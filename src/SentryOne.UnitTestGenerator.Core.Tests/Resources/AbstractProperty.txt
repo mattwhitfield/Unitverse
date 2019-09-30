@@ -1,0 +1,32 @@
+namespace SentryOne.Document.Web.Services.Workflow.BackgroundTaskExecutors.AzureFunctions
+{
+    using System;
+
+    public abstract class AzureFunctionsBackgroundTaskExecutor
+    {
+        public AzureFunctionsBackgroundTaskExecutor()
+        {
+        }
+
+        public abstract string SupportedStage { get; }
+
+        public abstract string SupportedStage2 { get; }
+
+		protected abstract string PropectedProperty { get; }
+
+        public abstract string CreateMessage(string item, long tenantId);
+
+        protected abstract string CreateMessage2(string item, long tenantId);
+    }
+
+	public abstract class AzureFunctionsBackgroundTaskExecutor2 : AzureFunctionsBackgroundTaskExecutor
+    {
+        public AzureFunctionsBackgroundTaskExecutor2()
+        {
+        }
+
+        public override string SupportedStage => "hello";
+
+        public override string CreateMessage(string item, long tenantId) { return "hello"; }
+    }
+}

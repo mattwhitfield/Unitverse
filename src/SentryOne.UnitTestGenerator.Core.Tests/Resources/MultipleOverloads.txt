@@ -1,0 +1,111 @@
+namespace SentryOne.Document.Web.Services.Workflow
+{
+	using System;
+    using System.Collections.Generic;
+    using System.Linq;	
+	
+	public enum WorkflowStage
+    {
+        Snapshot = 0,
+        SnapshotFinalization = 125,
+        LineageGeneration = 250,
+        DocumentGeneration = 500,
+        DocumentFinalization = 1000,
+        LineageFinalization = 1250,
+        CleanupItemsData = 2000,
+        CleanupSolutionData = 20100,
+    }
+
+	public static class WorkflowConstraintProviderFactory
+    {
+        public static Tuple<WorkflowStage, IList<WorkflowStage>> Follows(this WorkflowStage stage, params WorkflowStage[] followedStages)
+        {
+            if (followedStages == null)
+            {
+                throw new ArgumentNullException(nameof(followedStages));
+            }
+
+            if (followedStages.Length < 1)
+            {
+                throw new ArgumentNullException(nameof(followedStages));
+            }
+
+            return Tuple.Create(stage, (IList<WorkflowStage>)followedStages.ToList());
+        }
+
+        public static IDictionary<WorkflowStage, IList<WorkflowStage>> And(this Tuple<WorkflowStage, IList<WorkflowStage>> firstConstraint, Tuple<WorkflowStage, IList<WorkflowStage>> secondConstraint)
+        {
+            if (firstConstraint == null)
+            {
+                throw new ArgumentNullException(nameof(firstConstraint));
+            }
+
+            if (secondConstraint == null)
+            {
+                throw new ArgumentNullException(nameof(secondConstraint));
+            }
+
+            return new Dictionary<WorkflowStage, IList<WorkflowStage>>
+            {
+                [firstConstraint.Item1] = firstConstraint.Item2,
+                [secondConstraint.Item1] = secondConstraint.Item2
+            };
+        }
+
+        public static IDictionary<WorkflowStage, IList<WorkflowStage>> And(this IDictionary<WorkflowStage, IList<WorkflowStage>> constraints, Tuple<WorkflowStage, IList<WorkflowStage>> additionalConstraint)
+        {
+            if (constraints == null)
+            {
+                throw new ArgumentNullException(nameof(constraints));
+            }
+
+            if (additionalConstraint == null)
+            {
+                throw new ArgumentNullException(nameof(additionalConstraint));
+            }
+
+            constraints[additionalConstraint.Item1] = additionalConstraint.Item2;
+            return constraints;
+        }
+
+        public static WorkflowConstraintProvider ToConstraintProvider(this Tuple<WorkflowStage, IList<WorkflowStage>> constraint)
+        {
+            if (constraint == null)
+            {
+                throw new ArgumentNullException(nameof(constraint));
+            }
+
+            var dictionary = new Dictionary<WorkflowStage, IList<WorkflowStage>>
+            {
+                [constraint.Item1] = constraint.Item2
+            };
+
+            return new WorkflowConstraintProvider(dictionary);
+        }
+
+        public static WorkflowConstraintProvider ToConstraintProvider(this IDictionary<WorkflowStage, IList<WorkflowStage>> constraints)
+        {
+            if (constraints == null)
+            {
+                throw new ArgumentNullException(nameof(constraints));
+            }
+
+            return new WorkflowConstraintProvider(constraints);
+        }
+    }
+
+	public class WorkflowConstraintProvider
+    {
+        private readonly IDictionary<WorkflowStage, IList<WorkflowStage>> _constraints;
+
+        public WorkflowConstraintProvider(IDictionary<WorkflowStage, IList<WorkflowStage>> constraints)
+        {
+            _constraints = constraints ?? throw new ArgumentNullException(nameof(constraints));
+        }
+
+        public IEnumerable<WorkflowStage> GetPredecessors(WorkflowStage stage)
+        {
+            return _constraints.TryGetValue(stage, out var predecessors) ? predecessors : Enumerable.Empty<WorkflowStage>();
+        }
+    }
+}

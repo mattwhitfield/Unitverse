@@ -1,0 +1,11 @@
+public class TestClass
+    {
+		string _str1;
+
+        public TestClass(string str1)
+        {
+			_str1 = str1;
+        }
+
+        public string Str1 => _str1;
+    }

@@ -1,0 +1,35 @@
+namespace TestNamespace.SubNameSpace
+{
+    public static class TestClass
+    {
+	    public static void ThisIsAMethod<TInput>(string methodName)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+
+	    public static void ThisIsAMethod<TInput, TOutput>(string methodName)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+
+	    public static void ThisIsAMethod<TInput>(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+
+	    public static void ThisIsAMethod(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+
+	    public static void ThisIsAMethod<TInput>(int methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+
+	    public static void ThisIsAMethod<TInput, TOutput>(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+    }
+}

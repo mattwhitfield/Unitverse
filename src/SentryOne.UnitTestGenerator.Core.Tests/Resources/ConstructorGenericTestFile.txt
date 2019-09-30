@@ -1,0 +1,21 @@
+namespace AssemblyCore
+{
+    public class ConstructorGereric <T,U>
+    {
+        public T T1 { get; }
+        public U U1 { get; }
+        public T T2 { get; }
+
+
+        public ConstructorGereric(T t1)
+        {
+            T1 = t1;
+        }
+
+        public ConstructorGereric(T t1, U u1)
+        {
+            T1 = t1;
+            U1 = u1;
+        }
+    }
+}

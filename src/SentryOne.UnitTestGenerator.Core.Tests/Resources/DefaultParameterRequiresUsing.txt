@@ -1,0 +1,13 @@
+using System.Drawing;
+using System.Collections.Generic;
+
+namespace WindowsFormsApp1
+{
+    public partial class Form1
+    {
+        public Form1(IEnumerable<Brush> brushes)
+        {
+             
+        }
+    }
+}

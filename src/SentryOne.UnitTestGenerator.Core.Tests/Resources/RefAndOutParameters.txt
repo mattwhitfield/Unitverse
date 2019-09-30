@@ -1,0 +1,25 @@
+namespace TestNamespace.SubNameSpace
+{
+    public class TestClass
+    {
+        public void RefParamMethodString(string stringProp, ref string refParam)
+        {
+
+        }
+ 
+        public void OutParamMethodString(string stringProp, out string outParam)
+        {
+			outParam = "";
+        }
+
+        public void RefParamMethodClass(string stringProp, ref TestClass refParam)
+        {
+
+        }
+ 
+        public void OutParamMethodClass(string stringProp, out TestClass outParam)
+        {
+			outParam = null;
+        }
+    }
+}

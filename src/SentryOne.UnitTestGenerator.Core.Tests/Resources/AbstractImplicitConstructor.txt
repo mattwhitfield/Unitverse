@@ -1,0 +1,13 @@
+using System.IO;
+using System.Windows;
+
+namespace TestNamespace {
+	public abstract class TestClass
+	{
+		public abstract int SomeMethod();
+
+		public int IntProperty { get; set; }
+
+		public abstract string SomePublicAbstractMethod(int p, int r);
+	}
+}

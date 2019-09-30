@@ -1,0 +1,25 @@
+
+using System;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace WindowsFormsApp1
+{
+    public static class Form1 
+    {
+		public static string ToOther(this string source)
+        {
+            return source;
+        }
+
+		public static T ToOther<T>(this List<T> source)
+        {
+            return source.FirstOrDefault();
+        } 
+    }
+}

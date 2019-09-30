@@ -1,0 +1,39 @@
+using System;
+
+namespace AssemblyCore
+{
+    public class TestComparableGeneric : IComparable<TestComparableGeneric>, IComparable<int>, IComparable
+    {
+        public TestComparableGeneric(int value)
+        {
+            Value = value;
+        }
+
+        public int Value { get; }
+
+        public int CompareTo(TestComparableGeneric obj)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            return Value.CompareTo(obj.Value);
+        }
+
+        public int CompareTo(int value)
+        {
+            return Value.CompareTo(value);
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+
+            return Value.CompareTo(obj);
+        }
+    }
+}

@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace AssemblyCore
+{
+    public class ConstructorSamples
+    {
+        public string ArgumentOne { get; }
+        public string ArgumentTwo { get; }
+        public string NamedArgument { get; }
+        public string OptionalArgument { get; }
+        public string[] Args { get; }
+        public int[] ArgInt { get; }
+        public string ArguemntOne { get; }
+        public string ArguemntPrivateSet { get;private set; }
+
+        public ConstructorSamples()
+        {
+
+        }
+
+        public ConstructorSamples(params string[] args)
+        {
+            Args = args;
+        }
+
+        public ConstructorSamples(params int[] argInt)
+        {
+            ArgInt = argInt;
+        }
+
+        public ConstructorSamples(string argumentOne, string argumentTwo)
+        {
+            ArgumentOne = argumentOne;
+            ArgumentTwo = argumentTwo;
+        }
+
+
+        public ConstructorSamples(string argumentOne, string argumentTwo, string optionalArgument = "Optional_Argument")
+        {
+            ArgumentOne = argumentOne;
+            ArgumentTwo = argumentTwo;
+            OptionalArgument = optionalArgument;
+        }
+
+        public ConstructorSamples(string argumentOne, string argumentTwo, string namedArgument, string optionalArgument = "Optional_Argument")
+        {
+            ArgumentOne = argumentOne;
+            ArgumentTwo = argumentTwo;
+            NamedArgument = namedArgument;
+            OptionalArgument = optionalArgument;
+        }
+
+        public ConstructorSamples(string arguemntPrivateSet)
+        {
+            ArguemntPrivateSet = arguemntPrivateSet;
+        }
+    }
+}

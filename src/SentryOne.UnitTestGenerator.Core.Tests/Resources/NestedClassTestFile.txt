@@ -1,0 +1,60 @@
+using System;
+
+namespace AssemblyCore
+{
+    public class NestedClass
+    {
+        public InnerPublicClass innerPubClass { get; }
+        public InnerPublicClass InnerPubliClassOne { get; }
+        public InnerPublicClass InnerPublicClassTwo { get; }
+
+        public NestedClass()
+        {
+
+        }
+
+        public NestedClass(InnerPublicClass innerPublicClass)
+        {
+            innerPubClass = innerPublicClass;
+        }
+        public NestedClass(InnerPublicClass innerPubliClassOne, InnerPublicClass innerPublicClassTwo)
+        {
+            InnerPubliClassOne = innerPubliClassOne;
+            InnerPublicClassTwo = innerPublicClassTwo;
+        }
+
+        private class InnerPrivateClass
+        {
+            public string ArgumentOne { get; }
+            public int ArgumentTwo { get; }
+
+            public InnerPrivateClass()
+            {
+
+            }
+
+            public InnerPrivateClass(string argumentOne, int argumentTwo)
+            {
+                ArgumentOne = argumentOne;
+                ArgumentTwo = argumentTwo;
+            }
+
+        }
+        public class InnerPublicClass
+        {
+            public string ArgumentOne { get; }
+            public int ArgumentTwo { get; }
+
+            public InnerPublicClass()
+            {
+
+            }
+
+            public InnerPublicClass(string argumentOne, int argumentTwo)
+            {
+                ArgumentOne = argumentOne;
+                ArgumentTwo = argumentTwo;
+            }
+        }
+    }
+}

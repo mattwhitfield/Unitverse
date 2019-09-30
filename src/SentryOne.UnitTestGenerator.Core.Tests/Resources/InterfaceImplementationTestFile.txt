@@ -1,0 +1,41 @@
+using System.Threading.Tasks;
+
+namespace AssemblyCore
+{
+	public interface IDummyService { }
+
+    public class InterfaceImplementation : IDummyService
+    {
+        public Task<string> AsyncMethod()
+        {
+            return Task.FromResult("str");
+        }
+
+        public async Task<int> AsyncReturIntAsync()
+        {
+            await Task.Delay(500);
+            return 300;
+        }
+
+        public async Task<string> AsyncReturnStringAsync()
+        {
+            await Task.Delay(500);
+            return "Sample String";
+        }
+
+        public async Task AsyncReturnTaskAsync()
+        {
+            await Task.Delay(500);
+        }
+
+        public void NoReturnMethod()
+        {
+
+        }
+
+        public int ReturnMetod()
+        {
+            return 300;
+        }
+    }
+}

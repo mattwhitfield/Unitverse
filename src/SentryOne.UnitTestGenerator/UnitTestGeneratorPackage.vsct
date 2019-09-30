@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+  <Commands package="guidUnitTestGeneratorPackage">
+    <Groups>
+      <Group guid="guidUnitTestGeneratorPackageCmdSet" id="itemMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+      </Group>
+      <Group guid="guidUnitTestGeneratorPackageCmdSet" id="projectMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+      </Group>
+      <Group guid="guidUnitTestGeneratorPackageCmdSet" id="folderMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE" />
+      </Group>
+      <Group guid="guidUnitTestGeneratorPackageCmdSet" id="codeEditorMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
+      </Group>
+    </Groups>
+    <Buttons>
+      <Button guid="guidUnitTestGeneratorPackageCmdSet" id="GenerateUnitTestsCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidUnitTestGeneratorPackageCmdSet" id="projectMenuGroup" />
+        <Icon guid="guidCommandImages" id="bmpGenerate" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Generate tests</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidUnitTestGeneratorPackageCmdSet" id="GenerateUnitTestsCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidUnitTestGeneratorPackageCmdSet" id="folderMenuGroup" />
+        <Icon guid="guidCommandImages" id="bmpGenerate" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Generate tests</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidUnitTestGeneratorPackageCmdSet" id="GenerateUnitTestsCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidUnitTestGeneratorPackageCmdSet" id="itemMenuGroup" />
+        <Icon guid="guidCommandImages" id="bmpGenerate" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Generate tests</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidUnitTestGeneratorPackageCmdSet" id="RegenerateUnitTestsCommandId" priority="0x0101" type="Button">
+        <Parent guid="guidUnitTestGeneratorPackageCmdSet" id="itemMenuGroup" />
+        <Icon guid="guidCommandImages" id="bmpRegenerate" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Regenerate tests</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidUnitTestGeneratorPackageCmdSet" id="GoToUnitTestsCommandId" priority="0x0102" type="Button">
+        <Parent guid="guidUnitTestGeneratorPackageCmdSet" id="itemMenuGroup" />
+        <Icon guid="guidCommandImages" id="bmpGoTo" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Go to tests</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidUnitTestGeneratorPackageCmdSet" id="GenerateTestForMethodCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidUnitTestGeneratorPackageCmdSet" id="codeEditorMenuGroup" />
+        <Icon guid="guidCommandImages" id="bmpGenerate" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <ButtonText>Generate test...</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidUnitTestGeneratorPackageCmdSet" id="RegenerateTestForMethodCommandId" priority="0x0101" type="Button">
+        <Parent guid="guidUnitTestGeneratorPackageCmdSet" id="codeEditorMenuGroup" />
+        <Icon guid="guidCommandImages" id="bmpRegenerate" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <ButtonText>Regenerate test...</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidUnitTestGeneratorPackageCmdSet" id="GoToTestForMethodCommandId" priority="0x0102" type="Button">
+        <Parent guid="guidUnitTestGeneratorPackageCmdSet" id="codeEditorMenuGroup" />
+        <Icon guid="guidCommandImages" id="bmpGoTo" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Go to tests</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+    <Bitmaps>
+      <Bitmap guid="guidCommandImages" href="Resources\CommandImages.png" usedList="bmpGenerate, bmpGoTo, bmpRegenerate" />
+    </Bitmaps>
+  </Commands>
+  <Symbols>
+    <GuidSymbol name="guidUnitTestGeneratorPackage" value="{35b315f3-278a-4c3f-81d6-4dc2264828aa}" />
+    <GuidSymbol name="guidUnitTestGeneratorPackageCmdSet" value="{63d6b7b1-4f20-4519-9f56-09f9e220fd1b}">
+      <IDSymbol name="itemMenuGroup" value="0x1020" />
+      <IDSymbol name="projectMenuGroup" value="0x1030" />
+      <IDSymbol name="folderMenuGroup" value="0x1040" />
+      <IDSymbol name="codeEditorMenuGroup" value="0x1050" />
+      <IDSymbol name="GoToUnitTestsCommandId" value="0x0100" />
+      <IDSymbol name="GenerateUnitTestsCommandId" value="0x0101" />
+      <IDSymbol name="GenerateTestForMethodCommandId" value="0x0102"/>
+      <IDSymbol name="RegenerateTestForMethodCommandId" value="0x0103"/>
+      <IDSymbol name="RegenerateUnitTestsCommandId" value="0x0104" />
+      <IDSymbol name="GoToTestForMethodCommandId" value="0x0105" />
+    </GuidSymbol>
+    <GuidSymbol name="guidCommandImages" value="{8b760adc-9540-4474-87ce-4743acdaf4a1}">
+      <IDSymbol name="bmpGenerate" value="1" />
+      <IDSymbol name="bmpGoTo" value="2" />
+      <IDSymbol name="bmpRegenerate" value="3" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>

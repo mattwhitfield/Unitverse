@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentryOne.UnitTestGenerator", "SentryOne.UnitTestGenerator\SentryOne.UnitTestGenerator.csproj", "{7F7E3D01-F45E-4F59-BE96-0E9D052905DB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SentryOne.UnitTestGenerator.Core", "SentryOne.UnitTestGenerator.Core\SentryOne.UnitTestGenerator.Core.csproj", "{C0A7DDAC-CCA3-4FB5-A8A7-4B9AC4210D2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentryOne.UnitTestGenerator.Core.Tests", "SentryOne.UnitTestGenerator.Core.Tests\SentryOne.UnitTestGenerator.Core.Tests.csproj", "{BDA96138-2CEB-44B3-AD1F-8B253F736054}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{00FDA5F1-4AD2-45F1-BAC9-40ACA4737C53}"
+	ProjectSection(SolutionItems) = preProject
+		SentryOne.UnitTestGenerator.ruleset = SentryOne.UnitTestGenerator.ruleset
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F7E3D01-F45E-4F59-BE96-0E9D052905DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F7E3D01-F45E-4F59-BE96-0E9D052905DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F7E3D01-F45E-4F59-BE96-0E9D052905DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F7E3D01-F45E-4F59-BE96-0E9D052905DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0A7DDAC-CCA3-4FB5-A8A7-4B9AC4210D2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0A7DDAC-CCA3-4FB5-A8A7-4B9AC4210D2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0A7DDAC-CCA3-4FB5-A8A7-4B9AC4210D2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0A7DDAC-CCA3-4FB5-A8A7-4B9AC4210D2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDA96138-2CEB-44B3-AD1F-8B253F736054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDA96138-2CEB-44B3-AD1F-8B253F736054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDA96138-2CEB-44B3-AD1F-8B253F736054}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDA96138-2CEB-44B3-AD1F-8B253F736054}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D7FC5F92-5E1F-438B-ABEC-725956A073A2}
+	EndGlobalSection
+EndGlobal

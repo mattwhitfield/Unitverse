@@ -1,0 +1,32 @@
+
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+
+namespace TestApp1
+{
+    public class C1
+    {
+        public C1(C2 other)
+        {
+             
+        }
+    }
+    public class C2
+    {
+        public C2(C3 other)
+        {
+             
+        }
+    }
+    public class C3
+    {
+        public C3(SqlBulkCopy other)
+        {
+             
+        }
+    }
+}

@@ -1,0 +1,18 @@
+namespace TestNamespace.SubNameSpace
+{
+    public class TestClass<T>
+    {
+	    public void ThisIsAMethod(string methodName)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+    }
+
+    public class TestClass<TIn, TOut>
+    {
+	    public void ThisIsAMethod(string methodName)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+    }
+}

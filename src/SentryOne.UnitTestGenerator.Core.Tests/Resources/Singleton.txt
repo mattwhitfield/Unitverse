@@ -1,0 +1,30 @@
+namespace WindowsFormsApp1
+{
+	using System;
+
+	public class TenantSharedTableProvider
+	{
+		static TenantSharedTableProvider()
+		{
+			Instance = new TenantSharedTableProvider();
+		}
+
+		private TenantSharedTableProvider()
+		{
+		}
+
+		public static TenantSharedTableProvider Instance { get; }
+
+		public bool IsShared => true;
+
+		public string GetTableName(string baseName, long tenantId)
+		{
+			if (string.IsNullOrWhiteSpace(baseName))
+			{
+				throw new ArgumentNullException(nameof(baseName));
+			}
+
+			return baseName;
+		}
+	}
+}

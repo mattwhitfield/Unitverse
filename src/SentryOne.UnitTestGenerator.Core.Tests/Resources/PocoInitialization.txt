@@ -1,0 +1,29 @@
+namespace TestNamespace.SubNameSpace
+{
+	using System;
+
+    public class SomePoco
+    {
+        public int ThisIsAProperty {get;set;}
+        public string ThisIsAProperty2 {get;set;}
+        public Guid ThisIsAProperty3 {get;set;}
+        public Guid? ThisIsAProperty4 {get;set;}
+        public int ThisIsAProperty5 {get;private set;}
+		private int ThisIsAProperty6 {get;set;}
+        public Guid ThisIsAProperty7 {get;set;}
+        public Guid ThisIsAProperty8 {get;set;}
+        public Guid ThisIsAProperty9 {get;set;}
+    }
+
+    public class TestClass
+    {
+		SomePoco _poco;
+
+        public TestClass(SomePoco poco)
+        {
+			_poco = poco;
+        }
+ 
+        public SomePoco Poco => _poco;
+    }
+}

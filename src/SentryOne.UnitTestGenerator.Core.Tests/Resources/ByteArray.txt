@@ -1,0 +1,12 @@
+namespace TestNamespace
+{
+    public class TestClass
+    {
+        public TestClass(byte[] array, ulong unsignedLong, uint unsignedInt, decimal dec, short sh, ushort ush, byte b, sbyte s, double d, float f, bool boo)
+        {
+			Array = array;
+        }
+
+        public byte[] Array { get; set; }
+    }
+}
