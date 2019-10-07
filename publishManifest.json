@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json.schemastore.org/vsix-publish",
+    "categories": [ "testing", "coding" ],  
+    "identity": {
+        "internalName": "SentryOneUnitTestGenerator", 
+        "tags": [ "C#", "dependency injection", "FakeItEasy", "Moq", "MSTest", "NSUbstitue", "NUnit","Rhino Mocks", "unit testing", "xunit" ]
+    },
+    "overview": "README.md",           
+    "priceCategory": "free",             
+    "publisher": "SentryOne",       
+    "private": false,                     
+    "qna": true,                          
+    "repo": "https://github.com/sentryone/unittestgenerator"
+}
