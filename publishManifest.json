@@ -7,7 +7,7 @@
     },
     "overview": "README.md",           
     "priceCategory": "free",             
-    "publisher": "SentryOne",       
+    "publisher": "sentryone",       
     "private": false,                     
     "qna": true,                          
     "repo": "https://github.com/sentryone/unittestgenerator"
