@@ -1,4 +1,11 @@
 # Overview
+## Build and Release Status
+| Pipeline  |  Status |
+|----------|:-------------|
+|Master Build|[![Build Status](https://dev.azure.com/sentryone/DataDevOps/_apis/build/status/UnitTestGenerator/UnitTestGenerator?branchName=master)](https://dev.azure.com/sentryone/DataDevOps/_build/latest?definitionId=355&branchName=master)|
+|Latest Release|[![Release Status](https://vsrm.dev.azure.com/sentryone/_apis/public/Release/badge/82c651b5-78e2-4115-809e-32af91f4755b/28/86)](https://vsrm.dev.azure.com/sentryone/_apis/public/Release/badge/82c651b5-78e2-4115-809e-32af91f4755b/28/86) |
+
+## Introduction
 The SentryOne Unit Test Generator extension generates tests for classes written in C#. The extension covers basic tests automatically (for example, checking for correct property initialization), and creates placeholder tests for methods.  
 
 Test Project organization is simple and automatic because the tests are created in the test project with the same hierarchy defined in the source project. The extension can be used to modify tests later in the life cycle after refactoring or adding new functionality:
