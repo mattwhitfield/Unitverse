@@ -36,7 +36,7 @@
             }
 
             // readonly property without a constructor initializer parameter
-            return indexer.HasGet && !indexer.HasSet && !model.Constructors.Any(x => x.Parameters.Any(p => string.Equals(p.Name, indexer.Name, StringComparison.OrdinalIgnoreCase)));
+            return indexer.HasGet && !indexer.HasSet;
         }
 
         public IEnumerable<MethodDeclarationSyntax> Create(IIndexerModel indexer, ClassModel model)

@@ -12,7 +12,7 @@
     using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Resources;
 
-    internal class CanCallMethodGenerationStrategy : IGenerationStrategy<IMethodModel>
+    public class CanCallMethodGenerationStrategy : IGenerationStrategy<IMethodModel>
     {
         private readonly IFrameworkSet _frameworkSet;
 
@@ -27,11 +27,31 @@
 
         public bool CanHandle(IMethodModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword));
         }
 
         public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             var methodName = string.Format(CultureInfo.InvariantCulture, "CanCall{0}", model.GetMethodUniqueName(method));
 
             var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(methodName, method.IsAsync, model.IsStatic);

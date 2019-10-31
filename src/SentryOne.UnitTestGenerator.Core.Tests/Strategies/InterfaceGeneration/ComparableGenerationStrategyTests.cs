@@ -3,14 +3,12 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.InterfaceGeneration
     using System;
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using NSubstitute;
     using NUnit.Framework;
     using SentryOne.UnitTestGenerator.Core.Frameworks;
     using SentryOne.UnitTestGenerator.Core.Frameworks.Mocking;
     using SentryOne.UnitTestGenerator.Core.Frameworks.Test;
     using SentryOne.UnitTestGenerator.Core.Helpers;
     using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
     using SentryOne.UnitTestGenerator.Core.Strategies.InterfaceGeneration;
 
     [TestFixture]
@@ -24,7 +22,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.InterfaceGeneration
         {
             var generationContext = new GenerationContext();
 
-            _frameworkSet = new FrameworkSet(new NUnit3TestFramework(), new NSubstituteMockingFramework(generationContext), generationContext, Substitute.For<IUnitTestGeneratorOptions>());
+            _frameworkSet = new FrameworkSet(new NUnit3TestFramework(), new NSubstituteMockingFramework(generationContext), generationContext, "{0}Tests");
             _testClass = new ComparableGenerationStrategy(_frameworkSet);
         }
 
@@ -65,13 +63,13 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.InterfaceGeneration
         [Test]
         public void CannotCallCreateWithNullClassModel()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.Create(default(ClassModel), new ClassModel(TestSemanticModelFactory.Class, TestSemanticModelFactory.Model, true)));
+            Assert.Throws<ArgumentNullException>(() => _testClass.Create(default(ClassModel), new ClassModel(TestSemanticModelFactory.Class, TestSemanticModelFactory.Model, true)).Consume());
         }
 
         [Test]
         public void CannotCallCreateWithNullModel()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.Create(new ClassModel(TestSemanticModelFactory.Class, TestSemanticModelFactory.Model, true), default(ClassModel)));
+            Assert.Throws<ArgumentNullException>(() => _testClass.Create(new ClassModel(TestSemanticModelFactory.Class, TestSemanticModelFactory.Model, true), default(ClassModel)).Consume());
         }
     }
 }

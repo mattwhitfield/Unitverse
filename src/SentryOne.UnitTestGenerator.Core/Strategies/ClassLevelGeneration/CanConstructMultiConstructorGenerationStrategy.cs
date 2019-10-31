@@ -11,7 +11,7 @@
     using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Resources;
 
-    internal class CanConstructMultiConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
+    public class CanConstructMultiConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
     {
         private readonly IFrameworkSet _frameworkSet;
 
@@ -26,11 +26,31 @@
 
         public bool CanHandle(ClassModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return model.Declaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Count(x => x.Modifiers.All(m => !m.IsKind(SyntaxKind.StaticKeyword))) > 1 && !model.IsStatic;
         }
 
         public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod("CanConstruct", false, false);
 
             bool isFirst = true;

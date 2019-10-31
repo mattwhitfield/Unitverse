@@ -10,7 +10,7 @@
     using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Resources;
 
-    internal class CanConstructNoConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
+    public class CanConstructNoConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
     {
         private readonly IFrameworkSet _frameworkSet;
 
@@ -25,11 +25,31 @@
 
         public bool CanHandle(ClassModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return !model.Declaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Any() && !model.IsStatic;
         }
 
         public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod("CanConstruct", false, false);
 
             generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(

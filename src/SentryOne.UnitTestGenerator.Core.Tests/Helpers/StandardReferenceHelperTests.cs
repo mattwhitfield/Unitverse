@@ -18,6 +18,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
         public static void CanCallGetReferencedAssemblies(TestFrameworkTypes testFramework, MockingFrameworkType mockingFramework, string expectedTestFramework, string expectedMockingFramework)
         {
             var options = Substitute.For<IUnitTestGeneratorOptions>();
+            options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
             options.GenerationOptions.FrameworkType.Returns(testFramework);
             options.GenerationOptions.MockingFrameworkType.Returns(mockingFramework);
             var result = StandardReferenceHelper.GetReferencedNugetPackages(options);

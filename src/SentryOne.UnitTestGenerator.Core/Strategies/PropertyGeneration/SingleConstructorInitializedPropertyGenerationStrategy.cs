@@ -10,7 +10,7 @@
     using SentryOne.UnitTestGenerator.Core.Helpers;
     using SentryOne.UnitTestGenerator.Core.Models;
 
-    internal class SingleConstructorInitializedPropertyGenerationStrategy : IGenerationStrategy<IPropertyModel>
+    public class SingleConstructorInitializedPropertyGenerationStrategy : IGenerationStrategy<IPropertyModel>
     {
         private readonly IFrameworkSet _frameworkSet;
 
@@ -25,6 +25,16 @@
 
         public bool CanHandle(IPropertyModel property, ClassModel model)
         {
+            if (property is null)
+            {
+                throw new ArgumentNullException(nameof(property));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             if (property.IsStatic)
             {
                 return false;
@@ -37,6 +47,16 @@
 
         public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model)
         {
+            if (property is null)
+            {
+                throw new ArgumentNullException(nameof(property));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             var methodName = string.Format(CultureInfo.InvariantCulture, "{0}IsInitializedCorrectly", property.Name);
             var method = _frameworkSet.TestFramework.CreateTestMethod(methodName, false, model.IsStatic)
                 .AddBodyStatements(GetPropertyAssertionBodyStatements(property, model).ToArray());

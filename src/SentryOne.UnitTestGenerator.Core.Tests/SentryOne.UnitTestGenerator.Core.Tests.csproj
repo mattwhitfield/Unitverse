@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\Packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\..\Packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" />
   <Import Project="..\..\Packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.4\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props" Condition="Exists('..\..\Packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.4\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" />
   <Import Project="..\..\Packages\Microsoft.NetFramework.Analyzers.2.9.4\build\Microsoft.NetFramework.Analyzers.props" Condition="Exists('..\..\Packages\Microsoft.NetFramework.Analyzers.2.9.4\build\Microsoft.NetFramework.Analyzers.props')" />
   <Import Project="..\..\Packages\Microsoft.NetCore.Analyzers.2.9.4\build\Microsoft.NetCore.Analyzers.props" Condition="Exists('..\..\Packages\Microsoft.NetCore.Analyzers.2.9.4\build\Microsoft.NetCore.Analyzers.props')" />
@@ -7,7 +8,6 @@
   <Import Project="..\..\Packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.4\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props" Condition="Exists('..\..\Packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.4\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props')" />
   <Import Project="..\..\Packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\build\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('..\..\Packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\build\Microsoft.CodeAnalysis.Analyzers.props')" />
   <Import Project="..\..\Packages\xunit.core.2.4.1\build\xunit.core.props" Condition="Exists('..\..\Packages\xunit.core.2.4.1\build\xunit.core.props')" />
-  <Import Project="..\..\Packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\..\Packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props')" />
   <Import Project="..\..\Packages\NUnit.3.12.0\build\NUnit.props" Condition="Exists('..\..\Packages\NUnit.3.12.0\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -57,8 +57,14 @@
     <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\Microsoft.CodeAnalysis.CSharp.2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Scripting, Version=2.10.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\Microsoft.CodeAnalysis.CSharp.Scripting.2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.Scripting.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces, Version=2.10.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\Microsoft.CodeAnalysis.CSharp.Workspaces.2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Scripting, Version=2.10.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\Microsoft.CodeAnalysis.Scripting.Common.2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.Scripting.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.Workspaces, Version=2.10.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\Microsoft.CodeAnalysis.Workspaces.Common.2.10.0\lib\net46\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
@@ -245,13 +251,19 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Assets\AssetFactoryTests.cs" />
     <Compile Include="Assets\PropertyTesterAssetTests.cs" />
+    <Compile Include="ClassModelProvider.cs" />
     <Compile Include="Frameworks\FrameworkSetFactoryTests.cs" />
     <Compile Include="Frameworks\FrameworkSetTests.cs" />
     <Compile Include="Frameworks\Mocking\FakeItEasyMockingFrameworkTests.cs" />
     <Compile Include="Frameworks\Mocking\MoqMockingFrameworkTests.cs" />
     <Compile Include="Frameworks\Mocking\NSubstituteMockingFrameworkTests.cs" />
     <Compile Include="Frameworks\Mocking\RhinoMocksMockingFrameworkTests.cs" />
+    <Compile Include="Frameworks\Test\MsTestTestFrameworkTests.cs" />
+    <Compile Include="Frameworks\Test\NUnit2TestFrameworkTests.cs" />
+    <Compile Include="Frameworks\Test\NUnit3TestFrameworkTests.cs" />
+    <Compile Include="Frameworks\Test\NUnitTestFrameworkTests.cs" />
     <Compile Include="Frameworks\Test\TestFrameworkTests.cs" />
+    <Compile Include="Frameworks\Test\XUnitTestFrameworkTests.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\GenerateTests.cs" />
     <Compile Include="Helpers\GenerationContextTests.cs" />
@@ -269,13 +281,47 @@
     <Compile Include="Models\IndexerModelTests.cs" />
     <Compile Include="Models\NugetPackageReferenceTests.cs" />
     <Compile Include="Models\MethodModelTests.cs" />
+    <Compile Include="Models\OperatorModelTests.cs" />
     <Compile Include="Models\ParameterModelTests.cs" />
     <Compile Include="Models\PropertyModelTests.cs" />
     <Compile Include="Models\ReferencedAssemblyTests.cs" />
     <Compile Include="Models\SemanticVersionTests.cs" />
     <Compile Include="Models\TestableModelTests.cs" />
     <Compile Include="Options\UnitTestGeneratorOptionsTests.cs" />
+    <Compile Include="Strategies\ClassGeneration\AbstractClassGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\ClassGeneration\ClassGenerationStrategyFactoryTests.cs" />
+    <Compile Include="Strategies\ClassGeneration\StandardClassGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\ClassGeneration\StaticClassGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\ClassLevelGeneration\CanConstructMultiConstructorGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\ClassLevelGeneration\CanConstructNoConstructorGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\ClassLevelGeneration\CanConstructSingleConstructorGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\ClassLevelGeneration\ClassLevelGenerationStrategyFactoryTests.cs" />
+    <Compile Include="Strategies\ClassLevelGeneration\NullParameterCheckConstructorGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\ClassLevelGeneration\StringParameterCheckConstructorGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\IndexerGeneration\IndexerGenerationStrategyFactoryTests.cs" />
+    <Compile Include="Strategies\IndexerGeneration\ReadOnlyIndexerGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\IndexerGeneration\ReadWriteIndexerGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\IndexerGeneration\WriteOnlyIndexerGenerationStrategyTests.cs" />
     <Compile Include="Strategies\InterfaceGeneration\ComparableGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\InterfaceGeneration\EnumerableGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\InterfaceGeneration\InterfaceGenerationStrategyBaseTests.cs" />
+    <Compile Include="Strategies\InterfaceGeneration\InterfaceGenerationStrategyFactoryTests.cs" />
+    <Compile Include="Strategies\MethodGeneration\CanCallMethodGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\MethodGeneration\MethodGenerationStrategyFactoryTests.cs" />
+    <Compile Include="Strategies\MethodGeneration\NullParameterCheckMethodGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\MethodGeneration\StringParameterCheckMethodGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\OperatorGeneration\CanCallOperatorGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\OperatorGeneration\NullParameterCheckOperatorGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\OperatorGeneration\OperatorGenerationStrategyFactoryTests.cs" />
+    <Compile Include="Strategies\PropertyGeneration\MultiConstructorInitializedPropertyGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\PropertyGeneration\NotifyPropertyChangedGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\PropertyGeneration\PropertyGenerationStrategyFactoryTests.cs" />
+    <Compile Include="Strategies\PropertyGeneration\ReadOnlyPropertyGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\PropertyGeneration\ReadWritePropertyGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\PropertyGeneration\SingleConstructorInitializedPropertyGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\PropertyGeneration\WriteOnlyPropertyGenerationStrategyTests.cs" />
+    <Compile Include="Strategies\ValueGeneration\EnumFactoryTests.cs" />
+    <Compile Include="Strategies\ValueGeneration\ValueGenerationStrategyFactoryTester.cs" />
     <Compile Include="TestClasses.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -422,7 +468,6 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\Packages\NUnit.3.12.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\NUnit.3.12.0\build\NUnit.props'))" />
-    <Error Condition="!Exists('..\..\Packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props'))" />
     <Error Condition="!Exists('..\..\Packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets'))" />
     <Error Condition="!Exists('..\..\Packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets'))" />
     <Error Condition="!Exists('..\..\Packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets'))" />
@@ -434,6 +479,7 @@
     <Error Condition="!Exists('..\..\Packages\Microsoft.NetCore.Analyzers.2.9.4\build\Microsoft.NetCore.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\Microsoft.NetCore.Analyzers.2.9.4\build\Microsoft.NetCore.Analyzers.props'))" />
     <Error Condition="!Exists('..\..\Packages\Microsoft.NetFramework.Analyzers.2.9.4\build\Microsoft.NetFramework.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\Microsoft.NetFramework.Analyzers.2.9.4\build\Microsoft.NetFramework.Analyzers.props'))" />
     <Error Condition="!Exists('..\..\Packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.4\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.4\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props'))" />
+    <Error Condition="!Exists('..\..\Packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props'))" />
   </Target>
   <Import Project="..\..\Packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\..\Packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
   <Import Project="..\..\Packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\..\Packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />

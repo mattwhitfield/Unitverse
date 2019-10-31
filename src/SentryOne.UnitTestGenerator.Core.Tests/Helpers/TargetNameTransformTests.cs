@@ -3,6 +3,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
     using System;
     using NSubstitute;
     using NUnit.Framework;
+    using SentryOne.UnitTestGenerator.Core.Frameworks;
     using SentryOne.UnitTestGenerator.Core.Helpers;
     using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Options;
@@ -72,6 +73,38 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
         public static void CannotCallGetTargetFileNameWithInvalidSourceFileName(string value)
         {
             Assert.Throws<ArgumentNullException>(() => Substitute.For<IGenerationOptions>().GetTargetFileName(value));
+        }
+
+        [Test]
+        public static void CanCallGetTargetTypeName()
+        {
+            var frameworkSet = Substitute.For<IFrameworkSet>();
+            frameworkSet.TestTypeNaming.Returns("{0}Tests");
+            var classModel = ClassModelProvider.Instance;
+            var result = frameworkSet.GetTargetTypeName(classModel, false);
+            Assert.That(result, Is.EqualTo(ClassModelProvider.Instance.ClassName + "Tests"));
+        }
+
+        [Test]
+        public static void CanCallGetTargetTypeNameWithGenericDisambiguation()
+        {
+            var frameworkSet = Substitute.For<IFrameworkSet>();
+            frameworkSet.TestTypeNaming.Returns("{0}Tests");
+            var classModel = ClassModelProvider.GenericInstance;
+            var result = frameworkSet.GetTargetTypeName(classModel, true);
+            Assert.That(result, Is.EqualTo(ClassModelProvider.GenericInstance.ClassName + "_1Tests"));
+        }
+
+        [Test]
+        public static void CannotCallGetTargetTypeNameWithNullFrameworkSet()
+        {
+            Assert.Throws<ArgumentNullException>(() => default(IFrameworkSet).GetTargetTypeName(ClassModelProvider.Instance, false));
+        }
+
+        [Test]
+        public static void CannotCallGetTargetTypeNameWithNullClassModel()
+        {
+            Assert.Throws<ArgumentNullException>(() => Substitute.For<IFrameworkSet>().GetTargetTypeName(default(ClassModel), false));
         }
     }
 }

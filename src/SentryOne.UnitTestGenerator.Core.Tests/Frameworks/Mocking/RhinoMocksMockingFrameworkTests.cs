@@ -9,6 +9,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Mocking
     using NUnit.Framework;
     using SentryOne.UnitTestGenerator.Core.Frameworks.Mocking;
     using SentryOne.UnitTestGenerator.Core.Helpers;
+    using SentryOne.UnitTestGenerator.Core.Options;
 
     [TestFixture]
     public class RhinoMocksMockingFrameworkTests
@@ -55,6 +56,12 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Mocking
         public void CannotCallMockInterfaceWithNullType()
         {
             Assert.Throws<ArgumentNullException>(() => _testClass.MockInterface(default(TypeSyntax)));
+        }
+
+        [Test]
+        public void CannotCallReferencedNugetPackagesWithNullOptions()
+        {
+            Assert.Throws<ArgumentNullException>(() => _testClass.ReferencedNugetPackages(default(IVersioningOptions)).Consume());
         }
     }
 }

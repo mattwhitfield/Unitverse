@@ -2,6 +2,7 @@
 {
     using System;
     using System.Globalization;
+    using SentryOne.UnitTestGenerator.Core.Frameworks;
     using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Options;
     using SentryOne.UnitTestGenerator.Core.Resources;
@@ -52,11 +53,11 @@
             }
         }
 
-        public static string GetTargetTypeName(this IGenerationOptions options, ClassModel classModel, bool withGenericDisambiguation)
+        public static string GetTargetTypeName(this IFrameworkSet frameworkSet, ClassModel classModel, bool withGenericDisambiguation)
         {
-            if (options == null)
+            if (frameworkSet == null)
             {
-                throw new ArgumentNullException(nameof(options));
+                throw new ArgumentNullException(nameof(frameworkSet));
             }
 
             if (classModel == null)
@@ -72,7 +73,7 @@
                     sourceName += "_" + classModel.TypeSymbol.TypeParameters.Length;
                 }
 
-                return string.Format(CultureInfo.CurrentCulture, options.TestTypeNaming, sourceName);
+                return string.Format(CultureInfo.CurrentCulture, frameworkSet.TestTypeNaming, sourceName);
             }
             catch (FormatException)
             {

@@ -259,6 +259,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
             var model = extractor.Extract(null).First();
             var targetTypeName = "TestValue1540739065";
             var options = Substitute.For<IUnitTestGeneratorOptions>();
+            options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
             options.GenerationOptions.FrameworkType.Returns(TestFrameworkTypes.NUnit3);
             var frameworkSet = FrameworkSetFactory.Create(options);
             var classDeclaration = TestSemanticModelFactory.Class;

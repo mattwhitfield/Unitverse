@@ -2,16 +2,20 @@
 {
     using System;
     using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
 
     public class FrameworkSet : IFrameworkSet
     {
-        public FrameworkSet(ITestFramework testFramework, IMockingFramework mockingFramework, IGenerationContext context, IUnitTestGeneratorOptions options)
+        public FrameworkSet(ITestFramework testFramework, IMockingFramework mockingFramework, IGenerationContext context, string testTypeNaming)
         {
+            if (string.IsNullOrWhiteSpace(testTypeNaming))
+            {
+                throw new ArgumentNullException(nameof(testTypeNaming));
+            }
+
             TestFramework = testFramework ?? throw new ArgumentNullException(nameof(testFramework));
             MockingFramework = mockingFramework ?? throw new ArgumentNullException(nameof(mockingFramework));
             Context = context ?? throw new ArgumentNullException(nameof(context));
-            Options = options ?? throw new ArgumentNullException(nameof(options));
+            TestTypeNaming = testTypeNaming;
         }
 
         public ITestFramework TestFramework { get; }
@@ -20,6 +24,6 @@
 
         public IGenerationContext Context { get; }
 
-        public IUnitTestGeneratorOptions Options { get; }
+        public string TestTypeNaming { get; }
     }
 }

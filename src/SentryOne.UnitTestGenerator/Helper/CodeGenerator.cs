@@ -49,7 +49,7 @@
 
                 if (generationItems.All(x => string.IsNullOrWhiteSpace(x.TargetContent)))
                 {
-                    throw new InvalidOperationException("None of the selected targets contained a testable type.");
+                    throw new InvalidOperationException("None of the selected targets contained a testable type. Tests can only be generated for classes and structs");
                 }
 
                 messageLogger.LogMessage("Adding generated items to target project...");

@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.MethodGeneration
+﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.OperatorGeneration
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +12,7 @@
     using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Resources;
 
-    internal class NullParameterCheckOperatorGenerationStrategy : IGenerationStrategy<IOperatorModel>
+    public class NullParameterCheckOperatorGenerationStrategy : IGenerationStrategy<IOperatorModel>
     {
         private readonly IFrameworkSet _frameworkSet;
 
@@ -27,11 +27,31 @@
 
         public bool CanHandle(IOperatorModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type.IsReferenceType);
         }
 
         public IEnumerable<MethodDeclarationSyntax> Create(IOperatorModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             for (var i = 0; i < method.Parameters.Count; i++)
             {
                 if (!method.Parameters[i].TypeInfo.Type.IsReferenceType)

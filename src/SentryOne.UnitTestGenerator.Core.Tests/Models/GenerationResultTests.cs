@@ -1,6 +1,5 @@
 namespace SentryOne.UnitTestGenerator.Core.Tests.Models
 {
-    using System;
     using System.Collections.Generic;
     using NUnit.Framework;
     using SentryOne.UnitTestGenerator.Core.Assets;

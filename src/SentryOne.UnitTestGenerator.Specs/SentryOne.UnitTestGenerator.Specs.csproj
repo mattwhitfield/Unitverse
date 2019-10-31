@@ -1,0 +1,124 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Class Generation\AbstractClassGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Class Generation\ComparableStrategy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Class Generation\StandardClassGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Indexer Generation\ReadOnlyIndexerGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Indexer Generation\WriteOnlyIndexerGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Operator Generation\NullParameterCheckConstructorGenerator.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Operator Generation\NullParameterCheckOperatorGenerator - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Property Generator\MultiConstructorInitialisedPropertyGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Property Generator\ReadOnlyIndexerGeneration.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Property Generator\ReadOnlyPropertyGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Property Generator\ReadWritePropertyGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Property Generator\WriteOnlyPropertyGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Regeneration\StandardClassGeneration.feature.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="SpecFlow.NUnit" Version="3.0.225" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.225" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SentryOne.UnitTestGenerator.Core\SentryOne.UnitTestGenerator.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Strategies\InterfaceGeneration\ComparableStrategy.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ComparableStrategy.feature.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <SpecFlowFeatureFiles Update="Strategies\Class Generation\AbstractClassGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Class Generation\StaticClassGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Class Generation\StandardClassGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Indexer Generation\ReadWriteIndexGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Indexer Generation\WriteOnlyIndexerGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Operator Generation\NullParameterCheckOperatorGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Operator Generation\CanCallOperatorGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Property Generator\SingleConstructorInitializedPropertyGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Property Generator\NotifyPropertyChangedGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Property Generator\MultiConstructorInitializedPropertyGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Property Generator\ReadWritePropertyGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Property Generator\WriteOnlyPropertyGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Property Generator\ReadOnlyPropertyGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Regeneration\Regeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Strategies\Class Generation\AbstractClassGeneration.feature.cs">
+      <DependentUpon>AbstractClassGeneration.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Strategies\Class Generation\StaticClassGeneration.feature.cs">
+      <DependentUpon>StaticClassGeneration.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Strategies\Class Generation\StandardClassGeneration.feature.cs">
+      <DependentUpon>StandardClassGeneration.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Strategies\Operator Generation\CanCallOperatorGeneration.feature.cs">
+      <DependentUpon>CanCallOperatorGeneration.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Strategies\Property Generator\ReadOnlyPropertyGeneration.feature.cs">
+      <DependentUpon>ReadOnlyPropertyGeneration.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Strategies\Regeneration\Regeneration.feature.cs">
+      <DependentUpon>Regeneration.feature</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

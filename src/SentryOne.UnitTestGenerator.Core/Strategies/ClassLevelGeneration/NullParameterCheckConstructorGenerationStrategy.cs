@@ -11,7 +11,7 @@
     using SentryOne.UnitTestGenerator.Core.Helpers;
     using SentryOne.UnitTestGenerator.Core.Models;
 
-    internal class NullParameterCheckConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
+    public class NullParameterCheckConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
     {
         private readonly IFrameworkSet _frameworkSet;
 
@@ -26,11 +26,31 @@
 
         public bool CanHandle(ClassModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return model.Constructors.SelectMany(x => x.Parameters).Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String) && !model.IsStatic;
         }
 
         public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             var nullableParameters = new HashSet<string>(model.Constructors.SelectMany(x => x.Parameters).Where(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String).Select(x => x.Name), StringComparer.OrdinalIgnoreCase);
 
             foreach (var nullableParameter in nullableParameters)

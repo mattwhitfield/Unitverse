@@ -10,7 +10,7 @@
     using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Resources;
 
-    internal class CanConstructSingleConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
+    public class CanConstructSingleConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
     {
         private readonly IFrameworkSet _frameworkSet;
 
@@ -25,11 +25,31 @@
 
         public bool CanHandle(ClassModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return model.Declaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Count() == 1 && model.DefaultConstructor != null && !model.IsStatic && model.DefaultConstructor.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.PublicKeyword);
         }
 
         public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod("CanConstruct", false, false);
 
             var tokenList = model.DefaultConstructor.Parameters.Select(parameter => SyntaxFactory.IdentifierName(model.GetConstructorParameterFieldName(parameter))).Cast<ExpressionSyntax>().ToList();

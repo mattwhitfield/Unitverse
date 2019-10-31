@@ -27,21 +27,16 @@
 
         public override IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model)
         {
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return GenerateMethods(classModel, model, GetBodyStatements);
         }
 
         private IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
         {
-            if (sourceModel == null)
-            {
-                throw new ArgumentNullException(nameof(sourceModel));
-            }
-
-            if (interfaceModel == null)
-            {
-                throw new ArgumentNullException(nameof(interfaceModel));
-            }
-
             ITypeSymbol enumerableTypeSymbol = sourceModel.TypeSymbol;
             if (interfaceModel.IsGeneric)
             {

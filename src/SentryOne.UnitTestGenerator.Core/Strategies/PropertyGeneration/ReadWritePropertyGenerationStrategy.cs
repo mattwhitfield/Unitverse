@@ -31,6 +31,11 @@
                 throw new ArgumentNullException(nameof(property));
             }
 
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return property.HasGet && property.HasSet;
         }
 

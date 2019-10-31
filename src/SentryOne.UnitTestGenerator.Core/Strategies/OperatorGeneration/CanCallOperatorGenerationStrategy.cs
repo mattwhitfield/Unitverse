@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.MethodGeneration
+﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.OperatorGeneration
 {
     using System;
     using System.Collections.Generic;
@@ -10,7 +10,7 @@
     using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Resources;
 
-    internal class CanCallOperatorGenerationStrategy : IGenerationStrategy<IOperatorModel>
+    public class CanCallOperatorGenerationStrategy : IGenerationStrategy<IOperatorModel>
     {
         private readonly IFrameworkSet _frameworkSet;
 
@@ -25,11 +25,31 @@
 
         public bool CanHandle(IOperatorModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return true;
         }
 
         public IEnumerable<MethodDeclarationSyntax> Create(IOperatorModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             var methodName = string.Format(CultureInfo.InvariantCulture, "CanCall{0}Operator", method.Name);
 
             var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(methodName, false, model.IsStatic);

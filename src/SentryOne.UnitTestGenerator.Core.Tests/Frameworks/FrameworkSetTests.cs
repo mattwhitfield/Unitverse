@@ -5,7 +5,6 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks
     using NUnit.Framework;
     using SentryOne.UnitTestGenerator.Core.Frameworks;
     using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
 
     [TestFixture]
     public class FrameworkSetTests
@@ -14,7 +13,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks
         private ITestFramework _testFramework;
         private IMockingFramework _mockingFramework;
         private IGenerationContext _context;
-        private IUnitTestGeneratorOptions _options;
+        private string _testTypeNaming;
 
         [SetUp]
         public void SetUp()
@@ -22,39 +21,41 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks
             _testFramework = Substitute.For<ITestFramework>();
             _mockingFramework = Substitute.For<IMockingFramework>();
             _context = Substitute.For<IGenerationContext>();
-            _options = Substitute.For<IUnitTestGeneratorOptions>();
-            _testClass = new FrameworkSet(_testFramework, _mockingFramework, _context, _options);
+            _testTypeNaming = "TestValue455103231";
+            _testClass = new FrameworkSet(_testFramework, _mockingFramework, _context, _testTypeNaming);
         }
 
         [Test]
         public void CanConstruct()
         {
-            var instance = new FrameworkSet(_testFramework, _mockingFramework, _context, _options);
+            var instance = new FrameworkSet(_testFramework, _mockingFramework, _context, _testTypeNaming);
             Assert.That(instance, Is.Not.Null);
         }
 
         [Test]
         public void CannotConstructWithNullTestFramework()
         {
-            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(default(ITestFramework), Substitute.For<IMockingFramework>(), Substitute.For<IGenerationContext>(), Substitute.For<IUnitTestGeneratorOptions>()));
+            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(default(ITestFramework), Substitute.For<IMockingFramework>(), Substitute.For<IGenerationContext>(), "TestValue1808135505"));
         }
 
         [Test]
         public void CannotConstructWithNullMockingFramework()
         {
-            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(Substitute.For<ITestFramework>(), default(IMockingFramework), Substitute.For<IGenerationContext>(), Substitute.For<IUnitTestGeneratorOptions>()));
+            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(Substitute.For<ITestFramework>(), default(IMockingFramework), Substitute.For<IGenerationContext>(), "TestValue888012024"));
         }
 
         [Test]
         public void CannotConstructWithNullContext()
         {
-            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), default(IGenerationContext), Substitute.For<IUnitTestGeneratorOptions>()));
+            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), default(IGenerationContext), "TestValue1975092699"));
         }
 
-        [Test]
-        public void CannotConstructWithNullOptions()
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("   ")]
+        public void CannotConstructWithInvalidTestTypeNaming(string value)
         {
-            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IGenerationContext>(), default(IUnitTestGeneratorOptions)));
+            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IGenerationContext>(), value));
         }
 
         [Test]
@@ -76,9 +77,9 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks
         }
 
         [Test]
-        public void OptionsIsInitializedCorrectly()
+        public void TestTypeNamingIsInitializedCorrectly()
         {
-            Assert.That(_testClass.Options, Is.EqualTo(_options));
+            Assert.That(_testClass.TestTypeNaming, Is.EqualTo(_testTypeNaming));
         }
     }
 }

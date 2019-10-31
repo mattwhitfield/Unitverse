@@ -8,7 +8,7 @@
     using SentryOne.UnitTestGenerator.Core.Helpers;
     using SentryOne.UnitTestGenerator.Core.Models;
 
-    internal class StaticClassGenerationStrategy : IClassGenerationStrategy
+    public class StaticClassGenerationStrategy : IClassGenerationStrategy
     {
         private readonly IFrameworkSet _frameworkSet;
 
@@ -21,12 +21,22 @@
 
         public bool CanHandle(ClassModel model)
         {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return model.Declaration.Modifiers.Any(x => string.Equals(x.Text, "static", StringComparison.OrdinalIgnoreCase));
         }
 
         public ClassDeclarationSyntax Create(ClassModel model)
         {
-            var classDeclaration = SyntaxFactory.ClassDeclaration(_frameworkSet.Options.GenerationOptions.GetTargetTypeName(model, true));
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            var classDeclaration = SyntaxFactory.ClassDeclaration(_frameworkSet.GetTargetTypeName(model, true));
 
             model.TargetInstance = model.TypeSyntax;
 

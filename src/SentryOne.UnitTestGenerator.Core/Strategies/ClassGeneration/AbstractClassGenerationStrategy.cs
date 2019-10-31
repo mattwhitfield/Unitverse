@@ -12,7 +12,7 @@
     using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Resources;
 
-    internal class AbstractClassGenerationStrategy : IClassGenerationStrategy
+    public class AbstractClassGenerationStrategy : IClassGenerationStrategy
     {
         private readonly IFrameworkSet _frameworkSet;
 
@@ -25,12 +25,22 @@
 
         public bool CanHandle(ClassModel model)
         {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return model.Declaration.Modifiers.Any(x => string.Equals(x.Text, "abstract", StringComparison.OrdinalIgnoreCase));
         }
 
         public ClassDeclarationSyntax Create(ClassModel model)
         {
-            var targetTypeName = _frameworkSet.Options.GenerationOptions.GetTargetTypeName(model, true);
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            var targetTypeName = _frameworkSet.GetTargetTypeName(model, true);
             var classDeclaration = SyntaxFactory.ClassDeclaration(targetTypeName);
 
             classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));

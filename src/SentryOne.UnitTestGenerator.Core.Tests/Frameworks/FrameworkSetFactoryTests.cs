@@ -19,6 +19,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks
         public static void CanCallCreateForTestFramework(TestFrameworkTypes type, Type expectedType)
         {
             var options = Substitute.For<IUnitTestGeneratorOptions>();
+            options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
             options.GenerationOptions.FrameworkType.Returns(type);
             options.GenerationOptions.MockingFrameworkType.Returns(MockingFrameworkType.Moq);
             var result = FrameworkSetFactory.Create(options);
@@ -33,6 +34,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks
         public static void CanCallCreateForMockingFramework(MockingFrameworkType type, Type expectedType)
         {
             var options = Substitute.For<IUnitTestGeneratorOptions>();
+            options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
             options.GenerationOptions.FrameworkType.Returns(TestFrameworkTypes.NUnit2);
             options.GenerationOptions.MockingFrameworkType.Returns(type);
             var result = FrameworkSetFactory.Create(options);

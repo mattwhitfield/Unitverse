@@ -12,7 +12,7 @@
     using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Resources;
 
-    internal class NullParameterCheckMethodGenerationStrategy : IGenerationStrategy<IMethodModel>
+    public class NullParameterCheckMethodGenerationStrategy : IGenerationStrategy<IMethodModel>
     {
         private readonly IFrameworkSet _frameworkSet;
 
@@ -27,11 +27,31 @@
 
         public bool CanHandle(IMethodModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String);
         }
 
         public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model)
         {
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             for (var i = 0; i < method.Parameters.Count; i++)
             {
                 if (!method.Parameters[i].TypeInfo.Type.IsReferenceType)

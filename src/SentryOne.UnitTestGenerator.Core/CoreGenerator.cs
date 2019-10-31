@@ -20,6 +20,7 @@
     using SentryOne.UnitTestGenerator.Core.Strategies.IndexerGeneration;
     using SentryOne.UnitTestGenerator.Core.Strategies.InterfaceGeneration;
     using SentryOne.UnitTestGenerator.Core.Strategies.MethodGeneration;
+    using SentryOne.UnitTestGenerator.Core.Strategies.OperatorGeneration;
     using SentryOne.UnitTestGenerator.Core.Strategies.PropertyGeneration;
 
     public static class CoreGenerator
@@ -246,7 +247,7 @@
 
         private static TypeDeclarationSyntax EnsureAllConstructorParametersHaveFields(IFrameworkSet frameworkSet, ClassModel classModel, TypeDeclarationSyntax targetType)
         {
-            var setupMethod = frameworkSet.TestFramework.CreateSetupMethod(frameworkSet.Options.GenerationOptions.GetTargetTypeName(classModel, true));
+            var setupMethod = frameworkSet.TestFramework.CreateSetupMethod(frameworkSet.GetTargetTypeName(classModel, true));
 
             BaseMethodDeclarationSyntax foundMethod = null, updatedMethod = null;
             if (setupMethod is MethodDeclarationSyntax methodSyntax)
@@ -382,12 +383,12 @@
             {
                 var types = TestableItemExtractor.GetTypeDeclarations(targetNamespace);
 
-                var targetClassName = frameworkSet.Options.GenerationOptions.GetTargetTypeName(classModel, true);
+                var targetClassName = frameworkSet.GetTargetTypeName(classModel, true);
                 originalTargetType = targetType = types.FirstOrDefault(x => string.Equals(x.GetClassName(), targetClassName, StringComparison.OrdinalIgnoreCase));
 
                 if (originalTargetType == null)
                 {
-                    targetClassName = frameworkSet.Options.GenerationOptions.GetTargetTypeName(classModel, false);
+                    targetClassName = frameworkSet.GetTargetTypeName(classModel, false);
                     originalTargetType = targetType = types.FirstOrDefault(x => string.Equals(x.GetClassName(), targetClassName, StringComparison.OrdinalIgnoreCase));
                 }
             }

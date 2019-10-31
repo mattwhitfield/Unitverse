@@ -28,11 +28,6 @@
 
         public override IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model)
         {
-            if (classModel == null)
-            {
-                throw new ArgumentNullException(nameof(classModel));
-            }
-
             if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
@@ -43,16 +38,6 @@
 
         private IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
         {
-            if (sourceModel == null)
-            {
-                throw new ArgumentNullException(nameof(sourceModel));
-            }
-
-            if (interfaceModel == null)
-            {
-                throw new ArgumentNullException(nameof(interfaceModel));
-            }
-
             ITypeSymbol comparableTypeIdentifier = sourceModel.TypeSymbol;
             if (interfaceModel.IsGeneric)
             {

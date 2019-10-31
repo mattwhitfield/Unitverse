@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.MethodGeneration
+﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.OperatorGeneration
 {
     using System;
     using System.Collections.Generic;

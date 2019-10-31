@@ -1,10 +1,8 @@
 namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
 {
-    using System;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using NSubstitute;
     using NUnit.Framework;
     using SentryOne.UnitTestGenerator.Core.Helpers;
 

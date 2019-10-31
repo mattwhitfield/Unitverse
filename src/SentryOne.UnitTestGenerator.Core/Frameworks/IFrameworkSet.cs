@@ -1,7 +1,6 @@
 ﻿namespace SentryOne.UnitTestGenerator.Core.Frameworks
 {
     using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
 
     public interface IFrameworkSet
     {
@@ -11,6 +10,6 @@
 
         IGenerationContext Context { get; }
 
-        IUnitTestGeneratorOptions Options { get; }
+        string TestTypeNaming { get; }
     }
 }
