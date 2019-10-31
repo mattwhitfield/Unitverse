@@ -1,0 +1,17 @@
+namespace TestNamespace.SubNameSpace
+{
+    public class TestClass
+    {
+	    public System.Threading.Tasks.Task ThisIsAnAsyncMethod(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+			return System.Threading.Tasks.Task.CompletedTask;
+	    }
+
+	    public System.Threading.Tasks.Task<int> ThisIsAnAsyncMethodWithReturnType(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+			return System.Threading.Tasks.Task.FromResult(0);
+	    }
+    }
+}

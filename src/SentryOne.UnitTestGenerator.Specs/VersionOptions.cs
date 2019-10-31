@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs.Strategies
+﻿namespace SentryOne.UnitTestGenerator.Specs
 {
     using SentryOne.UnitTestGenerator.Core.Options;
 

@@ -56,14 +56,10 @@ public static class Generate
 	And I set my test framework to 'XUnit'
 	And I set my mock framework to 'Moq'
 	When I generate tests for the method using the strategy 'NullParameterCheckMethodGenerationStrategy'
-	Then I expect a method called 'CannotCallArgumentsWithExpressionsWithNullExpressions'
-		And I expect it to contain 1 statements called 'Assert.Throws<ArgumentNullException>(() => Generate.Arguments(default(string[])));'
-		And I expect it to have the attribute 'Fact'
-	And I expect a method called 'CannotCallArgumentsWithExpressionsAndExpressions2WithNullExpressions'
-		And I expect it to contain a statement like 'Assert.Throws<ArgumentNullException>(()=>Generate.Arguments(default(IEnumerable<string>),new[]{{{{AnyString}}}, {{{AnyString}}}, {{{AnyString}}}}));'
-	And I expect a method called 'CannotCallArgumentsWithExpressionsAndExpressions2WithNullExpressions2'
-		And I expect it to contain a statement like 'Assert.Throws<ArgumentNullException>(()=>Generate.Arguments(new[]{{{{AnyString}}}, {{{AnyString}}}, {{{AnyString}}}}, default(IEnumerable<string>)));'
-	And I expect a method called 'CannotCallTest2WithNullTesting'
-		And I expect it to contain the statement ' Assert.Throws<ArgumentNullException>(()=>Generate.Test2(reftesting));'
-		And I expect it to contain the variable 'testing'
+	Then I expect methods with statements like:
+	| methodName                                                            | methodStatement                                                                                                                                       |
+	| CannotCallArgumentsWithExpressionsWithNullExpressions                 | Assert.Throws<ArgumentNullException>(() => Generate.Arguments(default(string[])));                                                                    |
+	| CannotCallArgumentsWithExpressionsAndExpressions2WithNullExpressions  | Assert.Throws<ArgumentNullException>(()=>Generate.Arguments(default(IEnumerable<string>),new[]{{{{AnyString}}}, {{{AnyString}}}, {{{AnyString}}}}));  |
+	| CannotCallArgumentsWithExpressionsAndExpressions2WithNullExpressions2 | Assert.Throws<ArgumentNullException>(()=>Generate.Arguments(new[]{{{{AnyString}}}, {{{AnyString}}}, {{{AnyString}}}}, default(IEnumerable<string>))); |
+	| CannotCallTest2WithNullTesting                                        | Assert.Throws<ArgumentNullException>(()=>Generate.Test2(reftesting));                                                                                 |
 	And I expect no method with a name like '.*Test1.*'

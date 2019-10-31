@@ -133,35 +133,28 @@ public static IList<string> Test2(ref IEnumerable<string> testing)
 #line 58
  testRunner.When("I generate tests for the method using the strategy \'NullParameterCheckMethodGener" +
                     "ationStrategy\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                        "methodName",
+                        "methodStatement"});
+            table1.AddRow(new string[] {
+                        "CannotCallArgumentsWithExpressionsWithNullExpressions",
+                        "Assert.Throws<ArgumentNullException>(() => Generate.Arguments(default(string[])))" +
+                            ";"});
+            table1.AddRow(new string[] {
+                        "CannotCallArgumentsWithExpressionsAndExpressions2WithNullExpressions",
+                        "Assert.Throws<ArgumentNullException>(()=>Generate.Arguments(default(IEnumerable<s" +
+                            "tring>),new[]{{{{AnyString}}}, {{{AnyString}}}, {{{AnyString}}}}));"});
+            table1.AddRow(new string[] {
+                        "CannotCallArgumentsWithExpressionsAndExpressions2WithNullExpressions2",
+                        "Assert.Throws<ArgumentNullException>(()=>Generate.Arguments(new[]{{{{AnyString}}}" +
+                            ", {{{AnyString}}}, {{{AnyString}}}}, default(IEnumerable<string>)));"});
+            table1.AddRow(new string[] {
+                        "CannotCallTest2WithNullTesting",
+                        "Assert.Throws<ArgumentNullException>(()=>Generate.Test2(reftesting));"});
 #line 59
- testRunner.Then("I expect a method called \'CannotCallArgumentsWithExpressionsWithNullExpressions\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 60
-  testRunner.And("I expect it to contain 1 statements called \'Assert.Throws<ArgumentNullException>(" +
-                    "() => Generate.Arguments(default(string[])));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 61
-  testRunner.And("I expect it to have the attribute \'Fact\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 62
- testRunner.And("I expect a method called \'CannotCallArgumentsWithExpressionsAndExpressions2WithNu" +
-                    "llExpressions\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 63
-  testRunner.And("I expect it to contain a statement like \'Assert.Throws<ArgumentNullException>(()=" +
-                    ">Generate.Arguments(default(IEnumerable<string>),new[]{{{{AnyString}}}, {{{AnySt" +
-                    "ring}}}, {{{AnyString}}}}));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 64
- testRunner.And("I expect a method called \'CannotCallArgumentsWithExpressionsAndExpressions2WithNu" +
-                    "llExpressions2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("I expect methods with statements like:", ((string)(null)), table1, "Then ");
 #line 65
-  testRunner.And("I expect it to contain a statement like \'Assert.Throws<ArgumentNullException>(()=" +
-                    ">Generate.Arguments(new[]{{{{AnyString}}}, {{{AnyString}}}, {{{AnyString}}}}, de" +
-                    "fault(IEnumerable<string>)));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 66
- testRunner.And("I expect a method called \'CannotCallTest2WithNullTesting\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 67
-  testRunner.And("I expect it to contain the statement \' Assert.Throws<ArgumentNullException>(()=>G" +
-                    "enerate.Test2(reftesting));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 68
-  testRunner.And("I expect it to contain the variable \'testing\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 69
  testRunner.And("I expect no method with a name like \'.*Test1.*\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

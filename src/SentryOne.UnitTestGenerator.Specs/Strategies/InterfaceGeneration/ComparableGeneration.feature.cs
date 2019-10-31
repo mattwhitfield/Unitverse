@@ -132,13 +132,13 @@ public int CompareTo(object obj)
                     "Value), Is.EqualTo(0));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 52
   testRunner.And("I expect it to have the attribute \'Test\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 54
+#line 53
  testRunner.And("I expect a method called \'ImplementsIComparable_Int32\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 55
+#line 54
   testRunner.And("I expect it to contain the statement \'int greaterThanBaseValue = default(int);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 57
+#line 55
  testRunner.And("I expect a method called \'ImplementsIComparable_TestComparableGeneric\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 58
+#line 56
   testRunner.And("I expect it to contain the variable \'baseValue\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

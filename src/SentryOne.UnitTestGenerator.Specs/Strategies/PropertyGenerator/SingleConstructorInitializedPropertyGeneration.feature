@@ -22,4 +22,4 @@ public class TestClass
 	When I generate tests for the property using the strategy 'SingleConstructorInitializedPropertyGenerationStrategy'
 	Then I expect a method called 'Str1IsInitializedCorrectly'
 		And I expect it to have the attribute 'Test'
-		And I expect it to contain the statement 'Assert.That(_testClass.Str1, Is.EqualTo(_str1));'
+		And I expect it to contain 1 statements called 'Assert.That(_testClass.Str1, Is.EqualTo(_str1));'

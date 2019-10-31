@@ -19,7 +19,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class TestClasses {
@@ -195,6 +195,29 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         internal static string ArrowPropertyGetter {
             get {
                 return ResourceManager.GetString("ArrowPropertyGetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///	    public System.Threading.Tasks.Task ThisIsAnAsyncMethod(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///			return System.Threading.Tasks.Task.CompletedTask;
+        ///	    }
+        ///
+        ///	    public System.Threading.Tasks.Task&lt;int&gt; ThisIsAnAsyncMethod(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///			return System.Threading.Tasks.Task.FromResult(0);
+        ///	     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AsyncMethod {
+            get {
+                return ResourceManager.GetString("AsyncMethod", resourceCulture);
             }
         }
         
@@ -861,7 +884,30 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to namespace WindowsFormsApp1
+        ///{
+        ///	using System;
+        ///
+        ///	public class TenantSharedTableProvider
+        ///	{
+        ///		static TenantSharedTableProvider()
+        ///		{
+        ///			Instance = new TenantSharedTableProvider();
+        ///		}
+        ///
+        ///		private TenantSharedTableProvider()
+        ///		{
+        ///		}
+        ///
+        ///		public static TenantSharedTableProvider Instance { get; }
+        ///
+        ///		public bool IsShared =&gt; true;
+        ///
+        ///		public string GetTableName(string baseName, long tenantId)
+        ///		{
+        ///			if (string.IsNullOrWhiteSpace(baseName))
+        ///			{
+        ///				throw new ArgumentNullException(nameof(baseName)) [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Singleton {
             get {

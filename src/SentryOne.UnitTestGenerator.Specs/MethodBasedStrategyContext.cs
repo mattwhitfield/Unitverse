@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs.Strategies
+﻿namespace SentryOne.UnitTestGenerator.Specs
 {
     using System;
     using System.Collections.Generic;

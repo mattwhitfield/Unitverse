@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs.Strategies
+﻿namespace SentryOne.UnitTestGenerator.Specs
 {
     using System;
     using System.Collections.Generic;
@@ -33,7 +33,6 @@
             var compilation = CSharpCompilation.Create("MyTest", new[] { syntaxTree }, SemanticModelHelper.References.Value);
             var model = compilation.GetSemanticModel(syntaxTree);
             _context.TestModel = model;
-
         }
 
         [When(@"I generate tests for the class using strategy '(.*)'")]
@@ -93,29 +92,27 @@
             
             foreach (var field in _context.CurrentClass.Members.OfType<FieldDeclarationSyntax>())
             {
-                foreach (var variable in field.Declaration.Variables)
+                fieldThere = field.Declaration.Variables.FindMatches(
+                    variable => variable.ToString(),
+                    name,
+                    out var foundItems,
+                    out _);
+
+                if (fieldThere)
                 {
-                    if (variable.ToString() == name)
+                    if (field.Declaration.Type.ToString() == type)
                     {
-                        fieldThere = true;
-                        
-                        if (field.Declaration.Type.ToString() == type)
-                        {
-                            isThere = true;
-                            break;
-                        }
-                        else
-                        {
-                            foundType = field.Declaration.Type.ToString();
-                        }
+                        isThere = true;
+                        break;
                     }
-                }
-                
-                if (isThere)
-                {
+                    foundType = field.Declaration.Type.ToString();
                     break;
                 }
+
+                found.AddRange(foundItems);
             }
+
+            found.RemoveAll(item => item == "none");
             
             if (!isThere && fieldThere)
             {
@@ -128,7 +125,6 @@
             }
             
             Assert.IsTrue(isThere, "Expected to find variable '{0}', found variables '{1}'", name, found.Aggregate((x, y) => x + ", " + y));
-
         }
 
         [Then(@"I expect the method '(.*)'")]
@@ -163,20 +159,21 @@
 
             foreach (var attributeList in _context.CurrentMethod.AttributeLists)
             {
-                isThere = attributeList.Attributes.FindMatches(attribute => attribute.ToString(), attributeName, out var foundItems, out _);
+                isThere = attributeList.Attributes.FindMatches(
+                    attribute => attribute.ToString(), 
+                    attributeName, 
+                    out var foundItems, 
+                    out _);
+
                 if (isThere)
                 {
                     break;
                 }
 
-                foreach (var foundItem in foundItems)
-                {
-                    if (foundItem != "none")
-                    {
-                        found.Add(foundItem);
-                    }
-                }
+                found.AddRange(foundItems);
             }
+
+            found.RemoveAll(item => item == "none");
 
             if (!found.Any())
             {
@@ -250,7 +247,6 @@
                 out _);
 
             Assert.IsTrue(!isThere, "Expected no method called '{0}', found one", methodName);
-
         }
 
         [Then(@"I expect it to have the modifier '(.*)'")]

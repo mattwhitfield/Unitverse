@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs.Strategies
+﻿namespace SentryOne.UnitTestGenerator.Specs
 {
     using SentryOne.UnitTestGenerator.Core.Options;
 
@@ -12,10 +12,10 @@
 
         public TestFrameworkTypes FrameworkType { get; }
         public MockingFrameworkType MockingFrameworkType { get; }
-        public bool CreateProjectAutomatically { get; set; } = true;
-        public bool AddReferencesAutomatically { get; set; } = true;
-        public string TestProjectNaming { get; set; } = "{0}.Tests";
-        public string TestFileNaming { get; set; } = "{0}Tests";
-        public string TestTypeNaming { get; set; } = "{0}Tests";
+        public bool CreateProjectAutomatically { get; } = true;
+        public bool AddReferencesAutomatically { get; } = true;
+        public string TestProjectNaming { get; } = "{0}.Tests";
+        public string TestFileNaming { get; } = "{0}Tests";
+        public string TestTypeNaming { get; } = "{0}Tests";
     }
 }

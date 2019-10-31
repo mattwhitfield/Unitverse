@@ -7,18 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Class Generation\AbstractClassGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Class Generation\ComparableStrategy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Class Generation\StandardClassGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Indexer Generation\ReadOnlyIndexerGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Indexer Generation\WriteOnlyIndexerGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Operator Generation\NullParameterCheckConstructorGenerator.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Operator Generation\NullParameterCheckOperatorGenerator - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Property Generator\MultiConstructorInitialisedPropertyGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Property Generator\ReadOnlyIndexerGeneration.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Property Generator\ReadOnlyPropertyGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Property Generator\ReadWritePropertyGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Property Generator\WriteOnlyPropertyGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="FrameworkGeneration\MockFrameworkGeneration.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="MockGeneration\MockGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\ClassGeneration\AbstractClassGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\ClassGeneration\ComparableStrategy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\ClassGeneration\StandardClassGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\IndexerGeneration\ReadOnlyIndexerGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\IndexerGeneration\WriteOnlyIndexerGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="MockGeneration\StandardClassGeneration.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\OperatorGeneration\NullParameterCheckConstructorGenerator.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\OperatorGeneration\NullParameterCheckOperatorGenerator - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\MultiConstructorInitialisedPropertyGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\ReadOnlyIndexerGeneration.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\ReadOnlyPropertyGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\ReadWritePropertyGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\WriteOnlyPropertyGeneration - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Regeneration\StandardClassGeneration.feature.cs" />
   </ItemGroup>
 
@@ -42,55 +45,63 @@
   </ItemGroup>
 
   <ItemGroup>
-    <SpecFlowFeatureFiles Update="Strategies\Class Generation\AbstractClassGeneration.feature">
+    <SpecFlowFeatureFiles Update="FrameworkGeneration\FrameworkGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Class Generation\StaticClassGeneration.feature">
+    <SpecFlowFeatureFiles Update="MockGeneration\MockGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Class Generation\StandardClassGeneration.feature">
+    <SpecFlowFeatureFiles Update="Strategies\ClassGeneration\AbstractClassGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Indexer Generation\ReadWriteIndexGeneration.feature">
+    <SpecFlowFeatureFiles Update="Strategies\ClassGeneration\StaticClassGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Indexer Generation\WriteOnlyIndexerGeneration.feature">
+    <SpecFlowFeatureFiles Update="Strategies\ClassGeneration\StandardClassGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Operator Generation\NullParameterCheckOperatorGeneration.feature">
+    <SpecFlowFeatureFiles Update="Strategies\IndexerGeneration\ReadWriteIndexGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Operator Generation\CanCallOperatorGeneration.feature">
+    <SpecFlowFeatureFiles Update="Strategies\IndexerGeneration\WriteOnlyIndexerGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Property Generator\SingleConstructorInitializedPropertyGeneration.feature">
+    <SpecFlowFeatureFiles Update="Strategies\OperatorGeneration\NullParameterCheckOperatorGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Property Generator\NotifyPropertyChangedGeneration.feature">
+    <SpecFlowFeatureFiles Update="Strategies\OperatorGeneration\CanCallOperatorGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Property Generator\MultiConstructorInitializedPropertyGeneration.feature">
+    <SpecFlowFeatureFiles Update="Strategies\PropertyGenerator\SingleConstructorInitializedPropertyGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Property Generator\ReadWritePropertyGeneration.feature">
+    <SpecFlowFeatureFiles Update="Strategies\PropertyGenerator\NotifyPropertyChangedGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Property Generator\WriteOnlyPropertyGeneration.feature">
+    <SpecFlowFeatureFiles Update="Strategies\PropertyGenerator\MultiConstructorInitializedPropertyGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Strategies\Property Generator\ReadOnlyPropertyGeneration.feature">
+    <SpecFlowFeatureFiles Update="Strategies\PropertyGenerator\ReadWritePropertyGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\PropertyGenerator\WriteOnlyPropertyGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\PropertyGenerator\ReadOnlyPropertyGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
@@ -101,19 +112,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Strategies\Class Generation\AbstractClassGeneration.feature.cs">
+    <Compile Update="FrameworkGeneration\FrameworkGeneration.feature.cs">
+      <DependentUpon>FrameworkGeneration.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Strategies\ClassGeneration\AbstractClassGeneration.feature.cs">
       <DependentUpon>AbstractClassGeneration.feature</DependentUpon>
     </Compile>
-    <Compile Update="Strategies\Class Generation\StaticClassGeneration.feature.cs">
+    <Compile Update="Strategies\ClassGeneration\StaticClassGeneration.feature.cs">
       <DependentUpon>StaticClassGeneration.feature</DependentUpon>
     </Compile>
-    <Compile Update="Strategies\Class Generation\StandardClassGeneration.feature.cs">
+    <Compile Update="Strategies\ClassGeneration\StandardClassGeneration.feature.cs">
       <DependentUpon>StandardClassGeneration.feature</DependentUpon>
     </Compile>
-    <Compile Update="Strategies\Operator Generation\CanCallOperatorGeneration.feature.cs">
+    <Compile Update="Strategies\OperatorGeneration\CanCallOperatorGeneration.feature.cs">
       <DependentUpon>CanCallOperatorGeneration.feature</DependentUpon>
     </Compile>
-    <Compile Update="Strategies\Property Generator\ReadOnlyPropertyGeneration.feature.cs">
+    <Compile Update="Strategies\PropertyGenerator\ReadOnlyPropertyGeneration.feature.cs">
       <DependentUpon>ReadOnlyPropertyGeneration.feature</DependentUpon>
     </Compile>
     <Compile Update="Strategies\Regeneration\Regeneration.feature.cs">

@@ -147,11 +147,21 @@ this.ScenarioInitialize(scenarioInfo);
 #line 70
  testRunner.Then("I expect a method called \'ThisIsAPropertyIsInitializedCorrectly\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 71
-  testRunner.And("I expect it to contain the statement \'Assert.That(_testClass.ThisIsAProperty, Is." +
-                    "EqualTo(_thisIsAProperty));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to have the attribute \'Test\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 72
- testRunner.And("I expect a method called \'StringPropIsInitializedCorrectly\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to contain the statement \'_testClass = new TestClass(_thisIsAProperty" +
+                    ", _iTest);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 73
+  testRunner.And("I expect it to contain 2 statements called \'Assert.That(_testClass.ThisIsAPropert" +
+                    "y, Is.EqualTo(_thisIsAProperty));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 74
+ testRunner.And("I expect a method called \'StringPropIsInitializedCorrectly\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 75
+  testRunner.And("I expect it to contain the statement \'_testClass = new TestClass(_stringProp);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 76
+  testRunner.And("I expect it to contain 2 statements called \'Assert.That(_testClass.StringProp, Is" +
+                    ".EqualTo(_stringProp));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 77
  testRunner.And("I expect no method with a name like \'.*nullableIntProp.*\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

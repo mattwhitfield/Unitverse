@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs.Strategies
+﻿namespace SentryOne.UnitTestGenerator.Specs
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;

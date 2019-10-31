@@ -141,62 +141,49 @@ class Calculator {
 #line 66
  testRunner.When("I generate tests for the operator using the strategy \'NullParameterCheckOperatorG" +
                     "enerationStrategy\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                        "methodName",
+                        "methodStatement"});
+            table2.AddRow(new string[] {
+                        "CannotCallPlusOperatorWithNullCalc1",
+                        "Assert.ThrowsException<ArgumentNullException>(() => { var result = default(Calcul" +
+                            "ator) + new Calculator({{{AnyInteger}}});});"});
+            table2.AddRow(new string[] {
+                        "CannotCallPlusOperatorWithNullCalc2",
+                        "Assert.ThrowsException<ArgumentNullException>(() => { var result = new Calculator" +
+                            "({{{AnyInteger}}}) + default(Calculator);});"});
+            table2.AddRow(new string[] {
+                        "CannotCallMinusOperatorWithNullCalc1",
+                        "Assert.ThrowsException<ArgumentNullException>(() => { var result = default(Calcul" +
+                            "ator) - new Calculator({{{AnyInteger}}});});"});
+            table2.AddRow(new string[] {
+                        "CannotCallMinusOperatorWithNullCalc2",
+                        "Assert.ThrowsException<ArgumentNullException>(() => { var result = new Calculator" +
+                            "({{{AnyInteger}}}) - default(Calculator);});"});
+            table2.AddRow(new string[] {
+                        "CannotCallUnaryMinusOperatorWithNullCalc1",
+                        "Assert.ThrowsException<ArgumentNullException>(() => { var result = -default(Calcu" +
+                            "lator);});"});
+            table2.AddRow(new string[] {
+                        "CannotCallMultiplicationOperatorWithNullCalc1",
+                        "Assert.ThrowsException<ArgumentNullException>(() => { var result = default(Calcul" +
+                            "ator) * new Calculator({{{AnyInteger}}});});"});
+            table2.AddRow(new string[] {
+                        "CannotCallMultiplicationOperatorWithNullCalc2",
+                        "Assert.ThrowsException<ArgumentNullException>(() => { var result = new Calculator" +
+                            "({{{AnyInteger}}}) * default(Calculator);});"});
+            table2.AddRow(new string[] {
+                        "CannotCallDivisionOperatorWithNullCalc1",
+                        "Assert.ThrowsException<ArgumentNullException>(() => { var result = default(Calcul" +
+                            "ator) / new Calculator({{{AnyInteger}}});});"});
+            table2.AddRow(new string[] {
+                        "CannotCallDivisionOperatorWithNullCalc2",
+                        "Assert.ThrowsException<ArgumentNullException>(() => { var result = new Calculator" +
+                            "({{{AnyInteger}}}) / default(Calculator);});"});
 #line 67
- testRunner.Then("I expect a method called \'CannotCallPlusOperatorWithNullCalc1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 68
-  testRunner.And("I expect it to have the attribute \'TestMethod\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 69
-  testRunner.And("I expect it to contain a statement like \'Assert.ThrowsException<ArgumentNullExcep" +
-                    "tion>(() => { var result = default(Calculator) + new Calculator({{{AnyInteger}}}" +
-                    ");});\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 70
- testRunner.And("I expect a method called \'CannotCallPlusOperatorWithNullCalc2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 71
-  testRunner.And("I expect it to contain a statement like \'Assert.ThrowsException<ArgumentNullExcep" +
-                    "tion>(() => { var result = new Calculator({{{AnyInteger}}}) + default(Calculator" +
-                    ");});\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 72
- testRunner.And("I expect a method called \'CannotCallMinusOperatorWithNullCalc1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 73
-  testRunner.And("I expect it to contain a statement like \'Assert.ThrowsException<ArgumentNullExcep" +
-                    "tion>(() => { var result = default(Calculator) - new Calculator({{{AnyInteger}}}" +
-                    ");});\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 74
- testRunner.And("I expect a method called \'CannotCallMinusOperatorWithNullCalc2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 75
-  testRunner.And("I expect it to contain a statement like \'Assert.ThrowsException<ArgumentNullExcep" +
-                    "tion>(() => { var result = new Calculator({{{AnyInteger}}}) - default(Calculator" +
-                    ");});\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 76
- testRunner.And("I expect a method called \'CannotCallUnaryMinusOperatorWithNullCalc1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 77
-  testRunner.And("I expect it to contain a statement like \'Assert.ThrowsException<ArgumentNullExcep" +
-                    "tion>(() => { var result = -default(Calculator);});\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("I expect methods with statements like:", ((string)(null)), table2, "Then ");
 #line 78
- testRunner.And("I expect a method called \'CannotCallMultiplicationOperatorWithNullCalc1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 79
-  testRunner.And("I expect it to contain a statement like \'Assert.ThrowsException<ArgumentNullExcep" +
-                    "tion>(() => { var result = default(Calculator) * new Calculator({{{AnyInteger}}}" +
-                    ");});\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 80
- testRunner.And("I expect a method called \'CannotCallMultiplicationOperatorWithNullCalc2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 81
-  testRunner.And("I expect it to contain a statement like \'Assert.ThrowsException<ArgumentNullExcep" +
-                    "tion>(() => { var result = new Calculator({{{AnyInteger}}}) * default(Calculator" +
-                    ");});\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 82
- testRunner.And("I expect a method called \'CannotCallDivisionOperatorWithNullCalc1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 83
-  testRunner.And("I expect it to contain a statement like \'Assert.ThrowsException<ArgumentNullExcep" +
-                    "tion>(() => { var result = default(Calculator) / new Calculator({{{AnyInteger}}}" +
-                    ");});\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 84
- testRunner.And("I expect a method called \'CannotCallDivisionOperatorWithNullCalc2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 85
-  testRunner.And("I expect it to contain a statement like \'Assert.ThrowsException<ArgumentNullExcep" +
-                    "tion>(() => { var result = new Calculator({{{AnyInteger}}}) / default(Calculator" +
-                    ");});\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 86
  testRunner.And("I expect no method with a name like \'.*UnaryMinusOperatorWithNullCalc2.*\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

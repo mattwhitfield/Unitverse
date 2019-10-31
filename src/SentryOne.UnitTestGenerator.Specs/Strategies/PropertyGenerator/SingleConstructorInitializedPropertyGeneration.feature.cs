@@ -93,8 +93,8 @@ this.ScenarioInitialize(scenarioInfo);
 #line 24
   testRunner.And("I expect it to have the attribute \'Test\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 25
-  testRunner.And("I expect it to contain the statement \'Assert.That(_testClass.Str1, Is.EqualTo(_st" +
-                    "r1));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to contain 1 statements called \'Assert.That(_testClass.Str1, Is.Equal" +
+                    "To(_str1));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }

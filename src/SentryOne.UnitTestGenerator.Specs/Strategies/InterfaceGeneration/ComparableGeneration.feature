@@ -50,9 +50,7 @@ namespace AssemblyCore
 	Then I expect a method called 'ImplementsIComparable'
 		And I expect it to contain the statement 'Assert.That(baseValue.CompareTo(equalToBaseValue), Is.EqualTo(0));'
 		And I expect it to have the attribute 'Test'
-
 	And I expect a method called 'ImplementsIComparable_Int32'
 		And I expect it to contain the statement 'int greaterThanBaseValue = default(int);'
-
 	And I expect a method called 'ImplementsIComparable_TestComparableGeneric'
 		And I expect it to contain the variable 'baseValue'

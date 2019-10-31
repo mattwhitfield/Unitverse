@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs.Strategies
+﻿namespace SentryOne.UnitTestGenerator.Specs
 {
     using System;
     using Microsoft.CodeAnalysis;
@@ -30,16 +30,7 @@
                 BaseContext.CurrentMethod = value;
             }
         }
-        public SemanticModel SemanticModel
-        {
-            get
-            {
-                return BaseContext.SemanticModel;
-            }
-            set
-            {
-                BaseContext.SemanticModel = value;
-            }
-        }
+
+        public SemanticModel SemanticModel => BaseContext.SemanticModel;
     }
 }

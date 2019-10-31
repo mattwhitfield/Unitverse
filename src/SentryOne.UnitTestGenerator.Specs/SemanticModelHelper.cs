@@ -9,7 +9,6 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Formatting;
-    using SentryOne.UnitTestGenerator.Specs.Strategies;
 
     internal static class SemanticModelHelper
     {
@@ -107,6 +106,23 @@
                     Console.WriteLine(Formatter.Format(method, workspace).ToString());
                 }
             }
+        }
+
+        public static IEnumerable<MethodDeclarationSyntax> GetMethodList<T>(this IEnumerable<T> list, Func<T, bool> canHandle, Func<T, IEnumerable<MethodDeclarationSyntax>> generate)
+
+        {
+            var methodList = new List<MethodDeclarationSyntax>();
+
+            foreach (var item in list)
+            {
+                if (canHandle(item))
+                {
+                    methodList.AddRange(generate(item));
+                }
+            }
+
+            SemanticModelHelper.WriteMethods(methodList);
+            return methodList;
         }
     }
 }

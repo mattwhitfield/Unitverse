@@ -1,12 +1,10 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs.Strategies
+﻿namespace SentryOne.UnitTestGenerator.Specs
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
-    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis.Formatting;
     using NUnit.Framework;
     using SentryOne.UnitTestGenerator.Core.Frameworks;
     using SentryOne.UnitTestGenerator.Core.Models;
@@ -113,17 +111,9 @@
                 throw new InvalidOperationException();
             }
 
-            var methodList = new List<MethodDeclarationSyntax>();
-            foreach (var method in _context.ClassModel.Methods)
-            {
-                if (generationStrategy.CanHandle(method, _context.ClassModel))
-                {
-                    methodList.AddRange(generationStrategy.Create(method, _context.ClassModel));
-                }
-            }
-
-            _context.Result = methodList;
-            SemanticModelHelper.WriteMethods(_context.Result);
+            _context.Result = _context.ClassModel.Methods.GetMethodList(
+                method => generationStrategy.CanHandle(method, _context.ClassModel),
+                method => generationStrategy.Create(method, _context.ClassModel));
         }
 
         [When(@"I generate tests for the indexer using the strategy '(.*)'")]
@@ -153,17 +143,9 @@
                 throw new InvalidOperationException();
             }
 
-            var methodList = new List<MethodDeclarationSyntax>();
-            foreach (var indexer in _context.ClassModel.Indexers)
-            {
-                if (generationStrategy.CanHandle(indexer, _context.ClassModel))
-                {
-                    methodList.AddRange(generationStrategy.Create(indexer, _context.ClassModel));
-                }
-            }
-
-            _context.Result = methodList;
-            SemanticModelHelper.WriteMethods(_context.Result);
+            _context.Result = _context.ClassModel.Indexers.GetMethodList(
+                indexer => generationStrategy.CanHandle(indexer, _context.ClassModel),
+                indexer => generationStrategy.Create(indexer, _context.ClassModel));
         }
 
         [When(@"I generate tests for the operator using the strategy '(.*)'")]
@@ -187,18 +169,10 @@
             {
                 throw new InvalidOperationException();
             }
-
-            var methodList = new List<MethodDeclarationSyntax>();
-            foreach (var methodOperator in _context.ClassModel.Operators)
-            {
-                if (generationStrategy.CanHandle(methodOperator, _context.ClassModel))
-                {
-                    methodList.AddRange(generationStrategy.Create(methodOperator, _context.ClassModel));
-                }
-            }
-
-            _context.Result = methodList;
-            SemanticModelHelper.WriteMethods(_context.Result);
+            
+            _context.Result = _context.ClassModel.Operators.GetMethodList(
+                methodOperator => generationStrategy.CanHandle(methodOperator, _context.ClassModel),
+                methodOperator => generationStrategy.Create(methodOperator, _context.ClassModel));
         }
 
         [When(@"I generate tests for the property using the strategy '(.*)'")]
@@ -243,17 +217,9 @@
                 throw new InvalidOperationException();
             }
 
-            var methodList = new List<MethodDeclarationSyntax>();
-            foreach (var property in _context.ClassModel.Properties)
-            {
-                if (generationStrategy.CanHandle(property, _context.ClassModel))
-                {
-                    methodList.AddRange(generationStrategy.Create(property, _context.ClassModel));
-                }
-            }
-
-            _context.Result = methodList;
-            SemanticModelHelper.WriteMethods(_context.Result);
+            _context.Result = _context.ClassModel.Properties.GetMethodList(
+                property => generationStrategy.CanHandle(property, _context.ClassModel),
+                property => generationStrategy.Create(property, _context.ClassModel));
         }
 
         [Then (@"I expect a method called '(.*)'")]
@@ -296,10 +262,13 @@
                 out var foundStatements);
 
             var found = new List<string>();
+
             foreach (var foundStatement in foundStatements)
             {
-                found.Add(foundStatement.ToString());
+                    found.Add(foundStatement.ToString());
             }
+
+            found.RemoveAll(item => item == "none");
             
             if (!found.Any())
             {
@@ -327,14 +296,10 @@
                     break;
                 }
 
-                foreach (var item in foundList)
-                {
-                    if (item != "none")
-                    {
-                        found.Add(item);
-                    }
-                }
+                found.AddRange(foundList);
             }
+
+            found.RemoveAll(item => item == "none");
 
             if (!found.Any())
             {
@@ -383,9 +348,8 @@
             var isThere = _context.Result.FindMatches(
                 method => matcher.IsMatch(method.Identifier.ValueText), 
                 out _);
-
-            Assert.IsTrue(!isThere, "Expected no method called '{0}', found one", methodName);
-
+            
+            Assert.IsTrue(!isThere, "Expected no method called '{0}', found none", methodName);
         }
 
         [Then(@"I expect it to contain a using statement with a '(.*)' token")]
@@ -398,30 +362,23 @@
             {
                 Assert.Fail("Expected a using statement, found none");
             }
-            
+
             foreach (var statement in _context.CurrentMethod.Body.Statements.OfType<UsingStatementSyntax>())
             {
                 isThere = statement.Statement.DescendantTokens().FindMatches(token => token.ToString(),
-                   usingToken, 
+                   usingToken,
                    out var foundTokens,
                    out _);
-                
-                foreach (var token in statement.Statement.DescendantTokens())
-                {
-                    if (isThere)
-                    {
-                        break;
-                    }
 
-                    foreach (var tokenFound in foundTokens)
-                    {
-                        if (tokenFound != "none")
-                        {
-                            found.Add(tokenFound);
-                        }
-                    }
+                if (isThere)
+                {
+                    break;
                 }
+
+                found.AddRange(foundTokens);
             }
+
+            found.RemoveAll(item => item == "none");
 
             if (!found.Any())
             {
@@ -429,6 +386,50 @@
             }
 
             Assert.IsTrue(isThere, "Found a using statement, expected it to contain a '{0}' token, in contained tokens '{1}'", usingToken, found.Aggregate((x, y) => x + ", " + y));
+        }
+        
+        [Then(@"I expect methods with statements like:")]
+        public void ThenIExpectMethodsWithStatementsLike(Table table)
+        {
+            foreach (var row in table.Rows)
+            {
+                string methodName = row.First().Value;
+                var methodThere = _context.Result.FindMatches(
+                    method => method.Identifier.ValueText,
+                    methodName,
+                    out var found,
+                    out var methodFound);
+                
+                if (!methodThere)
+                {
+                    Assert.Fail("Expected to find method '{0}', found methods '{1}'", methodName, found.Aggregate((x, y) => x + ", " + y));
+                }
+
+                string methodStatement = row.Last().Value;
+                methodStatement = SemanticModelHelper.RemoveSpaces(methodStatement);
+                string updateMethodStatement = Regex.Escape(methodStatement).Replace("\\{\\{\\{AnyString}}}", "(.+)").Replace("\\{\\{\\{AnyInteger}}}", "(\\d+)");
+                var matcher = new Regex(updateMethodStatement);
+
+                var isThere = methodFound.Body.Statements.FindMatches(
+                statement => matcher.IsMatch(statement.ToString()),
+                out var statementsFound
+                );
+
+                var foundStatements = new List<string>();
+                foreach (var foundStatement in statementsFound)
+                {
+                        foundStatements.Add(foundStatement.ToString());
+                }
+
+                foundStatements.RemoveAll(item => item == "none");
+
+                if (!foundStatements.Any())
+                {
+                    foundStatements.Add("none");
+                }
+
+                Assert.True(isThere, "Expected to find statement like '{0}', found statements '{1}'", methodStatement, foundStatements.Aggregate((x, y) => x + ", " + y));
+            }
         }
     }
 }
