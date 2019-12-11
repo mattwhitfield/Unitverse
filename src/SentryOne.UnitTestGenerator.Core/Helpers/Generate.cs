@@ -348,7 +348,7 @@
                 return parenthesizedLambda;
             }
 
-            return SyntaxFactory.ParenthesizedLambdaExpression(expression);
+            return SyntaxFactory.ParenthesizedLambdaExpression(SyntaxFactory.ParameterList(), expression);
         }
 
         public static ArgumentListSyntax Arguments(params CSharpSyntaxNode[] expressions)
