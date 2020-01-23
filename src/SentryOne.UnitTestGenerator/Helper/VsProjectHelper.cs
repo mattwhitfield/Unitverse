@@ -2,6 +2,7 @@ namespace SentryOne.UnitTestGenerator.Helper
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using EnvDTE;
     using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.Shell;
@@ -10,6 +11,8 @@ namespace SentryOne.UnitTestGenerator.Helper
 
     internal static class VsProjectHelper
     {
+        private static readonly Guid FolderProject = new Guid("{66A26720-8FB5-11D2-AA7E-00C04F688DDE}");
+
         private static IEnumerable<IVsProject> LoadedProjects
         {
             get
@@ -30,6 +33,42 @@ namespace SentryOne.UnitTestGenerator.Helper
                     }
                 }
             }
+        }
+
+        public static Project FindProject(Solution solution, string projectName)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            return FindProject(projectName, solution.Projects.OfType<Project>());
+        }
+
+        private static Project FindProject(string projectName, IEnumerable<Project> currentProjects)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            foreach (var project in currentProjects)
+            {
+                if (string.Equals(project.Name, projectName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return project;
+                }
+
+                if (Guid.TryParse(project.Kind, out var projectKindGuid) && projectKindGuid == FolderProject)
+                {
+                    var subProjects = new List<Project>();
+                    foreach (var projectItem in project.ProjectItems.OfType<ProjectItem>())
+                    {
+                        if (projectItem.SubProject != null)
+                        {
+                            subProjects.Add(projectItem.SubProject);
+                        }
+                    }
+
+                    return FindProject(projectName, subProjects);
+                }
+            }
+
+            return null;
         }
 
         public static List<string> GetNameParts(ProjectItem projectItem)

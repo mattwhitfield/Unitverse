@@ -11,6 +11,8 @@
 
     public class ProjectItemModel
     {
+        private Project _targetProject;
+
         public ProjectItemModel(ProjectItem projectItem, IGenerationOptions options)
         {
             if (options == null)
@@ -51,16 +53,8 @@
             get
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
-                var targetProjectName = TargetProjectName;
-                foreach (var project in Project.DTE.Solution.Projects.OfType<Project>())
-                {
-                    if (string.Equals(project.Name, targetProjectName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return project;
-                    }
-                }
 
-                return null;
+                return _targetProject ?? (_targetProject = VsProjectHelper.FindProject(Item.DTE.Solution, TargetProjectName));
             }
         }
 
