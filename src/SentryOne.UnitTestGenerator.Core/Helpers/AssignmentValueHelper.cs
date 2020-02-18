@@ -100,7 +100,11 @@
                                 SyntaxKind.SimpleMemberAccessExpression,
                                 namedType.ToTypeSyntax(frameworkSet.Context),
                                 SyntaxFactory.IdentifierName(factoryMethod.Name)))
-                        .WithArgumentList(Generate.Arguments(factoryMethod.Parameters.Select(x => GetDefaultAssignmentValue(x.Type, semanticModel, visitedTypes, frameworkSet)).ToArray()));
+                        .WithArgumentList(Generate.Arguments(factoryMethod.Parameters.Select(x =>
+                        {
+                            var visitedTypesThisMember = new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase);
+                            return GetDefaultAssignmentValue(x.Type, semanticModel, visitedTypesThisMember, frameworkSet);
+                        }).OfType<CSharpSyntaxNode>().ToArray()));
                 }
 
                 var instanceProperty = namedType.GetMembers().OfType<IPropertySymbol>().FirstOrDefault(x => x.Type.Equals(namedType) && x.IsStatic);
@@ -117,7 +121,8 @@
 
             foreach (var parameter in constructor.Parameters)
             {
-                parameters.Add(GetDefaultAssignmentValue(parameter.Type, semanticModel, visitedTypes, frameworkSet));
+                var visitedTypesThisParameter = new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase);
+                parameters.Add(GetDefaultAssignmentValue(parameter.Type, semanticModel, visitedTypesThisParameter, frameworkSet));
             }
 
             return Generate.ObjectCreation(namedType.ToTypeSyntax(frameworkSet.Context), parameters.ToArray());

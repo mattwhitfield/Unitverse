@@ -209,11 +209,10 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         ///			return System.Threading.Tasks.Task.CompletedTask;
         ///	    }
         ///
-        ///	    public System.Threading.Tasks.Task&lt;int&gt; ThisIsAnAsyncMethod(string methodName, int methodValue)
+        ///	    public System.Threading.Tasks.Task&lt;int&gt; ThisIsAnAsyncMethodWithReturnType(string methodName, int methodValue)
         ///	    {
         ///		    System.Console.WriteLine(&quot;Testing this&quot;);
-        ///			return System.Threading.Tasks.Task.FromResult(0);
-        ///	     [rest of string was truncated]&quot;;.
+        ///			return System.Threading.Tasks.Task.FromRes [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AsyncMethod {
             get {
@@ -824,6 +823,15 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         internal static string RefAndOutParameters {
             get {
                 return ResourceManager.GetString("RefAndOutParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string RepeatedValueTypeParameters {
+            get {
+                return ResourceManager.GetString("RepeatedValueTypeParameters", resourceCulture);
             }
         }
         

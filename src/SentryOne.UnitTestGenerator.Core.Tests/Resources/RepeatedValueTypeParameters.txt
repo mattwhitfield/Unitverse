@@ -1,0 +1,18 @@
+namespace TestNamespace.SubNameSpace
+{
+    public class InnerClass
+    {
+        public InnerClass(int intParam1, int intParam2, int intParam3, string stringParam1, string stringParam2, string stringParam3)
+        {
+
+        }
+    }
+
+    public class OuterClass
+    {
+        public OuterClass(InnerClass innerClass)
+        {
+
+        }
+    }
+}
