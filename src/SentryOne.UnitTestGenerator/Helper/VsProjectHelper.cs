@@ -64,7 +64,11 @@ namespace SentryOne.UnitTestGenerator.Helper
                         }
                     }
 
-                    return FindProject(projectName, subProjects);
+                    var foundProject = FindProject(projectName, subProjects);
+                    if (foundProject != null)
+                    {
+                        return foundProject;
+                    }
                 }
             }
 
