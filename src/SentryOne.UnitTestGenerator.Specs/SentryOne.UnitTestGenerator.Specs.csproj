@@ -22,6 +22,7 @@
     <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\ReadOnlyPropertyGeneration - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\ReadWritePropertyGeneration - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\WriteOnlyPropertyGeneration - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Regeneration\Regeneration - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Regeneration\StandardClassGeneration.feature.cs" />
   </ItemGroup>
 
@@ -105,6 +106,10 @@
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\Regeneration\GenericRegeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Strategies\Regeneration\Regeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
@@ -129,6 +134,9 @@
     </Compile>
     <Compile Update="Strategies\PropertyGenerator\ReadOnlyPropertyGeneration.feature.cs">
       <DependentUpon>ReadOnlyPropertyGeneration.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Strategies\Regeneration\GenericRegeneration.feature.cs">
+      <DependentUpon>GenericRegeneration.feature</DependentUpon>
     </Compile>
     <Compile Update="Strategies\Regeneration\Regeneration.feature.cs">
       <DependentUpon>Regeneration.feature</DependentUpon>
