@@ -125,19 +125,25 @@
             return compilation;
         }
 
-        private static CompilationUnitSyntax AddTypeParameterAliases(ClassModel classModel, HashSet<string> typeParametersEmitted, CompilationUnitSyntax compilation)
+        private static NamespaceDeclarationSyntax AddTypeParameterAliases(ClassModel classModel, HashSet<string> typeParametersEmitted, NamespaceDeclarationSyntax targetNamespace)
         {
             foreach (var parameter in classModel.Declaration.TypeParameterList?.Parameters ?? Enumerable.Empty<TypeParameterSyntax>())
             {
+                var aliasedName = parameter.Identifier.ToString();
+                if (targetNamespace.DescendantNodes().OfType<UsingDirectiveSyntax>().Any(node => string.Equals(node.Alias?.Name?.ToString(), aliasedName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    continue;
+                }
+
                 if (typeParametersEmitted.Add(parameter.Identifier.ValueText))
                 {
-                    compilation = compilation.AddUsings(
+                    targetNamespace = targetNamespace.AddUsings(
                         SyntaxFactory.UsingDirective(SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName(Strings.UnitTestGenerator_AddUsingStatements_System), SyntaxFactory.IdentifierName("String")))
                             .WithAlias(SyntaxFactory.NameEquals(SyntaxFactory.IdentifierName(parameter.Identifier))));
                 }
             }
 
-            return compilation;
+            return targetNamespace;
         }
 
         private static NamespaceDeclarationSyntax AddTypeToTargetNamespace(TypeDeclarationSyntax originalTargetType, NamespaceDeclarationSyntax targetNamespace, TypeDeclarationSyntax targetType)
@@ -221,12 +227,12 @@
             }
         }
 
-        private static NamespaceDeclarationSyntax EmitUsingStatements(NamespaceDeclarationSyntax compilation, ISet<string> emittedUsings, params UsingDirectiveSyntax[] usings)
+        private static NamespaceDeclarationSyntax EmitUsingStatements(NamespaceDeclarationSyntax namespaceDeclaration, ISet<string> emittedUsings, params UsingDirectiveSyntax[] usings)
         {
-            return EmitUsingStatements(compilation, emittedUsings, usings?.AsEnumerable() ?? Enumerable.Empty<UsingDirectiveSyntax>());
+            return EmitUsingStatements(namespaceDeclaration, emittedUsings, usings?.AsEnumerable() ?? Enumerable.Empty<UsingDirectiveSyntax>());
         }
 
-        private static NamespaceDeclarationSyntax EmitUsingStatements(NamespaceDeclarationSyntax compilation, ISet<string> emittedUsings, IEnumerable<UsingDirectiveSyntax> usings)
+        private static NamespaceDeclarationSyntax EmitUsingStatements(NamespaceDeclarationSyntax namespaceDeclaration, ISet<string> emittedUsings, IEnumerable<UsingDirectiveSyntax> usings)
         {
             foreach (var usingDirective in usings)
             {
@@ -238,11 +244,11 @@
                         continue;
                     }
 
-                    compilation = compilation.AddUsings(usingDirective);
+                    namespaceDeclaration = namespaceDeclaration.AddUsings(usingDirective);
                 }
             }
 
-            return compilation;
+            return namespaceDeclaration;
         }
 
         private static TypeDeclarationSyntax EnsureAllConstructorParametersHaveFields(IFrameworkSet frameworkSet, ClassModel classModel, TypeDeclarationSyntax targetType)
@@ -349,7 +355,7 @@
             {
                 var targetType = GetOrCreateTargetType(sourceSymbol, targetNamespace, frameworkSet, classModel, out var originalTargetType);
 
-                compilation = AddTypeParameterAliases(classModel, typeParametersEmitted, compilation);
+                targetNamespace = AddTypeParameterAliases(classModel, typeParametersEmitted, targetNamespace);
 
                 targetType = ApplyStrategies(withRegeneration, targetType, frameworkSet, classModel);
 

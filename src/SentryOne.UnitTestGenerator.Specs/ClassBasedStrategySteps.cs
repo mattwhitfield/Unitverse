@@ -139,6 +139,13 @@
             Assert.IsTrue(isThere, "Expected method '{0}', found methods '{1}'", methodName, found.Aggregate((x, y) => x + ", " + y));
         }
 
+        [Then(@"I expect only one generic type alias")]
+        public void ThenIExpectASingleGenericTypeAlias()
+        {
+            var usingStatements = _context.CurrentClass.Ancestors().OfType<NamespaceDeclarationSyntax>().First().DescendantNodes().OfType<UsingDirectiveSyntax>().ToList();
+            Assert.That(usingStatements.Count(x => string.Equals(x.Alias?.Name?.ToString(), "T", StringComparison.OrdinalIgnoreCase)), Is.EqualTo(1));
+        }
+
         [Then(@"I expect it to contain an assignment for '(.*)'")]
         public void ThenIExpectField(string fieldName)
         {
