@@ -10,6 +10,8 @@
 
         bool AddReferencesAutomatically { get; }
 
+        bool AllowGenerationWithoutTargetProject { get; }
+
         string TestProjectNaming { get; }
 
         string TestFileNaming { get; }

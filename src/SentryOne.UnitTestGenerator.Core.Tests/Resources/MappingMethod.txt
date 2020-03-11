@@ -1,0 +1,23 @@
+namespace TestApp1
+{
+    public class InputClass
+    {
+        public string SomeProperty { get; }
+        public string SomeOtherProperty { get; set; }
+        public string WriteOnlyProperty { set { } }
+    }
+
+    public class OutputClass
+    {
+        public string SomeProperty { get; set; }
+        public string SomeOtherProperty { get; set; }
+        public string WriteOnlyProperty { get; set; }
+    }
+    public class C3
+    {
+        public OutputClass Map(InputClass inputClass)
+        {
+            return null;
+        }
+    }
+}

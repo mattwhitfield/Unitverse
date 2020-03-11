@@ -628,6 +628,15 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MappingMethod {
+            get {
+                return ResourceManager.GetString("MappingMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to namespace SentryOne.Document.Web.Services.Workflow
         ///{
         ///	using System;
@@ -827,7 +836,24 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class InnerClass
+        ///    {
+        ///        public InnerClass(int intParam1, int intParam2, int intParam3, string stringParam1, string stringParam2, string stringParam3)
+        ///        {
+        ///
+        ///        }
+        ///    }
+        ///
+        ///    public class OuterClass
+        ///    {
+        ///        public OuterClass(InnerClass innerClass)
+        ///        {
+        ///
+        ///        }
+        ///    }
+        ///}.
         /// </summary>
         internal static string RepeatedValueTypeParameters {
             get {

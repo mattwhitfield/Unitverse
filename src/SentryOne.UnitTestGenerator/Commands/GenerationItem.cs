@@ -22,7 +22,7 @@
             _options = options ?? throw new ArgumentNullException(nameof(options));
             Source = source ?? throw new ArgumentNullException(nameof(source));
             SourceSymbol = sourceSymbol;
-            TargetProjectItems = targetProjectItems ?? throw new ArgumentNullException(nameof(targetProjectItems));
+            TargetProjectItems = targetProjectItems;
             _targetPath = targetPath;
             RequiredAssets = requiredAssets ?? throw new ArgumentNullException(nameof(requiredAssets));
             NamespaceTransform = namespaceTransform ?? throw new ArgumentNullException(nameof(namespaceTransform));
@@ -41,7 +41,20 @@
 
         public string TargetContent { get; set; }
 
-        public string TargetFileName => Path.Combine(_targetPath, _options.GetTargetFileName(Path.GetFileNameWithoutExtension(Source.FilePath)) + Path.GetExtension(Source.FilePath));
+        public string TargetFileName
+        {
+            get
+            {
+                var targetFileName = _options.GetTargetFileName(Path.GetFileNameWithoutExtension(Source.FilePath)) + Path.GetExtension(Source.FilePath);
+                if (string.IsNullOrEmpty(_targetPath))
+                {
+                    return targetFileName;
+                }
+
+                return Path.Combine(_targetPath, targetFileName);
+            }
+
+        }
 
         public ProjectItems TargetProjectItems { get; }
     }

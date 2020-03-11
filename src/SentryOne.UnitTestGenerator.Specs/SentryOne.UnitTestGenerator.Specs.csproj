@@ -15,6 +15,7 @@
     <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\IndexerGeneration\ReadOnlyIndexerGeneration - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\IndexerGeneration\WriteOnlyIndexerGeneration - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="MockGeneration\StandardClassGeneration.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\MethodGeneration\CanCallMethodGeneration - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\OperatorGeneration\NullParameterCheckConstructorGenerator.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\OperatorGeneration\NullParameterCheckOperatorGenerator - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\MultiConstructorInitialisedPropertyGeneration - Copy.feature.cs" />
@@ -74,6 +75,10 @@
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Strategies\MethodGeneration\MappingMethodGeneration.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Strategies\OperatorGeneration\NullParameterCheckOperatorGeneration.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
@@ -128,6 +133,9 @@
     </Compile>
     <Compile Update="Strategies\ClassGeneration\StandardClassGeneration.feature.cs">
       <DependentUpon>StandardClassGeneration.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Strategies\MethodGeneration\MappingMethodGeneration.feature.cs">
+      <DependentUpon>MappingMethodGeneration.feature</DependentUpon>
     </Compile>
     <Compile Update="Strategies\OperatorGeneration\CanCallOperatorGeneration.feature.cs">
       <DependentUpon>CanCallOperatorGeneration.feature</DependentUpon>

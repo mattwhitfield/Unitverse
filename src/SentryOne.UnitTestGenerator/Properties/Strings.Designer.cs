@@ -61,6 +61,15 @@ namespace SentryOne.UnitTestGenerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string DisconnectedFileHeader {
+            get {
+                return ResourceManager.GetString("DisconnectedFileHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot not derive target project name, please check the test project naming setting..
         /// </summary>
         internal static string ProjectItemModel_ProjectItemModel_Cannot_not_derive_target_project_name__please_check_the_test_project_naming_setting_ {

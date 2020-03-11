@@ -1,0 +1,7 @@
+// This file was generated with SentryOne Unit Test Generator
+
+// It has not been added to a test project because an existing test project was not found
+// and the 'Automatically create Tests project' setting is turned off.
+
+// To change this, please go to Tools -> Options -> SentryOne Unit Test Generator
+

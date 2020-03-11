@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\CommandImages.png" />
+    <None Include="Resources\DisconnectedFileHeader.txt" />
     <Content Include="Resources\UnitTestGeneratorPackage.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

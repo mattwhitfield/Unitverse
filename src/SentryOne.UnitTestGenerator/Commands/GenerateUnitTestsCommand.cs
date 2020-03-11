@@ -143,8 +143,11 @@
                     }
 
                     var targetProject = source.TargetProject;
-                    targetProjects[source.Project] = targetProject ?? throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
-                    projectDictionary[targetProject] = Tuple.Create(new HashSet<TargetAsset>(), new HashSet<IReferencedAssembly>());
+                    if (!_package.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
+                    {
+                        targetProjects[source.Project] = targetProject ?? throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
+                        projectDictionary[targetProject] = Tuple.Create(new HashSet<TargetAsset>(), new HashSet<IReferencedAssembly>());
+                    }
                 }
 
                 foreach (var source in sources)
@@ -163,20 +166,42 @@
 
                     var nameParts = VsProjectHelper.GetNameParts(projectItem);
 
-                    var targetProject = targetProjects[source.Project];
-
+                    targetProjects.TryGetValue(source.Project, out var targetProject);
                     var targetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out var targetPath);
 
-                    if (targetProjectItems == null)
+                    if (targetProjectItems == null && !_package.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
                     {
                         // we asked to create targetProjectItems - so if it's null we effectively had a problem getting to the target project
                         throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
                     }
 
                     var sourceNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.Project);
-                    var targetNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.TargetProject);
+                    HashSet<TargetAsset> requiredAssets;
+                    HashSet<IReferencedAssembly> referencedAssemblies;
 
-                    generationItems.Add(new GenerationItem(source, null, targetProjectItems, targetPath, projectDictionary[targetProject].Item1, projectDictionary[targetProject].Item2, NamespaceTransform.Create(sourceNameSpaceRoot, targetNameSpaceRoot), _package.Options.GenerationOptions));
+                    if (targetProject != null && projectDictionary.TryGetValue(targetProject, out var targetProjectEntry))
+                    {
+                        requiredAssets = targetProjectEntry.Item1;
+                        referencedAssemblies = targetProjectEntry.Item2;
+                    }
+                    else
+                    {
+                        requiredAssets = new HashSet<TargetAsset>();
+                        referencedAssemblies = new HashSet<IReferencedAssembly>();
+                    }
+
+                    Func<string, string> namespaceTransform;
+                    if (source.TargetProject != null)
+                    {
+                        var targetNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.TargetProject);
+                        namespaceTransform = NamespaceTransform.Create(sourceNameSpaceRoot, targetNameSpaceRoot);
+                    }
+                    else
+                    {
+                        namespaceTransform = x => x + ".Tests";
+                    }
+
+                    generationItems.Add(new GenerationItem(source, null, targetProjectItems, targetPath, requiredAssets, referencedAssemblies, namespaceTransform, _package.Options.GenerationOptions));
                 }
 #pragma warning restore VSTHRD010
             }, _package);

@@ -223,7 +223,7 @@
                 }
 
                 var targetProject = source.TargetProject;
-                if (targetProject == null)
+                if (targetProject == null && !_package.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
                 {
                     throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
                 }
@@ -231,10 +231,13 @@
                 var projectDictionary = new Dictionary<EnvDTE.Project, Tuple<HashSet<TargetAsset>, HashSet<IReferencedAssembly>>>();
                 var set = new HashSet<TargetAsset>();
                 var assemblyReferences = new HashSet<IReferencedAssembly>();
-                projectDictionary[targetProject] = Tuple.Create(set, assemblyReferences);
+                if (targetProject != null)
+                {
+                    projectDictionary[targetProject] = Tuple.Create(set, assemblyReferences);
+                }
 
                 var targetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out var targetPath);
-                if (targetProjectItems == null)
+                if (targetProjectItems == null && !_package.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
                 {
                     // we asked to create targetProjectItems - so if it's null we effectively had a problem getting to the target project
                     throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
@@ -249,9 +252,19 @@
                         if (methodSymbol != null)
                         {
                             var sourceNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.Project);
-                            var targetNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.TargetProject);
 
-                            generationItem = new GenerationItem(source, methodSymbol.Item1, targetProjectItems, targetPath, set, assemblyReferences, NamespaceTransform.Create(sourceNameSpaceRoot, targetNameSpaceRoot), _package.Options.GenerationOptions);
+                            Func<string, string> namespaceTransform;
+                            if (source.TargetProject != null)
+                            {
+                                var targetNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.TargetProject);
+                                namespaceTransform = NamespaceTransform.Create(sourceNameSpaceRoot, targetNameSpaceRoot);
+                            }
+                            else
+                            {
+                                namespaceTransform = x => x + ".Tests";
+                            }
+
+                            generationItem = new GenerationItem(source, methodSymbol.Item1, targetProjectItems, targetPath, set, assemblyReferences, namespaceTransform, _package.Options.GenerationOptions);
 
                             await CodeGenerator.GenerateCodeAsync(new[] { generationItem }, withRegeneration, _package, projectDictionary, messageLogger).ConfigureAwait(true);
                         }

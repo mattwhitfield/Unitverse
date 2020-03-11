@@ -106,6 +106,11 @@
                 generationStrategy = new StringParameterCheckMethodGenerationStrategy(frameworkSet);
             }
 
+            if (strategy == "MappingMethodGenerationStrategy")
+            {
+                generationStrategy = new MappingMethodGenerationStrategy(frameworkSet);
+            }
+
             if (generationStrategy == null)
             {
                 throw new InvalidOperationException();

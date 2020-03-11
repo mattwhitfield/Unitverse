@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using EnvDTE;
+    using EnvDTE80;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.VisualStudio.Shell;
@@ -14,6 +15,7 @@
     using SentryOne.UnitTestGenerator.Core.Assets;
     using SentryOne.UnitTestGenerator.Core.Helpers;
     using SentryOne.UnitTestGenerator.Core.Models;
+    using SentryOne.UnitTestGenerator.Properties;
     using Project = EnvDTE.Project;
     using Solution = Microsoft.CodeAnalysis.Solution;
     using Task = System.Threading.Tasks.Task;
@@ -55,11 +57,44 @@
                 messageLogger.LogMessage("Adding generated items to target project...");
                 foreach (var generationItem in generationItems.Where(x => !string.IsNullOrWhiteSpace(x.TargetContent)))
                 {
-                    AddTargetItem(generationItems, package, generationItem);
+                    if (generationItem.TargetProjectItems != null)
+                    {
+                        AddTargetItem(generationItems, package, generationItem);
+                    }
+                    else
+                    {
+                        CreateUnsavedFile(package, generationItem);
+                    }
                 }
 
                 messageLogger.LogMessage("Generation complete.");
             }, package);
+        }
+
+        private static void CreateUnsavedFile(IUnitTestGeneratorPackage package, GenerationItem generationItem)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(generationItem.TargetFileName));
+            try
+            {
+                File.WriteAllText(tempFile, Strings.DisconnectedFileHeader + generationItem.TargetContent);
+                var dte = (DTE2)package.GetService(typeof(DTE));
+                if (dte != null)
+                {
+                    var window = dte.ItemOperations.OpenFile(tempFile, Constants.vsViewKindCode);
+                    window.Document.Saved = false;
+                }
+            }
+            finally
+            {
+                try
+                {
+                    File.Delete(tempFile);
+                }
+                catch (IOException)
+                {
+                }
+            }
         }
 
         private static void AddTargetItem(IReadOnlyCollection<GenerationItem> generationItems, IUnitTestGeneratorPackage package, GenerationItem generationItem)
@@ -78,7 +113,7 @@
                 }
                 else
                 {
-                    var textSelection = (TextSelection)targetItem.Document.Selection;
+                    var textSelection = (TextSelection) targetItem.Document.Selection;
                     textSelection.SelectAll();
                     textSelection.Insert(generationItem.TargetContent);
                     targetItem.Document.Save();

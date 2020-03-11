@@ -20,6 +20,7 @@
                 new CanCallMethodGenerationStrategy(_frameworkSet),
                 new NullParameterCheckMethodGenerationStrategy(_frameworkSet),
                 new StringParameterCheckMethodGenerationStrategy(_frameworkSet),
+                new MappingMethodGenerationStrategy(_frameworkSet), 
             };
     }
 }

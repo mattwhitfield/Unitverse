@@ -27,6 +27,11 @@ namespace SentryOne.UnitTestGenerator.Options
         [Description("References will be added to test projects automatically")]
         public bool AddReferencesAutomatically { get; set; } = true;
 
+        [Category("Test project")]
+        [DisplayName("Allow generation without target project")]
+        [Description("Tests will be generated as a file outside of the scope of a project if a target project is not available")]
+        public bool AllowGenerationWithoutTargetProject { get; set; } = true;
+
         [Category("Naming")]
         [DisplayName("Project naming convention")]
         [Description("Format string that converts the source project name to the unit test project name")]

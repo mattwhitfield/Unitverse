@@ -14,6 +14,7 @@
         public MockingFrameworkType MockingFrameworkType { get; }
         public bool CreateProjectAutomatically { get; } = true;
         public bool AddReferencesAutomatically { get; } = true;
+        public bool AllowGenerationWithoutTargetProject { get; } = true;
         public string TestProjectNaming { get; } = "{0}.Tests";
         public string TestFileNaming { get; } = "{0}Tests";
         public string TestTypeNaming { get; } = "{0}Tests";
