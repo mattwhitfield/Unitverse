@@ -157,7 +157,9 @@
 
         private static async Task GenerateItemAsync(bool withRegeneration, IUnitTestGeneratorPackage package, Solution solution, GenerationItem generationItem)
         {
-            var documentId = solution.GetDocumentIdsWithFilePath(generationItem.Source.FilePath).FirstOrDefault();
+            var targetProject = solution.Projects.FirstOrDefault(x => string.Equals(x.Name, generationItem.Source.Project.Name, StringComparison.Ordinal));
+            var documents = solution.GetDocumentIdsWithFilePath(generationItem.Source.FilePath);
+            var documentId = documents.FirstOrDefault(x => x.ProjectId == targetProject?.Id) ?? documents.FirstOrDefault();
             if (documentId == null)
             {
                 throw new InvalidOperationException("Could not find document in solution with file path '" + generationItem.Source.FilePath + "'");
