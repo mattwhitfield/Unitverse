@@ -143,9 +143,15 @@
                     }
 
                     var targetProject = source.TargetProject;
-                    if (!_package.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
+
+                    if (targetProject == null && !_package.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
                     {
-                        targetProjects[source.Project] = targetProject ?? throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
+                        throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
+                    }
+
+                    if (targetProject != null)
+                    {
+                        targetProjects[source.Project] = targetProject;
                         projectDictionary[targetProject] = Tuple.Create(new HashSet<TargetAsset>(), new HashSet<IReferencedAssembly>());
                     }
                 }
