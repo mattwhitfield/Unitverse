@@ -39,7 +39,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var classImplementsNotifyPropertyChanged = model.Declaration.BaseList?.Types.Any(t => t.Type.GetText().ToString().IndexOf("INotifyPropertyChanged", StringComparison.Ordinal) >= 0) ?? false;
+            var classImplementsNotifyPropertyChanged = model.TypeSymbol.AllInterfaces.Any(x => string.Equals(x.Name, "INotifyPropertyChanged", StringComparison.Ordinal));
             return classImplementsNotifyPropertyChanged && property.HasGet && property.HasSet;
         }
 

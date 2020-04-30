@@ -80,48 +80,48 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 6
  testRunner.Given("I have a class defined as", "using System.ComponentModel;\r\nusing System.Windows.Media;\r\n\r\nnamespace AssemblyCo" +
-                    "re\r\n{\r\n   public class PropertyChange : INotifyPropertyChanged\r\n   {\r\n       pri" +
-                    "vate string name;\r\n\r\n       public string Name\r\n       {\r\n           get { retur" +
-                    "n name; }\r\n           set\r\n           {\r\n               name = value;\r\n         " +
-                    "      OnPropertChanged(\"Name\");\r\n               OnPropertChanged(\"FullName\");\r\n " +
-                    "          }\r\n       }\r\n\r\n       private string lastname;\r\n\r\n       public string" +
-                    " LastName\r\n       {\r\n           get { return lastname; }\r\n           set\r\n      " +
-                    "     {\r\n               lastname = value;\r\n               OnPropertChanged(\"LastN" +
-                    "ame\");\r\n               OnPropertChanged(\"FullName\");\r\n           }\r\n       }\r\n\r\n" +
-                    "       private string fullName;\r\n\r\n       public string FullName\r\n       {\r\n    " +
-                    "       get { return fullName; }\r\n           set\r\n           {\r\n               fu" +
-                    "llName = value;\r\n               OnPropertChanged(\"FullName\");\r\n           }\r\n   " +
-                    "    }\r\n\r\n       private Color color;\r\n\r\n       public Color Color\r\n       {\r\n   " +
-                    "        get { return color; }\r\n           set\r\n           {\r\n               colo" +
-                    "r = value;\r\n               OnPropertChanged(\"Color\");\r\n           }\r\n       }\r\n\r" +
-                    "\n\tpublic string notChange { get}\r\n\r\n       public PropertyChange()\r\n       {\r\n\r\n" +
-                    "       }\r\n\r\n       public event PropertyChangedEventHandler PropertyChanged;\r\n\r\n" +
-                    "       private void OnPropertChanged(string propertyName)\r\n       {\r\n           " +
-                    "if (PropertyChanged != null)\r\n               PropertyChanged(this, new PropertyC" +
-                    "hangedEventArgs(propertyName));\r\n       }\r\n   }\r\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 82
- testRunner.And("I set my test framework to \'NUnit3\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                    "re\r\n{\r\n   public class PropertyChange : BaseCl\r\n   {\r\n       private string name" +
+                    ";\r\n\r\n       public string Name\r\n       {\r\n           get { return name; }\r\n     " +
+                    "      set\r\n           {\r\n               name = value;\r\n               OnProperty" +
+                    "Changed(\"Name\");\r\n           }\r\n       }\r\n\r\n       private string lastname;\r\n\r\n " +
+                    "      public string LastName\r\n       {\r\n           get { return lastname; }\r\n   " +
+                    "        set\r\n           {\r\n               lastname = value;\r\n               OnPr" +
+                    "opertyChanged(\"LastName\");\r\n           }\r\n       }\r\n\r\n       private string full" +
+                    "Name;\r\n\r\n       public string FullName\r\n       {\r\n           get { return fullNa" +
+                    "me; }\r\n           set\r\n           {\r\n               fullName = value;\r\n         " +
+                    "      OnPropertyChanged(\"FullName\");\r\n           }\r\n       }\r\n\r\n       private C" +
+                    "olor color;\r\n\r\n       public Color Color\r\n       {\r\n           get { return colo" +
+                    "r; }\r\n           set\r\n           {\r\n               color = value;\r\n             " +
+                    "  OnPropertyChanged(\"Color\");\r\n           }\r\n       }\r\n\r\n\tpublic string notChang" +
+                    "e { get}\r\n\r\n       public PropertyChange()\r\n       {\r\n\r\n       }\r\n   }\r\n\r\n   pub" +
+                    "lic class BaseCl : INotifyPropertyChanged\r\n   {\r\n       public event PropertyCha" +
+                    "ngedEventHandler PropertyChanged;\r\n\r\n       protected void OnPropertyChanged(str" +
+                    "ing propertyName)\r\n       {\r\n           if (PropertyChanged != null)\r\n          " +
+                    "     PropertyChanged(this, new PropertyChangedEventArgs(propertyName));\r\n       " +
+                    "}\r\n   }\r\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 83
- testRunner.And("I set my mock framework to \'FakeItEasy\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I set my test framework to \'NUnit3\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 84
+ testRunner.And("I set my mock framework to \'FakeItEasy\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 85
  testRunner.When("I generate tests for the property using the strategy \'NotifyPropertyChangedGenera" +
                     "tionStrategy\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 85
- testRunner.Then("I expect a method called \'CanSetAndGetName\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 86
-  testRunner.And("I expect it to contain the statement \'_testClass.CheckProperty(x => x.Name);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("I expect a method called \'CanSetAndGetName\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 87
- testRunner.And("I expect a method called \'CanSetAndGetLastName\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to contain the statement \'_testClass.CheckProperty(x => x.Name);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 88
-  testRunner.And("I expect it to have the attribute \'Test\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I expect a method called \'CanSetAndGetLastName\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 89
- testRunner.And("I expect a method called \'CanSetAndGetFullName\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to have the attribute \'Test\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 90
- testRunner.And("I expect a method called \'CanSetAndGetColor\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I expect a method called \'CanSetAndGetFullName\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 91
+ testRunner.And("I expect a method called \'CanSetAndGetColor\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 92
   testRunner.And("I expect it to contain the statement \'_testClass.CheckProperty(x => x.Color, defa" +
                     "ult(Color), default(Color));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 92
+#line 93
  testRunner.And("I expect no method with a name like \'.*notChange.*\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

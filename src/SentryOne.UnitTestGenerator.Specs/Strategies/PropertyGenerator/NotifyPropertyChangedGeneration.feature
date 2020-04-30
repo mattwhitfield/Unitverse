@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace AssemblyCore
 {
-    public class PropertyChange : INotifyPropertyChanged
+    public class PropertyChange : BaseCl
     {
         private string name;
 
@@ -20,8 +20,7 @@ namespace AssemblyCore
             set
             {
                 name = value;
-                OnPropertChanged("Name");
-                OnPropertChanged("FullName");
+                OnPropertyChanged("Name");
             }
         }
 
@@ -33,8 +32,7 @@ namespace AssemblyCore
             set
             {
                 lastname = value;
-                OnPropertChanged("LastName");
-                OnPropertChanged("FullName");
+                OnPropertyChanged("LastName");
             }
         }
 
@@ -46,7 +44,7 @@ namespace AssemblyCore
             set
             {
                 fullName = value;
-                OnPropertChanged("FullName");
+                OnPropertyChanged("FullName");
             }
         }
 
@@ -58,7 +56,7 @@ namespace AssemblyCore
             set
             {
                 color = value;
-                OnPropertChanged("Color");
+                OnPropertyChanged("Color");
             }
         }
 
@@ -68,10 +66,13 @@ namespace AssemblyCore
         {
 
         }
+    }
 
+    public class BaseCl : INotifyPropertyChanged
+    {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertChanged(string propertyName)
+        protected void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));

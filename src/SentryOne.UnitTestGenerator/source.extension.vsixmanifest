@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="SentryOne.UnitTestGenerator.4a7063ed-7b9a-4195-a740-9976b84638ea" Version="1.0.31" Language="en-US" Publisher="SentryOne" />
+        <Identity Id="SentryOne.UnitTestGenerator.4a7063ed-7b9a-4195-a740-9976b84638ea" Version="1.0.32" Language="en-US" Publisher="SentryOne" />
         <DisplayName>SentryOne Unit Test Generator</DisplayName>
         <Description xml:space="preserve">SentryOne Unit Test Generator generates boiler plate unit test code for existing classes.</Description>
         <Icon>Resources\UnitTestGeneratorPackage.png</Icon>
