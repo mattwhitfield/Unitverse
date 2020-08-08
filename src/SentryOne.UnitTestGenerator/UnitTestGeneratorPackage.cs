@@ -1,9 +1,12 @@
 ﻿namespace SentryOne.UnitTestGenerator
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using System.Threading;
+    using EditorConfig.Core;
     using Microsoft.VisualStudio.ComponentModelHost;
     using Microsoft.VisualStudio.LanguageServices;
     using Microsoft.VisualStudio.Shell;
@@ -23,7 +26,31 @@
     [ProvideOptionPage(typeof(VersioningOptions), "SentryOne Unit Test Generator", "Versioning Options", 0, 0, true)]
     public sealed class UnitTestGeneratorPackage : AsyncPackage, IUnitTestGeneratorPackage
     {
-        public IUnitTestGeneratorOptions Options => new UnitTestGeneratorOptions((GenerationOptions)GetDialogPage(typeof(GenerationOptions)), (VersioningOptions)GetDialogPage(typeof(VersioningOptions)));
+        public IUnitTestGeneratorOptions Options
+        {
+            get
+            {
+                var generationOptions = new MutableGenerationOptions((GenerationOptions) GetDialogPage(typeof(GenerationOptions)));
+                var versioningOptions = new MutableVersioningOptions((VersioningOptions) GetDialogPage(typeof(VersioningOptions)));
+
+                var solution = Workspace.CurrentSolution;
+                if (solution != null)
+                {
+                    var allFiles = new EditorConfigParser(".unitTestGeneratorConfig").GetConfigurationFilesTillRoot(solution.FilePath);
+                    var allProperties = allFiles.SelectMany(x => x.Sections).SelectMany(x => x);
+                    var properties = new Dictionary<string, string>();
+                    foreach (var pair in allProperties)
+                    {
+                        properties[pair.Key] = pair.Value;
+                    }
+
+                    properties.ApplyTo(generationOptions);
+                    properties.ApplyTo(versioningOptions);
+                }
+
+                return new UnitTestGeneratorOptions(generationOptions, versioningOptions);
+            }
+        }
 
         public IVsPackageInstaller PackageInstaller { get; private set; }
 

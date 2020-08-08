@@ -287,6 +287,8 @@
     <Compile Include="Models\ReferencedAssemblyTests.cs" />
     <Compile Include="Models\SemanticVersionTests.cs" />
     <Compile Include="Models\TestableModelTests.cs" />
+    <Compile Include="Options\MutableGenerationOptionsTests.cs" />
+    <Compile Include="Options\MutableVersioningOptionsTests.cs" />
     <Compile Include="Options\UnitTestGeneratorOptionsTests.cs" />
     <Compile Include="Strategies\ClassGeneration\AbstractClassGenerationStrategyTests.cs" />
     <Compile Include="Strategies\ClassGeneration\ClassGenerationStrategyFactoryTests.cs" />

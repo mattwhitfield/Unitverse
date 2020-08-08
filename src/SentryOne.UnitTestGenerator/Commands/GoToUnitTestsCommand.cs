@@ -7,6 +7,7 @@
     using EnvDTE80;
     using Microsoft.VisualStudio.Shell;
     using SentryOne.UnitTestGenerator.Helper;
+    using SentryOne.UnitTestGenerator.Options;
     using Task = System.Threading.Tasks.Task;
 
     /// <summary>
@@ -85,13 +86,14 @@
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
 
-                var source = SolutionUtilities.GetSelectedFiles(_dte, false, _package.Options.GenerationOptions).FirstOrDefault(ProjectItemModel.IsSupported);
+                var options = _package.Options;
+                var source = SolutionUtilities.GetSelectedFiles(_dte, false, options.GenerationOptions).FirstOrDefault(ProjectItemModel.IsSupported);
                 if (source == null)
                 {
                     throw new InvalidOperationException("Cannot go to tests for this item because no supported files were found");
                 }
 
-                var status = TargetFinder.FindExistingTargetItem(source, _package.Options.GenerationOptions, out var targetItem);
+                var status = TargetFinder.FindExistingTargetItem(source, options.GenerationOptions, out var targetItem);
                 switch (status)
                 {
                     case FindTargetStatus.FileNotFound:

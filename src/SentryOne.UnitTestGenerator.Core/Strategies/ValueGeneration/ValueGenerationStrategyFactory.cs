@@ -32,6 +32,7 @@
                 new SimpleValueGenerationStrategy(() => Generate.Literal((float)(Random.NextDouble() * short.MaxValue)), "float", "float?"),
                 new SimpleValueGenerationStrategy(() => (Random.Next(int.MaxValue) % 2) > 0 ? Generate.Literal(true) : Generate.Literal(false), "bool", "bool?"),
                 new SimpleValueGenerationStrategy(() => SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("CultureInfo"), SyntaxFactory.IdentifierName((Random.Next(int.MaxValue) % 2) > 0 ? "CurrentCulture" : "InvariantCulture")), "System.Globalization.CultureInfo"),
+                new SimpleValueGenerationStrategy(() => SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("CancellationToken"), SyntaxFactory.IdentifierName("None")), "System.Threading.CancellationToken"),
                 new SimpleValueGenerationStrategy(ArrayFactory.Byte, "byte[]"),
                 new TypedValueGenerationStrategy(EnumFactory.Random, "System.Enum"),
                 new SimpleValueGenerationStrategy(() => Generate.ObjectCreation(SyntaxFactory.IdentifierName("MemoryStream")), "System.IO.Stream"),

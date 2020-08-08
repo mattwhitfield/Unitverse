@@ -102,9 +102,10 @@
 
                 var item = VsProjectHelper.GetProjectItem(document.FilePath);
 
-                var source = new ProjectItemModel(item, _package.Options.GenerationOptions);
+                var options = _package.Options;
+                var source = new ProjectItemModel(item, options.GenerationOptions);
 
-                var status = TargetFinder.FindExistingTargetItem(source, _package.Options.GenerationOptions, out var targetItem);
+                var status = TargetFinder.FindExistingTargetItem(source, options.GenerationOptions, out var targetItem);
                 switch (status)
                 {
                     case FindTargetStatus.FileNotFound:
