@@ -79,7 +79,9 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line hidden
 #line 6
- testRunner.Given("I have a class defined as", @"public class TestClass
+ testRunner.Given("I have a class defined as", @"using System.Threading;
+
+public class TestClass
 {
 public void Test1(out string tester)
 {
@@ -89,6 +91,10 @@ public void Test1(out string tester)
 public void Test2(ref string tester)
 {
 	tester = ""test""
+}
+
+public void Test3(CancellationToken token)
+{
 }
 
    public TestClass(string stringProp, ITest iTest)
@@ -125,44 +131,54 @@ public void Test2(ref string tester)
 
    public TestClass ThisClass {get;set;}
 }", ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 55
+#line 61
  testRunner.And("I set my test framework to \'MS Test\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 56
+#line 62
  testRunner.And("I set my mock framework to \'FakeItEasy\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 57
+#line 63
  testRunner.When("I generate tests for the method using the strategy \'CanCallMethodGenerationStrate" +
                     "gy\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 58
+#line 64
  testRunner.Then("I expect a method called \'CanCallThisIsAMethod\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 59
+#line 65
   testRunner.And("I expect it to contain the variable \'methodName\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 60
+#line 66
   testRunner.And("I expect it to contain the statement \'_testClass.ThisIsAMethod(methodName, method" +
                     "Value);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 61
+#line 67
   testRunner.And("I expect it to contain the statement \'Assert.Fail(\"Create or modify test\");\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 62
+#line 68
  testRunner.And("I expect a method called \'CanCallWillReturnAString\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 63
+#line 69
   testRunner.And("I expect it to have the attribute \'TestMethod\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 64
+#line 70
   testRunner.And("I expect it to contain the statement \'var result = _testClass.WillReturnAString()" +
                     ";\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 65
-  testRunner.And("I expect it to contain the statement \'Assert.Fail(\"Create or modify test\");\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 66
- testRunner.And("I expect a method called \'CanCallTest1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 67
-  testRunner.And("I expect it to contain the statement \'_testClass.Test1(outvartester);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 68
-  testRunner.And("I expect it to contain the statement \'Assert.Fail(\"Create or modify test\");\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 69
- testRunner.And("I expect a method called \'CanCallTest2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 70
-  testRunner.And("I expect it to contain the variable \'tester\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 71
-  testRunner.And("I expect it to contain the statement \'_testClass.Test2(reftester);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to contain the statement \'Assert.Fail(\"Create or modify test\");\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 72
+ testRunner.And("I expect a method called \'CanCallTest1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 73
+  testRunner.And("I expect it to contain the statement \'_testClass.Test1(outvartester);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 74
+  testRunner.And("I expect it to contain the statement \'Assert.Fail(\"Create or modify test\");\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 75
+ testRunner.And("I expect a method called \'CanCallTest2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 76
+  testRunner.And("I expect it to contain the variable \'tester\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 77
+  testRunner.And("I expect it to contain the statement \'_testClass.Test2(reftester);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 78
+  testRunner.And("I expect it to contain the statement \'Assert.Fail(\"Create or modify test\");\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 79
+ testRunner.And("I expect a method called \'CanCallTest3\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 80
+  testRunner.And("I expect it to contain the variable \'token\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 81
+  testRunner.And("I expect it to contain the statement \'var token = CancellationToken.None;\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 82
+  testRunner.And("I expect it to contain the statement \'_testClass.Test3(token);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 83
   testRunner.And("I expect it to contain the statement \'Assert.Fail(\"Create or modify test\");\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

@@ -77,12 +77,28 @@ _Note: The default for project naming is **‘{0}.Tests’**. For example, a pro
 
 _Note: The default for the class and file naming is **‘{0}Tests’**. For example, a class called **MyClass** would be associated with a test class called **MyClassTests**._
 
-## Other Options
+### Other Options
 
 * Control whether test projects are automatically created
 * Control whether references are automatically added to test projects
 * Control the version of the framework dependencies that’s used
 
 _Note: If these options are not set, the extension uses the latest version. This does not apply to NUnit 2 because NUnit 2 and NUnit 3 share the same NuGet package name and the NUnit 2 version will always be 2.6.4 if this is left blank._
+
+### Setting options per-solution
+
+You can set settings per-solution if you need to (for example if you work with some code that uses MSTest and some that uses NUnit). In order to do this, you can create a `.unitTestGeneratorConfig` file, which is formatted similarly to .editorConfig files, just without the file type heading.
+
+You can set any member of the [IGenerationOptions](https://github.com/sentryone/unittestgenerator/blob/master/src/SentryOne.UnitTestGenerator.Core/Options/IGenerationOptions.cs) or the [IVersioningOptions](https://github.com/sentryone/unittestgenerator/blob/master/src/SentryOne.UnitTestGenerator.Core/Options/IVersioningOptions.cs) interfaces using this method. For example, the following content in a `.unitTestGeneratorConfig` would set the test framework to MSTest, the mocking framework to NSubstitute and the test project naming convention to `<project_name>.UnitTests`:
+
+```
+test_project_naming={0}.UnitTests
+framework-type=MSTest
+MockingFrameworkType=NSubstitute
+```
+
+> Note that the formatting for the member names is case insensitive, and underscores and hyphens are ignored. Hence `frameworkType`, `framework-type`, `FRAMEWORK_TYPE` and `FRAME-WORK-TYPE` all resolve to the `FrameworkType` member of `IGenerationOptions`. The rules for file finding & resolution work exactly the same as they do for `.editorConfig` files - in short, all folders from the solution file to the root are searched for a `.unitTestGeneratorConfig` file, and files 'closer' to the solution file take precedence if the same option is set in more than one file.
+
+## Other Notes
 
 _**Important**: Currently the extension doesn’t handle automatically creating test projects for .NET Core apps. It works as expected with.NET framework and .NET Standard projects. For .NET Core apps, please create the test project manually. Adding test classes and methods works normally once the project is in place._

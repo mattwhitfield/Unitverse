@@ -1,0 +1,27 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BasicProject
+{
+    public abstract class AbsTest
+    {
+        protected static string GetString()
+        {
+            return "string";
+        }
+
+        public AbsTest(IEnumerable<AbsTest> childSelectors)
+        {
+        }
+    }
+
+    public class AbsTestThing : AbsTest
+    {
+        public AbsTestThing() : base(Enumerable.Empty<AbsTest>())
+        {
+        }
+    }
+}
