@@ -157,14 +157,25 @@
 
                 var tokenList = ExtractTokenList(method.Parameters);
 
-                var baseInvocation = SyntaxFactory.InvocationExpression(
-                        SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            SyntaxFactory.BaseExpression(),
-                            SyntaxFactory.IdentifierName(method.Name)))
-                    .WithArgumentList(
-                        SyntaxFactory.ArgumentList(
-                            SyntaxFactory.SeparatedList<ArgumentSyntax>(tokenList)));
+                InvocationExpressionSyntax baseInvocation;
+                if (method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.StaticKeyword)))
+                {
+                    baseInvocation = SyntaxFactory.InvocationExpression(SyntaxFactory.IdentifierName(method.Name))
+                        .WithArgumentList(
+                            SyntaxFactory.ArgumentList(
+                                SyntaxFactory.SeparatedList<ArgumentSyntax>(tokenList)));
+                }
+                else
+                {
+                    baseInvocation = SyntaxFactory.InvocationExpression(
+                            SyntaxFactory.MemberAccessExpression(
+                                SyntaxKind.SimpleMemberAccessExpression,
+                                SyntaxFactory.BaseExpression(),
+                                SyntaxFactory.IdentifierName(method.Name)))
+                        .WithArgumentList(
+                            SyntaxFactory.ArgumentList(
+                                SyntaxFactory.SeparatedList<ArgumentSyntax>(tokenList)));
+                }
 
                 StatementSyntax methodStatement;
                 if (method.IsVoid)
@@ -176,19 +187,29 @@
                     methodStatement = SyntaxFactory.ReturnStatement(baseInvocation);
                 }
 
-                var newConstructor = method.Node
-                    .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
+                var newMethod = method.Node;
+
+                if (method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.StaticKeyword)))
+                {
+                    newMethod = newMethod.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.StaticKeyword)));
+                }
+                else
+                {
+                    newMethod = newMethod.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)));
+                }
+
+                newMethod = newMethod
                     .WithIdentifier(SyntaxFactory.Identifier("Public" + method.Name))
                     .WithBody(SyntaxFactory.Block(SyntaxFactory.SingletonList(methodStatement)));
 
                 if (method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)))
                 {
-                    newConstructor = newConstructor.AddModifiers(SyntaxFactory.Token(SyntaxKind.OverrideKeyword));
+                    newMethod = newMethod.AddModifiers(SyntaxFactory.Token(SyntaxKind.OverrideKeyword));
                 }
 
                 method.MutateName("Public" + method.Name);
 
-                classDeclaration = classDeclaration.AddMembers(newConstructor);
+                classDeclaration = classDeclaration.AddMembers(newMethod);
             }
 
             return classDeclaration;

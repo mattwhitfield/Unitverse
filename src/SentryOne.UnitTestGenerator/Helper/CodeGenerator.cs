@@ -115,7 +115,7 @@
                 }
                 else
                 {
-                    var textSelection = (TextSelection) targetItem.Document.Selection;
+                    var textSelection = (TextSelection)targetItem.Document.Selection;
                     textSelection.SelectAll();
                     textSelection.Insert(generationItem.TargetContent);
                     targetItem.Document.Save();
@@ -159,7 +159,7 @@
 
         private static async Task GenerateItemAsync(bool withRegeneration, IUnitTestGeneratorOptions options, Solution solution, GenerationItem generationItem)
         {
-            var targetProject = solution.Projects.FirstOrDefault(x => string.Equals(x.Name, generationItem.Source.Project.Name, StringComparison.Ordinal));
+            var targetProject = solution.Projects.FirstOrDefault(x => string.Equals(x.Name, generationItem.Source.SourceProjectName, StringComparison.Ordinal));
             var documents = solution.GetDocumentIdsWithFilePath(generationItem.Source.FilePath);
             var documentId = documents.FirstOrDefault(x => x.ProjectId == targetProject?.Id) ?? documents.FirstOrDefault();
             if (documentId == null)

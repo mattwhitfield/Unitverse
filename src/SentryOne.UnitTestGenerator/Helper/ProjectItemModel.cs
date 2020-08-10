@@ -25,6 +25,7 @@
             Item = projectItem ?? throw new ArgumentNullException(nameof(projectItem));
             FilePath = projectItem.FileNames[1];
             TargetProjectName = options.GetTargetProjectName(Item.ContainingProject.Name);
+            SourceProjectName = Item.ContainingProject.Name;
             try
             {
                 TargetProjectName = string.Format(CultureInfo.CurrentCulture, options.TestProjectNaming, Item.ContainingProject.Name);
@@ -57,6 +58,8 @@
                 return _targetProject ?? (_targetProject = VsProjectHelper.FindProject(Item.DTE.Solution, TargetProjectName));
             }
         }
+
+        public string SourceProjectName { get; }
 
         public string TargetProjectName { get; }
 

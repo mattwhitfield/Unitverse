@@ -1,6 +1,7 @@
 namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Scripting;
@@ -61,7 +62,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
             generationOptions.TestTypeNaming.Returns("{0}Tests");
             var options = new UnitTestGeneratorOptions(generationOptions, versionOptions);
             var frameworkSet = FrameworkSetFactory.Create(options);
-            var expression = ValueGenerationStrategyFactory.GenerateFor(info, model, frameworkSet);
+            var expression = ValueGenerationStrategyFactory.GenerateFor(info, model, new HashSet<string>(StringComparer.OrdinalIgnoreCase),  frameworkSet);
 
             string expressionText = string.Empty;
             try

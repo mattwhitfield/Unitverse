@@ -30,9 +30,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Options
             _options.TestFileNaming.Returns("tfn");
             _options.TestTypeNaming.Returns("ttn");
 
-            var instance = new MutableGenerationOptions(_options);
-            Assert.That(instance, Is.Not.Null);
-
+            _testClass = new MutableGenerationOptions(_options);
             Assert.That(_testClass.FrameworkType, Is.EqualTo(_options.FrameworkType));
             Assert.That(_testClass.MockingFrameworkType, Is.EqualTo(_options.MockingFrameworkType));
             Assert.That(_testClass.CreateProjectAutomatically, Is.EqualTo(_options.CreateProjectAutomatically));

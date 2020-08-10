@@ -30,9 +30,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Options
             _options.NSubstituteNugetPackageVersion.Returns("7");
             _options.RhinoMocksNugetPackageVersion.Returns("8");
 
-            var instance = new MutableVersioningOptions(_options);
-            Assert.That(instance, Is.Not.Null);
-
+            _testClass = new MutableVersioningOptions(_options);
             Assert.That(_testClass.NUnit2NugetPackageVersion, Is.EqualTo(_options.NUnit2NugetPackageVersion));
             Assert.That(_testClass.NUnit3NugetPackageVersion, Is.EqualTo(_options.NUnit3NugetPackageVersion));
             Assert.That(_testClass.XUnitNugetPackageVersion, Is.EqualTo(_options.XUnitNugetPackageVersion));

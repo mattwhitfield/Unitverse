@@ -45,12 +45,12 @@
                 new SimpleValueGenerationStrategy(BrushFactory.Colors, "System.Windows.Media.Color"),
             };
 
-        public static ExpressionSyntax GenerateFor(ITypeSymbol symbol, SemanticModel model, IFrameworkSet frameworkSet)
+        public static ExpressionSyntax GenerateFor(ITypeSymbol symbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
-            return GenerateFor(symbol.ToFullName(), symbol, model, frameworkSet);
+            return GenerateFor(symbol.ToFullName(), symbol, model, visitedTypes, frameworkSet);
         }
 
-        public static ExpressionSyntax GenerateFor(string typeName, ITypeSymbol symbol, SemanticModel model, IFrameworkSet frameworkSet)
+        public static ExpressionSyntax GenerateFor(string typeName, ITypeSymbol symbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
             if (symbol == null)
             {
@@ -60,7 +60,7 @@
             var strategy = Strategies.FirstOrDefault(x => x.SupportedTypeNames.Any(t => string.Equals(t, typeName, StringComparison.OrdinalIgnoreCase)));
             if (strategy != null)
             {
-                return strategy.CreateValueExpression(symbol, model, frameworkSet);
+                return strategy.CreateValueExpression(symbol, model, visitedTypes, frameworkSet);
             }
 
             var baseType = symbol.BaseType;
@@ -70,7 +70,7 @@
                 strategy = Strategies.FirstOrDefault(x => x.SupportedTypeNames.Any(t => string.Equals(t, name, StringComparison.OrdinalIgnoreCase)));
                 if (strategy != null)
                 {
-                    return strategy.CreateValueExpression(symbol, model, frameworkSet);
+                    return strategy.CreateValueExpression(symbol, model, visitedTypes, frameworkSet);
                 }
 
                 baseType = baseType.BaseType;

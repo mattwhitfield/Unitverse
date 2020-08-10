@@ -41,16 +41,7 @@
                     {
                         member.SetValue(instance, Coerce(fieldValue, member.PropertyType));
                     }
-                    catch (TargetException)
-                    {
-                    }
-                    catch (MethodAccessException)
-                    {
-                    }
-                    catch (TargetInvocationException)
-                    {
-                    }
-                    catch (InvalidCastException)
+                    catch (Exception e) when (e is TargetException || e is MethodAccessException || e is TargetInvocationException || e is InvalidCastException)
                     {
                     }
 
@@ -61,11 +52,6 @@
 
         private static object Coerce(object convertibleValue, Type targetType)
         {
-            if (convertibleValue == null)
-            {
-                return null;
-            }
-
             try
             {
                 try

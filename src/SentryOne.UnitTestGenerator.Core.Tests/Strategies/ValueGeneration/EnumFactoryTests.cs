@@ -1,6 +1,7 @@
 namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
 {
     using System;
+    using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
     using NSubstitute;
     using NUnit.Framework;
@@ -13,13 +14,13 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
         [Test]
         public static void CannotCallRandomWithNullTypeSymbol()
         {
-            Assert.Throws<ArgumentNullException>(() => EnumFactory.Random(default(ITypeSymbol), ClassModelProvider.Instance.SemanticModel, Substitute.For<IFrameworkSet>()));
+            Assert.Throws<ArgumentNullException>(() => EnumFactory.Random(default(ITypeSymbol), ClassModelProvider.Instance.SemanticModel, new HashSet<string>(StringComparer.OrdinalIgnoreCase), Substitute.For<IFrameworkSet>()));
         }
 
         [Test]
         public static void CannotCallRandomWithNullFrameworkSet()
         {
-            Assert.Throws<ArgumentNullException>(() => EnumFactory.Random(Substitute.For<ITypeSymbol>(), ClassModelProvider.Instance.SemanticModel, default(IFrameworkSet)));
+            Assert.Throws<ArgumentNullException>(() => EnumFactory.Random(Substitute.For<ITypeSymbol>(), ClassModelProvider.Instance.SemanticModel, new HashSet<string>(StringComparer.OrdinalIgnoreCase), default(IFrameworkSet)));
         }
     }
 }

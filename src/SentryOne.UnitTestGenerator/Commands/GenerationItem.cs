@@ -53,7 +53,6 @@
 
                 return Path.Combine(_targetPath, targetFileName);
             }
-
         }
 
         public ProjectItems TargetProjectItems { get; }
