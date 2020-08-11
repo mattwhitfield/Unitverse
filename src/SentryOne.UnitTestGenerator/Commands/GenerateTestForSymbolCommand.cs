@@ -210,20 +210,21 @@
 
                 var item = VsProjectHelper.GetProjectItem(document.FilePath);
 
-                var source = new ProjectItemModel(item, _package.Options.GenerationOptions);
+                var options = _package.Options;
+                var source = new ProjectItemModel(item, options.GenerationOptions);
 
                 var projectItem = source.Item;
 
                 var nameParts = VsProjectHelper.GetNameParts(projectItem);
 
-                if (source.TargetProject == null && _package.Options.GenerationOptions.CreateProjectAutomatically)
+                if (source.TargetProject == null && options.GenerationOptions.CreateProjectAutomatically)
                 {
-                    var testProject = SolutionUtilities.CreateTestProjectInCurrentSolution(_dte, source.Project, _package.Options.GenerationOptions);
-                    ReferencesHelper.AddNugetPackagesToProject(testProject, StandardReferenceHelper.GetReferencedNugetPackages(_package.Options), messageLogger.LogMessage, _package);
+                    var testProject = SolutionUtilities.CreateTestProjectInCurrentSolution(_dte, source.Project, options.GenerationOptions);
+                    ReferencesHelper.AddNugetPackagesToProject(testProject, StandardReferenceHelper.GetReferencedNugetPackages(options), messageLogger.LogMessage, _package);
                 }
 
                 var targetProject = source.TargetProject;
-                if (targetProject == null && !_package.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
+                if (targetProject == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
                 {
                     throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
                 }
@@ -237,7 +238,7 @@
                 }
 
                 var targetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out var targetPath);
-                if (targetProjectItems == null && !_package.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
+                if (targetProjectItems == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
                 {
                     // we asked to create targetProjectItems - so if it's null we effectively had a problem getting to the target project
                     throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
@@ -264,7 +265,7 @@
                                 namespaceTransform = x => x + ".Tests";
                             }
 
-                            generationItem = new GenerationItem(source, methodSymbol.Item1, targetProjectItems, targetPath, set, assemblyReferences, namespaceTransform, _package.Options.GenerationOptions);
+                            generationItem = new GenerationItem(source, methodSymbol.Item1, targetProjectItems, targetPath, set, assemblyReferences, namespaceTransform, options.GenerationOptions);
 
                             await CodeGenerator.GenerateCodeAsync(new[] { generationItem }, withRegeneration, _package, projectDictionary, messageLogger).ConfigureAwait(true);
                         }

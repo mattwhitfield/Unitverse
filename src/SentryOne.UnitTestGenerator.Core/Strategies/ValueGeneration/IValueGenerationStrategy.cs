@@ -9,6 +9,6 @@
     {
         IEnumerable<string> SupportedTypeNames { get; }
 
-        ExpressionSyntax CreateValueExpression(ITypeSymbol symbol, SemanticModel model, IFrameworkSet frameworkSet);
+        ExpressionSyntax CreateValueExpression(ITypeSymbol symbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet);
     }
 }

@@ -32,6 +32,7 @@
                 new SimpleValueGenerationStrategy(() => Generate.Literal((float)(Random.NextDouble() * short.MaxValue)), "float", "float?"),
                 new SimpleValueGenerationStrategy(() => (Random.Next(int.MaxValue) % 2) > 0 ? Generate.Literal(true) : Generate.Literal(false), "bool", "bool?"),
                 new SimpleValueGenerationStrategy(() => SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("CultureInfo"), SyntaxFactory.IdentifierName((Random.Next(int.MaxValue) % 2) > 0 ? "CurrentCulture" : "InvariantCulture")), "System.Globalization.CultureInfo"),
+                new SimpleValueGenerationStrategy(() => SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("CancellationToken"), SyntaxFactory.IdentifierName("None")), "System.Threading.CancellationToken"),
                 new SimpleValueGenerationStrategy(ArrayFactory.Byte, "byte[]"),
                 new TypedValueGenerationStrategy(EnumFactory.Random, "System.Enum"),
                 new SimpleValueGenerationStrategy(() => Generate.ObjectCreation(SyntaxFactory.IdentifierName("MemoryStream")), "System.IO.Stream"),
@@ -44,12 +45,12 @@
                 new SimpleValueGenerationStrategy(BrushFactory.Colors, "System.Windows.Media.Color"),
             };
 
-        public static ExpressionSyntax GenerateFor(ITypeSymbol symbol, SemanticModel model, IFrameworkSet frameworkSet)
+        public static ExpressionSyntax GenerateFor(ITypeSymbol symbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
-            return GenerateFor(symbol.ToFullName(), symbol, model, frameworkSet);
+            return GenerateFor(symbol.ToFullName(), symbol, model, visitedTypes, frameworkSet);
         }
 
-        public static ExpressionSyntax GenerateFor(string typeName, ITypeSymbol symbol, SemanticModel model, IFrameworkSet frameworkSet)
+        public static ExpressionSyntax GenerateFor(string typeName, ITypeSymbol symbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
             if (symbol == null)
             {
@@ -59,7 +60,7 @@
             var strategy = Strategies.FirstOrDefault(x => x.SupportedTypeNames.Any(t => string.Equals(t, typeName, StringComparison.OrdinalIgnoreCase)));
             if (strategy != null)
             {
-                return strategy.CreateValueExpression(symbol, model, frameworkSet);
+                return strategy.CreateValueExpression(symbol, model, visitedTypes, frameworkSet);
             }
 
             var baseType = symbol.BaseType;
@@ -69,7 +70,7 @@
                 strategy = Strategies.FirstOrDefault(x => x.SupportedTypeNames.Any(t => string.Equals(t, name, StringComparison.OrdinalIgnoreCase)));
                 if (strategy != null)
                 {
-                    return strategy.CreateValueExpression(symbol, model, frameworkSet);
+                    return strategy.CreateValueExpression(symbol, model, visitedTypes, frameworkSet);
                 }
 
                 baseType = baseType.BaseType;

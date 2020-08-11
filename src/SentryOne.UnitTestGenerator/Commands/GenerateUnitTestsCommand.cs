@@ -12,7 +12,9 @@
     using SentryOne.UnitTestGenerator.Core.Assets;
     using SentryOne.UnitTestGenerator.Core.Helpers;
     using SentryOne.UnitTestGenerator.Core.Models;
+    using SentryOne.UnitTestGenerator.Core.Options;
     using SentryOne.UnitTestGenerator.Helper;
+    using SentryOne.UnitTestGenerator.Options;
     using Project = EnvDTE.Project;
     using Task = System.Threading.Tasks.Task;
 
@@ -125,7 +127,8 @@
                     throw new InvalidOperationException("Cannot generate unit tests for this item because no supported files were found");
                 }
 
-                var sources = SolutionUtilities.GetSelectedFiles(_dte, true, _package.Options.GenerationOptions).Where(ProjectItemModel.IsSupported).ToList();
+                var options = _package.Options;
+                var sources = SolutionUtilities.GetSelectedFiles(_dte, true, options.GenerationOptions).Where(ProjectItemModel.IsSupported).ToList();
 
                 var targetProjects = new Dictionary<Project, Project>();
 
@@ -136,15 +139,15 @@
                         continue;
                     }
 
-                    if (source.TargetProject == null && _package.Options.GenerationOptions.CreateProjectAutomatically)
+                    if (source.TargetProject == null && options.GenerationOptions.CreateProjectAutomatically)
                     {
-                        var testProject = SolutionUtilities.CreateTestProjectInCurrentSolution(_dte, source.Project, _package.Options.GenerationOptions);
-                        ReferencesHelper.AddNugetPackagesToProject(testProject, StandardReferenceHelper.GetReferencedNugetPackages(_package.Options), messageLogger.LogMessage, _package);
+                        var testProject = SolutionUtilities.CreateTestProjectInCurrentSolution(_dte, source.Project, options.GenerationOptions);
+                        ReferencesHelper.AddNugetPackagesToProject(testProject, StandardReferenceHelper.GetReferencedNugetPackages(options), messageLogger.LogMessage, _package);
                     }
 
                     var targetProject = source.TargetProject;
 
-                    if (targetProject == null && !_package.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
+                    if (targetProject == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
                     {
                         throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
                     }
@@ -160,7 +163,7 @@
                 {
                     var projectItem = source.Item;
 
-                    if (!withRegeneration && TargetFinder.FindExistingTargetItem(source, _package.Options.GenerationOptions, out _) == FindTargetStatus.Found)
+                    if (!withRegeneration && TargetFinder.FindExistingTargetItem(source, options.GenerationOptions, out _) == FindTargetStatus.Found)
                     {
                         if (sources.Count == 1)
                         {
@@ -175,7 +178,7 @@
                     targetProjects.TryGetValue(source.Project, out var targetProject);
                     var targetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out var targetPath);
 
-                    if (targetProjectItems == null && !_package.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
+                    if (targetProjectItems == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
                     {
                         // we asked to create targetProjectItems - so if it's null we effectively had a problem getting to the target project
                         throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
@@ -207,7 +210,7 @@
                         namespaceTransform = x => x + ".Tests";
                     }
 
-                    generationItems.Add(new GenerationItem(source, null, targetProjectItems, targetPath, requiredAssets, referencedAssemblies, namespaceTransform, _package.Options.GenerationOptions));
+                    generationItems.Add(new GenerationItem(source, null, targetProjectItems, targetPath, requiredAssets, referencedAssemblies, namespaceTransform, options.GenerationOptions));
                 }
 #pragma warning restore VSTHRD010
             }, _package);

@@ -23,7 +23,17 @@
     [ProvideOptionPage(typeof(VersioningOptions), "SentryOne Unit Test Generator", "Versioning Options", 0, 0, true)]
     public sealed class UnitTestGeneratorPackage : AsyncPackage, IUnitTestGeneratorPackage
     {
-        public IUnitTestGeneratorOptions Options => new UnitTestGeneratorOptions((GenerationOptions)GetDialogPage(typeof(GenerationOptions)), (VersioningOptions)GetDialogPage(typeof(VersioningOptions)));
+        public IUnitTestGeneratorOptions Options
+        {
+            get
+            {
+                var generationOptions = (GenerationOptions)GetDialogPage(typeof(GenerationOptions));
+                var versioningOptions = (VersioningOptions)GetDialogPage(typeof(VersioningOptions));
+
+                var solutionFilePath = Workspace?.CurrentSolution?.FilePath;
+                return UnitTestGeneratorOptionsFactory.Create(solutionFilePath, generationOptions, versioningOptions);
+            }
+        }
 
         public IVsPackageInstaller PackageInstaller { get; private set; }
 

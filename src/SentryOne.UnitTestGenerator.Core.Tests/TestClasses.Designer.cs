@@ -180,6 +180,15 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string AbstractSelfReferencingClass {
+            get {
+                return ResourceManager.GetString("AbstractSelfReferencingClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to public class TestClass
         ///    {
         ///		string _str1;
@@ -628,7 +637,25 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to namespace TestApp1
+        ///{
+        ///    public class InputClass
+        ///    {
+        ///        public string SomeProperty { get; }
+        ///        public string SomeOtherProperty { get; set; }
+        ///        public string WriteOnlyProperty { set { } }
+        ///    }
+        ///
+        ///    public class OutputClass
+        ///    {
+        ///        public string SomeProperty { get; set; }
+        ///        public string SomeOtherProperty { get; set; }
+        ///        public string WriteOnlyProperty { get; set; }
+        ///    }
+        ///    public class C3
+        ///    {
+        ///        public OutputClass Map(InputClass inputClass)
+        ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MappingMethod {
             get {

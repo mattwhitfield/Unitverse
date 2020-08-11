@@ -1,6 +1,7 @@
 namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Scripting;
@@ -34,6 +35,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
         [TestCase("System.Globalization.CultureInfo")]
         [TestCase("System.Byte[]")]
         [TestCase("System.IO.Stream")]
+        [TestCase("System.Threading.CancellationToken")]
         [TestCase("System.Drawing.Brush, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
         [TestCase("System.Drawing.Color, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
         [TestCase("System.Int32[]")] // System.Array
@@ -61,7 +63,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
             generationOptions.TestTypeNaming.Returns("{0}Tests");
             var options = new UnitTestGeneratorOptions(generationOptions, versionOptions);
             var frameworkSet = FrameworkSetFactory.Create(options);
-            var expression = ValueGenerationStrategyFactory.GenerateFor(info, model, frameworkSet);
+            var expression = ValueGenerationStrategyFactory.GenerateFor(info, model, new HashSet<string>(StringComparer.OrdinalIgnoreCase),  frameworkSet);
 
             string expressionText = string.Empty;
             try
@@ -76,6 +78,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
                         .AddImports("System.Drawing")
                         .AddImports("Microsoft.Win32")
                         .AddImports("System.Globalization")
+                        .AddImports("System.Threading")
                         .AddImports("System.Collections");
                     var result = await CSharpScript.EvaluateAsync<object>(expressionText, scriptOptions).ConfigureAwait(false);
 

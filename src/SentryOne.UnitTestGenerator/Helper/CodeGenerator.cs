@@ -15,6 +15,7 @@
     using SentryOne.UnitTestGenerator.Core.Assets;
     using SentryOne.UnitTestGenerator.Core.Helpers;
     using SentryOne.UnitTestGenerator.Core.Models;
+    using SentryOne.UnitTestGenerator.Core.Options;
     using SentryOne.UnitTestGenerator.Properties;
     using Project = EnvDTE.Project;
     using Solution = Microsoft.CodeAnalysis.Solution;
@@ -25,10 +26,11 @@
         public static async Task GenerateCodeAsync(IReadOnlyCollection<GenerationItem> generationItems, bool withRegeneration, IUnitTestGeneratorPackage package, Dictionary<Project, Tuple<HashSet<TargetAsset>, HashSet<IReferencedAssembly>>> requiredAssetsByProject, IMessageLogger messageLogger)
         {
             var solution = package.Workspace.CurrentSolution;
+            var options = package.Options;
 
             foreach (var generationItem in generationItems)
             {
-                await GenerateItemAsync(withRegeneration, package, solution, generationItem).ConfigureAwait(true);
+                await GenerateItemAsync(withRegeneration, options, solution, generationItem).ConfigureAwait(true);
             }
 
             await package.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -41,9 +43,9 @@
                 messageLogger.LogMessage("Adding required assets to target project...");
                 foreach (var pair in requiredAssetsByProject)
                 {
-                    AddTargetAssets(package, pair);
+                    AddTargetAssets(options, pair);
 
-                    if (package.Options.GenerationOptions.AddReferencesAutomatically)
+                    if (options.GenerationOptions.AddReferencesAutomatically)
                     {
                         ReferencesHelper.AddReferencesToProject(pair.Key, pair.Value.Item2.ToList(), messageLogger.LogMessage);
                     }
@@ -59,7 +61,7 @@
                 {
                     if (generationItem.TargetProjectItems != null)
                     {
-                        AddTargetItem(generationItems, package, generationItem);
+                        AddTargetItem(generationItems, options, generationItem);
                     }
                     else
                     {
@@ -97,10 +99,10 @@
             }
         }
 
-        private static void AddTargetItem(IReadOnlyCollection<GenerationItem> generationItems, IUnitTestGeneratorPackage package, GenerationItem generationItem)
+        private static void AddTargetItem(IReadOnlyCollection<GenerationItem> generationItems, IUnitTestGeneratorOptions options, GenerationItem generationItem)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (TargetFinder.FindExistingTargetItem(generationItem.Source, package.Options.GenerationOptions, out var targetItem) != FindTargetStatus.Found)
+            if (TargetFinder.FindExistingTargetItem(generationItem.Source, options.GenerationOptions, out var targetItem) != FindTargetStatus.Found)
             {
                 File.WriteAllText(generationItem.TargetFileName, generationItem.TargetContent);
                 targetItem = generationItem.TargetProjectItems.AddFromFile(generationItem.TargetFileName);
@@ -113,7 +115,7 @@
                 }
                 else
                 {
-                    var textSelection = (TextSelection) targetItem.Document.Selection;
+                    var textSelection = (TextSelection)targetItem.Document.Selection;
                     textSelection.SelectAll();
                     textSelection.Insert(generationItem.TargetContent);
                     targetItem.Document.Save();
@@ -126,7 +128,7 @@
             }
         }
 
-        private static void AddTargetAssets(IUnitTestGeneratorPackage package, KeyValuePair<Project, Tuple<HashSet<TargetAsset>, HashSet<IReferencedAssembly>>> pair)
+        private static void AddTargetAssets(IUnitTestGeneratorOptions options, KeyValuePair<Project, Tuple<HashSet<TargetAsset>, HashSet<IReferencedAssembly>>> pair)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             foreach (var targetAsset in pair.Value.Item1)
@@ -148,16 +150,16 @@
                     {
                         var nameSpace = VsProjectHelper.GetProjectRootNamespace(pair.Key);
                         var fileName = Path.Combine(targetProjectPath, asset.AssetFileName);
-                        File.WriteAllText(fileName, asset.Content(nameSpace, package.Options.GenerationOptions.FrameworkType));
+                        File.WriteAllText(fileName, asset.Content(nameSpace, options.GenerationOptions.FrameworkType));
                         pair.Key.ProjectItems.AddFromFile(fileName);
                     }
                 }
             }
         }
 
-        private static async Task GenerateItemAsync(bool withRegeneration, IUnitTestGeneratorPackage package, Solution solution, GenerationItem generationItem)
+        private static async Task GenerateItemAsync(bool withRegeneration, IUnitTestGeneratorOptions options, Solution solution, GenerationItem generationItem)
         {
-            var targetProject = solution.Projects.FirstOrDefault(x => string.Equals(x.Name, generationItem.Source.Project.Name, StringComparison.Ordinal));
+            var targetProject = solution.Projects.FirstOrDefault(x => string.Equals(x.Name, generationItem.Source.SourceProjectName, StringComparison.Ordinal));
             var documents = solution.GetDocumentIdsWithFilePath(generationItem.Source.FilePath);
             var documentId = documents.FirstOrDefault(x => x.ProjectId == targetProject?.Id) ?? documents.FirstOrDefault();
             if (documentId == null)
@@ -175,7 +177,7 @@
                 return;
             }
 
-            var result = await GenerateAsync(withRegeneration, package, solution, generationItem, semanticModel).ConfigureAwait(true);
+            var result = await GenerateAsync(withRegeneration, options, solution, generationItem, semanticModel).ConfigureAwait(true);
 
             generationItem.TargetContent = result.FileContent;
 
@@ -193,7 +195,7 @@
             }
         }
 
-        private static async Task<GenerationResult> GenerateAsync(bool withRegeneration, IUnitTestGeneratorPackage package, Solution solution, GenerationItem generationItem, SemanticModel semanticModel)
+        private static async Task<GenerationResult> GenerateAsync(bool withRegeneration, IUnitTestGeneratorOptions options, Solution solution, GenerationItem generationItem, SemanticModel semanticModel)
         {
             GenerationResult result;
             if (File.Exists(generationItem.TargetFileName))
@@ -205,16 +207,16 @@
 
                     var targetSemanticModel = await targetDocument.GetSemanticModelAsync().ConfigureAwait(true);
 
-                    result = await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, targetSemanticModel, withRegeneration, package.Options, generationItem.NamespaceTransform).ConfigureAwait(true);
+                    result = await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, targetSemanticModel, withRegeneration, options, generationItem.NamespaceTransform).ConfigureAwait(true);
                 }
                 else
                 {
-                    result = await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, null, withRegeneration, package.Options, generationItem.NamespaceTransform).ConfigureAwait(true);
+                    result = await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, null, withRegeneration, options, generationItem.NamespaceTransform).ConfigureAwait(true);
                 }
             }
             else
             {
-                result = await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, null, withRegeneration, package.Options, generationItem.NamespaceTransform).ConfigureAwait(true);
+                result = await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, null, withRegeneration, options, generationItem.NamespaceTransform).ConfigureAwait(true);
             }
 
             return result;

@@ -5,6 +5,8 @@
 Scenario: Can Call Method Generation
 	Given I have a class defined as 
 	"""
+using System.Threading;
+
 public class TestClass
 {
 	public void Test1(out string tester)
@@ -15,6 +17,10 @@ public class TestClass
 	public void Test2(ref string tester)
 	{
 		tester = "test"
+	}
+
+	public void Test3(CancellationToken token)
+	{
 	}
 
     public TestClass(string stringProp, ITest iTest)
@@ -69,4 +75,9 @@ public class TestClass
 	And I expect a method called 'CanCallTest2'
 		And I expect it to contain the variable 'tester'
 		And I expect it to contain the statement '_testClass.Test2(reftester);'
+		And I expect it to contain the statement 'Assert.Fail("Create or modify test");'
+	And I expect a method called 'CanCallTest3'
+		And I expect it to contain the variable 'token'
+		And I expect it to contain the statement 'var token = CancellationToken.None;'
+		And I expect it to contain the statement '_testClass.Test3(token);'
 		And I expect it to contain the statement 'Assert.Fail("Create or modify test");'

@@ -1,6 +1,7 @@
 ﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.ValueGeneration
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -10,7 +11,7 @@
 
     public static class EnumFactory
     {
-        public static ExpressionSyntax Random(ITypeSymbol typeSymbol, SemanticModel model, IFrameworkSet frameworkSet)
+        public static ExpressionSyntax Random(ITypeSymbol typeSymbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
             if (typeSymbol == null)
             {

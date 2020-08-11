@@ -48,6 +48,9 @@
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="EditorConfig.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=fe6ce3ea283749f2, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\editorconfig.0.12.2\lib\net45\EditorConfig.Core.dll</HintPath>
+    </Reference>
     <Reference Include="FakeItEasy, Version=5.0.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\FakeItEasy.5.1.1\lib\net45\FakeItEasy.dll</HintPath>
     </Reference>
@@ -287,6 +290,11 @@
     <Compile Include="Models\ReferencedAssemblyTests.cs" />
     <Compile Include="Models\SemanticVersionTests.cs" />
     <Compile Include="Models\TestableModelTests.cs" />
+    <Compile Include="Options\EditorConfigFieldMapperTests.cs" />
+    <Compile Include="Options\MutableGenerationOptionsTests.cs" />
+    <Compile Include="Options\MutableVersioningOptionsTests.cs" />
+    <Compile Include="Options\TypeMemberMutatorTests.cs" />
+    <Compile Include="Options\UnitTestGeneratorOptionsFactoryTests.cs" />
     <Compile Include="Options\UnitTestGeneratorOptionsTests.cs" />
     <Compile Include="Strategies\ClassGeneration\AbstractClassGenerationStrategyTests.cs" />
     <Compile Include="Strategies\ClassGeneration\ClassGenerationStrategyFactoryTests.cs" />
@@ -470,6 +478,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MappingMethod.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AbstractSelfReferencingClass.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
