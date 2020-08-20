@@ -67,7 +67,7 @@
                 var paramList = new List<CSharpSyntaxNode>();
 
                 var methodName = string.Format(CultureInfo.InvariantCulture, "CannotCall{0}WithInvalid{1}", model.GetMethodUniqueName(method), method.Parameters[i].Name.ToPascalCase());
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(methodName, false, model.IsStatic, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), new object[] { null, string.Empty, "   " });
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(methodName, method.IsAsync && _frameworkSet.TestFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), new object[] { null, string.Empty, "   " });
 
                 for (var index = 0; index < method.Parameters.Count; index++)
                 {

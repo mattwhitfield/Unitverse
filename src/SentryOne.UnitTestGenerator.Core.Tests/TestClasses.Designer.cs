@@ -180,7 +180,31 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to using System;
+        ///using System.Collections.Generic;
+        ///using System.Linq;
+        ///using System.Text;
+        ///using System.Threading.Tasks;
+        ///
+        ///namespace BasicProject
+        ///{
+        ///    public abstract class AbsTest
+        ///    {
+        ///        protected static string GetString()
+        ///        {
+        ///            return &quot;string&quot;;
+        ///        }
+        ///
+        ///        public AbsTest(IEnumerable&lt;AbsTest&gt; childSelectors)
+        ///        {
+        ///        }
+        ///    }
+        ///
+        ///    public class AbsTestThing : AbsTest
+        ///    {
+        ///        public AbsTestThing() : base(Enumerable.Empty&lt;AbsTest&gt;())
+        ///        {
+        ///    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AbstractSelfReferencingClass {
             get {
@@ -204,6 +228,15 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         internal static string ArrowPropertyGetter {
             get {
                 return ResourceManager.GetString("ArrowPropertyGetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string AsyncMappingMethod {
+            get {
+                return ResourceManager.GetString("AsyncMappingMethod", resourceCulture);
             }
         }
         

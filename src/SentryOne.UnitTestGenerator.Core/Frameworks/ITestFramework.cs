@@ -7,6 +7,10 @@
 
     public interface ITestFramework
     {
+        bool SupportsStaticTestClasses { get; }
+
+        bool AssertThrowsAsyncIsAwaitable { get; }
+
         AttributeSyntax SingleThreadedApartmentAttribute { get; }
 
         string TestClassAttribute { get; }

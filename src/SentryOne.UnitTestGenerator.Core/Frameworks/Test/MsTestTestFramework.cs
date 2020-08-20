@@ -11,6 +11,10 @@
 
     public class MsTestTestFramework : ITestFramework
     {
+        public bool SupportsStaticTestClasses => false;
+
+        public bool AssertThrowsAsyncIsAwaitable => true;
+
         public AttributeSyntax SingleThreadedApartmentAttribute => null;
 
         public string TestClassAttribute => "TestClass";
@@ -107,12 +111,12 @@
 
         public StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall)
         {
-            return AssertThrows(exceptionType, methodCall, "ThrowsException");
+            return SyntaxFactory.ExpressionStatement(AssertThrows(exceptionType, methodCall, "ThrowsException"));
         }
 
         public StatementSyntax AssertThrowsAsync(TypeSyntax exceptionType, ExpressionSyntax methodCall)
         {
-            return AssertThrows(exceptionType, methodCall, "ThrowsExceptionAsync");
+            return SyntaxFactory.ExpressionStatement(SyntaxFactory.AwaitExpression(AssertThrows(exceptionType, methodCall, "ThrowsExceptionAsync")));
         }
 
         public BaseMethodDeclarationSyntax CreateSetupMethod(string targetTypeName)
@@ -146,7 +150,7 @@
                 throw new ArgumentNullException(nameof(testValues));
             }
 
-            var method = Generate.Method(name, isAsync, isStatic);
+            var method = Generate.Method(name, isAsync, false);
 
             method = method.AddParameterListParameters(SyntaxFactory.Parameter(SyntaxFactory.Identifier(Strings.MsTestTestFramework_CreateTestCaseMethod_value)).WithType(valueType));
             method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("DataTestMethod"))));
@@ -166,7 +170,7 @@
                 throw new ArgumentNullException(nameof(name));
             }
 
-            var method = Generate.Method(name, isAsync, isStatic);
+            var method = Generate.Method(name, isAsync, false);
 
             return method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("TestMethod"))));
         }
@@ -194,7 +198,7 @@
                 SyntaxFactory.IdentifierName(assertMethod)));
         }
 
-        private static StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string throws)
+        private static InvocationExpressionSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string throws)
         {
             if (exceptionType == null)
             {
@@ -206,13 +210,13 @@
                 throw new ArgumentNullException(nameof(methodCall));
             }
 
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(
+            return SyntaxFactory.InvocationExpression(
                     SyntaxFactory.MemberAccessExpression(
                         SyntaxKind.SimpleMemberAccessExpression,
                         SyntaxFactory.IdentifierName("Assert"),
                         SyntaxFactory.GenericName(SyntaxFactory.Identifier(throws))
                             .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(exceptionType)))))
-                .WithArgumentList(Generate.Arguments(Generate.ParenthesizedLambdaExpression(methodCall))));
+                .WithArgumentList(Generate.Arguments(Generate.ParenthesizedLambdaExpression(methodCall)));
         }
     }
 }

@@ -11,6 +11,10 @@
 
     public class XUnitTestFramework : ITestFramework
     {
+        public bool SupportsStaticTestClasses => true;
+
+        public bool AssertThrowsAsyncIsAwaitable => true;
+
         public AttributeSyntax SingleThreadedApartmentAttribute => null;
 
         public string TestClassAttribute => string.Empty;
@@ -113,12 +117,12 @@
 
         public StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall)
         {
-            return AssertThrows(exceptionType, methodCall, "Throws");
+            return SyntaxFactory.ExpressionStatement(AssertThrows(exceptionType, methodCall, "Throws"));
         }
 
         public StatementSyntax AssertThrowsAsync(TypeSyntax exceptionType, ExpressionSyntax methodCall)
         {
-            return AssertThrows(exceptionType, methodCall, "ThrowsAsync");
+            return SyntaxFactory.ExpressionStatement(SyntaxFactory.AwaitExpression(AssertThrows(exceptionType, methodCall, "ThrowsAsync")));
         }
 
         public BaseMethodDeclarationSyntax CreateSetupMethod(string targetTypeName)
@@ -196,7 +200,7 @@
                 SyntaxFactory.IdentifierName(assertMethod)));
         }
 
-        private static StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string throws)
+        private static InvocationExpressionSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string throws)
         {
             if (exceptionType == null)
             {
@@ -208,13 +212,13 @@
                 throw new ArgumentNullException(nameof(methodCall));
             }
 
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(
+            return SyntaxFactory.InvocationExpression(
                     SyntaxFactory.MemberAccessExpression(
                         SyntaxKind.SimpleMemberAccessExpression,
                         SyntaxFactory.IdentifierName("Assert"),
                         SyntaxFactory.GenericName(SyntaxFactory.Identifier(throws))
                             .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(exceptionType)))))
-                .WithArgumentList(Generate.Arguments(Generate.ParenthesizedLambdaExpression(methodCall))));
+                .WithArgumentList(Generate.Arguments(Generate.ParenthesizedLambdaExpression(methodCall)));
         }
     }
 }
