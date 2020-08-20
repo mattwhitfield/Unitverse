@@ -11,6 +11,10 @@
 
     public abstract class NUnitTestFramework : ITestFramework
     {
+        public bool SupportsStaticTestClasses => true;
+
+        public bool AssertThrowsAsyncIsAwaitable => false;
+
         public abstract AttributeSyntax SingleThreadedApartmentAttribute { get; }
 
         public string TestClassAttribute => "TestFixture";

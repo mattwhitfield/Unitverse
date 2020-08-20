@@ -40,7 +40,12 @@
 
             model.TargetInstance = model.TypeSyntax;
 
-            classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.StaticKeyword));
+            classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+            if (_frameworkSet.TestFramework.SupportsStaticTestClasses)
+            {
+                classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.StaticKeyword));
+            }
+
             if (!string.IsNullOrWhiteSpace(_frameworkSet.TestFramework.TestClassAttribute))
             {
                 var testFixtureAtt = Generate.Attribute(_frameworkSet.TestFramework.TestClassAttribute);

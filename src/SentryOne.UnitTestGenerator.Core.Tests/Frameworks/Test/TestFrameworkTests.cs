@@ -91,8 +91,8 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
 
         [TestCase(TestFrameworkTypes.NUnit2, "Assert.ThrowsAsync<int>(() => 1);")]
         [TestCase(TestFrameworkTypes.NUnit3, "Assert.ThrowsAsync<int>(() => 1);")]
-        [TestCase(TestFrameworkTypes.MsTest, "Assert.ThrowsExceptionAsync<int>(() => 1);")]
-        [TestCase(TestFrameworkTypes.XUnit, "Assert.ThrowsAsync<int>(() => 1);")]
+        [TestCase(TestFrameworkTypes.MsTest, "await Assert.ThrowsExceptionAsync<int>(() => 1);")]
+        [TestCase(TestFrameworkTypes.XUnit, "await Assert.ThrowsAsync<int>(() => 1);")]
         public void CanCallAssertThrowsAsync(TestFrameworkTypes frameworkTypes, string expectedOutput)
         {
             var testClass = CreateFramework(frameworkTypes);
@@ -132,7 +132,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
 
         [TestCase(TestFrameworkTypes.NUnit2, "[Test]\r\npublic static void TestValue1606901338()")]
         [TestCase(TestFrameworkTypes.NUnit3, "[Test]\r\npublic static void TestValue1606901338()")]
-        [TestCase(TestFrameworkTypes.MsTest, "[TestMethod]\r\npublic static void TestValue1606901338()")]
+        [TestCase(TestFrameworkTypes.MsTest, "[TestMethod]\r\npublic void TestValue1606901338()")]
         [TestCase(TestFrameworkTypes.XUnit, "[Fact]\r\npublic static void TestValue1606901338()")]
         public void CanCallCreateTestMethod(TestFrameworkTypes frameworkTypes, string expectedOutput)
         {

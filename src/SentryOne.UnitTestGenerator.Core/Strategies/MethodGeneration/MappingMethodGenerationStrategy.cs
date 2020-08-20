@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -42,10 +43,15 @@
                 return false;
             }
 
-            var returnTypeInfo = model.SemanticModel.GetTypeInfo(method.Node.ReturnType);
-            if (returnTypeInfo.Type == null || returnTypeInfo.Type.SpecialType != SpecialType.None || method.Node.IsKind(SyntaxKind.IndexerDeclaration))
+            var returnTypeInfo = model.SemanticModel.GetTypeInfo(method.Node.ReturnType).Type;
+            if (returnTypeInfo == null || returnTypeInfo.SpecialType != SpecialType.None || method.Node.IsKind(SyntaxKind.IndexerDeclaration) || (returnTypeInfo.ToFullName() == typeof(Task).FullName && !(returnTypeInfo is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.IsGenericType)))
             {
                 return false;
+            }
+
+            if (returnTypeInfo is INamedTypeSymbol namedType && namedType.IsGenericType && returnTypeInfo.ToFullName() == typeof(Task).FullName)
+            {
+                returnTypeInfo = namedType.TypeArguments[0];
             }
 
             var returnTypeMembers = GetProperties(returnTypeInfo);
@@ -57,9 +63,9 @@
                     return true;
                 }
 
-                if (methodParameter.TypeInfo.Type.SpecialType == SpecialType.None && !Equals(methodParameter.TypeInfo.Type, returnTypeInfo.Type))
+                if (methodParameter.TypeInfo.Type.SpecialType == SpecialType.None && !Equals(methodParameter.TypeInfo.Type, returnTypeInfo))
                 {
-                    var properties = GetProperties(methodParameter.TypeInfo);
+                    var properties = GetProperties(methodParameter.TypeInfo.Type);
                     if (properties.Any(x => returnTypeMembers.Contains(x)))
                     {
                         return true;
@@ -70,9 +76,9 @@
             return false;
         }
 
-        private static HashSet<string> GetProperties(TypeInfo returnTypeInfo)
+        private static HashSet<string> GetProperties(ITypeSymbol returnTypeInfo)
         {
-            return new HashSet<string>(returnTypeInfo.Type.GetMembers().Where(x => x.Kind == SymbolKind.Property).OfType<IPropertySymbol>().Where(x => !x.IsWriteOnly && !x.IsIndexer).Select(x => x.Name), StringComparer.OrdinalIgnoreCase);
+            return new HashSet<string>(returnTypeInfo.GetMembers().Where(x => x.Kind == SymbolKind.Property).OfType<IPropertySymbol>().Where(x => !x.IsWriteOnly && !x.IsIndexer).Select(x => x.Name), StringComparer.OrdinalIgnoreCase);
         }
 
         public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model)
@@ -156,10 +162,15 @@
 
             generatedMethod = generatedMethod.AddBodyStatements(bodyStatement);
 
-            var returnTypeInfo = model.SemanticModel.GetTypeInfo(method.Node.ReturnType);
-            if (returnTypeInfo.Type == null || returnTypeInfo.Type.SpecialType != SpecialType.None)
+            var returnTypeInfo = model.SemanticModel.GetTypeInfo(method.Node.ReturnType).Type;
+            if (returnTypeInfo == null || returnTypeInfo.SpecialType != SpecialType.None || method.Node.IsKind(SyntaxKind.IndexerDeclaration) || (returnTypeInfo.ToFullName() == typeof(Task).FullName && !(returnTypeInfo is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.IsGenericType)))
             {
                 yield break;
+            }
+
+            if (returnTypeInfo is INamedTypeSymbol namedType && namedType.IsGenericType && returnTypeInfo.ToFullName() == typeof(Task).FullName)
+            {
+                returnTypeInfo = namedType.TypeArguments[0];
             }
 
             var returnTypeMembers = GetProperties(returnTypeInfo);
@@ -174,9 +185,9 @@
                     continue;
                 }
 
-                if (methodParameter.TypeInfo.Type.SpecialType == SpecialType.None && !Equals(methodParameter.TypeInfo.Type, returnTypeInfo.Type))
+                if (methodParameter.TypeInfo.Type.SpecialType == SpecialType.None && !Equals(methodParameter.TypeInfo.Type, returnTypeInfo))
                 {
-                    var properties = GetProperties(methodParameter.TypeInfo);
+                    var properties = GetProperties(methodParameter.TypeInfo.Type);
                     foreach (var matchedSourceProperty in properties.Where(x => returnTypeMembers.Contains(x)))
                     {
                         var returnTypeMember = returnTypeMembers.FirstOrDefault(x => string.Equals(x, matchedSourceProperty, StringComparison.OrdinalIgnoreCase));
