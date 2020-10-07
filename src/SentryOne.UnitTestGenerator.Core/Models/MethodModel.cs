@@ -52,7 +52,16 @@
                 throw new ArgumentNullException(nameof(arguments));
             }
 
-            var expressionSyntax = Generate.MethodCall(Node.Modifiers.Any(x => x.IsKind(SyntaxKind.StaticKeyword)) ? owner.TypeSyntax : owner.TargetInstance, Node, Name, frameworkSet, arguments);
+            var ownerTargetInstance = Node.Modifiers.Any(x => x.IsKind(SyntaxKind.StaticKeyword)) ? owner.TypeSyntax : owner.TargetInstance;
+
+            if (Node.ExplicitInterfaceSpecifier != null)
+            {
+                ownerTargetInstance = SyntaxFactory.ParenthesizedExpression(SyntaxFactory.CastExpression(Node.ExplicitInterfaceSpecifier.Name, ownerTargetInstance));
+                var typeSymbol = owner.SemanticModel.GetTypeInfo(Node.ExplicitInterfaceSpecifier.Name).Type;
+                frameworkSet.Context.AddEmittedType(typeSymbol);
+            }
+
+            var expressionSyntax = Generate.MethodCall(ownerTargetInstance, Node, Name, frameworkSet, arguments);
             if (IsAsync && !suppressAwait)
             {
                 return SyntaxFactory.AwaitExpression(expressionSyntax);

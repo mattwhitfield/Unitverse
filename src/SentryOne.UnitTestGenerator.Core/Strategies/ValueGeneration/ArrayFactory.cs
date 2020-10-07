@@ -33,7 +33,14 @@
                             })));
             }
 
-            return AssignmentValueHelper.GetDefaultAssignmentValue(typeSymbol, model, frameworkSet);
+            var random = ValueGenerationStrategyFactory.Random;
+            return SyntaxFactory.InvocationExpression(
+                    SyntaxFactory.MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        SyntaxFactory.IdentifierName("Array"),
+                        SyntaxFactory.IdentifierName("CreateInstance")))
+                .WithArgumentList(
+                    Generate.Arguments(SyntaxFactory.TypeOfExpression(SyntaxFactory.IdentifierName("int")), Generate.Literal(random.Next(int.MaxValue)), Generate.Literal(random.Next(int.MaxValue)), Generate.Literal(random.Next(int.MaxValue))));
         }
 
         public static ExpressionSyntax ImplicitlyTyped(ITypeSymbol typeSymbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)

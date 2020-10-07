@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -38,6 +39,41 @@
             }
 
             return method;
+        }
+
+        public static string CleanName(string sourceName)
+        {
+            if (string.IsNullOrWhiteSpace(sourceName))
+            {
+                return sourceName;
+            }
+
+            var first = true;
+            var builder = new StringBuilder(sourceName.Length);
+            foreach (var ch in sourceName)
+            {
+                bool valid;
+                if (first)
+                {
+                    valid = char.IsLetter(ch) || ch == '_' || ch == '@';
+                    first = false;
+                }
+                else
+                {
+                    valid = char.IsLetterOrDigit(ch) || ch == '_' || ch == '@';
+                }
+
+                if (valid)
+                {
+                    builder.Append(ch);
+                }
+                else
+                {
+                    builder.Append('_');
+                }
+            }
+
+            return builder.ToString();
         }
 
         public static LiteralExpressionSyntax Literal(object literal)

@@ -154,7 +154,13 @@
                 }
             }
 
-            return string.Format(CultureInfo.InvariantCulture, "{0}With{1}", method.OriginalName, parameters.Any() ? parameters.Select(x => x.ToPascalCase()).Aggregate((x, y) => x + "And" + y) : "NoParameters");
+            var baseName = method.OriginalName;
+            if (method.Node?.ExplicitInterfaceSpecifier != null)
+            {
+                baseName += "For" + Generate.CleanName(method.Node.ExplicitInterfaceSpecifier.Name.ToString());
+            }
+
+            return string.Format(CultureInfo.InvariantCulture, "{0}With{1}", baseName, parameters.Any() ? parameters.Select(x => x.ToPascalCase()).Aggregate((x, y) => x + "And" + y) : "NoParameters");
         }
     }
 }

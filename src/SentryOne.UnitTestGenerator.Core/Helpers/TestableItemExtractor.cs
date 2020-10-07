@@ -75,6 +75,11 @@
             AddModels<PropertyDeclarationSyntax, IPropertyModel>(syntax, x => x.Modifiers, ExtractPropertyModel, allowedModifiers, model.Properties);
             AddModels<IndexerDeclarationSyntax, IIndexerModel>(syntax, x => x.Modifiers, ExtractIndexerModel, allowedModifiers, model.Indexers);
 
+            foreach (var methodModel in syntax.ChildNodes().OfType<MethodDeclarationSyntax>().Where(x => x.ExplicitInterfaceSpecifier != null).Select(ExtractMethodModel))
+            {
+                model.Methods.Add(methodModel);
+            }
+
             model.DefaultConstructor = model.Constructors.OrderByDescending(x => x.Parameters.Count).FirstOrDefault();
 
             // populate interface models

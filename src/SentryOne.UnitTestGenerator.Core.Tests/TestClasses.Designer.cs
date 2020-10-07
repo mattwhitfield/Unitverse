@@ -232,7 +232,25 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to namespace TestApp1
+        ///{
+        ///    using System.Threading.Tasks;
+        ///
+        ///    public class InputClass
+        ///    {
+        ///        public int ID { get; }
+        ///        public string SomeProperty { get; }
+        ///        public string SomeOtherProperty { get; set; }
+        ///        public string WriteOnlyProperty { set { } }
+        ///    }
+        ///
+        ///    public class OutputClass
+        ///    {
+        ///        public string SomeProperty { get; set; }
+        ///        public string SomeOtherProperty { get; set; }
+        ///        public string WriteOnlyProperty { get; set; }
+        ///    }
+        ///    public class C [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AsyncMappingMethod {
             get {
@@ -481,6 +499,15 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         internal static string Generate {
             get {
                 return ResourceManager.GetString("Generate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string GenericCollection {
+            get {
+                return ResourceManager.GetString("GenericCollection", resourceCulture);
             }
         }
         

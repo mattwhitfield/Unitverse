@@ -7,8 +7,18 @@ Scenario: Can Call Method Generation
 	"""
 using System.Threading;
 
-public class TestClass
+public interface ICR
 {
+	int Thing();
+}
+
+public class TestClass : ICR
+{
+    int ICR.Thing()
+	{
+		return 1;
+	}
+
 	public void Test1(out string tester)
 	{
 		tester = "test"
@@ -64,6 +74,9 @@ public class TestClass
 	Then I expect a method called 'CanCallThisIsAMethod'
 		And I expect it to contain the variable 'methodName'
 		And I expect it to contain the statement '_testClass.ThisIsAMethod(methodName, methodValue);'
+		And I expect it to contain the statement 'Assert.Fail("Create or modify test");'
+	Then I expect a method called 'CanCallThing'
+		And I expect it to contain the statement 'var result = ((ICR)_testClass).Thing();'
 		And I expect it to contain the statement 'Assert.Fail("Create or modify test");'
 	And I expect a method called 'CanCallWillReturnAString'
 		And I expect it to have the attribute 'TestMethod'

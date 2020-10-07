@@ -1,0 +1,65 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Linq;
+
+namespace QueueCrash
+{
+	public class DelayedConcurrentQueue<T> : IProducerConsumerCollection<T>
+	{
+		private readonly TimeSpan _delay;
+		private readonly ConcurrentQueue<Tuple<DateTime, T>> _internalQueue;
+		private int _count;
+		private bool _isSynchronized;
+		private object _syncRoot;
+
+		public void CopyTo(Array destinationArray, int index)
+		{
+			if (destinationArray.Length - index <= _internalQueue.Count)
+			{
+				throw new
+					ArgumentException("Destination destinationArray was not long enough. Check the destination index, length, and the destinationArray's lower bounds. (Parameter 'destinationArray')");
+			}
+
+			var source = _internalQueue.Select(t => t.Item2).ToArray();
+			Array.Copy(source, destinationArray, index);
+		}
+
+		int ICollection.Count => _count;
+
+		bool ICollection.IsSynchronized => _isSynchronized;
+
+		object ICollection.SyncRoot => _syncRoot;
+
+		IEnumerator<T> IEnumerable<T>.GetEnumerator()
+		{
+			throw new NotImplementedException();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			throw new NotImplementedException();
+		}
+
+		void IProducerConsumerCollection<T>.CopyTo(T[] array, int index)
+		{
+			throw new NotImplementedException();
+		}
+
+		T[] IProducerConsumerCollection<T>.ToArray()
+		{
+			throw new NotImplementedException();
+		}
+
+		bool IProducerConsumerCollection<T>.TryAdd(T item)
+		{
+			throw new NotImplementedException();
+		}
+
+		bool IProducerConsumerCollection<T>.TryTake(out T item)
+		{
+			throw new NotImplementedException();
+		}
+	}
+}
