@@ -139,12 +139,6 @@
                         continue;
                     }
 
-                    if (source.TargetProject == null && options.GenerationOptions.CreateProjectAutomatically)
-                    {
-                        var testProject = SolutionUtilities.CreateTestProjectInCurrentSolution(_dte, source.Project, options.GenerationOptions);
-                        ReferencesHelper.AddNugetPackagesToProject(testProject, StandardReferenceHelper.GetReferencedNugetPackages(options), messageLogger.LogMessage, _package);
-                    }
-
                     var targetProject = source.TargetProject;
 
                     if (targetProject == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
@@ -217,7 +211,7 @@
 
             if (generationItems.Any())
             {
-                _package.JoinableTaskFactory.RunAsync(() => Attempt.ActionAsync(() => CodeGenerator.GenerateCodeAsync(generationItems, withRegeneration, _package, projectDictionary, messageLogger), _package));
+                _ = _package.JoinableTaskFactory.RunAsync(() => Attempt.ActionAsync(() => CodeGenerator.GenerateCodeAsync(generationItems, withRegeneration, _package, projectDictionary, messageLogger), _package));
             }
         }
     }

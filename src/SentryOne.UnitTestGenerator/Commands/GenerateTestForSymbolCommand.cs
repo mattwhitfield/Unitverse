@@ -130,12 +130,12 @@
         public static async Task InitializeAsync(UnitTestGeneratorPackage package)
         {
             await package.JoinableTaskFactory.SwitchToMainThreadAsync();
+#pragma warning disable VSSDK006 // these services are always available
             _dte = (DTE2)await package.GetServiceAsync(typeof(DTE)).ConfigureAwait(true);
 
             var commandService = await package.GetServiceAsync(typeof(IMenuCommandService)).ConfigureAwait(true) as OleMenuCommandService;
             _instance = new GenerateTestForSymbolCommand(package, commandService);
         }
-#pragma warning disable VSTHRD010
 
         internal static async Task<Tuple<SyntaxNode, ISymbol, TypeInfo>> GetTargetSymbolAsync(ITextView textView)
         {
@@ -174,9 +174,8 @@
 
             return null;
         }
-#pragma warning restore VSTHRD010
 
-#pragma warning disable VSTHRD010
+#pragma warning disable VSTHRD010 // checks are present in called member
         private void Execute(object sender, EventArgs e)
         {
             Execute(false);
@@ -217,12 +216,6 @@
 
                 var nameParts = VsProjectHelper.GetNameParts(projectItem);
 
-                if (source.TargetProject == null && options.GenerationOptions.CreateProjectAutomatically)
-                {
-                    var testProject = SolutionUtilities.CreateTestProjectInCurrentSolution(_dte, source.Project, options.GenerationOptions);
-                    ReferencesHelper.AddNugetPackagesToProject(testProject, StandardReferenceHelper.GetReferencedNugetPackages(options), messageLogger.LogMessage, _package);
-                }
-
                 var targetProject = source.TargetProject;
                 if (targetProject == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
                 {
@@ -244,7 +237,7 @@
                     throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
                 }
 
-                _package.JoinableTaskFactory.RunAsync(
+                _ = _package.JoinableTaskFactory.RunAsync(
                     () => Attempt.ActionAsync(
                         async () =>
                     {

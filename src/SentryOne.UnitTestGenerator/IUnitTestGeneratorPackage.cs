@@ -13,10 +13,6 @@
 
         IUnitTestGeneratorOptions Options { get; }
 
-        IVsPackageInstaller PackageInstaller { get; }
-
-        IVsPackageInstallerServices PackageInstallerServices { get; }
-
         VisualStudioWorkspace Workspace { get; }
 
         Task<object> GetServiceAsync(Type serviceType);

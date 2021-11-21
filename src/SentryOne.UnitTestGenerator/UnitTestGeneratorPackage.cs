@@ -7,7 +7,6 @@
     using Microsoft.VisualStudio.ComponentModelHost;
     using Microsoft.VisualStudio.LanguageServices;
     using Microsoft.VisualStudio.Shell;
-    using NuGet.VisualStudio;
     using SentryOne.UnitTestGenerator.Commands;
     using SentryOne.UnitTestGenerator.Core.Options;
     using SentryOne.UnitTestGenerator.Options;
@@ -35,10 +34,6 @@
             }
         }
 
-        public IVsPackageInstaller PackageInstaller { get; private set; }
-
-        public IVsPackageInstallerServices PackageInstallerServices { get; private set; }
-
         public VisualStudioWorkspace Workspace { get; private set; }
 
         /// <summary>
@@ -56,14 +51,12 @@
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
+#pragma warning disable VSSDK006 // null check is present
             var componentModel = (IComponentModel)await GetServiceAsync(typeof(SComponentModel)).ConfigureAwait(true);
             if (componentModel == null)
             {
                 throw new InvalidOperationException();
             }
-
-            PackageInstallerServices = componentModel.GetService<IVsPackageInstallerServices>();
-            PackageInstaller = componentModel.GetService<IVsPackageInstaller>();
 
             Workspace = componentModel.GetService<VisualStudioWorkspace>();
 

@@ -44,11 +44,6 @@
                 foreach (var pair in requiredAssetsByProject)
                 {
                     AddTargetAssets(options, pair);
-
-                    if (options.GenerationOptions.AddReferencesAutomatically)
-                    {
-                        ReferencesHelper.AddReferencesToProject(pair.Key, pair.Value.Item2.ToList(), messageLogger.LogMessage);
-                    }
                 }
 
                 if (generationItems.All(x => string.IsNullOrWhiteSpace(x.TargetContent)))

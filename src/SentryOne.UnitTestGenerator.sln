@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29306.81
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentryOne.UnitTestGenerator", "SentryOne.UnitTestGenerator\SentryOne.UnitTestGenerator.csproj", "{7F7E3D01-F45E-4F59-BE96-0E9D052905DB}"
 EndProject
@@ -11,6 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentryOne.UnitTestGenerator
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{00FDA5F1-4AD2-45F1-BAC9-40ACA4737C53}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		SentryOne.UnitTestGenerator.ruleset = SentryOne.UnitTestGenerator.ruleset
 	EndProjectSection
 EndProject

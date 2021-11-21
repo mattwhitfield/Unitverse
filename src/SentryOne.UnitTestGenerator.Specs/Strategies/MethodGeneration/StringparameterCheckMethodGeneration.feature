@@ -53,7 +53,7 @@ public class TestClass
 }
 	"""
 	And I set my test framework to 'MSTest'
-	And I set my mock framework to 'RhinoMocks'
+	And I set my mock framework to 'Moq'
 	When I generate tests for the method using the strategy 'StringParameterCheckMethodGenerationStrategy'
 	Then I expect a method called 'CannotCallThisIsAMethodWithInvalidMethodName'
 		And I expect it to have the attribute 'DataTestMethod'

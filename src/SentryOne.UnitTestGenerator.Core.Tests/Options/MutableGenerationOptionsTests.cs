@@ -23,8 +23,6 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Options
         {
             _options.FrameworkType.Returns(TestFrameworkTypes.NUnit3);
             _options.MockingFrameworkType.Returns(MockingFrameworkType.Moq);
-            _options.CreateProjectAutomatically.Returns(false);
-            _options.AddReferencesAutomatically.Returns(true);
             _options.AllowGenerationWithoutTargetProject.Returns(true);
             _options.TestProjectNaming.Returns("tpn");
             _options.TestFileNaming.Returns("tfn");
@@ -33,8 +31,6 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Options
             _testClass = new MutableGenerationOptions(_options);
             Assert.That(_testClass.FrameworkType, Is.EqualTo(_options.FrameworkType));
             Assert.That(_testClass.MockingFrameworkType, Is.EqualTo(_options.MockingFrameworkType));
-            Assert.That(_testClass.CreateProjectAutomatically, Is.EqualTo(_options.CreateProjectAutomatically));
-            Assert.That(_testClass.AddReferencesAutomatically, Is.EqualTo(_options.AddReferencesAutomatically));
             Assert.That(_testClass.AllowGenerationWithoutTargetProject, Is.EqualTo(_options.AllowGenerationWithoutTargetProject));
             Assert.That(_testClass.TestProjectNaming, Is.EqualTo(_options.TestProjectNaming));
             Assert.That(_testClass.TestFileNaming, Is.EqualTo(_options.TestFileNaming));
@@ -61,22 +57,6 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Options
             var testValue = MockingFrameworkType.Moq;
             _testClass.MockingFrameworkType = testValue;
             Assert.That(_testClass.MockingFrameworkType, Is.EqualTo(testValue));
-        }
-
-        [Test]
-        public void CanSetAndGetCreateProjectAutomatically()
-        {
-            var testValue = false;
-            _testClass.CreateProjectAutomatically = testValue;
-            Assert.That(_testClass.CreateProjectAutomatically, Is.EqualTo(testValue));
-        }
-
-        [Test]
-        public void CanSetAndGetAddReferencesAutomatically()
-        {
-            var testValue = false;
-            _testClass.AddReferencesAutomatically = testValue;
-            Assert.That(_testClass.AddReferencesAutomatically, Is.EqualTo(testValue));
         }
 
         [Test]

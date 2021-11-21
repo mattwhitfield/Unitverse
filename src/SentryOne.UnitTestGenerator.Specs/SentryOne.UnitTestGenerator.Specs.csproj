@@ -1,38 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <SpecFlowObsoleteCodeBehindFiles Remove="FrameworkGeneration\MockFrameworkGeneration.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="MockGeneration\MockGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\ClassGeneration\AbstractClassGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\ClassGeneration\ComparableStrategy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\ClassGeneration\StandardClassGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\IndexerGeneration\ReadOnlyIndexerGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\IndexerGeneration\WriteOnlyIndexerGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="MockGeneration\StandardClassGeneration.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\MethodGeneration\CanCallMethodGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\OperatorGeneration\NullParameterCheckConstructorGenerator.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\OperatorGeneration\NullParameterCheckOperatorGenerator - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\MultiConstructorInitialisedPropertyGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\ReadOnlyIndexerGeneration.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\ReadOnlyPropertyGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\ReadWritePropertyGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\PropertyGenerator\WriteOnlyPropertyGeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Regeneration\Regeneration - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Strategies\Regeneration\StandardClassGeneration.feature.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="nunit" Version="3.11.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-    <PackageReference Include="SpecFlow.NUnit" Version="3.0.225" />
-    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.225" />
+    <PackageReference Include="nunit" Version="3.13.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="SpecFlow.NUnit" Version="3.9.40" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.40" />
   </ItemGroup>
 
   <ItemGroup>

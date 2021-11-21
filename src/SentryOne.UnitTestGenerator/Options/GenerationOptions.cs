@@ -18,16 +18,6 @@ namespace SentryOne.UnitTestGenerator.Options
         public MockingFrameworkType MockingFrameworkType { get; set; } = MockingFrameworkType.NSubstitute;
 
         [Category("Test project")]
-        [DisplayName("Automatically create Tests project")]
-        [Description("Test projects will be created automatically")]
-        public bool CreateProjectAutomatically { get; set; } = true;
-
-        [Category("Test project")]
-        [DisplayName("Automatically add references to Tests projects")]
-        [Description("References will be added to test projects automatically")]
-        public bool AddReferencesAutomatically { get; set; } = true;
-
-        [Category("Test project")]
         [DisplayName("Allow generation without target project")]
         [Description("Tests will be generated as a file outside of the scope of a project if a target project is not available")]
         public bool AllowGenerationWithoutTargetProject { get; set; } = true;

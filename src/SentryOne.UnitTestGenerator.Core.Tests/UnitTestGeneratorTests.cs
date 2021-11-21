@@ -43,7 +43,7 @@
                 }
 
                 var frameworks = new[] { TestFrameworkTypes.MsTest, TestFrameworkTypes.NUnit3, TestFrameworkTypes.XUnit };
-                var mocks = new[] { MockingFrameworkType.Moq, MockingFrameworkType.NSubstitute, MockingFrameworkType.RhinoMocks, MockingFrameworkType.FakeItEasy };
+                var mocks = new[] { MockingFrameworkType.Moq, MockingFrameworkType.NSubstitute, MockingFrameworkType.FakeItEasy };
 
                 foreach (var framework in frameworks)
                 {
@@ -173,10 +173,6 @@
 
                 case MockingFrameworkType.Moq:
                     yield return MetadataReference.CreateFromFile(typeof(Mock).Assembly.Location);
-                    break;
-
-                case MockingFrameworkType.RhinoMocks:
-                    yield return MetadataReference.CreateFromFile(typeof(Rhino.Mocks.MockRepository).Assembly.Location);
                     break;
 
                 case MockingFrameworkType.FakeItEasy:

@@ -12,6 +12,16 @@
     {
         public static ExpressionSyntax ImplicitlyTypedArray(ITypeSymbol typeSymbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
+            if (frameworkSet is null)
+            {
+                throw new ArgumentNullException(nameof(frameworkSet));
+            }
+
+            if (visitedTypes is null)
+            {
+                throw new ArgumentNullException(nameof(visitedTypes));
+            }
+
             if (typeSymbol is IArrayTypeSymbol arrayTypeSymbol)
             {
                 if (visitedTypes.Contains(arrayTypeSymbol.ElementType.ToFullName()))
@@ -45,6 +55,16 @@
 
         public static ExpressionSyntax ImplicitlyTyped(ITypeSymbol typeSymbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
+            if (frameworkSet is null)
+            {
+                throw new ArgumentNullException(nameof(frameworkSet));
+            }
+
+            if (visitedTypes is null)
+            {
+                throw new ArgumentNullException(nameof(visitedTypes));
+            }
+
             if (typeSymbol is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.TypeArguments.Length > 0)
             {
                 var targetType = namedTypeSymbol.TypeArguments[0];

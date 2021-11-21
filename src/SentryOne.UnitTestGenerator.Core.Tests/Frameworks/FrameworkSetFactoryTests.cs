@@ -28,7 +28,6 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks
 
         [Test]
         [TestCase(MockingFrameworkType.FakeItEasy, typeof(FakeItEasyMockingFramework))]
-        [TestCase(MockingFrameworkType.RhinoMocks, typeof(RhinoMocksMockingFramework))]
         [TestCase(MockingFrameworkType.Moq, typeof(MoqMockingFramework))]
         [TestCase(MockingFrameworkType.NSubstitute, typeof(NSubstituteMockingFramework))]
         public static void CanCallCreateForMockingFramework(MockingFrameworkType type, Type expectedType)

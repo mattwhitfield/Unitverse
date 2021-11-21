@@ -14,7 +14,6 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
         [TestCase(TestFrameworkTypes.MsTest, MockingFrameworkType.FakeItEasy, "MSTest.TestFramework", "FakeItEasy")]
         [TestCase(TestFrameworkTypes.NUnit2, MockingFrameworkType.Moq, "NUnit", "Moq")]
         [TestCase(TestFrameworkTypes.NUnit3, MockingFrameworkType.NSubstitute, "NUnit", "NSubstitute")]
-        [TestCase(TestFrameworkTypes.XUnit, MockingFrameworkType.RhinoMocks, "xunit", "RhinoMocks")]
         public static void CanCallGetReferencedAssemblies(TestFrameworkTypes testFramework, MockingFrameworkType mockingFramework, string expectedTestFramework, string expectedMockingFramework)
         {
             var options = Substitute.For<IUnitTestGeneratorOptions>();

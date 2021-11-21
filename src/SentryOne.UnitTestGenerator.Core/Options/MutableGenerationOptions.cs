@@ -13,8 +13,6 @@
 
             FrameworkType = options.FrameworkType;
             MockingFrameworkType = options.MockingFrameworkType;
-            CreateProjectAutomatically = options.CreateProjectAutomatically;
-            AddReferencesAutomatically = options.AddReferencesAutomatically;
             AllowGenerationWithoutTargetProject = options.AllowGenerationWithoutTargetProject;
             TestProjectNaming = options.TestProjectNaming;
             TestFileNaming = options.TestFileNaming;
@@ -24,10 +22,6 @@
         public TestFrameworkTypes FrameworkType { get; set; }
 
         public MockingFrameworkType MockingFrameworkType { get; set; }
-
-        public bool CreateProjectAutomatically { get; set; }
-
-        public bool AddReferencesAutomatically { get; set; }
 
         public bool AllowGenerationWithoutTargetProject { get; set; }
 

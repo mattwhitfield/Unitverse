@@ -43,7 +43,7 @@ public class TestClass
 }
 	"""
 	And I set my test framework to 'XUnit'
-	And I set my mock framework to 'RhinoMocks'
+	And I set my mock framework to 'Moq'
 	When I generate unit tests for the class using strategy 'CanConstructMultiConstructorGenerationStrategy'
 	Then I expect a method called 'CanConstruct'
 		And I expect it to contain the statement 'var instance = new TestClass(_stringProp, _iTest);'

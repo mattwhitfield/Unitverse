@@ -6,10 +6,6 @@
 
         MockingFrameworkType MockingFrameworkType { get; }
 
-        bool CreateProjectAutomatically { get; }
-
-        bool AddReferencesAutomatically { get; }
-
         bool AllowGenerationWithoutTargetProject { get; }
 
         string TestProjectNaming { get; }

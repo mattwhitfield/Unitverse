@@ -28,8 +28,6 @@
                     return new NSubstituteMockingFramework(context);
                 case MockingFrameworkType.Moq:
                     return new MoqMockingFramework(context);
-                case MockingFrameworkType.RhinoMocks:
-                    return new RhinoMocksMockingFramework(context);
                 case MockingFrameworkType.FakeItEasy:
                     return new FakeItEasyMockingFramework(context);
                 default:

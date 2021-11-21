@@ -4,7 +4,6 @@
     {
         NSubstitute,
         Moq,
-        RhinoMocks,
         FakeItEasy,
     }
 }

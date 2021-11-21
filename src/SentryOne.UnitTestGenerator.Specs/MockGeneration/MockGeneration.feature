@@ -60,4 +60,3 @@ namespace TestNamespace.SubNameSpace
 	| FakeItEasy  | _iTest = A.Fake<ITest>();                      |
 	| Moq         | _iTest = new Mock<ITest>().Object;             |
 	| NSubstitute | _iTest = Substitute.For<ITest>();              |
-	| RhinoMocks  | _iTest = MockRepository.GenerateStub<ITest>(); |
