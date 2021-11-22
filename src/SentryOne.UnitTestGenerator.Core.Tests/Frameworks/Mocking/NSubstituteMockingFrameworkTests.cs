@@ -57,11 +57,5 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Mocking
         {
             Assert.Throws<ArgumentNullException>(() => _testClass.MockInterface(default(TypeSyntax)));
         }
-
-        [Test]
-        public void CannotCallReferencedNugetPackagesWithNullOptions()
-        {
-            Assert.Throws<ArgumentNullException>(() => _testClass.ReferencedNugetPackages(default(IVersioningOptions)).Consume());
-        }
     }
 }

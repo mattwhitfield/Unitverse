@@ -40,15 +40,5 @@
                         .WithTypeArgumentList(
                             SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(type)))));
         }
-
-        public IEnumerable<INugetPackageReference> ReferencedNugetPackages(IVersioningOptions options)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            yield return new NugetPackageReference(Strings.FakeItEasyMockingFramework_GetUsings_FakeItEasy, options.FakeItEasyNugetPackageVersion);
-        }
     }
 }

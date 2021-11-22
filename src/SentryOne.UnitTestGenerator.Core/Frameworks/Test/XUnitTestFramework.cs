@@ -182,16 +182,6 @@
             yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.XUnitTestFramework_GetUsings_Xunit));
         }
 
-        public IEnumerable<INugetPackageReference> ReferencedNugetPackages(IVersioningOptions options)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            yield return new NugetPackageReference("xunit", options.XUnitNugetPackageVersion);
-        }
-
         private static InvocationExpressionSyntax AssertCall(string assertMethod)
         {
             return SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(

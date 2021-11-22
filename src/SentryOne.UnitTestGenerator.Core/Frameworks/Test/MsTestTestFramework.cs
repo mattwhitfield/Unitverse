@@ -180,16 +180,6 @@
             yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.MsTestTestFramework_GetUsings_Microsoft_VisualStudio_TestTools_UnitTesting));
         }
 
-        public IEnumerable<INugetPackageReference> ReferencedNugetPackages(IVersioningOptions options)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            yield return new NugetPackageReference("MSTest.TestFramework", options.MsTestNugetPackageVersion);
-        }
-
         private static InvocationExpressionSyntax AssertCall(string assertMethod)
         {
             return SyntaxFactory.InvocationExpression(SyntaxFactory.MemberAccessExpression(

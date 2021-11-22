@@ -57,11 +57,10 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
             }
 
             var generationOptions = Substitute.For<IGenerationOptions>();
-            var versionOptions = Substitute.For<IVersioningOptions>();
             generationOptions.FrameworkType.Returns(TestFrameworkTypes.NUnit3);
             generationOptions.MockingFrameworkType.Returns(MockingFrameworkType.NSubstitute);
             generationOptions.TestTypeNaming.Returns("{0}Tests");
-            var options = new UnitTestGeneratorOptions(generationOptions, versionOptions);
+            var options = new UnitTestGeneratorOptions(generationOptions);
             var frameworkSet = FrameworkSetFactory.Create(options);
             var expression = ValueGenerationStrategyFactory.GenerateFor(info, model, new HashSet<string>(StringComparer.OrdinalIgnoreCase),  frameworkSet);
 

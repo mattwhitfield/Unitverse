@@ -10,7 +10,5 @@
         IEnumerable<UsingDirectiveSyntax> GetUsings();
 
         ExpressionSyntax MockInterface(TypeSyntax interfaceName);
-
-        IEnumerable<INugetPackageReference> ReferencedNugetPackages(IVersioningOptions options);
     }
 }

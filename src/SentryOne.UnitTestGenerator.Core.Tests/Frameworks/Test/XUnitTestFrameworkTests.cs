@@ -16,11 +16,5 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
         {
             _testClass = new XUnitTestFramework();
         }
-
-        [Test]
-        public void CannotCallReferencedNugetPackagesWithNullOptions()
-        {
-            Assert.Throws<ArgumentNullException>(() => _testClass.ReferencedNugetPackages(default(IVersioningOptions)).Consume());
-        }
     }
 }

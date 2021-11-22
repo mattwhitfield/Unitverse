@@ -34,15 +34,5 @@
                 yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.NUnit3TestFramework_GetUsings_System_Threading));
             }
         }
-
-        public override IEnumerable<INugetPackageReference> ReferencedNugetPackages(IVersioningOptions options)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            yield return new NugetPackageReference("NUnit", options.NUnit3NugetPackageVersion);
-        }
     }
 }

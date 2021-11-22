@@ -216,8 +216,6 @@
             yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.NUnitTestFramework_GetUsings_NUnit_Framework));
         }
 
-        public abstract IEnumerable<INugetPackageReference> ReferencedNugetPackages(IVersioningOptions options);
-
         private static StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string throws)
         {
             if (exceptionType == null)

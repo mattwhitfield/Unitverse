@@ -13,11 +13,6 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
     {
         private class TestNUnitTestFramework : NUnitTestFramework
         {
-            public override IEnumerable<INugetPackageReference> ReferencedNugetPackages(IVersioningOptions options)
-            {
-                return default(IEnumerable<INugetPackageReference>);
-            }
-
             public override AttributeSyntax SingleThreadedApartmentAttribute { get; }
         }
 

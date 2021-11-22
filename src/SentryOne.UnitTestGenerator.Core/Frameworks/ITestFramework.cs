@@ -38,7 +38,5 @@
         MethodDeclarationSyntax CreateTestMethod(string name, bool isAsync, bool isStatic);
 
         IEnumerable<UsingDirectiveSyntax> GetUsings();
-
-        IEnumerable<INugetPackageReference> ReferencedNugetPackages(IVersioningOptions options);
     }
 }

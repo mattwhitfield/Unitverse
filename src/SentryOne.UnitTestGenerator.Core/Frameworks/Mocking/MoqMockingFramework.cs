@@ -38,15 +38,5 @@
                                  .WithArgumentList(SyntaxFactory.ArgumentList()),
                     SyntaxFactory.IdentifierName("Object"));
         }
-
-        public IEnumerable<INugetPackageReference> ReferencedNugetPackages(IVersioningOptions options)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            yield return new NugetPackageReference(Strings.MoqMockingFramework_GetUsings_Moq, options.MoqNugetPackageVersion);
-        }
     }
 }
