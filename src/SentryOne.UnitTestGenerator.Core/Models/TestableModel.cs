@@ -24,6 +24,8 @@
 
         public string OriginalName { get; private set; }
 
+        public bool ShouldGenerate { get; set; }
+
         public void MutateName(string newName)
         {
             if (string.IsNullOrWhiteSpace(newName))
@@ -38,6 +40,11 @@
 
             OriginalName = Name;
             Name = newName;
+        }
+
+        public virtual void SetShouldGenerateForSingleItem(SyntaxNode syntaxNode)
+        {
+            ShouldGenerate = syntaxNode == Node;
         }
     }
 }

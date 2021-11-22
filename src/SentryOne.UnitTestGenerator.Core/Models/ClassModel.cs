@@ -41,6 +41,8 @@
 
         public IList<IIndexerModel> Indexers { get; } = new List<IIndexerModel>();
 
+        public bool ShouldGenerate { get; set; } = true;
+
         public bool IsSingleItem { get; }
 
         public bool IsStatic => Declaration.Modifiers.Any(x => string.Equals(x.ValueText, "static", StringComparison.OrdinalIgnoreCase));
@@ -62,6 +64,16 @@
         public TypeSyntax TypeSyntax { get; set; }
 
         public IList<UsingDirectiveSyntax> Usings { get; } = new List<UsingDirectiveSyntax>();
+
+        public void SetShouldGenerateForSingleItem(SyntaxNode syntaxNode)
+        {
+            ShouldGenerate = TypeSyntax == syntaxNode;
+            Methods.Each(x => x.SetShouldGenerateForSingleItem(syntaxNode));
+            Operators.Each(x => x.SetShouldGenerateForSingleItem(syntaxNode));
+            Properties.Each(x => x.SetShouldGenerateForSingleItem(syntaxNode));
+            Constructors.Each(x => x.SetShouldGenerateForSingleItem(syntaxNode));
+            Indexers.Each(x => x.SetShouldGenerateForSingleItem(syntaxNode));
+        }
 
         public string GetConstructorParameterFieldName(ParameterModel parameter)
         {

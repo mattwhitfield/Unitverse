@@ -83,27 +83,30 @@
             }
         }
 
-        private static TypeDeclarationSyntax AddGeneratedItems<T>(ClassModel classModel, TypeDeclarationSyntax declaration, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector, bool withRegeneration)
+        private static TypeDeclarationSyntax AddGeneratedItems<T>(ClassModel classModel, TypeDeclarationSyntax declaration, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector, Func<T, bool> shouldGenerate, bool withRegeneration)
         {
             foreach (var property in selector(classModel))
             {
-                foreach (var method in factory.CreateFor(property, classModel))
+                if (shouldGenerate(property))
                 {
-                    var methodName = method.Identifier.Text;
-                    var existingMethod = declaration.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault(x => string.Equals(x.Identifier.Text, methodName, StringComparison.OrdinalIgnoreCase));
-
-                    if (existingMethod != null)
+                    foreach (var method in factory.CreateFor(property, classModel))
                     {
-                        if (!withRegeneration)
+                        var methodName = method.Identifier.Text;
+                        var existingMethod = declaration.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault(x => string.Equals(x.Identifier.Text, methodName, StringComparison.OrdinalIgnoreCase));
+
+                        if (existingMethod != null)
                         {
-                            throw new InvalidOperationException("One or more of the generated methods ('" + methodName + "') already exists in the test class. In order to over-write existing tests, hold left shift while right-clicking and select the 'Regenerate' option.");
-                        }
+                            if (!withRegeneration)
+                            {
+                                throw new InvalidOperationException("One or more of the generated methods ('" + methodName + "') already exists in the test class. In order to over-write existing tests, hold left shift while right-clicking and select the 'Regenerate' option.");
+                            }
 
-                        declaration = declaration.ReplaceNode(existingMethod, method);
-                    }
-                    else
-                    {
-                        declaration = declaration.AddMembers(method);
+                            declaration = declaration.ReplaceNode(existingMethod, method);
+                        }
+                        else
+                        {
+                            declaration = declaration.AddMembers(method);
+                        }
                     }
                 }
             }
@@ -196,18 +199,18 @@
 
             if (!classModel.IsSingleItem || classModel.Constructors.Any())
             {
-                targetType = AddGeneratedItems(classModel, targetType, new ClassLevelGenerationStrategyFactory(frameworkSet), x => new[] { x }, withRegeneration);
+                targetType = AddGeneratedItems(classModel, targetType, new ClassLevelGenerationStrategyFactory(frameworkSet), x => new[] { x }, x => x.Constructors.Any(c => c.ShouldGenerate), withRegeneration);
             }
 
             if (classModel.Interfaces.Count > 0)
             {
-                targetType = AddGeneratedItems(classModel, targetType, new InterfaceGenerationStrategyFactory(frameworkSet), x => new[] { x }, withRegeneration);
+                targetType = AddGeneratedItems(classModel, targetType, new InterfaceGenerationStrategyFactory(frameworkSet), x => new[] { x }, x => x.ShouldGenerate, withRegeneration);
             }
 
-            targetType = AddGeneratedItems(classModel, targetType, new MethodGenerationStrategyFactory(frameworkSet), x => x.Methods, withRegeneration);
-            targetType = AddGeneratedItems(classModel, targetType, new OperatorGenerationStrategyFactory(frameworkSet), x => x.Operators, withRegeneration);
-            targetType = AddGeneratedItems(classModel, targetType, new PropertyGenerationStrategyFactory(frameworkSet), x => x.Properties, withRegeneration);
-            targetType = AddGeneratedItems(classModel, targetType, new IndexerGenerationStrategyFactory(frameworkSet), x => x.Indexers, withRegeneration);
+            targetType = AddGeneratedItems(classModel, targetType, new MethodGenerationStrategyFactory(frameworkSet), x => x.Methods, x => x.ShouldGenerate, withRegeneration);
+            targetType = AddGeneratedItems(classModel, targetType, new OperatorGenerationStrategyFactory(frameworkSet), x => x.Operators, x => x.ShouldGenerate, withRegeneration);
+            targetType = AddGeneratedItems(classModel, targetType, new PropertyGenerationStrategyFactory(frameworkSet), x => x.Properties, x => x.ShouldGenerate, withRegeneration);
+            targetType = AddGeneratedItems(classModel, targetType, new IndexerGenerationStrategyFactory(frameworkSet), x => x.Indexers, x => x.ShouldGenerate, withRegeneration);
             return targetType;
         }
 

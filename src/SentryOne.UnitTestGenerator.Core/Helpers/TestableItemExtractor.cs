@@ -36,12 +36,13 @@
 
         public IEnumerable<ClassModel> Extract(SyntaxNode sourceSymbol)
         {
-            if (sourceSymbol == null)
+            var models = ExtractClassModels(Tree).ToList();
+            if (sourceSymbol != null)
             {
-                return ExtractClassModels(Tree);
+                models.Each(x => x.SetShouldGenerateForSingleItem(sourceSymbol));
             }
 
-            return new[] { ExtractSingleItem(sourceSymbol) };
+            return models;
         }
 
         private static HashSet<SyntaxKind> GetAllowedModifiers(TypeDeclarationSyntax syntax)
@@ -170,71 +171,6 @@
             var typeInfo = SemanticModel.GetTypeInfo(property.Type);
 
             return new PropertyModel(propertyName, property, typeInfo);
-        }
-
-        private ClassModel ExtractSingleItem(SyntaxNode sourceSymbol)
-        {
-            if (sourceSymbol is TypeDeclarationSyntax tSyntax)
-            {
-                return ExtractClassModel(tSyntax);
-            }
-
-            var syntax = sourceSymbol.Ancestors().OfType<TypeDeclarationSyntax>().FirstOrDefault();
-            if (syntax == null)
-            {
-                throw new InvalidOperationException(Strings.TestableItemExtractor_ExtractSingleItem_Could_not_find_symbol_s_owning_type);
-            }
-
-            var model = new ClassModel(syntax, SemanticModel, true);
-
-            if (sourceSymbol is MethodDeclarationSyntax mSyntax)
-            {
-                model.Methods.Add(ExtractMethodModel(mSyntax));
-            }
-
-            if (sourceSymbol is ConstructorDeclarationSyntax)
-            {
-                // we always get all constructors, because of how we generate stuff
-                foreach (var constructor in syntax.ChildNodes().OfType<ConstructorDeclarationSyntax>())
-                {
-                    model.Constructors.Add(ExtractConstructorModel(constructor));
-                }
-
-                model.DefaultConstructor = model.Constructors.OrderByDescending(x => x.Parameters.Count).FirstOrDefault();
-            }
-
-            if (sourceSymbol is PropertyDeclarationSyntax pSyntax)
-            {
-                model.Properties.Add(ExtractPropertyModel(pSyntax));
-            }
-
-            if (sourceSymbol is OperatorDeclarationSyntax oSyntax)
-            {
-                model.Operators.Add(ExtractOperatorModel(oSyntax));
-            }
-
-            if (sourceSymbol is IndexerDeclarationSyntax iSyntax)
-            {
-                model.Indexers.Add(ExtractIndexerModel(iSyntax));
-            }
-
-            if (sourceSymbol.Parent is BaseTypeSyntax && syntax is ClassDeclarationSyntax classDeclaration)
-            {
-                var typeInfo = SemanticModel.GetTypeInfo(sourceSymbol);
-                if (typeInfo.Type != null)
-                {
-                    var declaredSymbol = SemanticModel.GetDeclaredSymbol(classDeclaration);
-                    foreach (var declaredSymbolInterface in declaredSymbol.Interfaces)
-                    {
-                        if (typeInfo.Type.Equals(declaredSymbolInterface))
-                        {
-                            model.Interfaces.Add(new InterfaceModel(declaredSymbolInterface));
-                        }
-                    }
-                }
-            }
-
-            return model;
         }
     }
 }

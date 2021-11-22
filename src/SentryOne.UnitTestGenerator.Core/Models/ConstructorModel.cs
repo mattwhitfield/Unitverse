@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     public class ConstructorModel : TestableModel<ConstructorDeclarationSyntax>, IConstructorModel
@@ -18,5 +19,10 @@
         }
 
         public IList<ParameterModel> Parameters { get; }
+
+        public override void SetShouldGenerateForSingleItem(SyntaxNode syntaxNode)
+        {
+            ShouldGenerate = syntaxNode is ConstructorDeclarationSyntax;
+        }
     }
 }
