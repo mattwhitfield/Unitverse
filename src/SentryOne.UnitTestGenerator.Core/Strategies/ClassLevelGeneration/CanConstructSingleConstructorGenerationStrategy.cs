@@ -52,7 +52,7 @@
 
             var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod("CanConstruct", false, false);
 
-            var tokenList = model.DefaultConstructor.Parameters.Select(parameter => SyntaxFactory.IdentifierName(model.GetConstructorParameterFieldName(parameter))).Cast<ExpressionSyntax>().ToList();
+            var tokenList = model.DefaultConstructor.Parameters.Select(parameter => model.GetConstructorFieldReference(parameter, _frameworkSet)).Cast<ExpressionSyntax>().ToList();
 
             generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(
                 SyntaxFactory.VariableDeclaration(

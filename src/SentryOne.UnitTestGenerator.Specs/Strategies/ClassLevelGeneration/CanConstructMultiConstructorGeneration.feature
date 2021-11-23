@@ -5,6 +5,8 @@
 Scenario: Can Construct Multi Constructor Generation
 	Given I have a class defined as 
 	"""
+public interface ITest { }
+
 public class TestClass
 {
     public TestClass(string stringProp, ITest iTest)
@@ -46,7 +48,7 @@ public class TestClass
 	And I set my mock framework to 'Moq'
 	When I generate unit tests for the class using strategy 'CanConstructMultiConstructorGenerationStrategy'
 	Then I expect a method called 'CanConstruct'
-		And I expect it to contain the statement 'var instance = new TestClass(_stringProp, _iTest);'
-		And I expect it to contain the statement 'instance = new TestClass(_nullableIntProp, _iTest);'
-		And I expect it to contain the statement 'instance = new TestClass(_thisIsAProperty, _iTest);'
+		And I expect it to contain the statement 'var instance = new TestClass(_stringProp, _iTest.Object);'
+		And I expect it to contain the statement 'instance = new TestClass(_nullableIntProp, _iTest.Object);'
+		And I expect it to contain the statement 'instance = new TestClass(_thisIsAProperty, _iTest.Object);'
 		And I expect it to contain 3 statements called 'Assert.NotNull(instance);'

@@ -67,9 +67,8 @@
         private IEnumerable<StatementSyntax> GetPropertyAssertionBodyStatements(IPropertyModel property, ClassModel model)
         {
             var parameter = model.Constructors.SelectMany(x => x.Parameters).First(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
-            var fieldName = model.GetConstructorParameterFieldName(parameter);
 
-            yield return _frameworkSet.TestFramework.AssertEqual(Generate.PropertyAccess(model.TargetInstance, property.Name), SyntaxFactory.IdentifierName(fieldName));
+            yield return _frameworkSet.TestFramework.AssertEqual(Generate.PropertyAccess(model.TargetInstance, property.Name), model.GetConstructorFieldReference(parameter, _frameworkSet));
         }
     }
 }

@@ -357,15 +357,29 @@
                 }
 
                 var fieldName = model.GetConstructorParameterFieldName(parameterModel);
+                var typeSyntax = parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context);
 
-                var variable = SyntaxFactory.VariableDeclaration(parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context))
-                    .AddVariables(SyntaxFactory.VariableDeclarator(fieldName));
+                if (parameterModel.TypeInfo.Type.TypeKind == TypeKind.Interface)
+                {
+                    typeSyntax = frameworkSet.MockingFramework.GetFieldType(typeSyntax);
+                }
+
+                var variable = SyntaxFactory.VariableDeclaration(typeSyntax)
+                                        .AddVariables(SyntaxFactory.VariableDeclarator(fieldName));
                 var field = SyntaxFactory.FieldDeclaration(variable)
                     .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
 
                 classDeclaration = classDeclaration.AddMembers(field);
 
-                var defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameterModel.TypeInfo, model.SemanticModel, frameworkSet);
+                ExpressionSyntax defaultExpression;
+                if (parameterModel.TypeInfo.Type.TypeKind == TypeKind.Interface)
+                {
+                    defaultExpression = frameworkSet.MockingFramework.GetFieldInitializer(parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context));
+                }
+                else
+                {
+                    defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameterModel.TypeInfo, model.SemanticModel, frameworkSet);
+                }
 
                 setupMethod = setupMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(
                     SyntaxFactory.AssignmentExpression(

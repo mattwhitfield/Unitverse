@@ -56,7 +56,7 @@
             bool isFirst = true;
             foreach (var constructor in model.Constructors)
             {
-                var tokenList = constructor.Parameters.Select(parameter => SyntaxFactory.IdentifierName(model.GetConstructorParameterFieldName(parameter))).Cast<ExpressionSyntax>().ToList();
+                var tokenList = constructor.Parameters.Select(parameter => model.GetConstructorFieldReference(parameter, _frameworkSet)).Cast<ExpressionSyntax>().ToList();
 
                 var creationExpression = Generate.ObjectCreation(model.TypeSyntax, tokenList.ToArray());
 

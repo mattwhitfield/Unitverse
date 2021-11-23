@@ -86,7 +86,7 @@
                         tokenList.Add(SyntaxFactory.Token(SyntaxKind.CommaToken));
                     }
 
-                    tokenList.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(model.GetConstructorParameterFieldName(parameter))));
+                    tokenList.Add(SyntaxFactory.Argument(model.GetConstructorFieldReference(parameter, _frameworkSet)));
                 }
 
                 var objectCreation = SyntaxFactory.ObjectCreationExpression(model.TypeSyntax).WithArgumentList(SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList<ArgumentSyntax>(tokenList)));
@@ -98,10 +98,9 @@
 
                 yield return SyntaxFactory.ExpressionStatement(assignment);
 
-                var parameterName = model.Constructors.SelectMany(x => x.Parameters).First(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
-                var fieldName = model.GetConstructorParameterFieldName(parameterName);
+                var parameterToCheck = model.Constructors.SelectMany(x => x.Parameters).First(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
 
-                yield return _frameworkSet.TestFramework.AssertEqual(Generate.PropertyAccess(model.TargetInstance, property.Name), SyntaxFactory.IdentifierName(fieldName));
+                yield return _frameworkSet.TestFramework.AssertEqual(Generate.PropertyAccess(model.TargetInstance, property.Name), model.GetConstructorFieldReference(parameterToCheck, _frameworkSet));
             }
         }
     }

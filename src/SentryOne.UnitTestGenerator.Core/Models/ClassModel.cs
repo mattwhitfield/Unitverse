@@ -107,6 +107,17 @@
             return "IndexerFor" + indexer.Parameters.Select(x => x.TypeInfo.Type.GetLastNamePart().ToPascalCase()).Aggregate((x, y) => x + "And" + y);
         }
 
+        public ExpressionSyntax GetConstructorFieldReference(ParameterModel model, IFrameworkSet frameworkSet)
+        {
+            var identifierName = SyntaxFactory.IdentifierName(GetConstructorParameterFieldName(model));
+            if (model.TypeInfo.Type.TypeKind == TypeKind.Interface)
+            {
+                return frameworkSet.MockingFramework.GetFieldReference(identifierName);
+            }
+
+            return identifierName;
+        }
+
         public ExpressionSyntax GetObjectCreationExpression(IFrameworkSet frameworkSet)
         {
             if (frameworkSet == null)
@@ -120,7 +131,7 @@
 
             if (targetConstructor != null && targetConstructor.Parameters.Count > 0)
             {
-                return objectCreation.WithArgumentList(Generate.Arguments(targetConstructor.Parameters.Select(x => SyntaxFactory.IdentifierName(GetConstructorParameterFieldName(x)))));
+                return objectCreation.WithArgumentList(Generate.Arguments(targetConstructor.Parameters.Select(x => GetConstructorFieldReference(x, frameworkSet))));
             }
 
             if (targetConstructor != null || !Declaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Any())

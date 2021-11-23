@@ -54,10 +54,10 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
         public void CanCallExtractWithMethodSymbol()
         {
             var result = _testClass.Extract(TestSemanticModelFactory.Method).Single();
-            Assert.That(result.Constructors.Count, Is.EqualTo(0));
-            Assert.That(result.Methods.Count, Is.EqualTo(1));
-            Assert.That(result.Indexers.Count, Is.EqualTo(0));
-            Assert.That(result.Properties.Count, Is.EqualTo(0));
+            Assert.That(result.Constructors.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.Methods.Count(x => x.ShouldGenerate), Is.EqualTo(1));
+            Assert.That(result.Indexers.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.Properties.Count(x => x.ShouldGenerate), Is.EqualTo(0));
         }
 
         [Test]
@@ -65,29 +65,41 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
         {
             var result = _testClass.Extract(TestSemanticModelFactory.Constructor).Single();
             Assert.That(result.Constructors.Count, Is.EqualTo(1));
-            Assert.That(result.Methods.Count, Is.EqualTo(0));
-            Assert.That(result.Indexers.Count, Is.EqualTo(0));
-            Assert.That(result.Properties.Count, Is.EqualTo(0));
+            Assert.That(result.Methods.Count, Is.EqualTo(2));
+            Assert.That(result.Indexers.Count, Is.EqualTo(1));
+            Assert.That(result.Properties.Count, Is.EqualTo(1));
+            Assert.That(result.Constructors.Count(x => x.ShouldGenerate), Is.EqualTo(1));
+            Assert.That(result.Methods.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.Indexers.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.Properties.Count(x => x.ShouldGenerate), Is.EqualTo(0));
         }
 
         [Test]
         public void CanCallExtractWithPropertySymbol()
         {
             var result = _testClass.Extract(TestSemanticModelFactory.Property).Single();
-            Assert.That(result.Constructors.Count, Is.EqualTo(0));
-            Assert.That(result.Methods.Count, Is.EqualTo(0));
-            Assert.That(result.Indexers.Count, Is.EqualTo(0));
+            Assert.That(result.Constructors.Count, Is.EqualTo(1));
+            Assert.That(result.Methods.Count, Is.EqualTo(2));
+            Assert.That(result.Indexers.Count, Is.EqualTo(1));
             Assert.That(result.Properties.Count, Is.EqualTo(1));
+            Assert.That(result.Constructors.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.Methods.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.Indexers.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.Properties.Count(x => x.ShouldGenerate), Is.EqualTo(1));
         }
 
         [Test]
         public void CanCallExtractWithIndexerSymbol()
         {
             var result = _testClass.Extract(TestSemanticModelFactory.Indexer).Single();
-            Assert.That(result.Constructors.Count, Is.EqualTo(0));
-            Assert.That(result.Methods.Count, Is.EqualTo(0));
+            Assert.That(result.Constructors.Count, Is.EqualTo(1));
+            Assert.That(result.Methods.Count, Is.EqualTo(2));
             Assert.That(result.Indexers.Count, Is.EqualTo(1));
-            Assert.That(result.Properties.Count, Is.EqualTo(0));
+            Assert.That(result.Properties.Count, Is.EqualTo(1));
+            Assert.That(result.Constructors.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.Methods.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.Indexers.Count(x => x.ShouldGenerate), Is.EqualTo(1));
+            Assert.That(result.Properties.Count(x => x.ShouldGenerate), Is.EqualTo(0));
         }
 
         [Test]
@@ -98,6 +110,10 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
             Assert.That(result.Methods.Count, Is.EqualTo(2));
             Assert.That(result.Indexers.Count, Is.EqualTo(1));
             Assert.That(result.Properties.Count, Is.EqualTo(1));
+            Assert.That(result.Constructors.Count(x => x.ShouldGenerate), Is.EqualTo(1));
+            Assert.That(result.Methods.Count(x => x.ShouldGenerate), Is.EqualTo(2));
+            Assert.That(result.Indexers.Count(x => x.ShouldGenerate), Is.EqualTo(1));
+            Assert.That(result.Properties.Count(x => x.ShouldGenerate), Is.EqualTo(1));
         }
 
         [Test]

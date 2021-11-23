@@ -58,5 +58,5 @@ namespace TestNamespace.SubNameSpace
 	Examples:
 	| mock        | statement                                      |
 	| FakeItEasy  | _iTest = A.Fake<ITest>();                      |
-	| Moq         | _iTest = new Mock<ITest>().Object;             |
+	| Moq         | _iTest = new Mock<ITest>();             |
 	| NSubstitute | _iTest = Substitute.For<ITest>();              |

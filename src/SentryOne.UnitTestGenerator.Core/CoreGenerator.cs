@@ -293,14 +293,25 @@
 
                     if (!fieldExists)
                     {
-                        var variable = SyntaxFactory.VariableDeclaration(parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context))
+                        var fieldTypeSyntax = parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context);
+                        ExpressionSyntax defaultExpression;
+
+                        if (parameterModel.TypeInfo.Type.TypeKind == TypeKind.Interface)
+                        {
+                            fieldTypeSyntax = frameworkSet.MockingFramework.GetFieldType(fieldTypeSyntax);
+                            defaultExpression = frameworkSet.MockingFramework.GetFieldInitializer(parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context));
+                        }
+                        else
+                        {
+                            defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameterModel.TypeInfo, classModel.SemanticModel, frameworkSet);
+                        }
+
+                        var variable = SyntaxFactory.VariableDeclaration(fieldTypeSyntax)
                             .AddVariables(SyntaxFactory.VariableDeclarator(fieldName));
                         var field = SyntaxFactory.FieldDeclaration(variable)
                             .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
 
                         fields.Add(field);
-
-                        var defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameterModel.TypeInfo, classModel.SemanticModel, frameworkSet);
 
                         var statement = SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(fieldName), defaultExpression));
 

@@ -101,7 +101,9 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 6
- testRunner.Given("I have a class defined as", @"public class TestClass
+ testRunner.Given("I have a class defined as", @"public interface ITest { }
+
+public class TestClass
 {
    public TestClass(string stringProp, ITest iTest)
    {
@@ -138,32 +140,32 @@ public void ThisIsAMethod(string methodName, int methodValue)
    public TestClass ThisClass {get;set;}
 }", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 45
+#line 47
  testRunner.And("I set my test framework to \'XUnit\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 46
+#line 48
  testRunner.And("I set my mock framework to \'Moq\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 47
+#line 49
  testRunner.When("I generate unit tests for the class using strategy \'CanConstructMultiConstructorG" +
                         "enerationStrategy\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 48
+#line 50
  testRunner.Then("I expect a method called \'CanConstruct\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 49
-  testRunner.And("I expect it to contain the statement \'var instance = new TestClass(_stringProp, _" +
-                        "iTest);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 50
-  testRunner.And("I expect it to contain the statement \'instance = new TestClass(_nullableIntProp, " +
-                        "_iTest);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
 #line 51
-  testRunner.And("I expect it to contain the statement \'instance = new TestClass(_thisIsAProperty, " +
-                        "_iTest);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to contain the statement \'var instance = new TestClass(_stringProp, _" +
+                        "iTest.Object);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 52
+  testRunner.And("I expect it to contain the statement \'instance = new TestClass(_nullableIntProp, " +
+                        "_iTest.Object);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 53
+  testRunner.And("I expect it to contain the statement \'instance = new TestClass(_thisIsAProperty, " +
+                        "_iTest.Object);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 54
   testRunner.And("I expect it to contain 3 statements called \'Assert.NotNull(instance);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }

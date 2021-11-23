@@ -22,7 +22,7 @@
 
         public override void SetShouldGenerateForSingleItem(SyntaxNode syntaxNode)
         {
-            ShouldGenerate = syntaxNode is ConstructorDeclarationSyntax;
+            ShouldGenerate = syntaxNode is ConstructorDeclarationSyntax || syntaxNode == Node.Parent;
         }
     }
 }

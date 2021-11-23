@@ -187,6 +187,9 @@
   <data name="InterfaceSampleTestFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\InterfaceSampleTestFile.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="InterfaceSampleWithOtherParam" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\InterfaceSampleWithOtherParam.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="MappingMethod" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\MappingMethod.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

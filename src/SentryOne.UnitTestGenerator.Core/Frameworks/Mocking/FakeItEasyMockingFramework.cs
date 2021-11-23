@@ -18,12 +18,27 @@
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public ExpressionSyntax GetFieldReference(ExpressionSyntax fieldReference)
+        {
+            return fieldReference;
+        }
+
+        public TypeSyntax GetFieldType(TypeSyntax type)
+        {
+            return type;
+        }
+
         public IEnumerable<UsingDirectiveSyntax> GetUsings()
         {
             yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.FakeItEasyMockingFramework_GetUsings_FakeItEasy));
         }
 
-        public ExpressionSyntax MockInterface(TypeSyntax type)
+        public ExpressionSyntax GetThrowawayReference(TypeSyntax type)
+        {
+            return GetFieldInitializer(type);
+        }
+
+        public ExpressionSyntax GetFieldInitializer(TypeSyntax type)
         {
             if (type == null)
             {

@@ -44,7 +44,7 @@
 
         public virtual void SetShouldGenerateForSingleItem(SyntaxNode syntaxNode)
         {
-            ShouldGenerate = syntaxNode == Node;
+            ShouldGenerate = syntaxNode == Node || syntaxNode == Node.Parent;
         }
     }
 }

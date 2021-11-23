@@ -76,7 +76,7 @@ namespace SentryOne.UnitTestGenerator.Specs.MockGeneration
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Mock Generation Test")]
         [NUnit.Framework.TestCaseAttribute("FakeItEasy", "_iTest = A.Fake<ITest>();", null)]
-        [NUnit.Framework.TestCaseAttribute("Moq", "_iTest = new Mock<ITest>().Object;", null)]
+        [NUnit.Framework.TestCaseAttribute("Moq", "_iTest = new Mock<ITest>();", null)]
         [NUnit.Framework.TestCaseAttribute("NSubstitute", "_iTest = Substitute.For<ITest>();", null)]
         public virtual void MockGenerationTest(string mock, string statement, string[] exampleTags)
         {

@@ -1,7 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
-
-namespace SentryOne.UnitTestGenerator.Core.Models
+﻿namespace SentryOne.UnitTestGenerator.Core.Models
 {
+    using Microsoft.CodeAnalysis;
+
     public interface ITestableModel<out T>
         where T : SyntaxNode
     {

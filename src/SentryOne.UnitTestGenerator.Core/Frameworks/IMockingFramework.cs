@@ -9,6 +9,12 @@
     {
         IEnumerable<UsingDirectiveSyntax> GetUsings();
 
-        ExpressionSyntax MockInterface(TypeSyntax interfaceName);
+        TypeSyntax GetFieldType(TypeSyntax type);
+
+        ExpressionSyntax GetFieldReference(ExpressionSyntax fieldReference);
+
+        ExpressionSyntax GetFieldInitializer(TypeSyntax type);
+
+        ExpressionSyntax GetThrowawayReference(TypeSyntax type);
     }
 }

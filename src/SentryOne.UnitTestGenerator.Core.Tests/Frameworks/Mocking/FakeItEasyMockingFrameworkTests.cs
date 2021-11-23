@@ -48,14 +48,14 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Mocking
         public void CanCallMockInterface()
         {
             var type = SyntaxFactory.ParseTypeName("ISomeInterface");
-            var result = _testClass.MockInterface(type);
+            var result = _testClass.GetFieldInitializer(type);
             Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo("A.Fake<ISomeInterface>()"));
         }
 
         [Test]
         public void CannotCallMockInterfaceWithNullType()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.MockInterface(default(TypeSyntax)));
+            Assert.Throws<ArgumentNullException>(() => _testClass.GetFieldInitializer(default(TypeSyntax)));
         }
     }
 }

@@ -60,7 +60,7 @@
 
                 if (propertyType.TypeKind == TypeKind.Interface)
                 {
-                    return frameworkSet.MockingFramework.MockInterface(propertyType.ToTypeSyntax(frameworkSet.Context));
+                    return frameworkSet.MockingFramework.GetThrowawayReference(propertyType.ToTypeSyntax(frameworkSet.Context));
                 }
 
                 if (propertyType is INamedTypeSymbol namedType && (propertyType.TypeKind == TypeKind.Class || propertyType.TypeKind == TypeKind.Struct))
