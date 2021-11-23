@@ -35,7 +35,7 @@ namespace TestNamespace {
 
 		protected Stream TargetStream { get; }
 
-		protected string SomeMethod(int i, int j) { return string.Empty; }
+		protected string SomeMethod(int @int, int j) { return string.Empty; }
 
 		protected abstract string SomeAbstractMethod(int i, int j);
 

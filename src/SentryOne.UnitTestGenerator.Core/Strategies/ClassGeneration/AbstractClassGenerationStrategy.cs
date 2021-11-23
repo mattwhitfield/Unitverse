@@ -89,7 +89,7 @@
                     tokenList.Add(SyntaxFactory.Token(SyntaxKind.CommaToken));
                 }
 
-                tokenList.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Name)));
+                tokenList.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Node.Identifier)));
             }
 
             return tokenList;
