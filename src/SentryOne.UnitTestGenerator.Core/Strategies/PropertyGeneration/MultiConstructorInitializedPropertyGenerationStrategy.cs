@@ -100,7 +100,7 @@
 
                 var parameterToCheck = model.Constructors.SelectMany(x => x.Parameters).First(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
 
-                yield return _frameworkSet.TestFramework.AssertEqual(Generate.PropertyAccess(model.TargetInstance, property.Name), model.GetConstructorFieldReference(parameterToCheck, _frameworkSet));
+                yield return _frameworkSet.TestFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(parameterToCheck, _frameworkSet));
             }
         }
     }

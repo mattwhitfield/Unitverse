@@ -63,7 +63,7 @@
                 generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(
                     SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName(Strings.Create_var))
                                  .WithVariables(SyntaxFactory.SingletonSeparatedList(
-                                                   SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(parameter.Name))
+                                                   SyntaxFactory.VariableDeclarator(parameter.Identifier)
                                                                 .WithInitializer(SyntaxFactory.EqualsValueClause(defaultAssignmentValue))))));
 
                 paramExpressions.Add(SyntaxFactory.IdentifierName(parameter.Name));

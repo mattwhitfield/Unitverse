@@ -24,7 +24,7 @@
 
         public string OriginalName { get; private set; }
 
-        public bool ShouldGenerate { get; set; }
+        public bool ShouldGenerate { get; set; } = true;
 
         public void MutateName(string newName)
         {

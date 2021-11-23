@@ -12,5 +12,7 @@
         TypeInfo TypeInfo { get; }
 
         bool IsStatic { get; }
+
+        ExpressionSyntax Access(ExpressionSyntax target);
     }
 }

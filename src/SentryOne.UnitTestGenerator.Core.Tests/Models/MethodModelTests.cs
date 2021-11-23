@@ -67,7 +67,10 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Models
         {
             var owner = new ClassModel(TestSemanticModelFactory.Class, TestSemanticModelFactory.Model, false);
             var result = _testClass.Invoke(owner, false, Substitute.For<IFrameworkSet>());
-            Assert.That(result.ToFullString(), Is.EqualTo("_testClass.TestValue1917291340()"));
+            Assert.That(result.ToFullString(), Is.EqualTo("_testClass.Method()"));
+            _testClass.MutateName("fred");
+            result = _testClass.Invoke(owner, false, Substitute.For<IFrameworkSet>());
+            Assert.That(result.ToFullString(), Is.EqualTo("_testClass.fred()"));
         }
 
         [Test]

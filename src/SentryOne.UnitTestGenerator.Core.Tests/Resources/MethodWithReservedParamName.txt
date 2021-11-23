@@ -1,0 +1,25 @@
+namespace TestNamespace.SubNameSpace
+{
+    public class TestClass
+    {
+		public TestClass(decimal @decimal) { }
+
+		public byte @byte { get; set; }
+
+		public short @short { get; }
+
+		public long @long { set { } }
+
+		public decimal @decimal { get; set; }
+
+        public static void @string(string @string, int i)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+
+        public static void ThisIsAMethod(string @string, int @int)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+    }
+}

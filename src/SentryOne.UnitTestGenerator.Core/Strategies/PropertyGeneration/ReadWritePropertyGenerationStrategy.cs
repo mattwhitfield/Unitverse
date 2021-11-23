@@ -73,9 +73,9 @@
 
             var target = property.IsStatic ? sourceModel.TypeSyntax : sourceModel.TargetInstance;
 
-            yield return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, Generate.PropertyAccess(target, property.Name), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue)));
+            yield return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue)));
 
-            yield return _frameworkSet.TestFramework.AssertEqual(Generate.PropertyAccess(target, property.Name), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue));
+            yield return _frameworkSet.TestFramework.AssertEqual(property.Access(target), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue));
         }
     }
 }

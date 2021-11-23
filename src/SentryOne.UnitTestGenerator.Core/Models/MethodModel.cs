@@ -61,7 +61,8 @@
                 frameworkSet.Context.AddEmittedType(typeSymbol);
             }
 
-            var expressionSyntax = Generate.MethodCall(ownerTargetInstance, Node, Name, frameworkSet, arguments);
+            var name = Name == OriginalName ? Node.Identifier.Text : Name;
+            var expressionSyntax = Generate.MethodCall(ownerTargetInstance, Node, name, frameworkSet, arguments);
             if (IsAsync && !suppressAwait)
             {
                 return SyntaxFactory.AwaitExpression(expressionSyntax);

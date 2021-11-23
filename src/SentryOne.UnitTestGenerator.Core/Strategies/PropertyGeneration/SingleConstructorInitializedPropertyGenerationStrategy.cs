@@ -68,7 +68,7 @@
         {
             var parameter = model.Constructors.SelectMany(x => x.Parameters).First(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
 
-            yield return _frameworkSet.TestFramework.AssertEqual(Generate.PropertyAccess(model.TargetInstance, property.Name), model.GetConstructorFieldReference(parameter, _frameworkSet));
+            yield return _frameworkSet.TestFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(parameter, _frameworkSet));
         }
     }
 }

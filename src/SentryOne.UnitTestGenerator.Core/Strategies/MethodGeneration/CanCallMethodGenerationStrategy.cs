@@ -62,7 +62,7 @@
             {
                 if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.OutKeyword))
                 {
-                    paramExpressions.Add(SyntaxFactory.Argument(SyntaxFactory.DeclarationExpression(SyntaxFactory.IdentifierName(Strings.Create_var), SyntaxFactory.SingleVariableDesignation(SyntaxFactory.Identifier(parameter.Name)))).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
+                    paramExpressions.Add(SyntaxFactory.Argument(SyntaxFactory.DeclarationExpression(SyntaxFactory.IdentifierName(Strings.Create_var), SyntaxFactory.SingleVariableDesignation(parameter.Identifier))).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
                 }
                 else
                 {
@@ -71,16 +71,16 @@
                     generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(
                         SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName(Strings.Create_var))
                                      .WithVariables(SyntaxFactory.SingletonSeparatedList(
-                                                       SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(parameter.Name))
+                                                       SyntaxFactory.VariableDeclarator(parameter.Identifier)
                                                                     .WithInitializer(SyntaxFactory.EqualsValueClause(defaultAssignmentValue))))));
 
                     if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
                     {
-                        paramExpressions.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Name)).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
+                        paramExpressions.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Identifier)).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
                     }
                     else
                     {
-                        paramExpressions.Add(SyntaxFactory.IdentifierName(parameter.Name));
+                        paramExpressions.Add(SyntaxFactory.IdentifierName(parameter.Identifier));
                     }
                 }
             }

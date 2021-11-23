@@ -19,7 +19,11 @@
             Type = type;
 
             TypeInfo = typeInfo;
+
+            Identifier = node.Identifier;
         }
+
+        public SyntaxToken Identifier { get; }
 
         public string Type { get; }
 
