@@ -160,7 +160,7 @@ namespace WindowsFormsApp1
 #line hidden
 #line 52
   testRunner.And("I expect it to contain a statement like \'_testClass[{{{AnyString}}}, new Guid({{{" +
-                        "AnyString}}}), new DateTime({{{AnyInteger}}})] = {{{AnyString}}};\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        "AnyString}}}), DateTime.UtcNow] = {{{AnyString}}};\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 53
  testRunner.And("I expect no method with a name like \'.*StringAndInt.*\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

@@ -2,6 +2,7 @@
 {
     using SentryOne.UnitTestGenerator.Core.Options;
 
+    // TODO - add fluent assertions to specs
     public class GenerationOptions : IGenerationOptions
     {
         public GenerationOptions(TestFrameworkTypes testFramework, MockingFrameworkType mockFramework)
@@ -18,5 +19,9 @@
         public string TestProjectNaming { get; } = "{0}.Tests";
         public string TestFileNaming { get; } = "{0}Tests";
         public string TestTypeNaming { get; } = "{0}Tests";
+
+        public bool UseFluentAssertions { get; }
+
+        public bool AutoDetectFrameworkTypes { get; }
     }
 }

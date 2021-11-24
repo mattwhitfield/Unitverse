@@ -65,24 +65,6 @@
             return Generate(sourceModel, sourceSymbol, withRegeneration, options, targetNamespace, usingsEmitted, compilation, originalTargetNamespace);
         }
 
-        private static void AddAssembliesToGenerationResult(SemanticModel sourceModel, IFrameworkSet frameworkSet, GenerationResult generationResult)
-        {
-            var addedAssemblies = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            foreach (var reference in frameworkSet.Context.EmittedTypes.Select(x => x.ContainingAssembly).Where(x => x != null))
-            {
-                if (addedAssemblies.Add(reference.Identity.ToString()))
-                {
-                    if (sourceModel.Compilation.GetMetadataReference(reference) is PortableExecutableReference location && !string.IsNullOrWhiteSpace(location.FilePath))
-                    {
-                        if (!generationResult.AssemblyReferences.Any(x => string.Equals(x.Name, reference.Identity.Name, StringComparison.OrdinalIgnoreCase)))
-                        {
-                            generationResult.AssemblyReferences.Add(new ReferencedAssembly(reference.Identity.Name, reference.Identity.Version, location.FilePath));
-                        }
-                    }
-                }
-            }
-        }
-
         private static TypeDeclarationSyntax AddGeneratedItems<T>(ClassModel classModel, TypeDeclarationSyntax declaration, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector, Func<T, bool> shouldGenerate, bool withRegeneration)
         {
             foreach (var property in selector(classModel))
@@ -172,6 +154,7 @@
         {
             targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.UnitTestGenerator_AddUsingStatements_System)));
             targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, frameworkSet.TestFramework.GetUsings());
+            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, frameworkSet.AssertionFramework.GetUsings());
             if (frameworkSet.Context.MocksUsed)
             {
                 targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, frameworkSet.MockingFramework.GetUsings());
@@ -388,8 +371,6 @@
             compilation = AddTargetNamespaceToCompilation(originalTargetNamespace, compilation, targetNamespace);
 
             var generationResult = CreateGenerationResult(compilation, classModels);
-
-            AddAssembliesToGenerationResult(sourceModel, frameworkSet, generationResult);
 
             return generationResult;
         }

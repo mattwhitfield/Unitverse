@@ -7,7 +7,6 @@
     using EnvDTE80;
     using Microsoft.VisualStudio.Shell;
     using SentryOne.UnitTestGenerator.Helper;
-    using SentryOne.UnitTestGenerator.Options;
     using Task = System.Threading.Tasks.Task;
 
     /// <summary>

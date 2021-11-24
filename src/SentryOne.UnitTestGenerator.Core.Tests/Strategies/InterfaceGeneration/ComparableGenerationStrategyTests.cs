@@ -22,7 +22,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.InterfaceGeneration
         {
             var generationContext = new GenerationContext();
 
-            _frameworkSet = new FrameworkSet(new NUnit3TestFramework(), new NSubstituteMockingFramework(generationContext), generationContext, "{0}Tests");
+            _frameworkSet = new FrameworkSet(new NUnit3TestFramework(), new NSubstituteMockingFramework(generationContext), new NUnit3TestFramework(), generationContext, "{0}Tests");
             _testClass = new ComparableGenerationStrategy(_frameworkSet);
         }
 

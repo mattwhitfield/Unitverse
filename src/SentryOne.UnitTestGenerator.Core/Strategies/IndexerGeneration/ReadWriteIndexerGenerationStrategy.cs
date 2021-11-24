@@ -73,11 +73,11 @@
                                     SyntaxFactory.EqualsValueClause(
                                         AssignmentValueHelper.GetDefaultAssignmentValue(indexer.TypeInfo, sourceModel.SemanticModel, _frameworkSet))))));
 
-            yield return _frameworkSet.TestFramework.AssertIsInstanceOf(Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), indexer.TypeInfo.ToTypeSyntax(_frameworkSet.Context));
+            yield return _frameworkSet.AssertionFramework.AssertIsInstanceOf(Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), indexer.TypeInfo.ToTypeSyntax(_frameworkSet.Context), indexer.TypeInfo.Type.IsReferenceType);
 
             yield return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue)));
 
-            yield return _frameworkSet.TestFramework.AssertEqual(Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue));
+            yield return _frameworkSet.AssertionFramework.AssertEqual(Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue), indexer.TypeInfo.Type.IsReferenceType);
         }
     }
 }

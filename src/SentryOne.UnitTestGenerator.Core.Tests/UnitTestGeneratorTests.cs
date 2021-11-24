@@ -12,7 +12,11 @@
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Forms;
+    using System.Windows.Markup;
+    using System.Xml;
+    using System.Xml.Linq;
     using FakeItEasy;
+    using FluentAssertions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -51,7 +55,8 @@
                     {
                         foreach (var resourceName in entryKeys)
                         {
-                            yield return new object[] { resourceName, framework, mock };
+                            yield return new object[] { resourceName, framework, mock, true };
+                            yield return new object[] { resourceName, framework, mock, false };
                         }
                     }
                 }
@@ -59,7 +64,7 @@
         }
 
         [TestCaseSource(nameof(TestClassResourceNames))]
-        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType)
+        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions)
         {
             var classAsText = TestClasses.ResourceManager.GetString(resourceName, TestClasses.Culture);
 
@@ -87,6 +92,14 @@
             references.AddRange(GetReferences(mockingFrameworkType));
             references.AddRange(GetReferences(testFrameworkTypes));
 
+            if (useFluentAssertions)
+            {
+                references.Add(MetadataReference.CreateFromFile(typeof(FluentActions).Assembly.Location));
+                references.Add(MetadataReference.CreateFromFile(typeof(XDocument).Assembly.Location));
+                references.Add(MetadataReference.CreateFromFile(typeof(XmlNode).Assembly.Location));
+                references.Add(MetadataReference.CreateFromFile(typeof(IQueryAmbient).Assembly.Location));
+            }
+
             var compilation = CSharpCompilation.Create(
                 "MyTest",
                 syntaxTrees: new[] { tree },
@@ -97,6 +110,7 @@
             IUnitTestGeneratorOptions options = Substitute.For<IUnitTestGeneratorOptions>();
             options.GenerationOptions.FrameworkType.Returns(testFrameworkTypes);
             options.GenerationOptions.MockingFrameworkType.Returns(mockingFrameworkType);
+            options.GenerationOptions.UseFluentAssertions.Returns(useFluentAssertions);
             options.GenerationOptions.TestFileNaming.Returns("{0}Tests");
             options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
             options.GenerationOptions.TestProjectNaming.Returns("{0}.Tests");

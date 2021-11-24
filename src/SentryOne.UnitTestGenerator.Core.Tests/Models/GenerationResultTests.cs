@@ -36,11 +36,5 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Models
         {
             Assert.That(_testClass.RequiredAssets, Is.InstanceOf<IList<TargetAsset>>());
         }
-
-        [Test]
-        public void CanGetAssemblyReferences()
-        {
-            Assert.That(_testClass.AssemblyReferences, Is.InstanceOf<IList<IReferencedAssembly>>());
-        }
     }
 }

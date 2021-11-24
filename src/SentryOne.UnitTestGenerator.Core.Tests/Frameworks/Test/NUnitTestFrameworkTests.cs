@@ -1,12 +1,8 @@
 namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
 {
-    using System;
-    using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
     using SentryOne.UnitTestGenerator.Core.Frameworks.Test;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
 
     [TestFixture]
     public class NUnitTestFrameworkTests

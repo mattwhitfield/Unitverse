@@ -16,6 +16,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
     [TestFixture]
     public static class ValueGenerationStrategyFactoryTester
     {
+        // TODO - HttpContext -> DefaultHttpContext
         [Test]
         [TestCase("System.String")]
         [TestCase("System.Int16")]
@@ -32,6 +33,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
         [TestCase("System.Boolean")]
         [TestCase("System.Guid")]
         [TestCase("System.DateTime")]
+        [TestCase("System.DateTimeOffset")]
         [TestCase("System.Globalization.CultureInfo")]
         [TestCase("System.Byte[]")]
         [TestCase("System.IO.Stream")]
@@ -70,6 +72,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
                 using (var workspace = new AdhocWorkspace())
                 {
                     expressionText = Formatter.Format(expression, workspace).ToString();
+                    Console.WriteLine(expressionText);
                     var scriptOptions = ScriptOptions.Default
                         .AddReferences(typeof(System.Drawing.Brushes).Assembly)
                         .AddImports("System")

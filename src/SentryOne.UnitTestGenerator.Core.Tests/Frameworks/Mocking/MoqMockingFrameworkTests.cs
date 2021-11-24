@@ -9,7 +9,6 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Mocking
     using NUnit.Framework;
     using SentryOne.UnitTestGenerator.Core.Frameworks.Mocking;
     using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
 
     [TestFixture]
     public class MoqMockingFrameworkTests

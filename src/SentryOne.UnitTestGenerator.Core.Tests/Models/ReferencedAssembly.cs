@@ -1,7 +1,7 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Models
-{
-    using System;
+﻿using System;
 
+namespace SentryOne.UnitTestGenerator.Core.Tests.Models
+{
     // TODO - tests
     public class ReferencedAssembly
     {
@@ -17,7 +17,6 @@
         }
 
         public string AssemblyName { get; }
-
         public int MajorVersion { get; }
     }
 }

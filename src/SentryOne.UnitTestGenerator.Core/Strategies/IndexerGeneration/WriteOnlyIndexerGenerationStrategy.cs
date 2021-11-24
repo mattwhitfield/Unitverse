@@ -64,7 +64,7 @@
 
             var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(indexer.TypeInfo, sourceModel.SemanticModel, _frameworkSet);
             yield return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), defaultAssignmentValue));
-            yield return _frameworkSet.TestFramework.AssertFail(Strings.PlaceholderAssertionMessage);
+            yield return _frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage);
         }
     }
 }

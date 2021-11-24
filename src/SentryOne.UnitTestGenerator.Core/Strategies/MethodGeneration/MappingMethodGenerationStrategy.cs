@@ -58,7 +58,7 @@
 
             foreach (var methodParameter in method.Parameters)
             {
-                if (returnTypeMembers.Contains(methodParameter.Name))
+                if (returnTypeMembers.ContainsKey(methodParameter.Name))
                 {
                     return true;
                 }
@@ -66,7 +66,7 @@
                 if (methodParameter.TypeInfo.Type.SpecialType == SpecialType.None && !Equals(methodParameter.TypeInfo.Type, returnTypeInfo))
                 {
                     var properties = GetProperties(methodParameter.TypeInfo.Type);
-                    if (properties.Any(x => returnTypeMembers.Contains(x)))
+                    if (properties.Any(x => returnTypeMembers.ContainsKey(x.Key)))
                     {
                         return true;
                     }
@@ -76,9 +76,17 @@
             return false;
         }
 
-        private static HashSet<string> GetProperties(ITypeSymbol returnTypeInfo)
+        private static Dictionary<string, bool> GetProperties(ITypeSymbol returnTypeInfo)
         {
-            return new HashSet<string>(returnTypeInfo.GetMembers().Where(x => x.Kind == SymbolKind.Property).OfType<IPropertySymbol>().Where(x => !x.IsWriteOnly && !x.IsIndexer).Select(x => x.Name), StringComparer.OrdinalIgnoreCase);
+            var properties = returnTypeInfo.GetMembers().Where(x => x.Kind == SymbolKind.Property).OfType<IPropertySymbol>().Where(x => !x.IsWriteOnly && !x.IsIndexer);
+
+            var dictionary = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+            foreach (var property in properties)
+            {
+                dictionary[property.Name] = property.Type.IsReferenceType;
+            }
+
+            return dictionary;
         }
 
         public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model)
@@ -177,22 +185,22 @@
 
             foreach (var methodParameter in method.Parameters)
             {
-                if (returnTypeMembers.Contains(methodParameter.Name))
+                if (returnTypeMembers.ContainsKey(methodParameter.Name))
                 {
-                    var returnTypeMember = returnTypeMembers.FirstOrDefault(x => string.Equals(x, methodParameter.Name, StringComparison.OrdinalIgnoreCase));
-                    var resultProperty = Generate.PropertyAccess(SyntaxFactory.IdentifierName(Strings.CanCallMethodGenerationStrategy_Create_result), returnTypeMember);
-                    generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.TestFramework.AssertEqual(resultProperty, SyntaxFactory.IdentifierName(methodParameter.Name)));
+                    var returnTypeMember = returnTypeMembers.FirstOrDefault(x => string.Equals(x.Key, methodParameter.Name, StringComparison.OrdinalIgnoreCase));
+                    var resultProperty = Generate.PropertyAccess(SyntaxFactory.IdentifierName(Strings.CanCallMethodGenerationStrategy_Create_result), returnTypeMember.Key);
+                    generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertEqual(resultProperty, SyntaxFactory.IdentifierName(methodParameter.Name), returnTypeMembers[methodParameter.Name]));
                     continue;
                 }
 
                 if (methodParameter.TypeInfo.Type.SpecialType == SpecialType.None && !Equals(methodParameter.TypeInfo.Type, returnTypeInfo))
                 {
                     var properties = GetProperties(methodParameter.TypeInfo.Type);
-                    foreach (var matchedSourceProperty in properties.Where(x => returnTypeMembers.Contains(x)))
+                    foreach (var matchedSourceProperty in properties.Where(x => returnTypeMembers.ContainsKey(x.Key)))
                     {
-                        var returnTypeMember = returnTypeMembers.FirstOrDefault(x => string.Equals(x, matchedSourceProperty, StringComparison.OrdinalIgnoreCase));
-                        var resultProperty = Generate.PropertyAccess(SyntaxFactory.IdentifierName(Strings.CanCallMethodGenerationStrategy_Create_result), returnTypeMember);
-                        generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.TestFramework.AssertEqual(resultProperty,  Generate.PropertyAccess(SyntaxFactory.IdentifierName(methodParameter.Name), matchedSourceProperty)));
+                        var returnTypeMember = returnTypeMembers.FirstOrDefault(x => string.Equals(x.Key, matchedSourceProperty.Key, StringComparison.OrdinalIgnoreCase));
+                        var resultProperty = Generate.PropertyAccess(SyntaxFactory.IdentifierName(Strings.CanCallMethodGenerationStrategy_Create_result), returnTypeMember.Key);
+                        generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertEqual(resultProperty,  Generate.PropertyAccess(SyntaxFactory.IdentifierName(methodParameter.Name), matchedSourceProperty.Key), matchedSourceProperty.Value));
                     }
                 }
             }

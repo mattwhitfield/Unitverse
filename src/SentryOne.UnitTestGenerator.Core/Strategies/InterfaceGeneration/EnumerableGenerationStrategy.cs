@@ -64,7 +64,7 @@
 
             yield return SyntaxFactory.UsingStatement(
                 SyntaxFactory.Block(
-                    FrameworkSet.TestFramework.AssertNotNull(SyntaxFactory.IdentifierName("enumerator")),
+                    FrameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("enumerator")),
                     SyntaxFactory.WhileStatement(
                         SyntaxFactory.InvocationExpression(
                             SyntaxFactory.MemberAccessExpression(
@@ -76,12 +76,13 @@
                                 SyntaxFactory.PostfixUnaryExpression(
                                     SyntaxKind.PostIncrementExpression,
                                     SyntaxFactory.IdentifierName("actualCount"))),
-                            FrameworkSet.TestFramework.AssertIsInstanceOf(
+                            FrameworkSet.AssertionFramework.AssertIsInstanceOf(
                                 SyntaxFactory.MemberAccessExpression(
                                     SyntaxKind.SimpleMemberAccessExpression,
                                     SyntaxFactory.IdentifierName("enumerator"),
                                     SyntaxFactory.IdentifierName("Current")),
-                                enumerableTypeSymbol.ToTypeSyntax(FrameworkSet.Context))))))
+                                enumerableTypeSymbol.ToTypeSyntax(FrameworkSet.Context),
+                                enumerableTypeSymbol.IsReferenceType)))))
                 .WithDeclaration(
                     SyntaxHelper.CreateVariableDeclaration("enumerator", SyntaxFactory.InvocationExpression(
                         SyntaxFactory.MemberAccessExpression(
@@ -89,7 +90,7 @@
                             SyntaxFactory.IdentifierName("enumerable"),
                             SyntaxFactory.IdentifierName("GetEnumerator")))));
 
-            yield return FrameworkSet.TestFramework.AssertEqual(SyntaxFactory.IdentifierName("actualCount"), SyntaxFactory.IdentifierName("expectedCount"));
+            yield return FrameworkSet.AssertionFramework.AssertEqual(SyntaxFactory.IdentifierName("actualCount"), SyntaxFactory.IdentifierName("expectedCount"), false);
         }
     }
 }

@@ -2,12 +2,8 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Models
 {
     using System;
     using System.Collections.Generic;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
     using SentryOne.UnitTestGenerator.Core.Models;
 
     [TestFixture]

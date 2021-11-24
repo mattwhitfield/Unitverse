@@ -7,6 +7,12 @@ namespace SentryOne.UnitTestGenerator.Options
 
     public class GenerationOptions : DialogPage, IGenerationOptions
     {
+
+        [Category("Generation")]
+        [DisplayName("Auto-Detect Frameworks")]
+        [Description("Whether to detect the test, mocking and assertion frameworks based on the packages currently installed in the target project")]
+        public bool AutoDetectFrameworkTypes { get; set; } = true;
+
         [Category("Generation")]
         [DisplayName("Test framework type")]
         [Description("The type of test framework to use")]
@@ -36,5 +42,10 @@ namespace SentryOne.UnitTestGenerator.Options
         [DisplayName("Type naming convention")]
         [Description("Format string that converts the source type name to the unit test type name")]
         public string TestTypeNaming { get; set; } = "{0}Tests";
+
+        [Category("Generation")]
+        [DisplayName("Use Fluent Assertions")]
+        [Description("Whether to use Fluent Assertions in preference to the test framework's built in assertion capabilities")]
+        public bool UseFluentAssertions { get; set; } = false;
     }
 }

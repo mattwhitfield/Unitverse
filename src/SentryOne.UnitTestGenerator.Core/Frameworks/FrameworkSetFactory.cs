@@ -1,6 +1,7 @@
 ﻿namespace SentryOne.UnitTestGenerator.Core.Frameworks
 {
     using System;
+    using SentryOne.UnitTestGenerator.Core.Frameworks.Assertion;
     using SentryOne.UnitTestGenerator.Core.Frameworks.Mocking;
     using SentryOne.UnitTestGenerator.Core.Frameworks.Test;
     using SentryOne.UnitTestGenerator.Core.Helpers;
@@ -17,7 +18,9 @@
             }
 
             var context = new GenerationContext();
-            return new FrameworkSet(Create(options.GenerationOptions.FrameworkType), Create(options.GenerationOptions.MockingFrameworkType, context), context, options.GenerationOptions.TestTypeNaming);
+            var testFramework = Create(options.GenerationOptions.FrameworkType);
+            IAssertionFramework assertionFramework = testFramework;
+            return new FrameworkSet(testFramework, Create(options.GenerationOptions.MockingFrameworkType, context), options.GenerationOptions.UseFluentAssertions ? new FluentAssertionFramework() : assertionFramework, context, options.GenerationOptions.TestTypeNaming);
         }
 
         private static IMockingFramework Create(MockingFrameworkType mockingFrameworkType, IGenerationContext context)

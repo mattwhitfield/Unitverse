@@ -6,6 +6,10 @@
 
         MockingFrameworkType MockingFrameworkType { get; }
 
+        bool UseFluentAssertions { get; }
+
+        bool AutoDetectFrameworkTypes { get; }
+
         bool AllowGenerationWithoutTargetProject { get; }
 
         string TestProjectNaming { get; }

@@ -19,7 +19,6 @@
     using Microsoft.VisualStudio.TextManager.Interop;
     using SentryOne.UnitTestGenerator.Core.Assets;
     using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Strategies.InterfaceGeneration;
     using SentryOne.UnitTestGenerator.Helper;
     using Task = System.Threading.Tasks.Task;
@@ -222,12 +221,13 @@
                     throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
                 }
 
-                var projectDictionary = new Dictionary<EnvDTE.Project, Tuple<HashSet<TargetAsset>, HashSet<IReferencedAssembly>>>();
+                var generationOptions = OptionsResolver.DetectFrameworks(targetProject, options.GenerationOptions);
+
+                var projectDictionary = new Dictionary<EnvDTE.Project, HashSet<TargetAsset>>();
                 var set = new HashSet<TargetAsset>();
-                var assemblyReferences = new HashSet<IReferencedAssembly>();
                 if (targetProject != null)
                 {
-                    projectDictionary[targetProject] = Tuple.Create(set, assemblyReferences);
+                    projectDictionary[targetProject] = set;
                 }
 
                 var targetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out var targetPath);
@@ -258,7 +258,7 @@
                                 namespaceTransform = x => x + ".Tests";
                             }
 
-                            generationItem = new GenerationItem(source, methodSymbol.Item1, targetProjectItems, targetPath, set, assemblyReferences, namespaceTransform, options.GenerationOptions);
+                            generationItem = new GenerationItem(source, methodSymbol.Item1, targetProjectItems, targetPath, set, namespaceTransform, generationOptions);
 
                             await CodeGenerator.GenerateCodeAsync(new[] { generationItem }, withRegeneration, _package, projectDictionary, messageLogger).ConfigureAwait(true);
                         }

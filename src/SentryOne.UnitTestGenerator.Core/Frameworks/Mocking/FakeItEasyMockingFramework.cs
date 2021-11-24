@@ -5,8 +5,6 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
     using SentryOne.UnitTestGenerator.Core.Resources;
 
     public class FakeItEasyMockingFramework : IMockingFramework

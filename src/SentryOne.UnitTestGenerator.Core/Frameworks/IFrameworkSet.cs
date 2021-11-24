@@ -8,6 +8,8 @@
 
         IMockingFramework MockingFramework { get; }
 
+        IAssertionFramework AssertionFramework { get; }
+
         IGenerationContext Context { get; }
 
         string TestTypeNaming { get; }

@@ -17,6 +17,8 @@
             TestProjectNaming = options.TestProjectNaming;
             TestFileNaming = options.TestFileNaming;
             TestTypeNaming = options.TestTypeNaming;
+            UseFluentAssertions = options.UseFluentAssertions;
+            AutoDetectFrameworkTypes = options.AutoDetectFrameworkTypes;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -30,5 +32,9 @@
         public string TestFileNaming { get; set; }
 
         public string TestTypeNaming { get; set; }
+
+        public bool UseFluentAssertions { get; set; }
+
+        public bool AutoDetectFrameworkTypes { get; set; }
     }
 }

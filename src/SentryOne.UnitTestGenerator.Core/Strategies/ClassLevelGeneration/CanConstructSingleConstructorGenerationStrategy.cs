@@ -65,7 +65,7 @@
                                     SyntaxFactory.EqualsValueClause(
                                         Generate.ObjectCreation(model.TypeSyntax, tokenList.ToArray())))))));
 
-            generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.TestFramework.AssertNotNull(SyntaxFactory.IdentifierName(Strings.CanConstructMultiConstructorGenerationStrategy_Create_instance)));
+            generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName(Strings.CanConstructMultiConstructorGenerationStrategy_Create_instance)));
 
             yield return generatedMethod;
         }

@@ -23,7 +23,7 @@
 
     internal static class CodeGenerator
     {
-        public static async Task GenerateCodeAsync(IReadOnlyCollection<GenerationItem> generationItems, bool withRegeneration, IUnitTestGeneratorPackage package, Dictionary<Project, Tuple<HashSet<TargetAsset>, HashSet<IReferencedAssembly>>> requiredAssetsByProject, IMessageLogger messageLogger)
+        public static async Task GenerateCodeAsync(IReadOnlyCollection<GenerationItem> generationItems, bool withRegeneration, IUnitTestGeneratorPackage package, Dictionary<Project, HashSet<TargetAsset>> requiredAssetsByProject, IMessageLogger messageLogger)
         {
             var solution = package.Workspace.CurrentSolution;
             var options = package.Options;
@@ -123,10 +123,10 @@
             }
         }
 
-        private static void AddTargetAssets(IUnitTestGeneratorOptions options, KeyValuePair<Project, Tuple<HashSet<TargetAsset>, HashSet<IReferencedAssembly>>> pair)
+        private static void AddTargetAssets(IUnitTestGeneratorOptions options, KeyValuePair<Project, HashSet<TargetAsset>> pair)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            foreach (var targetAsset in pair.Value.Item1)
+            foreach (var targetAsset in pair.Value)
             {
                 var asset = AssetFactory.Create(targetAsset);
                 if (asset != null)
@@ -179,14 +179,6 @@
             foreach (var asset in result.RequiredAssets)
             {
                 generationItem.RequiredAssets.Add(asset);
-            }
-
-            foreach (var reference in result.AssemblyReferences)
-            {
-                if (!generationItem.AssemblyReferences.Any(x => string.Equals(x.Name, reference.Name, StringComparison.OrdinalIgnoreCase)))
-                {
-                    generationItem.AssemblyReferences.Add(reference);
-                }
             }
         }
 

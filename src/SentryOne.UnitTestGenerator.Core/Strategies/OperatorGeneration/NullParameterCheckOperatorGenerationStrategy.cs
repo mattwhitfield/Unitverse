@@ -99,7 +99,7 @@
                                                     SyntaxFactory.EqualsValueClause(
                                                         methodCall))))))));
 
-                generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.TestFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), assignment));
+                generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), assignment));
 
                 yield return generatedMethod;
             }

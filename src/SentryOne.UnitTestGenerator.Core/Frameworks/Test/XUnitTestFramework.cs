@@ -5,11 +5,9 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
     using SentryOne.UnitTestGenerator.Core.Resources;
 
-    public class XUnitTestFramework : ITestFramework
+    public class XUnitTestFramework : ITestFramework, IAssertionFramework
     {
         public bool SupportsStaticTestClasses => true;
 
@@ -19,7 +17,7 @@
 
         public string TestClassAttribute => string.Empty;
 
-        public StatementSyntax AssertEqual(ExpressionSyntax actual, ExpressionSyntax expected)
+        public StatementSyntax AssertEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)
         {
             if (actual == null)
             {
@@ -64,7 +62,7 @@
                                 SyntaxKind.GreaterThanExpression, actual, expected))))));
         }
 
-        public StatementSyntax AssertIsInstanceOf(ExpressionSyntax value, TypeSyntax type)
+        public StatementSyntax AssertIsInstanceOf(ExpressionSyntax value, TypeSyntax type, bool isReferenceType)
         {
             if (value == null)
             {

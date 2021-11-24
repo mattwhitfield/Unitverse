@@ -4,10 +4,8 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
     using SentryOne.UnitTestGenerator.Core.Models;
 
     public class SingleConstructorInitializedPropertyGenerationStrategy : IGenerationStrategy<IPropertyModel>
@@ -68,7 +66,7 @@
         {
             var parameter = model.Constructors.SelectMany(x => x.Parameters).First(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
 
-            yield return _frameworkSet.TestFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(parameter, _frameworkSet));
+            yield return _frameworkSet.AssertionFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(parameter, _frameworkSet), property.TypeInfo.Type.IsReferenceType);
         }
     }
 }

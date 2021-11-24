@@ -35,7 +35,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
             var testClass = CreateFramework(frameworkTypes);
             var actual = Generate.Literal(1);
             var expected = Generate.Literal(1);
-            var result = testClass.AssertEqual(actual, expected);
+            var result = testClass.AssertEqual(actual, expected, true);
             Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 
@@ -60,7 +60,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
             var testClass = CreateFramework(frameworkTypes);
             var value = Generate.Literal(1);
             var type = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword));
-            var result = testClass.AssertIsInstanceOf(value, type);
+            var result = testClass.AssertIsInstanceOf(value, type, true);
             Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 
@@ -178,13 +178,13 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertEqualWithNullActual(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertEqual(default(ExpressionSyntax), Generate.Literal(1)));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertEqual(default(ExpressionSyntax), Generate.Literal(1), true));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertEqualWithNullExpected(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertEqual(Generate.Literal(1), default(ExpressionSyntax)));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertEqual(Generate.Literal(1), default(ExpressionSyntax), false));
         }
 
         [TestCaseSource(nameof(Targets))]
@@ -196,13 +196,13 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertIsInstanceOfWithNullType(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertIsInstanceOf(Generate.Literal(1), default(TypeSyntax)));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertIsInstanceOf(Generate.Literal(1), default(TypeSyntax), true));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertIsInstanceOfWithNullValue(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertIsInstanceOf(default(ExpressionSyntax), SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword))));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertIsInstanceOf(default(ExpressionSyntax), SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), true));
         }
 
         [TestCaseSource(nameof(Targets))]

@@ -83,7 +83,7 @@
 
             generatedMethod = generatedMethod.AddBodyStatements(bodyStatement);
 
-            generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.TestFramework.AssertFail(Strings.PlaceholderAssertionMessage));
+            generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
 
             yield return generatedMethod;
         }

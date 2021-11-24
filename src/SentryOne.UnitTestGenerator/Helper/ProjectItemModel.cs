@@ -2,7 +2,6 @@
 {
     using System;
     using System.Globalization;
-    using System.Linq;
     using EnvDTE;
     using Microsoft.VisualStudio.Shell;
     using SentryOne.UnitTestGenerator.Core.Helpers;

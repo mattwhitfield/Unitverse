@@ -5,7 +5,7 @@
 
     public class FrameworkSet : IFrameworkSet
     {
-        public FrameworkSet(ITestFramework testFramework, IMockingFramework mockingFramework, IGenerationContext context, string testTypeNaming)
+        public FrameworkSet(ITestFramework testFramework, IMockingFramework mockingFramework, IAssertionFramework assertionFramework, IGenerationContext context, string testTypeNaming)
         {
             if (string.IsNullOrWhiteSpace(testTypeNaming))
             {
@@ -14,6 +14,7 @@
 
             TestFramework = testFramework ?? throw new ArgumentNullException(nameof(testFramework));
             MockingFramework = mockingFramework ?? throw new ArgumentNullException(nameof(mockingFramework));
+            AssertionFramework = assertionFramework ?? throw new ArgumentNullException(nameof(assertionFramework));
             Context = context ?? throw new ArgumentNullException(nameof(context));
             TestTypeNaming = testTypeNaming;
         }
@@ -21,6 +22,8 @@
         public ITestFramework TestFramework { get; }
 
         public IMockingFramework MockingFramework { get; }
+
+        public IAssertionFramework AssertionFramework { get; }
 
         public IGenerationContext Context { get; }
 

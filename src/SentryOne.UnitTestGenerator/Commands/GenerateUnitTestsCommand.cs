@@ -11,10 +11,8 @@
     using Microsoft.VisualStudio.Shell;
     using SentryOne.UnitTestGenerator.Core.Assets;
     using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
     using SentryOne.UnitTestGenerator.Core.Options;
     using SentryOne.UnitTestGenerator.Helper;
-    using SentryOne.UnitTestGenerator.Options;
     using Project = EnvDTE.Project;
     using Task = System.Threading.Tasks.Task;
 
@@ -111,7 +109,7 @@
         private void Execute(bool withRegeneration)
         {
             var generationItems = new List<GenerationItem>();
-            var projectDictionary = new Dictionary<Project, Tuple<HashSet<TargetAsset>, HashSet<IReferencedAssembly>>>();
+            var projectDictionary = new Dictionary<Project, HashSet<TargetAsset>>();
 
             var messageLogger = new AggregateLogger();
             messageLogger.Initialize();
@@ -130,7 +128,7 @@
                 var options = _package.Options;
                 var sources = SolutionUtilities.GetSelectedFiles(_dte, true, options.GenerationOptions).Where(ProjectItemModel.IsSupported).ToList();
 
-                var targetProjects = new Dictionary<Project, Project>();
+                var targetProjects = new Dictionary<Project, Tuple<Project, IGenerationOptions>>();
 
                 foreach (var source in sources)
                 {
@@ -148,8 +146,10 @@
 
                     if (targetProject != null)
                     {
-                        targetProjects[source.Project] = targetProject;
-                        projectDictionary[targetProject] = Tuple.Create(new HashSet<TargetAsset>(), new HashSet<IReferencedAssembly>());
+                        var generationOptions = OptionsResolver.DetectFrameworks(targetProject, options.GenerationOptions);
+
+                        targetProjects[source.Project] = Tuple.Create(targetProject, generationOptions);
+                        projectDictionary[targetProject] = new HashSet<TargetAsset>();
                     }
                 }
 
@@ -169,7 +169,8 @@
 
                     var nameParts = VsProjectHelper.GetNameParts(projectItem);
 
-                    targetProjects.TryGetValue(source.Project, out var targetProject);
+                    targetProjects.TryGetValue(source.Project, out var targetProjectPair);
+                    var targetProject = targetProjectPair?.Item1;
                     var targetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out var targetPath);
 
                     if (targetProjectItems == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
@@ -180,17 +181,14 @@
 
                     var sourceNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.Project);
                     HashSet<TargetAsset> requiredAssets;
-                    HashSet<IReferencedAssembly> referencedAssemblies;
 
                     if (targetProject != null && projectDictionary.TryGetValue(targetProject, out var targetProjectEntry))
                     {
-                        requiredAssets = targetProjectEntry.Item1;
-                        referencedAssemblies = targetProjectEntry.Item2;
+                        requiredAssets = targetProjectEntry;
                     }
                     else
                     {
                         requiredAssets = new HashSet<TargetAsset>();
-                        referencedAssemblies = new HashSet<IReferencedAssembly>();
                     }
 
                     Func<string, string> namespaceTransform;
@@ -204,7 +202,7 @@
                         namespaceTransform = x => x + ".Tests";
                     }
 
-                    generationItems.Add(new GenerationItem(source, null, targetProjectItems, targetPath, requiredAssets, referencedAssemblies, namespaceTransform, options.GenerationOptions));
+                    generationItems.Add(new GenerationItem(source, null, targetProjectItems, targetPath, requiredAssets, namespaceTransform, targetProjectPair.Item2));
                 }
 #pragma warning restore VSTHRD010
             }, _package);

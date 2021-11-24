@@ -49,5 +49,5 @@ namespace WindowsFormsApp1
 	Then I expect a method called 'CanSetIndexerForStringAndGuidAndDateTime'
 		And I expect it to have the attribute 'Test'
 		And I expect it to contain the statement 'Assert.Fail("Create or modify test");'
-		And I expect it to contain a statement like '_testClass[{{{AnyString}}}, new Guid({{{AnyString}}}), new DateTime({{{AnyInteger}}})] = {{{AnyString}}};'
+		And I expect it to contain a statement like '_testClass[{{{AnyString}}}, new Guid({{{AnyString}}}), DateTime.UtcNow] = {{{AnyString}}};'
 	And I expect no method with a name like '.*StringAndInt.*'

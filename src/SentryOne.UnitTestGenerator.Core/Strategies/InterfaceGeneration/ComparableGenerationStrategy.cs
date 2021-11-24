@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Globalization;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -65,16 +64,16 @@
                     SyntaxFactory.DefaultExpression(typeSyntax))
                 .AsLocalVariableDeclarationStatementSyntax();
 
-            yield return FrameworkSet.TestFramework.AssertEqual(
+            yield return FrameworkSet.AssertionFramework.AssertEqual(
                 SyntaxHelper.CreateInvocationStatement(
                     SyntaxFactory.IdentifierName("baseValue"),
                     SyntaxFactory.IdentifierName("CompareTo"),
                     SyntaxFactory.IdentifierName("equalToBaseValue")),
                 SyntaxFactory.LiteralExpression(
                     SyntaxKind.NumericLiteralExpression,
-                    SyntaxFactory.Literal(0)));
+                    SyntaxFactory.Literal(0)), false);
 
-            yield return FrameworkSet.TestFramework.AssertLessThan(
+            yield return FrameworkSet.AssertionFramework.AssertLessThan(
                 SyntaxHelper.CreateInvocationStatement(
                     SyntaxFactory.IdentifierName("baseValue"),
                     SyntaxFactory.IdentifierName("CompareTo"),
@@ -83,7 +82,7 @@
                     SyntaxKind.NumericLiteralExpression,
                     SyntaxFactory.Literal(0)));
 
-            yield return FrameworkSet.TestFramework.AssertGreaterThan(
+            yield return FrameworkSet.AssertionFramework.AssertGreaterThan(
                 SyntaxHelper.CreateInvocationStatement(
                     SyntaxFactory.IdentifierName("greaterThanBaseValue"),
                     SyntaxFactory.IdentifierName("CompareTo"),

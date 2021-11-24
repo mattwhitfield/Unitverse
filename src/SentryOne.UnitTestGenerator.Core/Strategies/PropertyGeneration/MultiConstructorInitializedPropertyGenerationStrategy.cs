@@ -8,7 +8,6 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
     using SentryOne.UnitTestGenerator.Core.Models;
 
     public class MultiConstructorInitializedPropertyGenerationStrategy : IGenerationStrategy<IPropertyModel>
@@ -100,7 +99,7 @@
 
                 var parameterToCheck = model.Constructors.SelectMany(x => x.Parameters).First(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
 
-                yield return _frameworkSet.TestFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(parameterToCheck, _frameworkSet));
+                yield return _frameworkSet.AssertionFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(parameterToCheck, _frameworkSet), parameterToCheck.TypeInfo.Type.IsReferenceType);
             }
         }
     }
