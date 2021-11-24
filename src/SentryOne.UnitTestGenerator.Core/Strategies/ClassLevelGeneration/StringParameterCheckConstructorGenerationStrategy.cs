@@ -57,7 +57,9 @@
             foreach (var nullableParameter in nullableParameters)
             {
                 var methodName = string.Format(CultureInfo.InvariantCulture, "CannotConstructWithInvalid{0}", nullableParameter.ToPascalCase());
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(methodName, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), new object[] { null, string.Empty, "   " });
+                var isNonNullable = model.Constructors.SelectMany(x => x.Parameters.Where(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))).All(x => x.Node.Type is NullableTypeSyntax);
+                object[] testValues = isNonNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(methodName, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues);
 
                 foreach (var constructorModel in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))))
                 {

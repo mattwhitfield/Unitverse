@@ -1,0 +1,31 @@
+namespace TestNamespace.SubNameSpace
+{
+    public interface ITest { }
+
+    public class TestClass
+    {
+        public TestClass(string stringProp, string? nonNullableStringProp)
+        {
+        }
+ 
+        public TestClass(ITest? test)
+        {
+        }
+ 
+        public TestClass(ITest test, string someOtherThing)
+        {
+        }
+ 
+        public string GetFullName(string first, string? middle, string last) =>
+            middle != null ? $"{first} {middle} {last}" : $"{first} {last}";
+
+        public void SomeMethod(ITest? test)
+        { }
+
+        public void SomeMethod(ITest test, string someOtherThing)
+        { }
+
+        public void MethodForWhichNoNullabilityTestShouldBeEmitted(ITest? test)
+        { }
+    }
+}

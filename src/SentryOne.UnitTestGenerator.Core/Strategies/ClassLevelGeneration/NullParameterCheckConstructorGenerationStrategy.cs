@@ -56,10 +56,24 @@
             foreach (var nullableParameter in nullableParameters)
             {
                 var methodName = string.Format(CultureInfo.InvariantCulture, "CannotConstructWithNull{0}", nullableParameter.ToPascalCase());
+                var isNonNullable = model.Constructors.SelectMany(x => x.Parameters.Where(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))).All(x => x.Node.Type is NullableTypeSyntax);
+
+                if (isNonNullable)
+                {
+                    // all params are non-nullable, so skip
+                    continue;
+                }
+
                 var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(methodName, false, false);
 
                 foreach (var constructorModel in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))))
                 {
+                    var constructorParam = constructorModel.Parameters.First(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase));
+                    if (constructorParam.Node.Type is NullableTypeSyntax)
+                    {
+                        continue;
+                    }
+
                     var paramExpressions = constructorModel.Parameters.Select(param => string.Equals(param.Name, nullableParameter, StringComparison.OrdinalIgnoreCase) ? SyntaxFactory.DefaultExpression(param.TypeInfo.ToTypeSyntax(_frameworkSet.Context)) : AssignmentValueHelper.GetDefaultAssignmentValue(param.TypeInfo, model.SemanticModel, _frameworkSet)).ToList();
                     var methodCall = Generate.ObjectCreation(model.TypeSyntax, paramExpressions.ToArray());
                     generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));

@@ -69,6 +69,11 @@
                     continue;
                 }
 
+                if (method.Parameters[i].Node.Type is NullableTypeSyntax)
+                {
+                    continue;
+                }
+
                 var paramList = new List<CSharpSyntaxNode>();
 
                 var methodName = string.Format(CultureInfo.InvariantCulture, "CannotCall{0}WithNull{1}", model.GetMethodUniqueName(method), method.Parameters[i].Name.ToPascalCase());
