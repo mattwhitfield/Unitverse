@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Commands
+﻿namespace Unitverse.Commands
 {
     using System;
     using System.Collections.Generic;
@@ -9,10 +9,10 @@
     using EnvDTE;
     using EnvDTE80;
     using Microsoft.VisualStudio.Shell;
-    using SentryOne.UnitTestGenerator.Core.Assets;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Helper;
+    using Unitverse.Core.Assets;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
+    using Unitverse.Helper;
     using Project = EnvDTE.Project;
     using Task = System.Threading.Tasks.Task;
 
@@ -202,7 +202,7 @@
                         namespaceTransform = x => x + ".Tests";
                     }
 
-                    generationItems.Add(new GenerationItem(source, null, targetProjectItems, targetPath, requiredAssets, namespaceTransform, targetProjectPair.Item2));
+                    generationItems.Add(new GenerationItem(source, null, targetProjectItems, targetPath, requiredAssets, namespaceTransform, targetProjectPair?.Item2 ?? options.GenerationOptions));
                 }
 #pragma warning restore VSTHRD010
             }, _package);

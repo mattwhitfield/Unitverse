@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs
+﻿namespace Unitverse.Specs
 {
     using System;
     using System.Collections.Generic;

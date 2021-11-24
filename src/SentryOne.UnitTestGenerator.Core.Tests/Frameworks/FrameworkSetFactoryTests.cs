@@ -1,12 +1,12 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks
+namespace Unitverse.Core.Tests.Frameworks
 {
     using System;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Frameworks.Mocking;
-    using SentryOne.UnitTestGenerator.Core.Frameworks.Test;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Frameworks.Mocking;
+    using Unitverse.Core.Frameworks.Test;
+    using Unitverse.Core.Options;
 
     [TestFixture]
     public static class FrameworkSetFactoryTests

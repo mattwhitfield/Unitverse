@@ -1,12 +1,12 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Frameworks
+﻿namespace Unitverse.Core.Frameworks
 {
     using System;
-    using SentryOne.UnitTestGenerator.Core.Frameworks.Assertion;
-    using SentryOne.UnitTestGenerator.Core.Frameworks.Mocking;
-    using SentryOne.UnitTestGenerator.Core.Frameworks.Test;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Core.Resources;
+    using Unitverse.Core.Frameworks.Assertion;
+    using Unitverse.Core.Frameworks.Mocking;
+    using Unitverse.Core.Frameworks.Test;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
+    using Unitverse.Core.Resources;
 
     public static class FrameworkSetFactory
     {

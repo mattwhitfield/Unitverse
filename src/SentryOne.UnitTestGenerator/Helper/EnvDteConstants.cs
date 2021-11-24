@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Helper
+﻿namespace Unitverse.Helper
 {
     internal static class EnvDteConstants
     {

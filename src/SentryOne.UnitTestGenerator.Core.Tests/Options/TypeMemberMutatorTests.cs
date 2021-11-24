@@ -1,6 +1,6 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Options
+namespace Unitverse.Core.Tests.Options
 {
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Options;
     using System;
     using NUnit.Framework;
 

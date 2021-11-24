@@ -1,12 +1,12 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.ClassGeneration
+﻿namespace Unitverse.Core.Strategies.ClassGeneration
 {
     using System;
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Models;
 
     public class StaticClassGenerationStrategy : IClassGenerationStrategy
     {

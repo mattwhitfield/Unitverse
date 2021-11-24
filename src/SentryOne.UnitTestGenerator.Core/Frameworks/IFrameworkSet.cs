@@ -1,6 +1,6 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Frameworks
+﻿namespace Unitverse.Core.Frameworks
 {
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Helpers;
 
     public interface IFrameworkSet
     {

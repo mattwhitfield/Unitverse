@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <CodeAnalysisRuleSet>..\SentryOne.UnitTestGenerator.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Unitverse.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

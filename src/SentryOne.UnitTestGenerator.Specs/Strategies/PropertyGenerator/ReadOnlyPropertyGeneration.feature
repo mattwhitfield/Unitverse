@@ -5,7 +5,7 @@
 Scenario: Read Only Property Generation
 	Given I have a class defined as 
 	"""
-namespace SentryOne.Document.Web.Services.Workflow.BackgroundTaskExecutors.AzureFunctions
+namespace Unitverse.Web.Services.Workflow.BackgroundTaskExecutors.AzureFunctions
 {
     using System;
 

@@ -1,10 +1,10 @@
-﻿namespace SentryOne.UnitTestGenerator
+﻿namespace Unitverse
 {
     using System;
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.LanguageServices;
     using Microsoft.VisualStudio.Threading;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Options;
 
     public interface IUnitTestGeneratorPackage : IServiceProvider
     {

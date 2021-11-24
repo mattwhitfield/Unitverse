@@ -1,7 +1,7 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Frameworks.Test
+﻿namespace Unitverse.Core.Frameworks.Test
 {
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Helpers;
 
     public class NUnit2TestFramework : NUnitTestFramework
     {

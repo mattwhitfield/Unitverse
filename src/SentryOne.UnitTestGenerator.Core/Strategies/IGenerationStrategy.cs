@@ -1,8 +1,8 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies
+﻿namespace Unitverse.Core.Strategies
 {
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Models;
 
     public interface IGenerationStrategy<in T>
     {

@@ -1,6 +1,6 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Assets
+﻿namespace Unitverse.Core.Assets
 {
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Options;
 
     public interface IAsset
     {

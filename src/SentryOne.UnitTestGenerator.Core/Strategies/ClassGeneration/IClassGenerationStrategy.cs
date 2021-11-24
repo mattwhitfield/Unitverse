@@ -1,7 +1,7 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.ClassGeneration
+﻿namespace Unitverse.Core.Strategies.ClassGeneration
 {
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Models;
 
     public interface IClassGenerationStrategy
     {

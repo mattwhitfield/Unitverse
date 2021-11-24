@@ -1,12 +1,12 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Tests
+﻿namespace Unitverse.Core.Tests
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Models;
 
     internal static class ClassModelProvider
     {

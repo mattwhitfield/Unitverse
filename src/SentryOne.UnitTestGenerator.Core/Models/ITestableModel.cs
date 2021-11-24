@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Models
+﻿namespace Unitverse.Core.Models
 {
     using Microsoft.CodeAnalysis;
 

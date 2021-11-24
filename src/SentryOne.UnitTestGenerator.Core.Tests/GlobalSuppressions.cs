@@ -3,4 +3,4 @@
 // Project-level suppressions either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "Test Project")]
-////, Target = "~M:SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Mocking.FakeItEasyMockingFrameworkTests.CanCallMockInterface"
+

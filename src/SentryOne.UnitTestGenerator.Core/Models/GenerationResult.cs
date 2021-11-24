@@ -1,7 +1,7 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Models
+﻿namespace Unitverse.Core.Models
 {
     using System.Collections.Generic;
-    using SentryOne.UnitTestGenerator.Core.Assets;
+    using Unitverse.Core.Assets;
 
     public class GenerationResult
     {

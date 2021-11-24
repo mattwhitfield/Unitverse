@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Frameworks
+﻿namespace Unitverse.Core.Frameworks
 {
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp.Syntax;

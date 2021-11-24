@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Tests
+﻿namespace Unitverse.Core.Tests
 {
     using System;
     using System.Collections.Generic;

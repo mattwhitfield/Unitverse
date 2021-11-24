@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator
+﻿namespace Unitverse
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -7,9 +7,9 @@
     using Microsoft.VisualStudio.ComponentModelHost;
     using Microsoft.VisualStudio.LanguageServices;
     using Microsoft.VisualStudio.Shell;
-    using SentryOne.UnitTestGenerator.Commands;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Options;
+    using Unitverse.Commands;
+    using Unitverse.Core.Options;
+    using Unitverse.Options;
     using Task = System.Threading.Tasks.Task;
 
     [ProvideAutoLoad(Microsoft.VisualStudio.Shell.Interop.UIContextGuids.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
@@ -18,7 +18,7 @@
     [Guid("35B315F3-278A-4C3F-81D6-4DC2264828AA")]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideOptionPage(typeof(GenerationOptions), "SentryOne Unit Test Generator", "Generation Options", 0, 0, true)]
+    [ProvideOptionPage(typeof(GenerationOptions), "Unitverse", "Generation Options", 0, 0, true)]
     public sealed class UnitTestGeneratorPackage : AsyncPackage, IUnitTestGeneratorPackage
     {
         public IUnitTestGeneratorOptions Options

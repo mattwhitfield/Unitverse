@@ -1,7 +1,7 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
+namespace Unitverse.Core.Tests.Frameworks.Test
 {
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks.Test;
+    using Unitverse.Core.Frameworks.Test;
 
     [TestFixture]
     public class NUnit2TestFrameworkTests

@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace SentryOne.UnitTestGenerator.Specs.Strategies.IndexerGeneration
+namespace Unitverse.Specs.Strategies.IndexerGeneration
 {
     using TechTalk.SpecFlow;
     using System;

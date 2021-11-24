@@ -1,12 +1,7 @@
 # Overview
-## Build and Release Status
-| Pipeline  |  Status |
-|----------|:-------------|
-|Master Build|[![Build Status](https://dev.azure.com/sentryone/DataDevOps/_apis/build/status/UnitTestGenerator/UnitTestGenerator?branchName=master)](https://dev.azure.com/sentryone/DataDevOps/_build/latest?definitionId=355&branchName=master)|
-|Latest Release|[![Release Status](https://vsrm.dev.azure.com/sentryone/_apis/public/Release/badge/82c651b5-78e2-4115-809e-32af91f4755b/28/86)](https://vsrm.dev.azure.com/sentryone/_apis/public/Release/badge/82c651b5-78e2-4115-809e-32af91f4755b/28/86) |
 
 ## Introduction
-The SentryOne Unit Test Generator extension generates tests for classes written in C#. The extension covers basic tests automatically (for example, checking for correct property initialization), and creates placeholder tests for methods.  
+The Unitverse extension generates tests for classes written in C#. The extension covers basic tests automatically (for example, checking for correct property initialization), and creates placeholder tests for methods.  
 
 Test Project organization is simple and automatic because the tests are created in the test project with the same hierarchy defined in the source project. The extension can be used to modify tests later in the life cycle after refactoring or adding new functionality:
 
@@ -46,11 +41,11 @@ _**Important:** Regenerating a test will replace any code that you have added to
 
 Using the code editor context menu:
 
-![Code editor context menu](https://raw.githubusercontent.com/sentryone/unittestgenerator/master/assets/CodeEditorContextMenu.png)
+![Code editor context menu](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/assets/CodeEditorContextMenu.png)
 
 Using the solution explorer context menu:
 
-![Solution Explorer context menu](https://raw.githubusercontent.com/sentryone/unittestgenerator/master/assets/SolutionContextMenu.png)
+![Solution Explorer context menu](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/assets/SolutionContextMenu.png)
 
 **Regenerate tests** and **Go to tests** are not available at higher levels in the solution explorer (for example when you have a folder or project selected). **Regenerate tests** is not shown by default, to prevent accidental overwriting of test code. Hold SHIFT while you open the context menu to use this option.
 
@@ -58,11 +53,11 @@ Using the solution explorer context menu:
 
 Consider this simple class:
 
- ![Example source class](https://raw.githubusercontent.com/sentryone/unittestgenerator/master/assets/SourceClass.png)
+ ![Example source class](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/assets/SourceClass.png)
 
 Although the constructor and methods are not implemented, it serves as a good example because the extension generates tests based on signatures only. The following illustrates the results of generating tests for this class.
 
- ![Example generated test class with annotations](https://raw.githubusercontent.com/sentryone/unittestgenerator/master/assets/SourceClassTestsAnnotated.png)
+ ![Example generated test class with annotations](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/assets/SourceClassTestsAnnotated.png)
 
 Notice that the dependency for the class has been automatically mocked & injected, and there are generated tests for the constructor. There are also tests to verify that parameters can’t be null for both constructors and methods. Note that the generator is producing values required for testing – both initializing a POCO using an object initializer and an immutable class by providing values for its constructor.
 
@@ -89,7 +84,7 @@ _Note: If these options are not set, the extension uses the latest version. This
 
 You can set settings per-solution if you need to (for example if you work with some code that uses MSTest and some that uses NUnit). In order to do this, you can create a `.unitTestGeneratorConfig` file, which is formatted similarly to .editorConfig files, just without the file type heading.
 
-You can set any member of the [IGenerationOptions](https://github.com/sentryone/unittestgenerator/blob/master/src/SentryOne.UnitTestGenerator.Core/Options/IGenerationOptions.cs) or the [IVersioningOptions](https://github.com/sentryone/unittestgenerator/blob/master/src/SentryOne.UnitTestGenerator.Core/Options/IVersioningOptions.cs) interfaces using this method. For example, the following content in a `.unitTestGeneratorConfig` would set the test framework to MSTest, the mocking framework to NSubstitute and the test project naming convention to `<project_name>.UnitTests`:
+You can set any member of the [IGenerationOptions](https://github.com/mattwhitfield/unittestgenerator/blob/master/src/Unitverse.Core/Options/IGenerationOptions.cs) or the [IVersioningOptions](https://github.com/mattwhitfield/unittestgenerator/blob/master/src/Unitverse.Core/Options/IVersioningOptions.cs) interfaces using this method. For example, the following content in a `.unitTestGeneratorConfig` would set the test framework to MSTest, the mocking framework to NSubstitute and the test project naming convention to `<project_name>.UnitTests`:
 
 ```
 test_project_naming={0}.UnitTests
@@ -98,7 +93,3 @@ MockingFrameworkType=NSubstitute
 ```
 
 > Note that the formatting for the member names is case insensitive, and underscores and hyphens are ignored. Hence `frameworkType`, `framework-type`, `FRAMEWORK_TYPE` and `FRAME-WORK-TYPE` all resolve to the `FrameworkType` member of `IGenerationOptions`. The rules for file finding & resolution work exactly the same as they do for `.editorConfig` files - in short, all folders from the solution file to the root are searched for a `.unitTestGeneratorConfig` file, and files 'closer' to the solution file take precedence if the same option is set in more than one file.
-
-## Other Notes
-
-_**Important**: Currently the extension doesn’t handle automatically creating test projects for .NET Core apps. It works as expected with.NET framework and .NET Standard projects. For .NET Core apps, please create the test project manually. Adding test classes and methods works normally once the project is in place._

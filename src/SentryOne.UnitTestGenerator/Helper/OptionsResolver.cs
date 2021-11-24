@@ -1,13 +1,13 @@
-﻿namespace SentryOne.UnitTestGenerator.Helper
+﻿namespace Unitverse.Helper
 {
     using System.Linq;
     using System.Management.Instrumentation;
     using EnvDTE;
     using Microsoft.VisualStudio.Shell;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Properties;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
+    using Unitverse.Properties;
     using VSLangProj;
     using VSLangProj80;
 

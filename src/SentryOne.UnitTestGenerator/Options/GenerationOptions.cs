@@ -1,9 +1,9 @@
 ﻿// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global - is set by VS
-namespace SentryOne.UnitTestGenerator.Options
+namespace Unitverse.Options
 {
     using System.ComponentModel;
     using Microsoft.VisualStudio.Shell;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Options;
 
     public class GenerationOptions : DialogPage, IGenerationOptions
     {

@@ -1,11 +1,11 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.MethodGeneration
+namespace Unitverse.Core.Tests.Strategies.MethodGeneration
 {
     using System;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Strategies.MethodGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Strategies.MethodGeneration;
 
     [TestFixture]
     public class CanCallMethodGenerationStrategyTests

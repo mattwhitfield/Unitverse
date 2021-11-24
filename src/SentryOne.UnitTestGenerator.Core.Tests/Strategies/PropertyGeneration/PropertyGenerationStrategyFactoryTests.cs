@@ -1,10 +1,10 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.PropertyGeneration
+namespace Unitverse.Core.Tests.Strategies.PropertyGeneration
 {
     using System;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Strategies.PropertyGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Strategies.PropertyGeneration;
 
     [TestFixture]
     public class PropertyGenerationStrategyFactoryTests

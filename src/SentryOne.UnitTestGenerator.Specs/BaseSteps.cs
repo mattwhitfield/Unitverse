@@ -1,10 +1,10 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs
+﻿namespace Unitverse.Specs
 {
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
     using TechTalk.SpecFlow;
 
     [Binding]

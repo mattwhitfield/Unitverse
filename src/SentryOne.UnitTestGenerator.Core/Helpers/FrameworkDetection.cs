@@ -1,10 +1,10 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Helpers
+﻿namespace Unitverse.Core.Helpers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     // TODO - tests
     public static class FrameworkDetection

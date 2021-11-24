@@ -1,12 +1,12 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.InterfaceGeneration
+﻿namespace Unitverse.Core.Strategies.InterfaceGeneration
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
 
     public abstract class InterfaceGenerationStrategyBase : IGenerationStrategy<ClassModel>
     {

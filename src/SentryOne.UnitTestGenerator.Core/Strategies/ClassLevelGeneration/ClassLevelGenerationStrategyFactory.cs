@@ -1,9 +1,9 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.ClassLevelGeneration
+﻿namespace Unitverse.Core.Strategies.ClassLevelGeneration
 {
     using System;
     using System.Collections.Generic;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
 
     public class ClassLevelGenerationStrategyFactory : ItemGenerationStrategyFactory<ClassModel>
     {

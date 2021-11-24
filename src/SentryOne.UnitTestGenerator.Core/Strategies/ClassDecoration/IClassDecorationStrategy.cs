@@ -1,7 +1,7 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.ClassDecoration
+﻿namespace Unitverse.Core.Strategies.ClassDecoration
 {
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Models;
 
     internal interface IClassDecorationStrategy
     {

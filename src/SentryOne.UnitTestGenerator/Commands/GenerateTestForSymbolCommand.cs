@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Commands
+﻿namespace Unitverse.Commands
 {
     using System;
     using System.Collections.Generic;
@@ -17,10 +17,10 @@
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Text.Editor;
     using Microsoft.VisualStudio.TextManager.Interop;
-    using SentryOne.UnitTestGenerator.Core.Assets;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Strategies.InterfaceGeneration;
-    using SentryOne.UnitTestGenerator.Helper;
+    using Unitverse.Core.Assets;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Strategies.InterfaceGeneration;
+    using Unitverse.Helper;
     using Task = System.Threading.Tasks.Task;
 
     /// <summary>

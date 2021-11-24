@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.PropertyGeneration
+﻿namespace Unitverse.Core.Strategies.PropertyGeneration
 {
     using System;
     using System.Collections.Generic;
@@ -7,8 +7,8 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
 
     public class MultiConstructorInitializedPropertyGenerationStrategy : IGenerationStrategy<IPropertyModel>
     {

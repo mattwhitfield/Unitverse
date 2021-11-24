@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs
+﻿namespace Unitverse.Specs
 {
     using System;
     using System.Collections.Generic;
@@ -6,16 +6,16 @@
     using System.Text.RegularExpressions;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Core.Strategies;
-    using SentryOne.UnitTestGenerator.Core.Strategies.ClassLevelGeneration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.IndexerGeneration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.InterfaceGeneration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.MethodGeneration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.OperatorGeneration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.PropertyGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
+    using Unitverse.Core.Strategies;
+    using Unitverse.Core.Strategies.ClassLevelGeneration;
+    using Unitverse.Core.Strategies.IndexerGeneration;
+    using Unitverse.Core.Strategies.InterfaceGeneration;
+    using Unitverse.Core.Strategies.MethodGeneration;
+    using Unitverse.Core.Strategies.OperatorGeneration;
+    using Unitverse.Core.Strategies.PropertyGeneration;
     using TechTalk.SpecFlow;
 
     [Binding]

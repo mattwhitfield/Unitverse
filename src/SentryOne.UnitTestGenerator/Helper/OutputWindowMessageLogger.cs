@@ -1,10 +1,10 @@
-﻿namespace SentryOne.UnitTestGenerator.Helper
+﻿namespace Unitverse.Helper
 {
     using System;
     using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Helpers;
 
     public sealed class OutputWindowMessageLogger : IMessageLogger
     {

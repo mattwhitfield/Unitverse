@@ -1,10 +1,10 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Options
+namespace Unitverse.Core.Tests.Options
 {
     using System;
     using System.IO;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Options;
 
     [TestFixture]
     public static class UnitTestGeneratorOptionsFactoryTests

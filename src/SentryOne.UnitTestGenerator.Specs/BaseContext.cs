@@ -1,9 +1,9 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs
+﻿namespace Unitverse.Specs
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class BaseContext
     {

@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Models
+﻿namespace Unitverse.Core.Models
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,9 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Resources;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Resources;
 
     public class MethodModel : TestableModel<MethodDeclarationSyntax>, IMethodModel
     {

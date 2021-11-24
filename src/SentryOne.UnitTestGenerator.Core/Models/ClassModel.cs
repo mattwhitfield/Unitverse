@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Models
+﻿namespace Unitverse.Core.Models
 {
     using System;
     using System.Collections.Generic;
@@ -7,9 +7,9 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Assets;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Assets;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
 
     public class ClassModel
     {

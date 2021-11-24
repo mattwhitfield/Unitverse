@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core
+﻿namespace Unitverse.Core
 {
     using System;
     using System.Collections.Generic;
@@ -8,20 +8,20 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Formatting;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Core.Resources;
-    using SentryOne.UnitTestGenerator.Core.Strategies;
-    using SentryOne.UnitTestGenerator.Core.Strategies.ClassDecoration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.ClassGeneration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.ClassLevelGeneration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.IndexerGeneration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.InterfaceGeneration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.MethodGeneration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.OperatorGeneration;
-    using SentryOne.UnitTestGenerator.Core.Strategies.PropertyGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
+    using Unitverse.Core.Resources;
+    using Unitverse.Core.Strategies;
+    using Unitverse.Core.Strategies.ClassDecoration;
+    using Unitverse.Core.Strategies.ClassGeneration;
+    using Unitverse.Core.Strategies.ClassLevelGeneration;
+    using Unitverse.Core.Strategies.IndexerGeneration;
+    using Unitverse.Core.Strategies.InterfaceGeneration;
+    using Unitverse.Core.Strategies.MethodGeneration;
+    using Unitverse.Core.Strategies.OperatorGeneration;
+    using Unitverse.Core.Strategies.PropertyGeneration;
 
     public static class CoreGenerator
     {

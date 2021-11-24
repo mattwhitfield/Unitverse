@@ -1,9 +1,9 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Models
+namespace Unitverse.Core.Tests.Models
 {
     using System.Collections.Generic;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Assets;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Assets;
+    using Unitverse.Core.Models;
 
     [TestFixture]
     public class GenerationResultTests

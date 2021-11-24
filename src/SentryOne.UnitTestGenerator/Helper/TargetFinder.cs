@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Helper
+﻿namespace Unitverse.Helper
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,8 @@
     using System.Linq;
     using EnvDTE;
     using Microsoft.VisualStudio.Shell;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
 
     internal static class TargetFinder
     {

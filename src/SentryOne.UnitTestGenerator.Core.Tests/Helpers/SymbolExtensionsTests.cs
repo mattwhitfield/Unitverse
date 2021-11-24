@@ -1,10 +1,10 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
+namespace Unitverse.Core.Tests.Helpers
 {
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Helpers;
 
     [TestFixture]
     public static class SymbolExtensionsTests

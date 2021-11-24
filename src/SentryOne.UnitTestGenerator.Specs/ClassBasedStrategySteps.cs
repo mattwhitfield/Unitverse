@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs
+﻿namespace Unitverse.Specs
 {
     using System;
     using System.Collections.Generic;
@@ -10,10 +10,10 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Formatting;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Core.Strategies.ClassGeneration;
+    using Unitverse.Core;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Options;
+    using Unitverse.Core.Strategies.ClassGeneration;
     using TechTalk.SpecFlow;
 
     [Binding]

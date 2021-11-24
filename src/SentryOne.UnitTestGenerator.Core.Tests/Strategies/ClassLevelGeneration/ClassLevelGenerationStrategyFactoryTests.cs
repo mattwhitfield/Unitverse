@@ -1,10 +1,10 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ClassLevelGeneration
+namespace Unitverse.Core.Tests.Strategies.ClassLevelGeneration
 {
     using System;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Strategies.ClassLevelGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Strategies.ClassLevelGeneration;
 
     [TestFixture]
     public class ClassLevelGenerationStrategyFactoryTests

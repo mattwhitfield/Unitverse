@@ -1,6 +1,6 @@
-﻿using SentryOne.UnitTestGenerator.Core.Options;
+﻿using Unitverse.Core.Options;
 
-namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
+namespace Unitverse.Core.Tests.Helpers
 {
     // TODO - tests
     public class DetectedGenerationOptions : IGenerationOptions

@@ -1,7 +1,7 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Assets
+﻿namespace Unitverse.Core.Assets
 {
     using System;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Options;
 
     public class PropertyTesterAsset : IAsset
     {

@@ -1,6 +1,6 @@
-﻿namespace SentryOne.UnitTestGenerator.Specs
+﻿namespace Unitverse.Specs
 {
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Options;
 
     // TODO - add fluent assertions to specs
     public class GenerationOptions : IGenerationOptions

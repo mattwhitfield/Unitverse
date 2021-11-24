@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Helpers
+﻿namespace Unitverse.Core.Helpers
 {
     using System;
     using System.Linq;

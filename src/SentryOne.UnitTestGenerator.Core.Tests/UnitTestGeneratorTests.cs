@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Tests
+﻿namespace Unitverse.Core.Tests
 {
     using System;
     using System.Collections;
@@ -23,9 +23,9 @@
     using Moq;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Assets;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Assets;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
     using Xunit;
     using Assert = NUnit.Framework.Assert;
     using Expression = System.Linq.Expressions.Expression;

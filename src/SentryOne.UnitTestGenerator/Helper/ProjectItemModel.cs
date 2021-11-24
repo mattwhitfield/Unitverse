@@ -1,12 +1,12 @@
-﻿namespace SentryOne.UnitTestGenerator.Helper
+﻿namespace Unitverse.Helper
 {
     using System;
     using System.Globalization;
     using EnvDTE;
     using Microsoft.VisualStudio.Shell;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Properties;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
+    using Unitverse.Properties;
 
     public class ProjectItemModel
     {

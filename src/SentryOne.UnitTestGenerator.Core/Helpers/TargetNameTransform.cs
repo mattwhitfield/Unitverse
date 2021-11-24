@@ -1,11 +1,11 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Helpers
+﻿namespace Unitverse.Core.Helpers
 {
     using System;
     using System.Globalization;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Core.Resources;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
+    using Unitverse.Core.Resources;
 
     public static class TargetNameTransform
     {

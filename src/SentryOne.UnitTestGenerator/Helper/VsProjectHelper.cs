@@ -1,4 +1,4 @@
-namespace SentryOne.UnitTestGenerator.Helper
+namespace Unitverse.Helper
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace SentryOne.UnitTestGenerator.Helper
     using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Helpers;
 
     internal static class VsProjectHelper
     {

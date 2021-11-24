@@ -1,11 +1,11 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.ClassGeneration
+﻿namespace Unitverse.Core.Strategies.ClassGeneration
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
 
     public class ClassGenerationStrategyFactory
     {

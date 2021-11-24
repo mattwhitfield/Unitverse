@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SentryOne.UnitTestGenerator.Core.Tests {
+namespace Unitverse.Core.Tests {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SentryOne.UnitTestGenerator.Core.Tests.TestClasses", typeof(TestClasses).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Unitverse.Core.Tests.TestClasses", typeof(TestClasses).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -155,7 +155,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace SentryOne.Document.Web.Services.Workflow.BackgroundTaskExecutors.AzureFunctions
+        ///   Looks up a localized string similar to namespace Unitverse.Web.Services.Workflow.BackgroundTaskExecutors.AzureFunctions
         ///{
         ///    using System;
         ///
@@ -724,7 +724,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace SentryOne.Document.Web.Services.Workflow
+        ///   Looks up a localized string similar to namespace Unitverse.Web.Services.Workflow
         ///{
         ///	using System;
         ///    using System.Collections.Generic;
@@ -985,7 +985,7 @@ namespace SentryOne.UnitTestGenerator.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace SentryOne.UnitTestGenerator.Core.Models
+        ///   Looks up a localized string similar to namespace Unitverse.Core.Models
         ///{
         ///    using System;
         ///    using System.Text.RegularExpressions;

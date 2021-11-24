@@ -1,4 +1,4 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Models
+namespace Unitverse.Core.Tests.Models
 {
     using System;
     using System.Collections.Generic;
@@ -7,9 +7,9 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Models
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Assets;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Assets;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
 
     [TestFixture]
     public class ClassModelTests

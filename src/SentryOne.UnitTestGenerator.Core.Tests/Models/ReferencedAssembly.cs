@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SentryOne.UnitTestGenerator.Core.Tests.Models
+namespace Unitverse.Core.Tests.Models
 {
     // TODO - tests
     public class ReferencedAssembly

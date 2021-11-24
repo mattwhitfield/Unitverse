@@ -1,9 +1,9 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Models
+﻿namespace Unitverse.Core.Models
 {
     using System;
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Helpers;
 
     public class InterfaceModel : IInterfaceModel
     {

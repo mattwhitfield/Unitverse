@@ -31,8 +31,8 @@
     <ProjectGuid>{7F7E3D01-F45E-4F59-BE96-0E9D052905DB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SentryOne.UnitTestGenerator</RootNamespace>
-    <AssemblyName>SentryOne.UnitTestGenerator</AssemblyName>
+    <RootNamespace>Unitverse</RootNamespace>
+    <AssemblyName>Unitverse</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -52,7 +52,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\SentryOne.UnitTestGenerator.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Unitverse.ruleset</CodeAnalysisRuleSet>
     <NoWarn>SA0001,1762</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -62,7 +62,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\SentryOne.UnitTestGenerator.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Unitverse.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\GenerateTestForSymbolCommand.cs" />
@@ -148,9 +148,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SentryOne.UnitTestGenerator.Core\SentryOne.UnitTestGenerator.Core.csproj">
+    <ProjectReference Include="..\Unitverse.Core\Unitverse.Core.csproj">
       <Project>{C0A7DDAC-CCA3-4FB5-A8A7-4B9AC4210D2A}</Project>
-      <Name>SentryOne.UnitTestGenerator.Core</Name>
+      <Name>Unitverse.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

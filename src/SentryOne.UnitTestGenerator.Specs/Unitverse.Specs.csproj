@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SentryOne.UnitTestGenerator.Core\SentryOne.UnitTestGenerator.Core.csproj" />
+    <ProjectReference Include="..\Unitverse.Core\Unitverse.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

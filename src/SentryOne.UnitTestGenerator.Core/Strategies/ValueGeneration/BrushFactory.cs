@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.ValueGeneration
+﻿namespace Unitverse.Core.Strategies.ValueGeneration
 {
     using System;
     using Microsoft.CodeAnalysis.CSharp;

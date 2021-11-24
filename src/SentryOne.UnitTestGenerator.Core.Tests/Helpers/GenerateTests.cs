@@ -1,4 +1,4 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
+namespace Unitverse.Core.Tests.Helpers
 {
     using System;
     using System.Collections.Generic;
@@ -8,10 +8,10 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     [TestFixture]
     public static class GenerateTests

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SentryOne.UnitTestGenerator.Properties {
+namespace Unitverse.Properties {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace SentryOne.UnitTestGenerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Strings {
@@ -39,7 +39,7 @@ namespace SentryOne.UnitTestGenerator.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SentryOne.UnitTestGenerator.Properties.Strings", typeof(Strings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Unitverse.Properties.Strings", typeof(Strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,16 @@ namespace SentryOne.UnitTestGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to //   _   _      _ _                       
+        /////  | | | |_ _ (_) |___ _____ _ _ ___ ___ 
+        /////  | |_| | &apos; \| |  _\ V / -_) &apos;_(_-&lt;/ -_)
+        /////   \___/|_||_|_|\__|\_/\___|_| /__/\___|
+        ///                                     
+        ///// This file was generated with Unitverse
+        ///// It has not been added to a test project because an existing test project was not found with the name &apos;$$TARGETNAME$$&apos;.
+        ///
+        ///// If this isn&apos;t the name you were expecting, you can change the naming pattern by going to Tools -&gt; Options -&gt; Unitverse.
+        ///// Ot [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DisconnectedFileHeader {
             get {

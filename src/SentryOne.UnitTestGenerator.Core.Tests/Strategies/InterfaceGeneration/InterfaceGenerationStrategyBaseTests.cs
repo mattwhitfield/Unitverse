@@ -1,13 +1,13 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.InterfaceGeneration
+namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
 {
     using System;
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Strategies.InterfaceGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Strategies.InterfaceGeneration;
 
     [TestFixture]
     public class InterfaceGenerationStrategyBaseTests

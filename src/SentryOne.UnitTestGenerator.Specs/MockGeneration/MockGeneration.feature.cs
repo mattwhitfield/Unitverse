@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace SentryOne.UnitTestGenerator.Specs.MockGeneration
+namespace Unitverse.Specs.MockGeneration
 {
     using TechTalk.SpecFlow;
     using System;

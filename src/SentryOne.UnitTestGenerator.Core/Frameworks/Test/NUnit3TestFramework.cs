@@ -1,10 +1,10 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Frameworks.Test
+﻿namespace Unitverse.Core.Frameworks.Test
 {
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Resources;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Resources;
 
     public class NUnit3TestFramework : NUnitTestFramework
     {

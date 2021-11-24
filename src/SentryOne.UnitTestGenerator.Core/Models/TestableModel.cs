@@ -1,8 +1,8 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Models
+﻿namespace Unitverse.Core.Models
 {
     using System;
     using Microsoft.CodeAnalysis;
-    using SentryOne.UnitTestGenerator.Core.Resources;
+    using Unitverse.Core.Resources;
 
     public abstract class TestableModel<T> : ITestableModel<T>
         where T : SyntaxNode

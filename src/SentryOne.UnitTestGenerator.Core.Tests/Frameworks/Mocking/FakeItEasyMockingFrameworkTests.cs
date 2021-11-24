@@ -1,4 +1,4 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Mocking
+namespace Unitverse.Core.Tests.Frameworks.Mocking
 {
     using System;
     using System.Linq;
@@ -7,8 +7,8 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Mocking
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks.Mocking;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Frameworks.Mocking;
+    using Unitverse.Core.Helpers;
 
     [TestFixture]
     public class FakeItEasyMockingFrameworkTests

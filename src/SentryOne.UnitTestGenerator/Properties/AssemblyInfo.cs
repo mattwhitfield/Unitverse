@@ -3,12 +3,12 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("SentryOne.UnitTestGenerator")]
-[assembly: AssemblyDescription("SentryOne Unit Test Generator generates unit test boiler plate from existing code")]
+[assembly: AssemblyTitle("Unitverse")]
+[assembly: AssemblyDescription("Unitverse generates better unit test boiler plate from existing code")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("SentryOne")]
-[assembly: AssemblyProduct("SentryOne.UnitTestGenerator")]
-[assembly: AssemblyCopyright("Coipyright © 2019 SentryOne")]
+[assembly: AssemblyCompany("Matt Whitfield")]
+[assembly: AssemblyProduct("Unitverse")]
+[assembly: AssemblyCopyright("Copyright © 2021 Matt Whitfield")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-us")]

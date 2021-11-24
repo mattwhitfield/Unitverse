@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Assets
+﻿namespace Unitverse.Core.Assets
 {
     public static class AssetFactory
     {

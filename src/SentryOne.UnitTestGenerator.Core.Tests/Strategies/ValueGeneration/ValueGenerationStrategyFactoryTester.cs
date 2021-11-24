@@ -1,4 +1,4 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
+namespace Unitverse.Core.Tests.Strategies.ValueGeneration
 {
     using System;
     using System.Collections.Generic;
@@ -9,9 +9,9 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
     using Microsoft.CodeAnalysis.Scripting;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Core.Strategies.ValueGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Options;
+    using Unitverse.Core.Strategies.ValueGeneration;
 
     [TestFixture]
     public static class ValueGenerationStrategyFactoryTester

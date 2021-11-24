@@ -1,10 +1,10 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.IndexerGeneration
+namespace Unitverse.Core.Tests.Strategies.IndexerGeneration
 {
     using System;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Strategies.IndexerGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Strategies.IndexerGeneration;
 
     [TestFixture]
     public class IndexerGenerationStrategyFactoryTests

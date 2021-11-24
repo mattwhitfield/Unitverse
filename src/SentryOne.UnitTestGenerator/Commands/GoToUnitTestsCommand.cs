@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Commands
+﻿namespace Unitverse.Commands
 {
     using System;
     using System.ComponentModel.Design;
@@ -6,7 +6,7 @@
     using EnvDTE;
     using EnvDTE80;
     using Microsoft.VisualStudio.Shell;
-    using SentryOne.UnitTestGenerator.Helper;
+    using Unitverse.Helper;
     using Task = System.Threading.Tasks.Task;
 
     /// <summary>

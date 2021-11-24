@@ -1,7 +1,12 @@
-// This file was generated with SentryOne Unit Test Generator
+//   _   _      _ _                       
+//  | | | |_ _ (_) |___ _____ _ _ ___ ___ 
+//  | |_| | ' \| |  _\ V / -_) '_(_-</ -_)
+//   \___/|_||_|_|\__|\_/\___|_| /__/\___|
+                                     
+// This file was generated with Unitverse
+// It has not been added to a test project because an existing test project was not found with the name '$$TARGETNAME$$'.
 
-// It has not been added to a test project because an existing test project was not found
-// and the 'Automatically create Tests project' setting is turned off.
-
-// To change this, please go to Tools -> Options -> SentryOne Unit Test Generator
+// If this isn't the name you were expecting, you can change the naming pattern by going to Tools -> Options -> Unitverse.
+// Otherwise, please create the test project using one of the standard Visual Studio project templates, and Unitverse will
+// generate test classes within that project.
 

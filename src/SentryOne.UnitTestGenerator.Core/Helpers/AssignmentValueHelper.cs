@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Helpers
+﻿namespace Unitverse.Core.Helpers
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,8 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Strategies.ValueGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Strategies.ValueGeneration;
 
     public static class AssignmentValueHelper
     {

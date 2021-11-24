@@ -1,14 +1,14 @@
-﻿namespace SentryOne.UnitTestGenerator.Commands
+﻿namespace Unitverse.Commands
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using EnvDTE;
     using Microsoft.CodeAnalysis;
-    using SentryOne.UnitTestGenerator.Core.Assets;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Helper;
+    using Unitverse.Core.Assets;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
+    using Unitverse.Helper;
 
     public class GenerationItem
     {

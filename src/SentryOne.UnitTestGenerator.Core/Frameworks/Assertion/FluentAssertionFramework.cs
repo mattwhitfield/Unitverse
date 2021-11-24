@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Frameworks.Assertion
+﻿namespace Unitverse.Core.Frameworks.Assertion
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Helpers;
 
     public class FluentAssertionFramework : IAssertionFramework
     {

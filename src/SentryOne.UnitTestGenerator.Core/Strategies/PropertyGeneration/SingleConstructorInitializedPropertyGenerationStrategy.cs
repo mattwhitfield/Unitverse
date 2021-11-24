@@ -1,12 +1,12 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.PropertyGeneration
+﻿namespace Unitverse.Core.Strategies.PropertyGeneration
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
 
     public class SingleConstructorInitializedPropertyGenerationStrategy : IGenerationStrategy<IPropertyModel>
     {

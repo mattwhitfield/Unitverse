@@ -1,10 +1,10 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.OperatorGeneration
+namespace Unitverse.Core.Tests.Strategies.OperatorGeneration
 {
     using System;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Strategies.OperatorGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Strategies.OperatorGeneration;
 
     [TestFixture]
     public class OperatorGenerationStrategyFactoryTests

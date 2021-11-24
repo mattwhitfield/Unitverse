@@ -1,10 +1,10 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks
+namespace Unitverse.Core.Tests.Frameworks
 {
     using System;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
 
     [TestFixture]
     public class FrameworkSetTests

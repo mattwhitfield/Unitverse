@@ -1,12 +1,12 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ValueGeneration
+namespace Unitverse.Core.Tests.Strategies.ValueGeneration
 {
     using System;
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Strategies.ValueGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Strategies.ValueGeneration;
 
     [TestFixture]
     public static class EnumFactoryTests

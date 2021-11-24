@@ -1,15 +1,15 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.InterfaceGeneration
+namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
 {
     using System;
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Frameworks.Mocking;
-    using SentryOne.UnitTestGenerator.Core.Frameworks.Test;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Strategies.InterfaceGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Frameworks.Mocking;
+    using Unitverse.Core.Frameworks.Test;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Strategies.InterfaceGeneration;
 
     [TestFixture]
     public class ComparableGenerationStrategyTests

@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Helpers
+﻿namespace Unitverse.Core.Helpers
 {
     using System;
     using System.Collections.Generic;
@@ -7,9 +7,9 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Resources;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Resources;
 
     public static class Generate
     {

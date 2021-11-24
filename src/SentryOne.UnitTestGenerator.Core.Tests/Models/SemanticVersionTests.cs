@@ -1,8 +1,8 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Models
+namespace Unitverse.Core.Tests.Models
 {
     using System;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Models;
 
     [TestFixture]
     public class SemanticVersionTests

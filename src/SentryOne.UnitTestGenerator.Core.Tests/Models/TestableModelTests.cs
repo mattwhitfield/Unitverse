@@ -1,9 +1,9 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Models
+namespace Unitverse.Core.Tests.Models
 {
     using System;
     using Microsoft.CodeAnalysis.CSharp;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Models;
     using T = Microsoft.CodeAnalysis.CSharp.Syntax.ClassDeclarationSyntax;
 
     [TestFixture]

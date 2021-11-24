@@ -1,9 +1,9 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.ValueGeneration
+﻿namespace Unitverse.Core.Strategies.ValueGeneration
 {
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
+    using Unitverse.Core.Frameworks;
 
     public interface IValueGenerationStrategy
     {

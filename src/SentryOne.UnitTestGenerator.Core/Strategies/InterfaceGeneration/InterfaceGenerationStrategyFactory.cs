@@ -1,12 +1,12 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.InterfaceGeneration
+﻿namespace Unitverse.Core.Strategies.InterfaceGeneration
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CodeAnalysis;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Models;
 
     public class InterfaceGenerationStrategyFactory : ItemGenerationStrategyFactory<ClassModel>
     {

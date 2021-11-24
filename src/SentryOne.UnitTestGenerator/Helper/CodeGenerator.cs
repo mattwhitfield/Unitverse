@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Helper
+﻿namespace Unitverse.Helper
 {
     using System;
     using System.Collections.Generic;
@@ -10,13 +10,13 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.VisualStudio.Shell;
-    using SentryOne.UnitTestGenerator.Commands;
-    using SentryOne.UnitTestGenerator.Core;
-    using SentryOne.UnitTestGenerator.Core.Assets;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Options;
-    using SentryOne.UnitTestGenerator.Properties;
+    using Unitverse.Commands;
+    using Unitverse.Core;
+    using Unitverse.Core.Assets;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
+    using Unitverse.Properties;
     using Project = EnvDTE.Project;
     using Solution = Microsoft.CodeAnalysis.Solution;
     using Task = System.Threading.Tasks.Task;
@@ -74,7 +74,7 @@
             var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(generationItem.TargetFileName));
             try
             {
-                File.WriteAllText(tempFile, Strings.DisconnectedFileHeader + generationItem.TargetContent);
+                File.WriteAllText(tempFile, Strings.DisconnectedFileHeader.Replace("$$TARGETNAME$$", generationItem.Source.TargetProjectName) + generationItem.TargetContent);
                 var dte = (DTE2)package.GetService(typeof(DTE));
                 if (dte != null)
                 {

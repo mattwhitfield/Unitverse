@@ -1,8 +1,8 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
+namespace Unitverse.Core.Tests.Helpers
 {
     using System.Linq;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Helpers;
 
     [TestFixture]
     public static class StringExtensionsTests

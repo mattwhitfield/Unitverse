@@ -1,4 +1,4 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Options
+﻿namespace Unitverse.Core.Options
 {
     public interface IGenerationOptions
     {

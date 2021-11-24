@@ -1,11 +1,11 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Models
+﻿namespace Unitverse.Core.Models
 {
     using System;
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
+    using Unitverse.Core.Frameworks;
 
     public class OperatorModel : TestableModel<OperatorDeclarationSyntax>, IOperatorModel
     {

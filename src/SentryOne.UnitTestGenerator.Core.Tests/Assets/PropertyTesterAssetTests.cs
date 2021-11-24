@@ -1,9 +1,9 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Assets
+namespace Unitverse.Core.Tests.Assets
 {
     using System;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Assets;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Assets;
+    using Unitverse.Core.Options;
 
     [TestFixture]
     public class PropertyTesterAssetTests

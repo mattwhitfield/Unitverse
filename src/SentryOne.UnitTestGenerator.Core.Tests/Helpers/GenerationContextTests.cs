@@ -1,11 +1,11 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Helpers
+namespace Unitverse.Core.Tests.Helpers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
+    using Unitverse.Core.Helpers;
 
     [TestFixture]
     public class GenerationContextTests

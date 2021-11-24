@@ -1,4 +1,4 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
+namespace Unitverse.Core.Tests.Frameworks.Test
 {
     using System;
     using System.Collections.Generic;
@@ -7,10 +7,10 @@ namespace SentryOne.UnitTestGenerator.Core.Tests.Frameworks.Test
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Frameworks.Test;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Options;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Frameworks.Test;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
 
     [TestFixture]
     public class TestFrameworkTests

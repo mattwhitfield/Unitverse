@@ -1,11 +1,11 @@
-namespace SentryOne.UnitTestGenerator.Core.Tests.Strategies.ClassGeneration
+namespace Unitverse.Core.Tests.Strategies.ClassGeneration
 {
     using System;
     using NSubstitute;
     using NUnit.Framework;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
-    using SentryOne.UnitTestGenerator.Core.Strategies.ClassGeneration;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Strategies.ClassGeneration;
 
     [TestFixture]
     public class StaticClassGenerationStrategyTests

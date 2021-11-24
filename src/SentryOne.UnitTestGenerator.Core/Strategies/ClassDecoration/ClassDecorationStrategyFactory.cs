@@ -1,11 +1,11 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.ClassDecoration
+﻿namespace Unitverse.Core.Strategies.ClassDecoration
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Models;
 
     public class ClassDecorationStrategyFactory
     {

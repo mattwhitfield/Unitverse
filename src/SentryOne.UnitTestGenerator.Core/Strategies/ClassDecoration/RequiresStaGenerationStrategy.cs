@@ -1,11 +1,11 @@
-﻿namespace SentryOne.UnitTestGenerator.Core.Strategies.ClassDecoration
+﻿namespace Unitverse.Core.Strategies.ClassDecoration
 {
     using System;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using SentryOne.UnitTestGenerator.Core.Frameworks;
-    using SentryOne.UnitTestGenerator.Core.Helpers;
-    using SentryOne.UnitTestGenerator.Core.Models;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
+    using Unitverse.Core.Models;
 
     internal class RequiresStaGenerationStrategy : IClassDecorationStrategy
     {
