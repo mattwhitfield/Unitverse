@@ -5,6 +5,7 @@ namespace Unitverse.Core.Tests.Strategies.MethodGeneration
     using NUnit.Framework;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.MethodGeneration;
 
     [TestFixture]
@@ -48,13 +49,13 @@ namespace Unitverse.Core.Tests.Strategies.MethodGeneration
         [Test]
         public void CannotCallCreateWithNullMethod()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.Create(default(IMethodModel), ClassModelProvider.Instance).Consume());
+            Assert.Throws<ArgumentNullException>(() => _testClass.Create(default(IMethodModel), ClassModelProvider.Instance, new NamingContext("class")).Consume());
         }
 
         [Test]
         public void CannotCallCreateWithNullModel()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.Create(Substitute.For<IMethodModel>(), default(ClassModel)).Consume());
+            Assert.Throws<ArgumentNullException>(() => _testClass.Create(Substitute.For<IMethodModel>(), default(ClassModel), new NamingContext("class")).Consume());
         }
 
         [Test]

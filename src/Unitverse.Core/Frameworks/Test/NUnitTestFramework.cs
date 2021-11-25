@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public abstract class NUnitTestFramework : ITestFramework, IAssertionFramework
@@ -168,7 +169,7 @@
                     SyntaxFactory.SingletonSeparatedList(Generate.Attribute("SetUp"))));
         }
 
-        public MethodDeclarationSyntax CreateTestCaseMethod(string name, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues)
+        public MethodDeclarationSyntax CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues)
         {
             if (valueType == null)
             {
@@ -180,12 +181,17 @@
                 throw new ArgumentNullException(nameof(testValues));
             }
 
-            if (string.IsNullOrWhiteSpace(name))
+            if (nameResolver is null)
             {
-                throw new ArgumentNullException(nameof(name));
+                throw new ArgumentNullException(nameof(nameResolver));
             }
 
-            var method = Generate.Method(name, isAsync, isStatic);
+            if (namingContext is null)
+            {
+                throw new ArgumentNullException(nameof(namingContext));
+            }
+
+            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic);
 
             method = method.AddParameterListParameters(SyntaxFactory.Parameter(SyntaxFactory.Identifier(Strings.MsTestTestFramework_CreateTestCaseMethod_value)).WithType(valueType));
 
@@ -197,14 +203,19 @@
             return method;
         }
 
-        public MethodDeclarationSyntax CreateTestMethod(string name, bool isAsync, bool isStatic)
+        public MethodDeclarationSyntax CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (nameResolver is null)
             {
-                throw new ArgumentNullException(nameof(name));
+                throw new ArgumentNullException(nameof(nameResolver));
             }
 
-            var method = Generate.Method(name, isAsync, isStatic);
+            if (namingContext is null)
+            {
+                throw new ArgumentNullException(nameof(namingContext));
+            }
+
+            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic);
 
             return method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("Test"))));
         }

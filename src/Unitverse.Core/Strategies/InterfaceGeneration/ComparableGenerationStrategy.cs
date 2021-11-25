@@ -10,29 +10,29 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class ComparableGenerationStrategy : InterfaceGenerationStrategyBase
     {
         private const string InterfaceNameForMatch = "System.IComparable";
-        private const string MethodNamePattern = "ImplementsIComparable{0}";
 
         public ComparableGenerationStrategy(IFrameworkSet frameworkSet)
             : base(frameworkSet)
         {
         }
 
-        protected override string GeneratedMethodNamePattern => MethodNamePattern;
+        protected override NameResolver GeneratedMethodNamePattern => FrameworkSet.NamingProvider.ImplementsIComparable;
 
         public override string SupportedInterfaceName => InterfaceNameForMatch;
 
-        public override IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model)
+        public override IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model, NamingContext namingContext)
         {
             if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return GenerateMethods(classModel, model, GetBodyStatements);
+            return GenerateMethods(classModel, model, namingContext, GetBodyStatements);
         }
 
         private IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)

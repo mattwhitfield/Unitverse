@@ -10,11 +10,11 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class EnumerableGenerationStrategy : InterfaceGenerationStrategyBase
     {
         private const string InterfaceNameForMatch = "System.Collections.Generic.IEnumerable";
-        private const string MethodNamePattern = "ImplementsIEnumerable{0}";
 
         public EnumerableGenerationStrategy(IFrameworkSet frameworkSet)
             : base(frameworkSet)
@@ -23,16 +23,16 @@
 
         public override string SupportedInterfaceName => InterfaceNameForMatch;
 
-        protected override string GeneratedMethodNamePattern => MethodNamePattern;
+        protected override NameResolver GeneratedMethodNamePattern => FrameworkSet.NamingProvider.ImplementsIEnumerable;
 
-        public override IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model)
+        public override IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model, NamingContext namingContext)
         {
             if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return GenerateMethods(classModel, model, GetBodyStatements);
+            return GenerateMethods(classModel, model, namingContext, GetBodyStatements);
         }
 
         private IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)

@@ -1,0 +1,39 @@
+namespace TestNamespace.SubNameSpace
+{
+
+    public interface ITest
+    {
+        int ThisIsAProperty {get;set;}
+    }
+
+    public interface ITest2
+    {
+        int ThisIsAnotherProperty {get;set;}
+    }
+
+    public class Test : ITest
+    {
+        public int ThisIsAProperty { get; set; }
+    }
+
+    public class TestBoth : ITest, ITest2
+    {
+        public int ThisIsAProperty { get; set; }
+        public int ThisIsAnotherProperty {get;set;}
+    }
+
+    public class TestClass<T, R>
+        where T : class, ITest, new()
+        where R : class, ITest, ITest2, new()
+    {
+        public TestClass(T insta, R insta2)
+        {
+            Insta = insta;
+            Insta2 = insta2;
+        }
+
+        public T Insta { get; }
+
+        public R Insta2 { get; }
+    }
+}

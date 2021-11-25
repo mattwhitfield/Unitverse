@@ -8,6 +8,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class ReadOnlyPropertyGenerationStrategy : IGenerationStrategy<IPropertyModel>
@@ -39,7 +40,7 @@
             return property.HasGet && !property.HasSet && !model.Constructors.Any(x => x.Parameters.Any(p => string.Equals(p.Name, property.Name, StringComparison.OrdinalIgnoreCase)));
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
         {
             if (property == null)
             {
@@ -53,7 +54,7 @@
 
             var target = property.IsStatic ? model.TypeSyntax : model.TargetInstance;
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(string.Format(CultureInfo.InvariantCulture, "CanGet{0}", property.Name), false, model.IsStatic)
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic)
                 .AddBodyStatements(_frameworkSet.AssertionFramework.AssertIsInstanceOf(property.Access(target), property.TypeInfo.ToTypeSyntax(_frameworkSet.Context), property.TypeInfo.Type.IsReferenceType))
                 .AddBodyStatements(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
 

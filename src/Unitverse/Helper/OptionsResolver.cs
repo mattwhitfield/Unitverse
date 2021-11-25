@@ -15,7 +15,7 @@
     {
         public static IGenerationOptions DetectFrameworks(Project targetProject, IGenerationOptions baseOptions)
         {
-            if (!baseOptions.AutoDetectFrameworkTypes)
+            if (!baseOptions.AutoDetectFrameworkTypes || targetProject == null)
             {
                 return baseOptions;
             }
@@ -25,7 +25,7 @@
             var vsLangProj = targetProject.Object as VSProject;
             if (vsLangProj == null)
             {
-                throw new InstanceNotFoundException(Strings.ReferencesHelper_AddReferencesToProject_The_VSLangProj_VSProject_instance_could_not_be_found_);
+                return baseOptions;
             }
 
             return FrameworkDetection.ResolveTargetFrameworks(vsLangProj.References.OfType<Reference3>().Select(x => new ReferencedAssembly(x.Name, x.MajorVersion)), baseOptions);

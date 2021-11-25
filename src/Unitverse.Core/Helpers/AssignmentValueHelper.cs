@@ -50,6 +50,12 @@
             {
                 if (propertyType is ITypeParameterSymbol typeParameterSymbol)
                 {
+                    frameworkSet.Context.GenericTypes.TryGetValue(typeParameterSymbol.Name, out var derivedType);
+                    if (derivedType is INamedTypeSymbol namedTypeSymbol)
+                    {
+                        return GetClassDefaultAssignmentValue(model, visitedTypes, frameworkSet, namedTypeSymbol);
+                    }
+
                     return ValueGenerationStrategyFactory.GenerateFor("string", typeParameterSymbol, model, visitedTypes,  frameworkSet);
                 }
 
@@ -116,45 +122,11 @@
         {
             if (namedType.IsAbstract)
             {
-                IEnumerable<INamedTypeSymbol> GetAllTypes(INamespaceSymbol @namespace)
+                var derivedType = TypeHelper.FindDerivedNonAbstractType(namedType);
+                if (derivedType != null)
                 {
-                    foreach (var type in @namespace.GetTypeMembers())
-                    {
-                        yield return type;
-                    }
-
-                    foreach (var nestedNamespace in @namespace.GetNamespaceMembers())
-                    {
-                        foreach (var type in GetAllTypes(nestedNamespace))
-                        {
-                            yield return type;
-                        }
-                    }
-                }
-
-                bool IsDerivedFrom(INamedTypeSymbol baseType, INamedTypeSymbol derivedType)
-                {
-                    var currentType = derivedType;
-                    while (currentType != null)
-                    {
-                        if (currentType.Equals(baseType))
-                        {
-                            return true;
-                        }
-
-                        currentType = currentType.BaseType;
-                    }
-
-                    return false;
-                }
-
-                var children = GetAllTypes(namedType.ContainingAssembly.GlobalNamespace).Where(x => !x.IsAbstract && IsDerivedFrom(namedType, x)).ToList();
-                if (children.Any())
-                {
-                    {
-                        expressionSyntax = GetClassDefaultAssignmentValue(semanticModel, visitedTypes, frameworkSet, children.First());
-                        return true;
-                    }
+                    expressionSyntax = GetClassDefaultAssignmentValue(semanticModel, visitedTypes, frameworkSet, derivedType);
+                    return true;
                 }
             }
 

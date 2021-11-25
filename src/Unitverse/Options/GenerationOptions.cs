@@ -1,5 +1,4 @@
-﻿// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global - is set by VS
-namespace Unitverse.Options
+﻿namespace Unitverse.Options
 {
     using System.ComponentModel;
     using Microsoft.VisualStudio.Shell;

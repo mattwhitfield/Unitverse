@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Unitverse.Core.Options;
 
     public interface ITestFramework : IAssertionFramework
     {
@@ -13,8 +14,8 @@
 
         BaseMethodDeclarationSyntax CreateSetupMethod(string targetTypeName);
 
-        MethodDeclarationSyntax CreateTestCaseMethod(string name, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues);
+        MethodDeclarationSyntax CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues);
 
-        MethodDeclarationSyntax CreateTestMethod(string name, bool isAsync, bool isStatic);
+        MethodDeclarationSyntax CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic);
     }
 }

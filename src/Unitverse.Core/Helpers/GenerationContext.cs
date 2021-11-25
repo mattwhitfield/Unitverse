@@ -8,13 +8,15 @@
     {
         private readonly List<ITypeSymbol> _emittedTypes = new List<ITypeSymbol>();
         private readonly HashSet<string> _emittedTypeFullNames = new HashSet<string>();
-        private readonly HashSet<string> _genericTypes = new HashSet<string>();
+        private readonly HashSet<string> _visitedGenericTypes = new HashSet<string>();
 
         public IEnumerable<ITypeSymbol> EmittedTypes => _emittedTypes;
 
-        public IEnumerable<string> GenericTypes => _genericTypes;
-
         public bool MocksUsed { get; set; }
+
+        public IDictionary<string, ITypeSymbol> GenericTypes { get; } = new Dictionary<string, ITypeSymbol>();
+
+        public IEnumerable<string> GenericTypesVisited => _visitedGenericTypes;
 
         public void AddEmittedType(ITypeSymbol typeInfo)
         {
@@ -35,9 +37,12 @@
             }
         }
 
-        public void AddGenericType(string identifier)
+        public void AddVisitedGenericType(string identifier)
         {
-            _genericTypes.Add(identifier);
+            if (!GenericTypes.ContainsKey(identifier))
+            {
+                _visitedGenericTypes.Add(identifier);
+            }
         }
     }
 }

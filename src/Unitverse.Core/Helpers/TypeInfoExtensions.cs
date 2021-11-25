@@ -71,7 +71,7 @@
                     typeArgument.ToTypeSyntax(context);
                     if (typeArgument.Kind == SymbolKind.TypeParameter)
                     {
-                        context.AddGenericType(typeArgument.Name);
+                        context.AddVisitedGenericType(typeArgument.Name);
                     }
                 }
             }

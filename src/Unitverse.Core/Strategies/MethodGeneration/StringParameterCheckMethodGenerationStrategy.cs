@@ -10,6 +10,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class StringParameterCheckMethodGenerationStrategy : IGenerationStrategy<IMethodModel>
@@ -40,7 +41,7 @@
             return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type.SpecialType == SpecialType.System_String);
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -66,12 +67,12 @@
 
                 var paramList = new List<CSharpSyntaxNode>();
 
-                var methodName = string.Format(CultureInfo.InvariantCulture, "CannotCall{0}WithInvalid{1}", model.GetMethodUniqueName(method), method.Parameters[i].Name.ToPascalCase());
+                namingContext = namingContext.WithParameterName(method.Parameters[i].Name.ToPascalCase());
 
                 var isNonNullable = method.Parameters[i].Node.Type is NullableTypeSyntax;
                 object[] testValues = isNonNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
 
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(methodName, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues);
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotCallWithInvalid, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues);
 
                 for (var index = 0; index < method.Parameters.Count; index++)
                 {

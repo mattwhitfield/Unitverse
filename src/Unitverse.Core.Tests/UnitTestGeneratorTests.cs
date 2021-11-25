@@ -111,6 +111,8 @@
             options.GenerationOptions.FrameworkType.Returns(testFrameworkTypes);
             options.GenerationOptions.MockingFrameworkType.Returns(mockingFrameworkType);
             options.GenerationOptions.UseFluentAssertions.Returns(useFluentAssertions);
+            var namingOptions = new DefaultNamingOptions();
+            options.NamingOptions.Returns(namingOptions);
             options.GenerationOptions.TestFileNaming.Returns("{0}Tests");
             options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
             options.GenerationOptions.TestProjectNaming.Returns("{0}.Tests");

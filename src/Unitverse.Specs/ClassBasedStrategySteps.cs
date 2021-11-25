@@ -38,7 +38,7 @@
         [When(@"I generate tests for the class using strategy '(.*)'")]
         public void WhenIGenerateTestsForTheClass(string strategy)
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework));
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             IClassGenerationStrategy generationStrategy = null;
@@ -74,7 +74,7 @@
         [When(@"I regenerate tests for all constructors")]
         public async Task WhenIRegenerateTests()
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework));
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
             var result = await CoreGenerator.Generate(_context.SemanticModel, _context.ClassModel.Constructors.First().Node, _context.TestModel, true, options, x => x + ".Tests");
             var tree = CSharpSyntaxTree.ParseText(result.FileContent, new CSharpParseOptions(LanguageVersion.Latest));
 

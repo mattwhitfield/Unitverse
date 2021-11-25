@@ -10,6 +10,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class StringParameterCheckConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
@@ -40,7 +41,7 @@
             return model.Constructors.SelectMany(x => x.Parameters).Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType == SpecialType.System_String) && !model.IsStatic;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -56,10 +57,10 @@
 
             foreach (var nullableParameter in nullableParameters)
             {
-                var methodName = string.Format(CultureInfo.InvariantCulture, "CannotConstructWithInvalid{0}", nullableParameter.ToPascalCase());
+                namingContext = namingContext.WithParameterName(nullableParameter.ToPascalCase());
                 var isNonNullable = model.Constructors.SelectMany(x => x.Parameters.Where(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))).All(x => x.Node.Type is NullableTypeSyntax);
                 object[] testValues = isNonNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(methodName, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues);
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotConstructWithInvalid, namingContext, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues);
 
                 foreach (var constructorModel in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))))
                 {

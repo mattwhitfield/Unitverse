@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public interface IGenerationStrategy<in T>
     {
@@ -12,6 +13,6 @@
 
         bool CanHandle(T member, ClassModel model);
 
-        IEnumerable<MethodDeclarationSyntax> Create(T method, ClassModel model);
+        IEnumerable<MethodDeclarationSyntax> Create(T member, ClassModel model, NamingContext namingContext);
     }
 }

@@ -7,12 +7,14 @@
     {
         IEnumerable<ITypeSymbol> EmittedTypes { get; }
 
-        IEnumerable<string> GenericTypes { get; }
+        IEnumerable<string> GenericTypesVisited { get; }
+
+        IDictionary<string, ITypeSymbol> GenericTypes { get; }
 
         bool MocksUsed { get; set; }
 
         void AddEmittedType(ITypeSymbol typeInfo);
 
-        void AddGenericType(string identifier);
+        void AddVisitedGenericType(string identifier);
     }
 }

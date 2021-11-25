@@ -4,17 +4,18 @@
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public abstract class ItemGenerationStrategyFactory<T>
     {
         protected abstract IEnumerable<IGenerationStrategy<T>> Strategies { get; }
 
-        public IEnumerable<MethodDeclarationSyntax> CreateFor(T property, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> CreateFor(T item, ClassModel model, NamingContext namingContext)
         {
-            var strategies = Strategies.Where(x => x.CanHandle(property, model)).OrderByDescending(x => x.Priority);
+            var strategies = Strategies.Where(x => x.CanHandle(item, model)).OrderByDescending(x => x.Priority);
             foreach (var strategy in strategies)
             {
-                foreach (var method in strategy.Create(property, model))
+                foreach (var method in strategy.Create(item, model, namingContext))
                 {
                     yield return method;
                 }

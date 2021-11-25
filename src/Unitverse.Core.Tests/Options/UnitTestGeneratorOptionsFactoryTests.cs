@@ -12,7 +12,13 @@ namespace Unitverse.Core.Tests.Options
         [Test]
         public static void CannotCallCreateWithNullGenerationOptions()
         {
-            Assert.Throws<ArgumentNullException>(() => UnitTestGeneratorOptionsFactory.Create("TestValue1494081794", default(MutableGenerationOptions)));
+            Assert.Throws<ArgumentNullException>(() => UnitTestGeneratorOptionsFactory.Create("TestValue1494081794", default(IGenerationOptions), Substitute.For<INamingOptions>()));
+        }
+
+        [Test]
+        public static void CannotCallCreateWithNullNamingOptions()
+        {
+            Assert.Throws<ArgumentNullException>(() => UnitTestGeneratorOptionsFactory.Create("TestValue1494081794", Substitute.For<IGenerationOptions>(), default(INamingOptions)));
         }
 
         [TestCase(null)]
@@ -20,7 +26,7 @@ namespace Unitverse.Core.Tests.Options
         [TestCase("   ")]
         public static void CanCallCreateWithInvalidSolutionFilePath(string value)
         {
-            Assert.DoesNotThrow(() => UnitTestGeneratorOptionsFactory.Create(value, Substitute.For<IGenerationOptions>()));
+            Assert.DoesNotThrow(() => UnitTestGeneratorOptionsFactory.Create(value, Substitute.For<IGenerationOptions>(), Substitute.For<INamingOptions>()));
         }
 
         [Test]
@@ -49,13 +55,14 @@ namespace Unitverse.Core.Tests.Options
 
                 var solutionFilePath = Path.Combine(pathC, "someSolution.sln");
                 var generationOptions = Substitute.For<IGenerationOptions>();
+                var namingOptions = Substitute.For<INamingOptions>();
                 generationOptions.MockingFrameworkType.Returns(MockingFrameworkType.NSubstitute);
 
                 File.WriteAllText(Path.Combine(pathA, ".unitTestGeneratorConfig"), "framework-type=XUnit");
                 File.WriteAllText(Path.Combine(pathB, ".unitTestGeneratorConfig"), "framework-type=NUnit3");
                 File.WriteAllText(Path.Combine(pathC, ".unitTestGeneratorConfig"), "framework-type=NUnit2");
 
-                var result = UnitTestGeneratorOptionsFactory.Create(solutionFilePath, generationOptions);
+                var result = UnitTestGeneratorOptionsFactory.Create(solutionFilePath, generationOptions, namingOptions);
                 Assert.That(result.GenerationOptions.FrameworkType, Is.EqualTo(TestFrameworkTypes.NUnit2));
                 Assert.That(result.GenerationOptions.MockingFrameworkType, Is.EqualTo(MockingFrameworkType.NSubstitute));
             }

@@ -10,6 +10,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class NullParameterCheckOperatorGenerationStrategy : IGenerationStrategy<IOperatorModel>
@@ -40,7 +41,7 @@
             return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type.IsReferenceType);
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IOperatorModel method, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(IOperatorModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -61,8 +62,8 @@
 
                 var paramList = new List<CSharpSyntaxNode>();
 
-                var methodName = string.Format(CultureInfo.InvariantCulture, "CannotCall{0}OperatorWithNull{1}", method.Name, method.Parameters[i].Name.ToPascalCase());
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(methodName, false, model.IsStatic);
+                namingContext = namingContext.WithParameterName(method.Parameters[i].Name.ToPascalCase());
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotCallOperatorWithNull, namingContext, false, model.IsStatic);
 
                 for (var index = 0; index < method.Parameters.Count; index++)
                 {

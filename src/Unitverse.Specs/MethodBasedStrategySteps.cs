@@ -31,7 +31,7 @@
         [When(@"I generate unit tests for the class using strategy '(.*)'")]
         public void WhenIGenerateUnitTestsForTheClass(string strategy)
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework));
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             // TODO: Replace with an Argument Transformation: https://specflow.org/documentation/Step-Argument-Transformations/
@@ -78,7 +78,7 @@
 
             if (generationStrategy.CanHandle(_context.ClassModel, _context.ClassModel))
             {
-                _context.Result = generationStrategy.Create(_context.ClassModel, _context.ClassModel);
+                _context.Result = generationStrategy.Create(_context.ClassModel, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName));
             }
 
             SemanticModelHelper.WriteMethods(_context.Result);
@@ -87,7 +87,7 @@
         [When(@"I generate tests for the method using the strategy '(.*)'")]
         public void WhenIGenerateTestsForTheMethod(string strategy)
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework));
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             IGenerationStrategy<IMethodModel> generationStrategy = null;
@@ -118,13 +118,13 @@
 
             _context.Result = _context.ClassModel.Methods.GetMethodList(
                 method => generationStrategy.CanHandle(method, _context.ClassModel),
-                method => generationStrategy.Create(method, _context.ClassModel));
+                method => generationStrategy.Create(method, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(_context.ClassModel.GetMethodUniqueName(method), method.Name)));
         }
 
         [When(@"I generate tests for the indexer using the strategy '(.*)'")]
         public void WhenIGenerateTestsForTheIndexer(string strategy)
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework));
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             IGenerationStrategy<IIndexerModel> generationStrategy = null;
@@ -150,13 +150,13 @@
 
             _context.Result = _context.ClassModel.Indexers.GetMethodList(
                 indexer => generationStrategy.CanHandle(indexer, _context.ClassModel),
-                indexer => generationStrategy.Create(indexer, _context.ClassModel));
+                indexer => generationStrategy.Create(indexer, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(_context.ClassModel.GetIndexerName(indexer))));
         }
 
         [When(@"I generate tests for the operator using the strategy '(.*)'")]
         public void WhenIGenerateTestsForTheOperator(string strategy)
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework));
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             IGenerationStrategy<IOperatorModel> generationStrategy = null;
@@ -177,13 +177,13 @@
             
             _context.Result = _context.ClassModel.Operators.GetMethodList(
                 methodOperator => generationStrategy.CanHandle(methodOperator, _context.ClassModel),
-                methodOperator => generationStrategy.Create(methodOperator, _context.ClassModel));
+                methodOperator => generationStrategy.Create(methodOperator, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(methodOperator.Name)));
         }
 
         [When(@"I generate tests for the property using the strategy '(.*)'")]
         public void WhenIGenerateTestsForTheProperty(string strategy)
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework));
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             IGenerationStrategy<IPropertyModel> generationStrategy = null;
@@ -224,7 +224,7 @@
 
             _context.Result = _context.ClassModel.Properties.GetMethodList(
                 property => generationStrategy.CanHandle(property, _context.ClassModel),
-                property => generationStrategy.Create(property, _context.ClassModel));
+                property => generationStrategy.Create(property, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(property.Name)));
         }
 
         [Then (@"I expect a method called '(.*)'")]

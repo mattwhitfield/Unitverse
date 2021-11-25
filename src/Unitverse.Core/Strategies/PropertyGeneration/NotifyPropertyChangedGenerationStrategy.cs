@@ -11,6 +11,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class NotifyPropertyChangedGenerationStrategy : IGenerationStrategy<IPropertyModel>
@@ -43,7 +44,7 @@
             return classImplementsNotifyPropertyChanged && property.HasGet && property.HasSet;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
         {
             if (property == null)
             {
@@ -59,8 +60,7 @@
 
             model.RequiredAssets.Add(TargetAsset.PropertyTester);
 
-            var methodName = string.Format(CultureInfo.InvariantCulture, "CanSetAndGet{0}", property.Name);
-            var method = _frameworkSet.TestFramework.CreateTestMethod(methodName, false, model.IsStatic)
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic)
                 .AddBodyStatements(GetPropertyAssertionBodyStatements(property, model, withDefaults).ToArray());
 
             yield return method;

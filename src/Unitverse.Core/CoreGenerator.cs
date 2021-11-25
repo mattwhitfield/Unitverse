@@ -65,13 +65,16 @@
             return Generate(sourceModel, sourceSymbol, withRegeneration, options, targetNamespace, usingsEmitted, compilation, originalTargetNamespace);
         }
 
-        private static TypeDeclarationSyntax AddGeneratedItems<T>(ClassModel classModel, TypeDeclarationSyntax declaration, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector, Func<T, bool> shouldGenerate, bool withRegeneration)
+        private static TypeDeclarationSyntax AddGeneratedItems<T>(ClassModel classModel, TypeDeclarationSyntax declaration, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector, Func<T, bool> shouldGenerate, Func<NamingContext, T, NamingContext> nameDecorator, bool withRegeneration)
         {
-            foreach (var property in selector(classModel))
+            var namingContext = new NamingContext(classModel.ClassName);
+
+            foreach (var member in selector(classModel))
             {
-                if (shouldGenerate(property))
+                if (shouldGenerate(member))
                 {
-                    foreach (var method in factory.CreateFor(property, classModel))
+                    namingContext = nameDecorator(namingContext, member);
+                    foreach (var method in factory.CreateFor(member, classModel, namingContext))
                     {
                         var methodName = method.Identifier.Text;
                         var existingMethod = declaration.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault(x => string.Equals(x.Identifier.Text, methodName, StringComparison.OrdinalIgnoreCase));
@@ -110,20 +113,32 @@
             return compilation;
         }
 
-        private static NamespaceDeclarationSyntax AddTypeParameterAliases(ClassModel classModel, HashSet<string> typeParametersEmitted, NamespaceDeclarationSyntax targetNamespace)
+        private static NamespaceDeclarationSyntax AddTypeParameterAliases(ClassModel classModel, IGenerationContext context, NamespaceDeclarationSyntax targetNamespace)
         {
             foreach (var parameter in classModel.Declaration.TypeParameterList?.Parameters ?? Enumerable.Empty<TypeParameterSyntax>())
             {
+                NameSyntax nameSyntax = SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName("System"), SyntaxFactory.IdentifierName("String"));
+                ITypeSymbol derivedType = null;
+                var constraint = classModel.Declaration.ConstraintClauses.FirstOrDefault(x => x.Name.Identifier.ValueText == parameter.Identifier.ValueText);
+
+                if (constraint != null)
+                {
+                    var typeConstraints = constraint.Constraints.OfType<TypeConstraintSyntax>().Select(x => x.Type).Select(x => classModel.SemanticModel.GetTypeInfo(x));
+                    derivedType = TypeHelper.FindDerivedNonAbstractType(typeConstraints.Select(x => x.Type).Where(x => x != null).ToArray());
+                    nameSyntax = SyntaxFactory.IdentifierName(derivedType.ToFullName());
+                }
+
                 var aliasedName = parameter.Identifier.ToString();
                 if (targetNamespace.DescendantNodes().OfType<UsingDirectiveSyntax>().Any(node => string.Equals(node.Alias?.Name?.ToString(), aliasedName, StringComparison.OrdinalIgnoreCase)))
                 {
                     continue;
                 }
 
-                if (typeParametersEmitted.Add(parameter.Identifier.ValueText))
+                if (!context.GenericTypes.ContainsKey(parameter.Identifier.ValueText))
                 {
+                    context.GenericTypes[parameter.Identifier.ValueText] = derivedType;
                     targetNamespace = targetNamespace.AddUsings(
-                        SyntaxFactory.UsingDirective(SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName(Strings.UnitTestGenerator_AddUsingStatements_System), SyntaxFactory.IdentifierName("String")))
+                        SyntaxFactory.UsingDirective(nameSyntax)
                             .WithAlias(SyntaxFactory.NameEquals(SyntaxFactory.IdentifierName(parameter.Identifier))));
                 }
             }
@@ -182,18 +197,18 @@
 
             if (!classModel.IsSingleItem || classModel.Constructors.Any())
             {
-                targetType = AddGeneratedItems(classModel, targetType, new ClassLevelGenerationStrategyFactory(frameworkSet), x => new[] { x }, x => x.Constructors.Any(c => c.ShouldGenerate), withRegeneration);
+                targetType = AddGeneratedItems(classModel, targetType, new ClassLevelGenerationStrategyFactory(frameworkSet), x => new[] { x }, x => x.Constructors.Any(c => c.ShouldGenerate), (c, x) => c, withRegeneration);
             }
 
             if (classModel.Interfaces.Count > 0)
             {
-                targetType = AddGeneratedItems(classModel, targetType, new InterfaceGenerationStrategyFactory(frameworkSet), x => new[] { x }, x => x.ShouldGenerate, withRegeneration);
+                targetType = AddGeneratedItems(classModel, targetType, new InterfaceGenerationStrategyFactory(frameworkSet), x => new[] { x }, x => x.ShouldGenerate, (c, x) => c, withRegeneration);
             }
 
-            targetType = AddGeneratedItems(classModel, targetType, new MethodGenerationStrategyFactory(frameworkSet), x => x.Methods, x => x.ShouldGenerate, withRegeneration);
-            targetType = AddGeneratedItems(classModel, targetType, new OperatorGenerationStrategyFactory(frameworkSet), x => x.Operators, x => x.ShouldGenerate, withRegeneration);
-            targetType = AddGeneratedItems(classModel, targetType, new PropertyGenerationStrategyFactory(frameworkSet), x => x.Properties, x => x.ShouldGenerate, withRegeneration);
-            targetType = AddGeneratedItems(classModel, targetType, new IndexerGenerationStrategyFactory(frameworkSet), x => x.Indexers, x => x.ShouldGenerate, withRegeneration);
+            targetType = AddGeneratedItems(classModel, targetType, new MethodGenerationStrategyFactory(frameworkSet), x => x.Methods, x => x.ShouldGenerate, (c, x) => c.WithMemberName(classModel.GetMethodUniqueName(x), x.Name), withRegeneration);
+            targetType = AddGeneratedItems(classModel, targetType, new OperatorGenerationStrategyFactory(frameworkSet), x => x.Operators, x => x.ShouldGenerate, (c, x) => c.WithMemberName(x.Name), withRegeneration);
+            targetType = AddGeneratedItems(classModel, targetType, new PropertyGenerationStrategyFactory(frameworkSet), x => x.Properties, x => x.ShouldGenerate, (c, x) => c.WithMemberName(x.Name), withRegeneration);
+            targetType = AddGeneratedItems(classModel, targetType, new IndexerGenerationStrategyFactory(frameworkSet), x => x.Indexers, x => x.ShouldGenerate, (c, x) => c.WithMemberName(classModel.GetIndexerName(x)), withRegeneration);
             return targetType;
         }
 
@@ -336,7 +351,6 @@
         private static GenerationResult Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, bool withRegeneration, IUnitTestGeneratorOptions options, NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax originalTargetNamespace)
         {
             var frameworkSet = FrameworkSetFactory.Create(options);
-            var typeParametersEmitted = new HashSet<string>();
             var model = new TestableItemExtractor(sourceModel.SyntaxTree, sourceModel);
             var classModels = model.Extract(sourceSymbol).ToList();
 
@@ -350,15 +364,15 @@
 
             foreach (var classModel in classModels)
             {
-                var targetType = GetOrCreateTargetType(sourceSymbol, targetNamespace, frameworkSet, classModel, out var originalTargetType);
+                targetNamespace = AddTypeParameterAliases(classModel, frameworkSet.Context, targetNamespace);
 
-                targetNamespace = AddTypeParameterAliases(classModel, typeParametersEmitted, targetNamespace);
+                var targetType = GetOrCreateTargetType(sourceSymbol, targetNamespace, frameworkSet, classModel, out var originalTargetType);
 
                 targetType = ApplyStrategies(withRegeneration, targetType, frameworkSet, classModel);
 
                 targetNamespace = AddTypeToTargetNamespace(originalTargetType, targetNamespace, targetType);
 
-                foreach (var parameter in frameworkSet.Context.GenericTypes)
+                foreach (var parameter in frameworkSet.Context.GenericTypesVisited)
                 {
                     targetNamespace = targetNamespace.AddUsings(
                         SyntaxFactory.UsingDirective(SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName(Strings.UnitTestGenerator_AddUsingStatements_System), SyntaxFactory.IdentifierName("String")))

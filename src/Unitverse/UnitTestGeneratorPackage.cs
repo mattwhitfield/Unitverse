@@ -19,6 +19,7 @@
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(GenerationOptions), "Unitverse", "Generation Options", 0, 0, true)]
+    [ProvideOptionPage(typeof(NamingOptions), "Unitverse", "Naming Options", 0, 0, true)]
     public sealed class UnitTestGeneratorPackage : AsyncPackage, IUnitTestGeneratorPackage
     {
         public IUnitTestGeneratorOptions Options
@@ -26,9 +27,10 @@
             get
             {
                 var generationOptions = (GenerationOptions)GetDialogPage(typeof(GenerationOptions));
+                var namingOptions = (NamingOptions)GetDialogPage(typeof(NamingOptions));
 
                 var solutionFilePath = Workspace?.CurrentSolution?.FilePath;
-                return UnitTestGeneratorOptionsFactory.Create(solutionFilePath, generationOptions);
+                return UnitTestGeneratorOptionsFactory.Create(solutionFilePath, generationOptions, namingOptions);
             }
         }
 

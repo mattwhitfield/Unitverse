@@ -10,6 +10,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class NullParameterCheckConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
     {
@@ -39,7 +40,7 @@
             return model.Constructors.SelectMany(x => x.Parameters).Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String) && !model.IsStatic;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -55,7 +56,6 @@
 
             foreach (var nullableParameter in nullableParameters)
             {
-                var methodName = string.Format(CultureInfo.InvariantCulture, "CannotConstructWithNull{0}", nullableParameter.ToPascalCase());
                 var isNonNullable = model.Constructors.SelectMany(x => x.Parameters.Where(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))).All(x => x.Node.Type is NullableTypeSyntax);
 
                 if (isNonNullable)
@@ -64,7 +64,9 @@
                     continue;
                 }
 
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(methodName, false, false);
+                namingContext = namingContext.WithParameterName(nullableParameter.ToPascalCase());
+
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotConstructWithNull, namingContext, false, false);
 
                 foreach (var constructorModel in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))))
                 {

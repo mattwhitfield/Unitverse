@@ -7,6 +7,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public abstract class InterfaceGenerationStrategyBase : IGenerationStrategy<ClassModel>
     {
@@ -23,7 +24,7 @@
 
         protected IFrameworkSet FrameworkSet { get; }
 
-        protected abstract string GeneratedMethodNamePattern { get; }
+        protected abstract NameResolver GeneratedMethodNamePattern { get; }
 
         public virtual bool CanHandle(ClassModel classModel, ClassModel model)
         {
@@ -40,9 +41,9 @@
             return classModel.Interfaces.Any(y => y.InterfaceName == SupportedInterfaceName);
         }
 
-        public abstract IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model);
+        public abstract IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model, NamingContext namingContext);
 
-        protected IEnumerable<MethodDeclarationSyntax> GenerateMethods(ClassModel classModel, ClassModel model, Func<ClassModel, IInterfaceModel, IEnumerable<StatementSyntax>> generateBody)
+        protected IEnumerable<MethodDeclarationSyntax> GenerateMethods(ClassModel classModel, ClassModel model, NamingContext namingContext, Func<ClassModel, IInterfaceModel, IEnumerable<StatementSyntax>> generateBody)
         {
             if (classModel == null)
             {
@@ -51,9 +52,10 @@
 
             foreach (var interfaceModel in classModel.Interfaces.Where(x => x.InterfaceName == SupportedInterfaceName))
             {
-                var methodName = string.Format(CultureInfo.InvariantCulture, GeneratedMethodNamePattern, interfaceModel.GenericTypes.Select(x => x.Name).Aggregate(string.Empty, (current, next) => current + $"_{next}"));
+                var typeParameters = interfaceModel.GenericTypes.Select(x => x.Name).Aggregate(string.Empty, (current, next) => current + $"_{next}");
+                namingContext = namingContext.WithInterfaceName(interfaceModel.InterfaceName).WithTypeParameters(typeParameters);
 
-                var method = FrameworkSet.TestFramework.CreateTestMethod(methodName, false, model != null && model.IsStatic);
+                var method = FrameworkSet.TestFramework.CreateTestMethod(GeneratedMethodNamePattern, namingContext, false, model != null && model.IsStatic);
                 var body = generateBody(classModel, interfaceModel);
                 yield return method.AddBodyStatements(body.ToArray());
             }

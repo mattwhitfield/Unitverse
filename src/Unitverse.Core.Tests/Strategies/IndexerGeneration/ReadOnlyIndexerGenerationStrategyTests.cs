@@ -5,6 +5,7 @@ namespace Unitverse.Core.Tests.Strategies.IndexerGeneration
     using NUnit.Framework;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.IndexerGeneration;
 
     [TestFixture]
@@ -48,13 +49,13 @@ namespace Unitverse.Core.Tests.Strategies.IndexerGeneration
         [Test]
         public void CannotCallCreateWithNullIndexer()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.Create(default(IIndexerModel), ClassModelProvider.Instance).Consume());
+            Assert.Throws<ArgumentNullException>(() => _testClass.Create(default(IIndexerModel), ClassModelProvider.Instance, new NamingContext("class")).Consume());
         }
 
         [Test]
         public void CannotCallCreateWithNullModel()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.Create(Substitute.For<IIndexerModel>(), default(ClassModel)).Consume());
+            Assert.Throws<ArgumentNullException>(() => _testClass.Create(Substitute.For<IIndexerModel>(), default(ClassModel), new NamingContext("class")).Consume());
         }
 
         [Test]

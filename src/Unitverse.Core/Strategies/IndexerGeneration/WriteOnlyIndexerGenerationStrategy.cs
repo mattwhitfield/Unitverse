@@ -9,6 +9,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class WriteOnlyIndexerGenerationStrategy : IGenerationStrategy<IIndexerModel>
@@ -39,7 +40,7 @@
             return !indexer.HasGet && indexer.HasSet;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IIndexerModel indexer, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(IIndexerModel indexer, ClassModel model, NamingContext namingContext)
         {
             if (indexer == null)
             {
@@ -51,8 +52,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var methodName = string.Format(CultureInfo.InvariantCulture, "CanSet{0}", model.GetIndexerName(indexer));
-            var method = _frameworkSet.TestFramework.CreateTestMethod(methodName, false, model.IsStatic)
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSet, namingContext, false, model.IsStatic)
                 .AddBodyStatements(GetPropertyAssertionBodyStatements(indexer, model).ToArray());
 
             yield return method;

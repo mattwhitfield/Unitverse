@@ -11,6 +11,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class MappingMethodGenerationStrategy : IGenerationStrategy<IMethodModel>
@@ -89,7 +90,7 @@
             return dictionary;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -101,9 +102,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var methodName = string.Format(CultureInfo.InvariantCulture, "{0}PerformsMapping", model.GetMethodUniqueName(method));
-
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(methodName, method.IsAsync, model.IsStatic);
+            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.PerformsMapping, namingContext, method.IsAsync, model.IsStatic);
 
             var paramExpressions = new List<CSharpSyntaxNode>();
 

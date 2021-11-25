@@ -3,12 +3,14 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
     using System;
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Frameworks.Mocking;
     using Unitverse.Core.Frameworks.Test;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.InterfaceGeneration;
 
     [TestFixture]
@@ -22,7 +24,9 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
         {
             var generationContext = new GenerationContext();
 
-            _frameworkSet = new FrameworkSet(new NUnit3TestFramework(), new NSubstituteMockingFramework(generationContext), new NUnit3TestFramework(), generationContext, "{0}Tests");
+            var options = Substitute.For<INamingOptions>();
+            options.ImplementsIComparableNamingPattern.Returns("ImplementsIComparable{0}");
+            _frameworkSet = new FrameworkSet(new NUnit3TestFramework(), new NSubstituteMockingFramework(generationContext), new NUnit3TestFramework(), new NamingProvider(options), generationContext, "{0}Tests");
             _testClass = new ComparableGenerationStrategy(_frameworkSet);
         }
 
@@ -54,7 +58,7 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
             var extractor = new TestableItemExtractor(syntaxTree, model);
             var classModel = extractor.Extract(syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().First()).First();
 
-            var result = _testClass.Create(classModel, classModel);
+            var result = _testClass.Create(classModel, classModel, new NamingContext("class"));
 
             // 3 IComparable definitions on the test class
             Assert.That(result.Count(), Is.EqualTo(classModel.Interfaces.Count));
@@ -63,13 +67,13 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
         [Test]
         public void CannotCallCreateWithNullClassModel()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.Create(default(ClassModel), new ClassModel(TestSemanticModelFactory.Class, TestSemanticModelFactory.Model, true)).Consume());
+            Assert.Throws<ArgumentNullException>(() => _testClass.Create(default(ClassModel), new ClassModel(TestSemanticModelFactory.Class, TestSemanticModelFactory.Model, true), new NamingContext("class")).Consume());
         }
 
         [Test]
         public void CannotCallCreateWithNullModel()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.Create(new ClassModel(TestSemanticModelFactory.Class, TestSemanticModelFactory.Model, true), default(ClassModel)).Consume());
+            Assert.Throws<ArgumentNullException>(() => _testClass.Create(new ClassModel(TestSemanticModelFactory.Class, TestSemanticModelFactory.Model, true), default(ClassModel), new NamingContext("class")).Consume());
         }
     }
 }

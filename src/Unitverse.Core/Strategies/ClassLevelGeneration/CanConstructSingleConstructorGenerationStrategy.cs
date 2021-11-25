@@ -8,6 +8,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class CanConstructSingleConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
@@ -38,7 +39,7 @@
             return model.Declaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Count() == 1 && model.DefaultConstructor != null && !model.IsStatic && model.DefaultConstructor.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.PublicKeyword);
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -50,7 +51,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod("CanConstruct", false, false);
+            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanConstruct, namingContext, false, false);
 
             var tokenList = model.DefaultConstructor.Parameters.Select(parameter => model.GetConstructorFieldReference(parameter, _frameworkSet)).Cast<ExpressionSyntax>().ToList();
 

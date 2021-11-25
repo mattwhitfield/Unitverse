@@ -8,6 +8,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class ReadOnlyIndexerGenerationStrategy : IGenerationStrategy<IIndexerModel>
@@ -39,7 +40,7 @@
             return indexer.HasGet && !indexer.HasSet;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IIndexerModel indexer, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(IIndexerModel indexer, ClassModel model, NamingContext namingContext)
         {
             if (indexer == null)
             {
@@ -53,7 +54,7 @@
 
             var paramExpressions = indexer.Parameters.Select(param => AssignmentValueHelper.GetDefaultAssignmentValue(param.TypeInfo, model.SemanticModel, _frameworkSet)).ToArray();
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(string.Format(CultureInfo.InvariantCulture, "CanGet{0}", model.GetIndexerName(indexer)), false, model.IsStatic)
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic)
                 .AddBodyStatements(_frameworkSet.AssertionFramework.AssertIsInstanceOf(Generate.IndexerAccess(model.TargetInstance, paramExpressions), indexer.TypeInfo.ToTypeSyntax(_frameworkSet.Context), indexer.TypeInfo.Type.IsReferenceType))
                 .AddBodyStatements(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
 

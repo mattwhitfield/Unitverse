@@ -1,6 +1,7 @@
 ﻿namespace Unitverse.Core.Frameworks
 {
     using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
 
     public interface IFrameworkSet
     {
@@ -10,8 +11,12 @@
 
         IAssertionFramework AssertionFramework { get; }
 
+        INamingProvider NamingProvider { get; }
+
         IGenerationContext Context { get; }
 
         string TestTypeNaming { get; }
+
+        void ResetContext();
     }
 }

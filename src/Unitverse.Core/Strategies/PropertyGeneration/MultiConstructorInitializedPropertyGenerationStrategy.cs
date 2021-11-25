@@ -9,6 +9,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class MultiConstructorInitializedPropertyGenerationStrategy : IGenerationStrategy<IPropertyModel>
     {
@@ -53,7 +54,7 @@
             return !isSingleConstructorProperty;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
         {
             if (property is null)
             {
@@ -65,8 +66,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var methodName = string.Format(CultureInfo.InvariantCulture, "{0}IsInitializedCorrectly", property.Name);
-            var method = _frameworkSet.TestFramework.CreateTestMethod(methodName, false, model.IsStatic)
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.IsInitializedCorrectly, namingContext, false, model.IsStatic)
                 .AddBodyStatements(GetPropertyAssertionBodyStatements(property, model).ToArray());
 
             yield return method;

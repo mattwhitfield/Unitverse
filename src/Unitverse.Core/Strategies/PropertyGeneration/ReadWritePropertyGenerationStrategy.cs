@@ -9,6 +9,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class ReadWritePropertyGenerationStrategy : IGenerationStrategy<IPropertyModel>
@@ -39,7 +40,7 @@
             return property.HasGet && property.HasSet;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
         {
             if (property == null)
             {
@@ -51,8 +52,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var methodName = string.Format(CultureInfo.InvariantCulture, "CanSetAndGet{0}", property.Name);
-            var method = _frameworkSet.TestFramework.CreateTestMethod(methodName, false, model.IsStatic)
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic)
                 .AddBodyStatements(GetPropertyAssertionBodyStatements(property, model).ToArray());
 
             yield return method;

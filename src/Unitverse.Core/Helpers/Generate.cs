@@ -174,7 +174,7 @@
             {
                 foreach (var parameter in method.TypeParameterList.Parameters)
                 {
-                    frameworkSet.Context.AddGenericType(parameter.Identifier.ValueText);
+                    frameworkSet.Context.AddVisitedGenericType(parameter.Identifier.ValueText);
                 }
 
                 methodReference = SyntaxFactory.GenericName(SyntaxFactory.Identifier(name)).WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SeparatedList<TypeSyntax>(method.TypeParameterList.Parameters.Select(x => SyntaxFactory.IdentifierName(x.Identifier)))));

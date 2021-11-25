@@ -3,5 +3,7 @@
     public interface IUnitTestGeneratorOptions
     {
         IGenerationOptions GenerationOptions { get; }
+
+        INamingOptions NamingOptions { get; }
     }
 }

@@ -2,3 +2,6 @@
 
 # RS1024: Compare symbols correctly
 dotnet_diagnostic.RS1024.severity = none
+
+# IDE0059: Unnecessary assignment of a value
+dotnet_diagnostic.IDE0059.severity = error

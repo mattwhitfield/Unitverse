@@ -5,6 +5,7 @@ namespace Unitverse.Core.Tests.Strategies.PropertyGeneration
     using NUnit.Framework;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.PropertyGeneration;
 
     [TestFixture]
@@ -48,13 +49,13 @@ namespace Unitverse.Core.Tests.Strategies.PropertyGeneration
         [Test]
         public void CannotCallCreateWithNullProperty()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.Create(default(IPropertyModel), ClassModelProvider.Instance).Consume());
+            Assert.Throws<ArgumentNullException>(() => _testClass.Create(default(IPropertyModel), ClassModelProvider.Instance, new NamingContext("class")).Consume());
         }
 
         [Test]
         public void CannotCallCreateWithNullModel()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.Create(Substitute.For<IPropertyModel>(), default(ClassModel)).Consume());
+            Assert.Throws<ArgumentNullException>(() => _testClass.Create(Substitute.For<IPropertyModel>(), default(ClassModel), new NamingContext("class")).Consume());
         }
 
         [Test]

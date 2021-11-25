@@ -7,6 +7,7 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
     using NUnit.Framework;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.InterfaceGeneration;
 
     [TestFixture]
@@ -19,23 +20,23 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
             {
             }
 
-            public IEnumerable<MethodDeclarationSyntax> PublicGenerateMethods(ClassModel classModel, ClassModel model, Func<ClassModel, IInterfaceModel, IEnumerable<StatementSyntax>> generateBody)
+            public IEnumerable<MethodDeclarationSyntax> PublicGenerateMethods(ClassModel classModel, ClassModel model, NamingContext namingContext, Func<ClassModel, IInterfaceModel, IEnumerable<StatementSyntax>> generateBody)
             {
-                return GenerateMethods(classModel, model, generateBody);
+                return GenerateMethods(classModel, model, namingContext, generateBody);
             }
 
             public IFrameworkSet PublicFrameworkSet => FrameworkSet;
 
-            public string PublicGeneratedMethodNamePattern => GeneratedMethodNamePattern;
+            public NameResolver PublicGeneratedMethodNamePattern => GeneratedMethodNamePattern;
 
-            public override IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model)
+            public override IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model, NamingContext namingContext)
             {
                 return default(IEnumerable<MethodDeclarationSyntax>);
             }
 
             public override string SupportedInterfaceName { get; }
 
-            protected override string GeneratedMethodNamePattern { get; }
+            protected override NameResolver GeneratedMethodNamePattern { get; }
         }
 
         private TestInterfaceGenerationStrategyBase _testClass;
@@ -69,7 +70,7 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
         [Test]
         public void CannotCallGenerateMethodsWithNullClassModel()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.PublicGenerateMethods(default(ClassModel), ClassModelProvider.Instance, default(Func<ClassModel, IInterfaceModel, IEnumerable<StatementSyntax>>)).Consume());
+            Assert.Throws<ArgumentNullException>(() => _testClass.PublicGenerateMethods(default(ClassModel), ClassModelProvider.Instance, new NamingContext("class"), default(Func<ClassModel, IInterfaceModel, IEnumerable<StatementSyntax>>)).Consume());
         }
 
         [Test]

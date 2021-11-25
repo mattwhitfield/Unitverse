@@ -8,6 +8,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class CanCallOperatorGenerationStrategy : IGenerationStrategy<IOperatorModel>
@@ -38,7 +39,7 @@
             return true;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IOperatorModel method, ClassModel model)
+        public IEnumerable<MethodDeclarationSyntax> Create(IOperatorModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -50,9 +51,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var methodName = string.Format(CultureInfo.InvariantCulture, "CanCall{0}Operator", method.Name);
-
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(methodName, false, model.IsStatic);
+            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanCallOperator, namingContext, false, model.IsStatic);
 
             var paramExpressions = new List<CSharpSyntaxNode>();
 
