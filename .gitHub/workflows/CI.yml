@@ -1,0 +1,46 @@
+name: Extension build
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: windows-latest
+    env: 
+        SolutionPath: src\Unitverse.sln
+        VsixManifestPath: src\MappingGenerator.Vsix\source.extension.vsixmanifest
+    steps:
+    - uses: actions/checkout@v2   
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+    - run: |
+        ./AutoVersion.ps1
+      shell: pwsh 
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.0.2
+    - name: Restore NuGet Packages
+      run: nuget restore $env:SolutionPath
+    - name: Set version for Visual Studio Extension
+      uses: cezarypiatek/VsixVersionAction@1.0
+      with:
+        version: '${{env.AutoVersion_AssemblySemVer}}'
+        vsix-manifest-file: 'src\Unitverse\source.extension.vsixmanifest'
+    - name: Build extension
+      run: msbuild $env:SolutionPath /t:Rebuild
+      env: 
+        DeployExtension: False
+    - name: Test extension
+      run: dotnet test --no-build --verbosity normal $env:SolutionPath
+    - name: Collect artifacts - VSIX
+      uses: actions/upload-artifact@v2
+      with:
+        name: MappingGenerator-VSIX
+        path: src\MappingGenerator.Vsix\bin\Release\MappingGenerator.vsix
