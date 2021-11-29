@@ -13,10 +13,13 @@ jobs:
   build:
     runs-on: windows-latest
     env: 
+        Configuration: Release
         SolutionPath: src\Unitverse.sln
         VsixManifestPath: src\MappingGenerator.Vsix\source.extension.vsixmanifest
     steps:
     - uses: actions/checkout@v2   
+      with:
+        fetch-depth: '0'
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -34,7 +37,7 @@ jobs:
         version: '${{env.AutoVersion_AssemblySemVer}}'
         vsix-manifest-file: 'src\Unitverse\source.extension.vsixmanifest'
     - name: Build extension
-      run: msbuild $env:SolutionPath /t:Rebuild -v:m
+      run: msbuild $env:SolutionPath /t:Rebuild -v:m 
       env: 
         DeployExtension: False
     - name: Test extension
