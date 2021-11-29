@@ -22,7 +22,7 @@ jobs:
       with:
         dotnet-version: '3.1.x'
     - run: |
-        ./AutoVersion.ps1
+        ./.github/workflows/AutoVersion.ps1
       shell: pwsh 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
