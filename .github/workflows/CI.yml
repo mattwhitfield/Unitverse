@@ -27,20 +27,20 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
     - name: Restore NuGet Packages
-      run: nuget restore $env:SolutionPath
+      run: nuget restore $env:SolutionPath -Verbosity quiet
     - name: Set version for Visual Studio Extension
       uses: cezarypiatek/VsixVersionAction@1.0
       with:
         version: '${{env.AutoVersion_AssemblySemVer}}'
         vsix-manifest-file: 'src\Unitverse\source.extension.vsixmanifest'
     - name: Build extension
-      run: msbuild $env:SolutionPath /t:Rebuild
+      run: msbuild $env:SolutionPath /t:Rebuild -v:m
       env: 
         DeployExtension: False
     - name: Test extension
-      run: dotnet test --no-build --verbosity normal $env:SolutionPath
+      run: dotnet test --no-build --verbosity minimal $env:SolutionPath
     - name: Collect artifacts - VSIX
       uses: actions/upload-artifact@v2
       with:
-        name: MappingGenerator-VSIX
-        path: src\MappingGenerator.Vsix\bin\Release\MappingGenerator.vsix
+        name: Unitverse-VSIX
+        path: src\Unitverse\bin\Release\Unitverse.vsix
