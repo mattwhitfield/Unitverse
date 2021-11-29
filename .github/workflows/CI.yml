@@ -15,7 +15,9 @@ jobs:
     env: 
         Configuration: Release
         SolutionPath: src\Unitverse.sln
-        VsixManifestPath: src\MappingGenerator.Vsix\source.extension.vsixmanifest
+        VsixPath: src\Unitverse\bin\Release\Unitverse.vsix
+        VsixManifestPath: src\Unitverse\source.extension.vsixmanifest
+        VsixPublishManifestPath: src\Unitverse\publishManifest.json
     steps:
     - uses: actions/checkout@v2   
       with:
@@ -46,4 +48,30 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Unitverse-VSIX
-        path: src\Unitverse\bin\Release\Unitverse.vsix
+        path: ${{ env.VsixPath }}
+    - name: Create Github Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{env.AutoVersion_SemVer}}
+        release_name: ${{env.AutoVersion_SemVer}}
+        body: 'Unitverse v${{env.AutoVersion_SemVer}}'
+        draft: false
+        prerelease: false
+    - name: Upload VSIX to Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ env.VsixPath }}
+        asset_name: Unitverse.vsix
+        asset_content_type: binary/octet-stream
+#    - name: Publish extension to Marketplace
+#      uses: cezarypiatek/VsixPublisherAction@0.1
+#      with:
+#        extension-file: ${{ env.VsixPath }}
+#        publish-manifest-file: ${{ env.VsixPublishManifestPath }}
+#        personal-access-code: ${{ secrets.VS_PUBLISHER_ACCESS_TOKEN }}      
