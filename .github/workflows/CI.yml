@@ -17,7 +17,6 @@ jobs:
         SolutionPath: src\Unitverse.sln
         VsixPath: src\Unitverse\bin\Release\Unitverse.vsix
         VsixManifestPath: src\Unitverse\source.extension.vsixmanifest
-        VsixPublishManifestPath: src\Unitverse\publishManifest.json
     steps:
     - uses: actions/checkout@v2   
       with:
@@ -76,5 +75,5 @@ jobs:
       uses: cezarypiatek/VsixPublisherAction@0.1
       with:
         extension-file: ${{ env.VsixPath }}
-        publish-manifest-file: ${{ env.VsixPublishManifestPath }}
+        publish-manifest-file: publishManifest.json
         personal-access-code: ${{ secrets.UNITVERSE_PUBLISHER_ACCESS_TOKEN }}      
