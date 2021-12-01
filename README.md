@@ -8,6 +8,9 @@ Test Project organization is simple and automatic because the tests are created 
 * Add tests for new methods
 * Regenerate tests as needed
 
+## The goal
+Unitverse aims to make the initial generation of tests much easier, and produce code that compiles. It's not perfect, but it's pretty good at achieving this. As you are writing members you can add tests for those members without having to stop and fix some uncompilable code.
+
 ## Supported Frameworks
 The following test frameworks are supported:
 
@@ -19,8 +22,13 @@ The following mocking frameworks are supported:
 
 * NSubstitute 
 * Moq 
-* Rhino Mocks 
 * FakeItEasy 
+
+Support is also present for using FluentAssertions for the assertions framework.
+
+### Framework auto-detection
+
+If Unitverse finds a test project related to the source project, it will look at the project references to determine what test and mocking frameworks to use. It will automatically use FluentAssertions if present. You can turn off framework auto-detection by going to Tools->Options->Unitverse.
 
 ## Using the Extension
 
@@ -63,8 +71,10 @@ Notice that the dependency for the class has been automatically mocked & injecte
 
 ## Controlling the process
 
-The Unit Test Generator extension options page allows for control of various aspects of the process. 
-Generation Side
+The Unitverse extension options page allows for control of various aspects of the process. 
+
+### Generation Options
+
 * Select the test and mocking frameworks to be used
 * Control the naming conventions for: test projects, classes, and files
 
@@ -72,19 +82,30 @@ _Note: The default for project naming is **‘{0}.Tests’**. For example, a pro
 
 _Note: The default for the class and file naming is **‘{0}Tests’**. For example, a class called **MyClass** would be associated with a test class called **MyClassTests**._
 
-### Other Options
+### Test Method Naming Options
 
-* Control whether test projects are automatically created
-* Control whether references are automatically added to test projects
-* Control the version of the framework dependencies that’s used
+Unitverse allows you to customise the method names that are generated, so you can fit the extension in with your existing code base.
 
-_Note: If these options are not set, the extension uses the latest version. This does not apply to NUnit 2 because NUnit 2 and NUnit 3 share the same NuGet package name and the NUnit 2 version will always be 2.6.4 if this is left blank._
+There are replacable tokens which can be substituted into the method names as follows:
+
+| Token | Meaning | Available |
+| - | - | - |
+| typeName | The name of the type that the tested item belongs to | Always |
+| interfaceName | The name of the interface for which generation is currently being performed | When generating tests for an interface implementation |
+| memberName | The unambiguous name of the member being tested (see below) | Everywhere except constructors |
+| memberBareName | The amiguous name of the member being tested (see below) | Everywhere except constructors |
+| parameterName | The name of the parameter being tested for guard conditions | Method guard condition generation |
+| typeParameters | The list of type parameters for an interface | When generating tests for an interface implementation |
+
+#### On unambiguous vs. ambiguous names
+
+When generating for a method with overloads, the names are decorated with 'WithParameterName' suffixes so that each method can be clearly identified. The unambiguous name includes these suffixes and the ambiguous name does not.
 
 ### Setting options per-solution
 
 You can set settings per-solution if you need to (for example if you work with some code that uses MSTest and some that uses NUnit). In order to do this, you can create a `.unitTestGeneratorConfig` file, which is formatted similarly to .editorConfig files, just without the file type heading.
 
-You can set any member of the [IGenerationOptions](https://github.com/mattwhitfield/unittestgenerator/blob/master/src/Unitverse.Core/Options/IGenerationOptions.cs) or the [IVersioningOptions](https://github.com/mattwhitfield/unittestgenerator/blob/master/src/Unitverse.Core/Options/IVersioningOptions.cs) interfaces using this method. For example, the following content in a `.unitTestGeneratorConfig` would set the test framework to MSTest, the mocking framework to NSubstitute and the test project naming convention to `<project_name>.UnitTests`:
+You can set any member of the [IGenerationOptions](https://github.com/mattwhitfield/unittestgenerator/blob/master/src/Unitverse.Core/Options/IGenerationOptions.cs) or the [INamingOptions](https://github.com/mattwhitfield/unittestgenerator/blob/master/src/Unitverse.Core/Options/INamingOptions.cs) interfaces using this method. For example, the following content in a `.unitTestGeneratorConfig` would set the test framework to MSTest, the mocking framework to NSubstitute and the test project naming convention to `<project_name>.UnitTests`:
 
 ```
 test_project_naming={0}.UnitTests
@@ -93,3 +114,7 @@ MockingFrameworkType=NSubstitute
 ```
 
 > Note that the formatting for the member names is case insensitive, and underscores and hyphens are ignored. Hence `frameworkType`, `framework-type`, `FRAMEWORK_TYPE` and `FRAME-WORK-TYPE` all resolve to the `FrameworkType` member of `IGenerationOptions`. The rules for file finding & resolution work exactly the same as they do for `.editorConfig` files - in short, all folders from the solution file to the root are searched for a `.unitTestGeneratorConfig` file, and files 'closer' to the solution file take precedence if the same option is set in more than one file.
+
+## History
+
+Unitverse was originally the SentryOne Unit Test Generator, and was written as part of an 'innovation sprint' where we wanted to write something that made our work more efficient. Unitverse is a fork of that project, and is not affiliated with any particular company.
