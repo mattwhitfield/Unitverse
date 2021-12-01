@@ -56,5 +56,23 @@ namespace Unitverse.Core.Tests.Frameworks.Mocking
         {
             Assert.Throws<ArgumentNullException>(() => _testClass.GetFieldInitializer(default(TypeSyntax)));
         }
+
+        [Test]
+        public void CannotCallGetFieldTypeWithNullType()
+        {
+            Assert.Throws<ArgumentNullException>(() => _testClass.GetFieldType(default(TypeSyntax)));
+        }
+
+        [Test]
+        public void CannotCallGetFieldReferenceWithNullFieldReference()
+        {
+            Assert.Throws<ArgumentNullException>(() => _testClass.GetFieldReference(default(ExpressionSyntax)));
+        }
+
+        [Test]
+        public void CannotCallGetThrowawayReferenceWithNullType()
+        {
+            Assert.Throws<ArgumentNullException>(() => _testClass.GetThrowawayReference(default(TypeSyntax)));
+        }
     }
 }

@@ -2,7 +2,6 @@
 {
     using Unitverse.Core.Options;
 
-    // TODO - tests
     public class DetectedGenerationOptions : IGenerationOptions
     {
         private readonly IGenerationOptions _baseOptions;

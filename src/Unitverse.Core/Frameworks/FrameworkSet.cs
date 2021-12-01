@@ -21,11 +21,6 @@
             TestTypeNaming = testTypeNaming;
         }
 
-        public void ResetContext()
-        {
-            Context = new GenerationContext();
-        }
-
         public ITestFramework TestFramework { get; }
 
         public IMockingFramework MockingFramework { get; }

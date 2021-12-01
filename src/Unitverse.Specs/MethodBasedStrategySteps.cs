@@ -34,7 +34,7 @@
             var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
             var frameworkSet = FrameworkSetFactory.Create(options);
 
-            // TODO: Replace with an Argument Transformation: https://specflow.org/documentation/Step-Argument-Transformations/
+            // ENHANCE - Replace with an Argument Transformation: https://specflow.org/documentation/Step-Argument-Transformations/
             IGenerationStrategy<ClassModel> generationStrategy = null;
             if (strategy == "ComparableGenerationStrategy")
             {

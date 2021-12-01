@@ -2,7 +2,6 @@
 {
     using System;
 
-    // TODO - tests
     public class ReferencedAssembly
     {
         public ReferencedAssembly(string assemblyName, int majorVersion)

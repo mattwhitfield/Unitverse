@@ -16,7 +16,5 @@
         IGenerationContext Context { get; }
 
         string TestTypeNaming { get; }
-
-        void ResetContext();
     }
 }

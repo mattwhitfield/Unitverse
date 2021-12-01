@@ -2,7 +2,6 @@
 
 namespace Unitverse.Core.Tests.Helpers
 {
-    // TODO - tests
     public class DetectedGenerationOptions : IGenerationOptions
     {
         private readonly IGenerationOptions _baseOptions;
@@ -12,7 +11,7 @@ namespace Unitverse.Core.Tests.Helpers
 
         public DetectedGenerationOptions(IGenerationOptions baseOptions, bool? usefluentAssertions, TestFrameworkTypes? testFramework, MockingFrameworkType? mockingFramework)
         {
-            _baseOptions = baseOptions;
+            _baseOptions = baseOptions ?? throw new System.ArgumentNullException(nameof(baseOptions));
             _usefluentAssertions = usefluentAssertions;
             _testFramework = testFramework;
             _mockingFramework = mockingFramework;

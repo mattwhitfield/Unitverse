@@ -16,7 +16,6 @@ namespace Unitverse.Core.Tests.Strategies.ValueGeneration
     [TestFixture]
     public static class ValueGenerationStrategyFactoryTester
     {
-        // TODO - HttpContext -> DefaultHttpContext
         [Test]
         [TestCase("System.String")]
         [TestCase("System.Int16")]

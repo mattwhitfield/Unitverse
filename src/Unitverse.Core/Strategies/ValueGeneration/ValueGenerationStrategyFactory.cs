@@ -13,7 +13,6 @@
     {
         internal static readonly Random Random = new Random();
 
-        // TODO - HttpContext -> DefaultHttpContext
         private static IEnumerable<IValueGenerationStrategy> Strategies =>
             new IValueGenerationStrategy[]
             {
@@ -37,6 +36,7 @@
                 new SimpleValueGenerationStrategy(() => SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("CancellationToken"), SyntaxFactory.IdentifierName("None")), "System.Threading.CancellationToken"),
                 new SimpleValueGenerationStrategy(ArrayFactory.Byte, "byte[]"),
                 new TypedValueGenerationStrategy(EnumFactory.Random, "System.Enum"),
+                new SimpleValueGenerationStrategy(() => Generate.ObjectCreation(SyntaxFactory.IdentifierName("DefaultHttpContext")), "Microsoft.AspNetCore.Http.HttpContext"),
                 new SimpleValueGenerationStrategy(() => Generate.ObjectCreation(SyntaxFactory.IdentifierName("MemoryStream")), "System.IO.Stream"),
                 new TypedValueGenerationStrategy(ArrayFactory.ImplicitlyTyped, "System.Collections.Generic.IEnumerable"),
                 new TypedValueGenerationStrategy(ArrayFactory.ImplicitlyTyped, "System.Collections.Generic.IList"),

@@ -6,7 +6,6 @@
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
-    // TODO - tests
     public static class FrameworkDetection
     {
         private class Matcher<T>
@@ -62,6 +61,16 @@
 
         public static IGenerationOptions ResolveTargetFrameworks(IEnumerable<ReferencedAssembly> referencedAssemblies, IGenerationOptions baseOptions)
         {
+            if (referencedAssemblies is null)
+            {
+                throw new ArgumentNullException(nameof(referencedAssemblies));
+            }
+
+            if (baseOptions is null)
+            {
+                throw new ArgumentNullException(nameof(baseOptions));
+            }
+
             if (!baseOptions.AutoDetectFrameworkTypes)
             {
                 return baseOptions;

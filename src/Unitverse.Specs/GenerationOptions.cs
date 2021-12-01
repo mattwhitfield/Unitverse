@@ -2,7 +2,7 @@
 {
     using Unitverse.Core.Options;
 
-    // TODO - add fluent assertions to specs
+    // ENHANCE - add fluent assertions to specs
     public class GenerationOptions : IGenerationOptions
     {
         public GenerationOptions(TestFrameworkTypes testFramework, MockingFrameworkType mockFramework)
