@@ -19,7 +19,6 @@ jobs:
         Configuration: Release
         SolutionPath: src\Unitverse.sln
         VsixPath: src\Unitverse\bin\Release\Unitverse.vsix
-        VsixManifestPath: src\Unitverse\Manifests\${{ matrix.VsTargetVersion }}\source.extension.vsixmanifest
         VsTargetVersion: '${{ matrix.VsTargetVersion }}'
     steps:
     - uses: actions/checkout@v2   
@@ -40,7 +39,7 @@ jobs:
       uses: cezarypiatek/VsixVersionAction@1.0
       with:
         version: '${{env.AutoVersion_AssemblySemVer}}'
-        vsix-manifest-file: 'src\Unitverse\source.extension.vsixmanifest'
+        vsix-manifest-file: 'src\Unitverse\Manifests\${{ matrix.VsTargetVersion }}\source.extension.vsixmanifest'
     - name: Build extension
       run: msbuild $env:SolutionPath /t:Rebuild -v:m 
       env: 
