@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json.schemastore.org/vsix-publish",
+    "categories": [ "testing", "coding" ],  
+    "identity": {
+        "internalName": "UnitverseVS2022", 
+        "tags": [ "C#", "dependency injection", "FakeItEasy", "Moq", "MSTest", "NSUbstitue", "NUnit", "unit testing", "xunit", "generation", "test generation" ]
+    },
+    "overview": "README.md",           
+    "priceCategory": "free",             
+    "publisher": "mattwhitfield",       
+    "private": false,                     
+    "qna": true,                          
+    "repo": "https://github.com/mattwhitfield/unittestgenerator"
+}
