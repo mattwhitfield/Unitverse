@@ -9,6 +9,11 @@
   <Import Project="..\..\Packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\build\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('..\..\Packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\build\Microsoft.CodeAnalysis.Analyzers.props')" />
   <Import Project="..\..\Packages\Microsoft.VSSDK.BuildTools.15.9.3039\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\..\Packages\Microsoft.VSSDK.BuildTools.15.9.3039\build\Microsoft.VSSDK.BuildTools.props')" />
   <PropertyGroup>
+    <VsTargetVersion Condition="'$(VsTargetVersion)' == '' and '$(VisualStudioVersion)' == '17.0' ">VS2022</VsTargetVersion>
+    <VsTargetVersion Condition="'$(VsTargetVersion)' == '' and '$(VisualStudioVersion)' == '16.0' ">VS2019</VsTargetVersion>
+    <!-- STEP 2 -->
+    <OutputPath>bin\$(VsTargetVersion)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(VsTargetVersion)\$(Configuration)\</IntermediateOutputPath>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <NuGetPackageImportStamp>
@@ -48,7 +53,6 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -58,7 +62,6 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -105,9 +108,6 @@
     <None Include="app.config" />
     <None Include="Key.snk" />
     <None Include="packages.config" />
-    <None Include="source.extension.vsixmanifest">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\CommandImages.png" />
@@ -130,12 +130,49 @@
     <Reference Include="System.Design" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
+  
+  <Choose>
+    <When Condition="'$(VsTargetVersion)' == 'VS2022'">
+      <PropertyGroup>
+        <AssemblyName>UnitverseVS2022</AssemblyName>
+      </PropertyGroup>
+      <ItemGroup>
+        <None Include="Manifests\VS2022\source.extension.vsixmanifest">
+          <SubType>Designer</SubType>
+        </None>
+        <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.31902.203" ExcludeAssets="runtime">
+          <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5232">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>    		
+        <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
+        <PackageReference Include="Microsoft.VisualStudio.LanguageServices" Version="4.0.1" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.1" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <AssemblyName>UnitverseVS2019</AssemblyName>
+      </PropertyGroup>
+      <ItemGroup>
+        <None Include="Manifests\VS2019\source.extension.vsixmanifest">
+          <SubType>Designer</SubType>
+        </None>
+        <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.10.31321.278" ExcludeAssets="runtime">
+          <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.11.35">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>    		
+        <PackageReference Include="Microsoft.VisualStudio.LanguageServices" Version="3.11.0" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.LanguageServices">
-      <Version>3.11.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.10.31321.278" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5232" />
     <PackageReference Include="Nerdbank.Streams">
       <Version>2.8.54</Version>
     </PackageReference>

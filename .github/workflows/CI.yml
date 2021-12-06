@@ -12,11 +12,15 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        VsTargetVersion: ['VS2019', 'VS2022']
     env: 
         Configuration: Release
         SolutionPath: src\Unitverse.sln
         VsixPath: src\Unitverse\bin\Release\Unitverse.vsix
-        VsixManifestPath: src\Unitverse\source.extension.vsixmanifest
+        VsixManifestPath: src\Unitverse\Manifests\${{ matrix.VsTargetVersion }}\source.extension.vsixmanifest
+        VsTargetVersion: '${{ matrix.VsTargetVersion }}'
     steps:
     - uses: actions/checkout@v2   
       with:
@@ -46,8 +50,21 @@ jobs:
     - name: Collect artifacts - VSIX
       uses: actions/upload-artifact@v2
       with:
-        name: Unitverse-VSIX
+        name: Unitverse-VSIX-${{ matrix.VsTargetVersion }}
         path: ${{ env.VsixPath }}
+        
+  release-extension:
+    needs: build
+    runs-on: windows-latest
+    steps:
+    - uses: actions/download-artifact@master
+      with:
+        name: Unitverse-VSIX-VS2019
+        path: dist/
+    - uses: actions/download-artifact@master
+      with:
+        name: Unitverse-VSIX-VS2022
+        path: dist/
     - name: Create Github Release
       if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
       id: create_release
@@ -60,20 +77,37 @@ jobs:
         body: 'Unitverse v${{env.AutoVersion_SemVer}}'
         draft: false
         prerelease: false
-    - name: Upload VSIX to Release Asset
-      if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    - name: Upload Unitverse for Visual Studio 2019 to release assets
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.VsixPath }}
-        asset_name: Unitverse.vsix
+        asset_path: 'dist/UnitverseVS2019.vsix'
+        asset_name: 'Unitverse.VS2019.vsix'
         asset_content_type: binary/octet-stream
-    - name: Publish extension to Marketplace
+        prerelease: false
+    - name: Upload Unitverse for Visual Studio 2019 to release assets
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: 'dist/UnitverseVS2022.vsix'
+        asset_name: 'Unitverse.VS2022.vsix'
+        asset_content_type: binary/octet-stream
+        prerelease: false
+    - name: Publish 2022 extension to Marketplace
       if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
       uses: cezarypiatek/VsixPublisherAction@0.1
       with:
-        extension-file: ${{ env.VsixPath }}
-        publish-manifest-file: publishManifest.json
+        extension-file: 'dist/UnitverseVS2022.vsix'
+        publish-manifest-file: src\Unitverse\Manifests\VS2022\source.extension.vsixmanifest
+        personal-access-code: ${{ secrets.UNITVERSE_PUBLISHER_ACCESS_TOKEN }}      
+    - name: Publish 2019 extension to Marketplace
+      if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+      uses: cezarypiatek/VsixPublisherAction@0.1
+      with:
+        extension-file: 'dist/UnitverseVS2019.vsix'
+        publish-manifest-file: src\Unitverse\Manifests\VS2019\source.extension.vsixmanifest
         personal-access-code: ${{ secrets.UNITVERSE_PUBLISHER_ACCESS_TOKEN }}      
