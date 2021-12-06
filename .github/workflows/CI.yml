@@ -18,7 +18,7 @@ jobs:
     env: 
         Configuration: Release
         SolutionPath: src\Unitverse.sln
-        VsixPath: src\Unitverse\bin\Release\Unitverse.vsix
+        VsixPath: src\Unitverse\bin\${{ matrix.VsTargetVersion }}\Release\Unitverse${{ matrix.VsTargetVersion }}.vsix
         VsTargetVersion: '${{ matrix.VsTargetVersion }}'
     steps:
     - uses: actions/checkout@v2   
