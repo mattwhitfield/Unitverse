@@ -3,7 +3,7 @@
     "categories": [ "testing", "coding" ],  
     "identity": {
         "internalName": "Unitverse", 
-        "tags": [ "C#", "dependency injection", "FakeItEasy", "Moq", "MSTest", "NSUbstitue", "NUnit", "unit testing", "xunit", "generation", "test generation" ]
+        "tags": [ "C#", "dependency injection", "FakeItEasy", "Moq", "MSTest", "NSubstitute", "NUnit", "unit testing", "xunit", "generation", "test generation" ]
     },
     "overview": "README.md",           
     "priceCategory": "free",             

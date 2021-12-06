@@ -11,6 +11,9 @@ Test Project organization is simple and automatic because the tests are created 
 ## The goal
 Unitverse aims to make the initial generation of tests much easier, and produce code that compiles. It's not perfect, but it's pretty good at achieving this. As you are writing members you can add tests for those members without having to stop and fix some uncompilable code.
 
+## Visual Studio Versions
+Due to the transition to 64-bit, Visual Studio 2022 introduces some architectural differences that necessitate a separate VSIX package. If you're working with Visual Studio 2019, you will need [Unitverse for Visual Studio 2019](https://marketplace.visualstudio.com/items?itemName=MattWhitfield.Unitverse) and if you're working with Visual Studio 2022, you will need [Unitverse for Visual Studio 2022](https://marketplace.visualstudio.com/items?itemName=MattWhitfield.UnitverseVS2022).
+
 ## Supported Frameworks
 The following test frameworks are supported:
 
