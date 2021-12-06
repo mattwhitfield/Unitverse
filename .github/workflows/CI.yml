@@ -56,6 +56,12 @@ jobs:
     needs: build
     runs-on: windows-latest
     steps:
+    - uses: actions/checkout@v2   
+      with:
+        fetch-depth: '0'
+    - run: |
+        ./.github/workflows/AutoVersion.ps1
+      shell: pwsh 
     - uses: actions/download-artifact@master
       with:
         name: Unitverse-VSIX-VS2019
