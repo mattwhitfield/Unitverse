@@ -81,6 +81,7 @@
     <Compile Include="Helper\AggregateLogger.cs" />
     <Compile Include="Helper\OptionsResolver.cs" />
     <Compile Include="Helper\OutputWindowMessageLogger.cs" />
+    <Compile Include="Helper\ProjectMapping.cs" />
     <Compile Include="Helper\ProjectItemModel.cs" />
     <Compile Include="Helper\SolutionUtilities.cs" />
     <Compile Include="Helper\StatusBarMessageLogger.cs" />
@@ -130,7 +131,6 @@
     <Reference Include="System.Design" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-  
   <Choose>
     <When Condition="'$(VsTargetVersion)' == 'VS2022'">
       <PropertyGroup>
@@ -146,7 +146,7 @@
         <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5232">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
-        </PackageReference>    		
+        </PackageReference>
         <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
         <PackageReference Include="Microsoft.VisualStudio.LanguageServices" Version="4.0.1" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
@@ -167,7 +167,7 @@
         <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.11.35">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
-        </PackageReference>    		
+        </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.LanguageServices" Version="3.11.0" />
       </ItemGroup>
     </Otherwise>

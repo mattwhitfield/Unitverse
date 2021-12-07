@@ -12,13 +12,11 @@
 
     public class GenerationItem
     {
-        private readonly IGenerationOptions _options;
-
         private readonly string _targetPath;
 
-        public GenerationItem(ProjectItemModel source, SyntaxNode sourceSymbol, ProjectItems targetProjectItems, string targetPath, HashSet<TargetAsset> requiredAssets, Func<string, string> namespaceTransform, IGenerationOptions options)
+        public GenerationItem(ProjectItemModel source, SyntaxNode sourceSymbol, ProjectItems targetProjectItems, string targetPath, HashSet<TargetAsset> requiredAssets, Func<string, string> namespaceTransform, IUnitTestGeneratorOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            Options = options ?? throw new ArgumentNullException(nameof(options));
             Source = source ?? throw new ArgumentNullException(nameof(source));
             SourceSymbol = sourceSymbol;
             TargetProjectItems = targetProjectItems;
@@ -41,7 +39,7 @@
         {
             get
             {
-                var targetFileName = _options.GetTargetFileName(Path.GetFileNameWithoutExtension(Source.FilePath)) + Path.GetExtension(Source.FilePath);
+                var targetFileName = Options.GenerationOptions.GetTargetFileName(Path.GetFileNameWithoutExtension(Source.FilePath)) + Path.GetExtension(Source.FilePath);
                 if (string.IsNullOrEmpty(_targetPath))
                 {
                     return targetFileName;
@@ -52,5 +50,7 @@
         }
 
         public ProjectItems TargetProjectItems { get; }
+
+        public IUnitTestGeneratorOptions Options { get; }
     }
 }

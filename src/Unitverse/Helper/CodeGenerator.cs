@@ -23,14 +23,13 @@
 
     internal static class CodeGenerator
     {
-        public static async Task GenerateCodeAsync(IReadOnlyCollection<GenerationItem> generationItems, bool withRegeneration, IUnitTestGeneratorPackage package, Dictionary<Project, HashSet<TargetAsset>> requiredAssetsByProject, IMessageLogger messageLogger)
+        public static async Task GenerateCodeAsync(IReadOnlyCollection<GenerationItem> generationItems, bool withRegeneration, IUnitTestGeneratorPackage package, IEnumerable<ProjectMapping> projectMappings, IMessageLogger messageLogger)
         {
             var solution = package.Workspace.CurrentSolution;
-            var options = package.Options;
 
             foreach (var generationItem in generationItems)
             {
-                await GenerateItemAsync(withRegeneration, options, solution, generationItem).ConfigureAwait(true);
+                await GenerateItemAsync(withRegeneration, generationItem.Options, solution, generationItem).ConfigureAwait(true);
             }
 
             await package.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -41,9 +40,9 @@
                 ThreadHelper.ThrowIfNotOnUIThread();
 
                 messageLogger.LogMessage("Adding required assets to target project...");
-                foreach (var pair in requiredAssetsByProject)
+                foreach (var mapping in projectMappings)
                 {
-                    AddTargetAssets(options, pair);
+                    AddTargetAssets(mapping.Options, mapping.TargetProject, mapping.TargetAssets);
                 }
 
                 if (generationItems.All(x => string.IsNullOrWhiteSpace(x.TargetContent)))
@@ -56,7 +55,7 @@
                 {
                     if (generationItem.TargetProjectItems != null)
                     {
-                        AddTargetItem(generationItems, options, generationItem);
+                        AddTargetItem(generationItems, generationItem.Options, generationItem);
                     }
                     else
                     {
@@ -123,15 +122,15 @@
             }
         }
 
-        private static void AddTargetAssets(IUnitTestGeneratorOptions options, KeyValuePair<Project, HashSet<TargetAsset>> pair)
+        private static void AddTargetAssets(IUnitTestGeneratorOptions options, Project project, HashSet<TargetAsset> targetAssets)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            foreach (var targetAsset in pair.Value)
+            foreach (var targetAsset in targetAssets)
             {
                 var asset = AssetFactory.Create(targetAsset);
                 if (asset != null)
                 {
-                    var targetProjectFileName = pair.Key.FileName;
+                    var targetProjectFileName = project.FileName;
                     var targetProjectPath = Path.GetDirectoryName(targetProjectFileName);
 
                     if (string.IsNullOrWhiteSpace(targetProjectPath))
@@ -140,13 +139,13 @@
                     }
 
 #pragma warning disable VSTHRD010
-                    if (!pair.Key.ProjectItems.OfType<ProjectItem>().Any(x => string.Equals(x.Name, asset.AssetFileName, StringComparison.OrdinalIgnoreCase)))
+                    if (!project.ProjectItems.OfType<ProjectItem>().Any(x => string.Equals(x.Name, asset.AssetFileName, StringComparison.OrdinalIgnoreCase)))
 #pragma warning restore VSTHRD010
                     {
-                        var nameSpace = VsProjectHelper.GetProjectRootNamespace(pair.Key);
+                        var nameSpace = VsProjectHelper.GetProjectRootNamespace(project);
                         var fileName = Path.Combine(targetProjectPath, asset.AssetFileName);
                         File.WriteAllText(fileName, asset.Content(nameSpace, options.GenerationOptions.FrameworkType));
-                        pair.Key.ProjectItems.AddFromFile(fileName);
+                        project.ProjectItems.AddFromFile(fileName);
                     }
                 }
             }

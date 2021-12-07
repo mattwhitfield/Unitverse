@@ -109,7 +109,7 @@
         private void Execute(bool withRegeneration)
         {
             var generationItems = new List<GenerationItem>();
-            var projectDictionary = new Dictionary<Project, HashSet<TargetAsset>>();
+            var projectMappings = new Dictionary<Project, ProjectMapping>();
 
             var messageLogger = new AggregateLogger();
             messageLogger.Initialize();
@@ -128,11 +128,9 @@
                 var options = _package.Options;
                 var sources = SolutionUtilities.GetSelectedFiles(_dte, true, options.GenerationOptions).Where(ProjectItemModel.IsSupported).ToList();
 
-                var targetProjects = new Dictionary<Project, Tuple<Project, IGenerationOptions>>();
-
                 foreach (var source in sources)
                 {
-                    if (targetProjects.ContainsKey(source.Project))
+                    if (projectMappings.ContainsKey(source.Project))
                     {
                         continue;
                     }
@@ -148,8 +146,7 @@
                     {
                         var generationOptions = OptionsResolver.DetectFrameworks(targetProject, options.GenerationOptions);
 
-                        targetProjects[source.Project] = Tuple.Create(targetProject, generationOptions);
-                        projectDictionary[targetProject] = new HashSet<TargetAsset>();
+                        projectMappings[source.Project] = new ProjectMapping(source.Project, targetProject, new UnitTestGeneratorOptions(generationOptions, options.NamingOptions));
                     }
                 }
 
@@ -169,8 +166,8 @@
 
                     var nameParts = VsProjectHelper.GetNameParts(projectItem);
 
-                    targetProjects.TryGetValue(source.Project, out var targetProjectPair);
-                    var targetProject = targetProjectPair?.Item1;
+                    projectMappings.TryGetValue(source.Project, out var mapping);
+                    var targetProject = mapping?.TargetProject;
                     var targetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out var targetPath);
 
                     if (targetProjectItems == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
@@ -180,16 +177,7 @@
                     }
 
                     var sourceNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.Project);
-                    HashSet<TargetAsset> requiredAssets;
-
-                    if (targetProject != null && projectDictionary.TryGetValue(targetProject, out var targetProjectEntry))
-                    {
-                        requiredAssets = targetProjectEntry;
-                    }
-                    else
-                    {
-                        requiredAssets = new HashSet<TargetAsset>();
-                    }
+                    HashSet<TargetAsset> requiredAssets = mapping?.TargetAssets ?? new HashSet<TargetAsset>();
 
                     Func<string, string> namespaceTransform;
                     if (source.TargetProject != null)
@@ -202,14 +190,14 @@
                         namespaceTransform = x => x + ".Tests";
                     }
 
-                    generationItems.Add(new GenerationItem(source, null, targetProjectItems, targetPath, requiredAssets, namespaceTransform, targetProjectPair?.Item2 ?? options.GenerationOptions));
+                    generationItems.Add(new GenerationItem(source, null, targetProjectItems, targetPath, requiredAssets, namespaceTransform, mapping?.Options ?? options));
                 }
 #pragma warning restore VSTHRD010
             }, _package);
 
             if (generationItems.Any())
             {
-                _ = _package.JoinableTaskFactory.RunAsync(() => Attempt.ActionAsync(() => CodeGenerator.GenerateCodeAsync(generationItems, withRegeneration, _package, projectDictionary, messageLogger), _package));
+                _ = _package.JoinableTaskFactory.RunAsync(() => Attempt.ActionAsync(() => CodeGenerator.GenerateCodeAsync(generationItems, withRegeneration, _package, projectMappings.Values, messageLogger), _package));
             }
         }
     }

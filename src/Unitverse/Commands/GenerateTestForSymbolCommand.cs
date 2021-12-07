@@ -19,6 +19,7 @@
     using Microsoft.VisualStudio.TextManager.Interop;
     using Unitverse.Core.Assets;
     using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.InterfaceGeneration;
     using Unitverse.Helper;
     using Task = System.Threading.Tasks.Task;
@@ -222,12 +223,13 @@
                 }
 
                 var generationOptions = OptionsResolver.DetectFrameworks(targetProject, options.GenerationOptions);
+                var resolvedOptions = new UnitTestGeneratorOptions(generationOptions, options.NamingOptions);
 
-                var projectDictionary = new Dictionary<EnvDTE.Project, HashSet<TargetAsset>>();
+                var projectMappings = new List<ProjectMapping>();
                 var set = new HashSet<TargetAsset>();
                 if (targetProject != null)
                 {
-                    projectDictionary[targetProject] = set;
+                    projectMappings.Add(new ProjectMapping(source.Project, targetProject, resolvedOptions));
                 }
 
                 var targetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out var targetPath);
@@ -258,9 +260,9 @@
                                 namespaceTransform = x => x + ".Tests";
                             }
 
-                            generationItem = new GenerationItem(source, methodSymbol.Item1, targetProjectItems, targetPath, set, namespaceTransform, generationOptions);
+                            generationItem = new GenerationItem(source, methodSymbol.Item1, targetProjectItems, targetPath, set, namespaceTransform, resolvedOptions);
 
-                            await CodeGenerator.GenerateCodeAsync(new[] { generationItem }, withRegeneration, _package, projectDictionary, messageLogger).ConfigureAwait(true);
+                            await CodeGenerator.GenerateCodeAsync(new[] { generationItem }, withRegeneration, _package, projectMappings, messageLogger).ConfigureAwait(true);
                         }
                     }, _package));
             }, _package);
