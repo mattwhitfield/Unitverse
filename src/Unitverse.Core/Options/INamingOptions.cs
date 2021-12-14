@@ -31,5 +31,9 @@
         string CannotCallOperatorWithNullNamingPattern { get; }
 
         string IsInitializedCorrectlyNamingPattern { get; }
+
+        string TargetFieldName { get; }
+
+        string DependencyFieldName { get; }
     }
 }

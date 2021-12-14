@@ -10,6 +10,7 @@
     using Unitverse.Core.Assets;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
 
     public class ClassModel
     {
@@ -18,7 +19,7 @@
             Declaration = declaration ?? throw new ArgumentNullException(nameof(declaration));
             SemanticModel = semanticModel ?? throw new ArgumentNullException(nameof(semanticModel));
             IsSingleItem = isSingleItem;
-
+            TargetFieldName = "_testClass";
             TypeSymbol = SemanticModel.GetDeclaredSymbol(declaration);
 
             TypeSyntax = SyntaxFactory.ParseTypeName(TypeSymbol.ToDisplayString(new SymbolDisplayFormat(
@@ -43,6 +44,8 @@
         public bool ShouldGenerate { get; set; } = true;
 
         public bool IsSingleItem { get; }
+
+        public string TargetFieldName { get; private set; }
 
         public bool IsStatic => Declaration.Modifiers.Any(x => string.Equals(x.ValueText, "static", StringComparison.OrdinalIgnoreCase));
 
@@ -74,14 +77,21 @@
             Indexers.Each(x => x.SetShouldGenerateForSingleItem(syntaxNode));
         }
 
-        public string GetConstructorParameterFieldName(ParameterModel parameter)
+        public string GetConstructorParameterFieldName(ParameterModel parameter, INamingProvider namingProvider)
         {
             if (parameter == null)
             {
                 throw new ArgumentNullException(nameof(parameter));
             }
 
-            var baseFieldName = "_" + parameter.Name.ToCamelCase();
+            if (namingProvider is null)
+            {
+                throw new ArgumentNullException(nameof(namingProvider));
+            }
+
+            var namingContext = new NamingContext(ClassName).WithParameterName(parameter.Name);
+
+            var baseFieldName = namingProvider.DependencyFieldName.Resolve(namingContext);
 
             if (Constructors.SelectMany(x => x.Parameters).Where(x => string.Equals(x.Name, parameter.Name, StringComparison.OrdinalIgnoreCase)).Select(x => x.Type).Distinct().Count() < 2)
             {
@@ -108,7 +118,7 @@
 
         public ExpressionSyntax GetConstructorFieldReference(ParameterModel model, IFrameworkSet frameworkSet)
         {
-            var identifierName = SyntaxFactory.IdentifierName(GetConstructorParameterFieldName(model));
+            var identifierName = SyntaxFactory.IdentifierName(GetConstructorParameterFieldName(model, frameworkSet.NamingProvider));
             if (model.TypeInfo.Type.TypeKind == TypeKind.Interface)
             {
                 return frameworkSet.MockingFramework.GetFieldReference(identifierName);
@@ -183,6 +193,12 @@
             }
 
             return string.Format(CultureInfo.InvariantCulture, "{0}With{1}", baseName, parameters.Any() ? parameters.Select(x => x.ToPascalCase()).Aggregate((x, y) => x + "And" + y) : "NoParameters");
+        }
+
+        internal void SetTargetInstance(string fieldName)
+        {
+            TargetFieldName = fieldName;
+            TargetInstance = SyntaxFactory.IdentifierName(TargetFieldName);
         }
     }
 }

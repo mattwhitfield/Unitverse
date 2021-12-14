@@ -31,5 +31,9 @@
         NameResolver CannotCallOperatorWithNull { get; }
 
         NameResolver IsInitializedCorrectly { get; }
+
+        NameResolver TargetFieldName { get; }
+
+        NameResolver DependencyFieldName { get; }
     }
 }

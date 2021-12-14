@@ -26,6 +26,8 @@
             CanCallOperatorNamingPattern = options.CanCallOperatorNamingPattern;
             CannotCallOperatorWithNullNamingPattern = options.CannotCallOperatorWithNullNamingPattern;
             IsInitializedCorrectlyNamingPattern = options.IsInitializedCorrectlyNamingPattern;
+            TargetFieldName = options.TargetFieldName;
+            DependencyFieldName = options.DependencyFieldName;
         }
 
         public string CanCallNamingPattern { get; set; }
@@ -57,5 +59,9 @@
         public string CannotCallOperatorWithNullNamingPattern { get; set; }
 
         public string IsInitializedCorrectlyNamingPattern { get; set; }
+
+        public string TargetFieldName { get; set; }
+
+        public string DependencyFieldName { get; set; }
     }
 }

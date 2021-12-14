@@ -85,7 +85,7 @@
 
             yield return SyntaxFactory.ExpressionStatement(
                 SyntaxFactory.InvocationExpression(
-                        SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("_testClass"), SyntaxFactory.IdentifierName("CheckProperty")))
+                        SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, sourceModel.TargetInstance, SyntaxFactory.IdentifierName("CheckProperty")))
                     .WithArgumentList(SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList<ArgumentSyntax>(argumentList))));
         }
     }
