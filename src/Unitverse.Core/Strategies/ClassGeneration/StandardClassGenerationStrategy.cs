@@ -50,7 +50,7 @@
             }
 
             var variableDeclaration = SyntaxFactory.VariableDeclaration(model.TypeSyntax)
-                .AddVariables(SyntaxFactory.VariableDeclarator("_testClass"));
+                .AddVariables(SyntaxFactory.VariableDeclarator(model.TargetFieldName));
 
             var fieldDeclaration = SyntaxFactory.FieldDeclaration(variableDeclaration)
                 .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));

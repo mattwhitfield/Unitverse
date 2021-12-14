@@ -259,6 +259,8 @@ namespace Unitverse.Core.Tests.Helpers
             var model = extractor.Extract(null).First();
             var targetTypeName = "TestValue1540739065";
             var options = Substitute.For<IUnitTestGeneratorOptions>();
+            options.NamingOptions.TargetFieldName.Returns("_testClass");
+            options.NamingOptions.DependencyFieldName.Returns("_{parameterName:camel}");
             options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
             options.GenerationOptions.FrameworkType.Returns(TestFrameworkTypes.NUnit3);
             var frameworkSet = FrameworkSetFactory.Create(options);

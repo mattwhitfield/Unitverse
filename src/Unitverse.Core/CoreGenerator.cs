@@ -274,7 +274,7 @@
                 var fields = new List<FieldDeclarationSyntax>();
                 foreach (var parameterModel in classModel.Constructors.SelectMany(x => x.Parameters))
                 {
-                    allFields.Add(classModel.GetConstructorParameterFieldName(parameterModel));
+                    allFields.Add(classModel.GetConstructorParameterFieldName(parameterModel, frameworkSet.NamingProvider));
                 }
 
                 // generate fields for each constructor parameter that doesn't have an existing field
@@ -285,7 +285,7 @@
                         continue;
                     }
 
-                    var fieldName = classModel.GetConstructorParameterFieldName(parameterModel);
+                    var fieldName = classModel.GetConstructorParameterFieldName(parameterModel, frameworkSet.NamingProvider);
 
                     var fieldExists = targetType.Members.OfType<FieldDeclarationSyntax>().Any(x => x.Declaration.Variables.Any(v => v.Identifier.Text == fieldName));
 
@@ -356,6 +356,7 @@
 
             foreach (var c in classModels)
             {
+                c.SetTargetInstance(frameworkSet.NamingProvider.TargetFieldName.Resolve(new NamingContext(c.ClassName)));
                 if (c.Declaration.Parent is NamespaceDeclarationSyntax namespaceDeclaration)
                 {
                     targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(namespaceDeclaration.Name.ToString())));

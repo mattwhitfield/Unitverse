@@ -356,7 +356,7 @@
                     continue;
                 }
 
-                var fieldName = model.GetConstructorParameterFieldName(parameterModel);
+                var fieldName = model.GetConstructorParameterFieldName(parameterModel, frameworkSet.NamingProvider);
                 var typeSyntax = parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context);
 
                 if (parameterModel.TypeInfo.Type.TypeKind == TypeKind.Interface)

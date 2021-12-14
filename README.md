@@ -97,8 +97,19 @@ There are replacable tokens which can be substituted into the method names as fo
 | interfaceName | The name of the interface for which generation is currently being performed | When generating tests for an interface implementation |
 | memberName | The unambiguous name of the member being tested (see below) | Everywhere except constructors |
 | memberBareName | The amiguous name of the member being tested (see below) | Everywhere except constructors |
-| parameterName | The name of the parameter being tested for guard conditions | Method guard condition generation |
+| parameterName | The name of the parameter being tested for guard conditions | Method guard condition generation & dependency field name generation |
 | typeParameters | The list of type parameters for an interface | When generating tests for an interface implementation |
+
+#### Formatting options
+
+There are also formatting options for token replacement. This can be achieved with the `{token:format}` syntax - so for instance `{typeName:lower}` will produce the name of the type in lower case. The formatters available are as follows:
+
+| Suffix | Meaning |
+| - | - |
+| lower | The token value is emitted in lower case |
+| upper | The token value is emitted in upper case |
+| camel | The token value is emitted in camel case (i.e. the first letter is converted to lower case) |
+| pascal | The token value is emitted in pascal case (i.e. the first letter is converted to upper case) |
 
 #### On unambiguous vs. ambiguous names
 

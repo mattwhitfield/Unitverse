@@ -22,22 +22,22 @@ namespace Unitverse.Options
         [Description("Naming format for the constructor test that checks string null or white space guards")]
         public string CannotConstructWithInvalidNamingPattern { get; set; } = "CannotConstructWithInvalid{parameterName}";
 
-        [Category("Properties & Indexers")]
+        [Category("Properties && Indexers")]
         [DisplayName("CanGet")]
         [Description("Naming format for read-only property tests")]
         public string CanGetNamingPattern { get; set; } = "CanGet{memberName}";
 
-        [Category("Properties & Indexers")]
+        [Category("Properties && Indexers")]
         [DisplayName("CanSetAndGet")]
         [Description("Naming format for read-write property tests")]
         public string CanSetAndGetNamingPattern { get; set; } = "CanSetAndGet{memberName}";
 
-        [Category("Properties & Indexers")]
+        [Category("Properties && Indexers")]
         [DisplayName("CanSet")]
         [Description("Naming format for read-only property tests")]
         public string CanSetNamingPattern { get; set; } = "CanSet{memberName}";
 
-        [Category("Properties & Indexers")]
+        [Category("Properties && Indexers")]
         [DisplayName("IsInitializedCorrectly")]
         [Description("Naming format for tests that ensure properties are set correctly by the constructor")]
         public string IsInitializedCorrectlyNamingPattern { get; set; } = "{memberName}IsInitializedCorrectly";
@@ -81,5 +81,17 @@ namespace Unitverse.Options
         [DisplayName("CannotCallOperatorWithNull")]
         [Description("Naming format for the operator test that checks null guards")]
         public string CannotCallOperatorWithNullNamingPattern { get; set; } = "CannotCall{memberName}OperatorWithNull{parameterName}";
+
+        [Category("Fields")]
+        [DisplayName("Target Field Name")]
+        [Description("Naming format for the field name used for the instance being tested")]
+        public string TargetFieldName { get; set; } = "_testClass";
+
+
+        [Category("Fields")]
+        [DisplayName("Dependency Field Name")]
+        [Description("Naming format for the field name used for dependencies")]
+        public string DependencyFieldName { get; set; } = "_{parameterName:camel}";
+
     }
 }

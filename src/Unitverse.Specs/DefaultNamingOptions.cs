@@ -33,5 +33,9 @@
         public string CanCallOperatorNamingPattern { get; set; } = "CanCall{memberName}Operator";
 
         public string CannotCallOperatorWithNullNamingPattern { get; set; } = "CannotCall{memberName}OperatorWithNull{parameterName}";
+
+        public string TargetFieldName { get; set; } = "_testClass";
+
+        public string DependencyFieldName { get; set; } = "_{parameterName:camel}";
     }
 }

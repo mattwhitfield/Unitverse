@@ -45,5 +45,9 @@
         public NameResolver CannotCallOperatorWithNull => new NameResolver(_namingOptions.CannotCallOperatorWithNullNamingPattern);
 
         public NameResolver IsInitializedCorrectly => new NameResolver(_namingOptions.IsInitializedCorrectlyNamingPattern);
+
+        public NameResolver TargetFieldName => new NameResolver(_namingOptions.TargetFieldName);
+
+        public NameResolver DependencyFieldName => new NameResolver(_namingOptions.DependencyFieldName);
     }
 }
