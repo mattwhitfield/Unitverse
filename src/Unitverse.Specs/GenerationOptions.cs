@@ -23,5 +23,7 @@
         public bool UseFluentAssertions { get; }
 
         public bool AutoDetectFrameworkTypes { get; }
+
+        public bool EmitUsingsOutsideNamespace { get; }
     }
 }

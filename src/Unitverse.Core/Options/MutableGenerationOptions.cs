@@ -19,6 +19,7 @@
             TestTypeNaming = options.TestTypeNaming;
             UseFluentAssertions = options.UseFluentAssertions;
             AutoDetectFrameworkTypes = options.AutoDetectFrameworkTypes;
+            EmitUsingsOutsideNamespace = options.EmitUsingsOutsideNamespace;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -36,5 +37,7 @@
         public bool UseFluentAssertions { get; set; }
 
         public bool AutoDetectFrameworkTypes { get; set; }
+
+        public bool EmitUsingsOutsideNamespace { get; set; }
     }
 }
