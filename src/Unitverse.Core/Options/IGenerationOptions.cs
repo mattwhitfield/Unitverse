@@ -17,5 +17,7 @@
         string TestFileNaming { get; }
 
         string TestTypeNaming { get; }
+
+        bool EmitUsingsOutsideNamespace { get; }
     }
 }

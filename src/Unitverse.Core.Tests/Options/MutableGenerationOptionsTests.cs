@@ -4,6 +4,7 @@ namespace Unitverse.Core.Tests.Options
     using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Options;
+    using FluentAssertions;
 
     [TestFixture]
     public class MutableGenerationOptionsTests
@@ -27,6 +28,9 @@ namespace Unitverse.Core.Tests.Options
             _options.TestProjectNaming.Returns("tpn");
             _options.TestFileNaming.Returns("tfn");
             _options.TestTypeNaming.Returns("ttn");
+            _options.UseFluentAssertions.Returns(true);
+            _options.EmitUsingsOutsideNamespace.Returns(true);
+            _options.AutoDetectFrameworkTypes.Returns(false);
 
             _testClass = new MutableGenerationOptions(_options);
             Assert.That(_testClass.FrameworkType, Is.EqualTo(_options.FrameworkType));
@@ -35,6 +39,9 @@ namespace Unitverse.Core.Tests.Options
             Assert.That(_testClass.TestProjectNaming, Is.EqualTo(_options.TestProjectNaming));
             Assert.That(_testClass.TestFileNaming, Is.EqualTo(_options.TestFileNaming));
             Assert.That(_testClass.TestTypeNaming, Is.EqualTo(_options.TestTypeNaming));
+            Assert.That(_testClass.UseFluentAssertions, Is.EqualTo(_options.UseFluentAssertions));
+            Assert.That(_testClass.EmitUsingsOutsideNamespace, Is.EqualTo(_options.EmitUsingsOutsideNamespace));
+            Assert.That(_testClass.AutoDetectFrameworkTypes, Is.EqualTo(_options.AutoDetectFrameworkTypes));
         }
 
         [Test]
@@ -89,6 +96,30 @@ namespace Unitverse.Core.Tests.Options
             var testValue = "TestValue609453222";
             _testClass.TestTypeNaming = testValue;
             Assert.That(_testClass.TestTypeNaming, Is.EqualTo(testValue));
+        }
+
+        [Test]
+        public void CanSetAndGetUseFluentAssertions()
+        {
+            var testValue = false;
+            _testClass.UseFluentAssertions = testValue;
+            _testClass.UseFluentAssertions.Should().Be(testValue);
+        }
+
+        [Test]
+        public void CanSetAndGetAutoDetectFrameworkTypes()
+        {
+            var testValue = false;
+            _testClass.AutoDetectFrameworkTypes = testValue;
+            _testClass.AutoDetectFrameworkTypes.Should().Be(testValue);
+        }
+
+        [Test]
+        public void CanSetAndGetEmitUsingsOutsideNamespace()
+        {
+            var testValue = false;
+            _testClass.EmitUsingsOutsideNamespace = testValue;
+            _testClass.EmitUsingsOutsideNamespace.Should().Be(testValue);
         }
     }
 }

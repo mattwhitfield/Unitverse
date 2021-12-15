@@ -99,18 +99,49 @@
             return declaration;
         }
 
-        private static CompilationUnitSyntax AddTargetNamespaceToCompilation(NamespaceDeclarationSyntax originalTargetNamespace, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax targetNamespace)
+        private static CompilationUnitSyntax AddTargetNamespaceToCompilation(NamespaceDeclarationSyntax originalTargetNamespace, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax targetNamespace, IGenerationOptions generationOptions)
         {
             if (originalTargetNamespace == null)
             {
-                compilation = compilation.AddMembers(targetNamespace);
+                if (generationOptions.EmitUsingsOutsideNamespace)
+                {
+                    var usings = targetNamespace.Usings.ToList();
+                    MoveUsingsToCompilation(ref compilation, ref targetNamespace, usings);
+                }
             }
             else
             {
-                compilation = compilation.RemoveNode(originalTargetNamespace, SyntaxRemoveOptions.KeepNoTrivia).AddMembers(targetNamespace);
+                compilation = compilation.RemoveNode(originalTargetNamespace, SyntaxRemoveOptions.KeepNoTrivia);
+
+                if (generationOptions.EmitUsingsOutsideNamespace)
+                {
+                    var namespaceUsings = originalTargetNamespace.Usings.Select(x => x.NormalizeWhitespace().ToFullString());
+                    var compilationUsings = compilation.Usings.Select(x => x.NormalizeWhitespace().ToFullString());
+                    var existingUsings = new HashSet<string>(namespaceUsings.Concat(compilationUsings), StringComparer.Ordinal);
+
+                    // find all the usings that are in targetNamespace, but not declared in either the originalTargetNamespace or the compilation
+                    var usings = targetNamespace.Usings.Where(x => !existingUsings.Contains(x.NormalizeWhitespace().ToFullString())).ToList();
+
+                    MoveUsingsToCompilation(ref compilation, ref targetNamespace, usings);
+                }
             }
 
-            return compilation;
+            return compilation.AddMembers(targetNamespace);
+        }
+
+        private static void MoveUsingsToCompilation(ref CompilationUnitSyntax compilation, ref NamespaceDeclarationSyntax targetNamespace, IEnumerable<UsingDirectiveSyntax> usings)
+        {
+            foreach (var usingStatement in usings)
+            {
+                var fullString = usingStatement.NormalizeWhitespace().ToFullString();
+                var node = targetNamespace.Usings.FirstOrDefault(x => x.NormalizeWhitespace().ToFullString() == fullString);
+                if (node != null)
+                {
+                    targetNamespace = targetNamespace.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);
+                }
+            }
+
+            compilation = compilation.WithUsings(SyntaxFactory.List(usings));
         }
 
         private static NamespaceDeclarationSyntax AddTypeParameterAliases(ClassModel classModel, IGenerationContext context, NamespaceDeclarationSyntax targetNamespace)
@@ -383,7 +414,7 @@
 
             targetNamespace = AddUsingStatements(targetNamespace, usingsEmitted, frameworkSet, classModels);
 
-            compilation = AddTargetNamespaceToCompilation(originalTargetNamespace, compilation, targetNamespace);
+            compilation = AddTargetNamespaceToCompilation(originalTargetNamespace, compilation, targetNamespace, options.GenerationOptions);
 
             var generationResult = CreateGenerationResult(compilation, classModels);
 

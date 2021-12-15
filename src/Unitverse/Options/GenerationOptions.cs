@@ -46,5 +46,10 @@
         [DisplayName("Use Fluent Assertions")]
         [Description("Whether to use Fluent Assertions in preference to the test framework's built in assertion capabilities")]
         public bool UseFluentAssertions { get; set; } = false;
+
+        [Category("Layout")]
+        [DisplayName("Emit using directives outside namespace")]
+        [Description("Whether to place the required using directives outside the namespace declaration")]
+        public bool EmitUsingsOutsideNamespace { get; set; } = false;
     }
 }

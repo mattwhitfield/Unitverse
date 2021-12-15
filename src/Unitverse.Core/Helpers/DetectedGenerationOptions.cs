@@ -11,7 +11,7 @@
 
         public DetectedGenerationOptions(IGenerationOptions baseOptions, bool? usefluentAssertions, TestFrameworkTypes? testFramework, MockingFrameworkType? mockingFramework)
         {
-            _baseOptions = baseOptions;
+            _baseOptions = baseOptions ?? throw new System.ArgumentNullException(nameof(baseOptions));
             _usefluentAssertions = usefluentAssertions;
             _testFramework = testFramework;
             _mockingFramework = mockingFramework;
@@ -32,5 +32,7 @@
         public string TestFileNaming => _baseOptions.TestFileNaming;
 
         public string TestTypeNaming => _baseOptions.TestTypeNaming;
+
+        public bool EmitUsingsOutsideNamespace => _baseOptions.EmitUsingsOutsideNamespace;
     }
 }
