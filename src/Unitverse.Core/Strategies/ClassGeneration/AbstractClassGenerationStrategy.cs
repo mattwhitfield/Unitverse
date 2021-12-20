@@ -54,7 +54,7 @@
             classDeclaration = classDeclaration.AddMembers(GenerateConcreteInheritor(model));
 
             var variableDeclaration = SyntaxFactory.VariableDeclaration(SyntaxFactory.ParseTypeName("Test" + model.ClassName))
-                .AddVariables(SyntaxFactory.VariableDeclarator("_testClass"));
+                .AddVariables(SyntaxFactory.VariableDeclarator(model.TargetFieldName));
 
             var fieldDeclaration = SyntaxFactory.FieldDeclaration(variableDeclaration)
                 .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
