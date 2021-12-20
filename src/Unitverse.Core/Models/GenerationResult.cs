@@ -5,12 +5,15 @@
 
     public class GenerationResult
     {
-        public GenerationResult(string fileContent)
+        public GenerationResult(string fileContent, bool anyMethodsEmitted)
         {
             FileContent = fileContent;
+            AnyMethodsEmitted = anyMethodsEmitted;
         }
 
         public string FileContent { get; }
+
+        public bool AnyMethodsEmitted { get; }
 
         public IList<TargetAsset> RequiredAssets { get; } = new List<TargetAsset>();
     }

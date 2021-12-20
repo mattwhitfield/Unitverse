@@ -116,7 +116,7 @@
             options.GenerationOptions.TestFileNaming.Returns("{0}Tests");
             options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
             options.GenerationOptions.TestProjectNaming.Returns("{0}.Tests");
-            var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests").ConfigureAwait(true);
+            var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             Assert.IsNotNull(core);
             Console.WriteLine(core.FileContent);

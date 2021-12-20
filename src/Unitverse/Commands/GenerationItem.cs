@@ -52,5 +52,7 @@
         public ProjectItems TargetProjectItems { get; }
 
         public IUnitTestGeneratorOptions Options { get; }
+
+        public bool AnyMethodsEmitted { get; set; }
     }
 }

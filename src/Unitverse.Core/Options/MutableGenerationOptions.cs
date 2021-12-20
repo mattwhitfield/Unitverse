@@ -20,6 +20,7 @@
             UseFluentAssertions = options.UseFluentAssertions;
             AutoDetectFrameworkTypes = options.AutoDetectFrameworkTypes;
             EmitUsingsOutsideNamespace = options.EmitUsingsOutsideNamespace;
+            PartialGenerationAllowed = options.PartialGenerationAllowed;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -39,5 +40,7 @@
         public bool AutoDetectFrameworkTypes { get; set; }
 
         public bool EmitUsingsOutsideNamespace { get; set; }
+
+        public bool PartialGenerationAllowed { get; set; }
     }
 }

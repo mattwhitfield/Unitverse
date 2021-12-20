@@ -86,6 +86,7 @@
     <Compile Include="Helper\SolutionUtilities.cs" />
     <Compile Include="Helper\StatusBarMessageLogger.cs" />
     <Compile Include="Helper\TargetFinder.cs" />
+    <Compile Include="Helper\VsMessageBox.cs" />
     <Compile Include="Helper\VsProjectHelper.cs" />
     <Compile Include="IUnitTestGeneratorPackage.cs" />
     <Compile Include="Options\GenerationOptions.cs">

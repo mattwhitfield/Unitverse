@@ -25,5 +25,7 @@
         public bool AutoDetectFrameworkTypes { get; }
 
         public bool EmitUsingsOutsideNamespace { get; }
+
+        public bool PartialGenerationAllowed { get; } = false;
     }
 }

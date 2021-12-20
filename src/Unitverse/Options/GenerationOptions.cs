@@ -51,5 +51,10 @@
         [DisplayName("Emit using directives outside namespace")]
         [Description("Whether to place the required using directives outside the namespace declaration")]
         public bool EmitUsingsOutsideNamespace { get; set; } = false;
+
+        [Category("Generation")]
+        [DisplayName("Partial Generation")]
+        [Description("When enabled, any new test methods are allowed to be added to the target test class without causing an error")]
+        public bool PartialGenerationAllowed { get; set; } = true;
     }
 }

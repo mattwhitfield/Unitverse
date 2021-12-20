@@ -34,5 +34,7 @@
         public string TestTypeNaming => _baseOptions.TestTypeNaming;
 
         public bool EmitUsingsOutsideNamespace => _baseOptions.EmitUsingsOutsideNamespace;
+
+        public bool PartialGenerationAllowed => _baseOptions.PartialGenerationAllowed;
     }
 }

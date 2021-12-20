@@ -27,9 +27,10 @@
         {
             var solution = package.Workspace.CurrentSolution;
 
+            var isSingleItemGeneration = generationItems.Count == 1;
             foreach (var generationItem in generationItems)
             {
-                await GenerateItemAsync(withRegeneration, generationItem.Options, solution, generationItem).ConfigureAwait(true);
+                await GenerateItemAsync(withRegeneration, generationItem.Options, solution, generationItem, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
             }
 
             await package.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -39,6 +40,14 @@
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
 
+                if (!isSingleItemGeneration && generationItems.All(x => !x.AnyMethodsEmitted))
+                {
+                    var message = "No new methods were generated for any selected item. If you want to re-generate existing tests, please hold left shift while opening the context menu and select the 'Regenerate tests' option.";
+                    messageLogger.LogMessage(message);
+                    VsMessageBox.Show(message, false, package);
+                    return;
+                }
+
                 messageLogger.LogMessage("Adding required assets to target project...");
                 foreach (var mapping in projectMappings)
                 {
@@ -47,10 +56,11 @@
 
                 if (generationItems.All(x => string.IsNullOrWhiteSpace(x.TargetContent)))
                 {
-                    throw new InvalidOperationException("None of the selected targets contained a testable type. Tests can only be generated for classes and structs");
+                    throw new InvalidOperationException("None of the selected targets contained a testable type. Tests can only be generated for classes and structs.");
                 }
 
                 messageLogger.LogMessage("Adding generated items to target project...");
+
                 foreach (var generationItem in generationItems.Where(x => !string.IsNullOrWhiteSpace(x.TargetContent)))
                 {
                     if (generationItem.TargetProjectItems != null)
@@ -77,7 +87,7 @@
                 var dte = (DTE2)package.GetService(typeof(DTE));
                 if (dte != null)
                 {
-                    var window = dte.ItemOperations.OpenFile(tempFile, Constants.vsViewKindCode);
+                    var window = dte.ItemOperations.OpenFile(tempFile, EnvDTE.Constants.vsViewKindCode);
                     window.Document.Saved = false;
                 }
             }
@@ -151,7 +161,7 @@
             }
         }
 
-        private static async Task GenerateItemAsync(bool withRegeneration, IUnitTestGeneratorOptions options, Solution solution, GenerationItem generationItem)
+        private static async Task GenerateItemAsync(bool withRegeneration, IUnitTestGeneratorOptions options, Solution solution, GenerationItem generationItem, bool isSingleItemGeneration, IMessageLogger messageLogger)
         {
             var targetProject = solution.Projects.FirstOrDefault(x => string.Equals(x.Name, generationItem.Source.SourceProjectName, StringComparison.Ordinal));
             var documents = solution.GetDocumentIdsWithFilePath(generationItem.Source.FilePath);
@@ -171,9 +181,10 @@
                 return;
             }
 
-            var result = await GenerateAsync(withRegeneration, options, solution, generationItem, semanticModel).ConfigureAwait(true);
+            var result = await GenerateAsync(withRegeneration, options, solution, generationItem, semanticModel, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
 
             generationItem.TargetContent = result.FileContent;
+            generationItem.AnyMethodsEmitted = result.AnyMethodsEmitted;
 
             foreach (var asset in result.RequiredAssets)
             {
@@ -181,9 +192,8 @@
             }
         }
 
-        private static async Task<GenerationResult> GenerateAsync(bool withRegeneration, IUnitTestGeneratorOptions options, Solution solution, GenerationItem generationItem, SemanticModel semanticModel)
+        private static async Task<GenerationResult> GenerateAsync(bool withRegeneration, IUnitTestGeneratorOptions options, Solution solution, GenerationItem generationItem, SemanticModel semanticModel, bool isSingleItemGeneration, IMessageLogger messageLogger)
         {
-            GenerationResult result;
             if (File.Exists(generationItem.TargetFileName))
             {
                 var documentIds = solution.GetDocumentIdsWithFilePath(generationItem.TargetFileName);
@@ -193,19 +203,11 @@
 
                     var targetSemanticModel = await targetDocument.GetSemanticModelAsync().ConfigureAwait(true);
 
-                    result = await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, targetSemanticModel, withRegeneration, options, generationItem.NamespaceTransform).ConfigureAwait(true);
+                    return await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, targetSemanticModel, withRegeneration, options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
                 }
-                else
-                {
-                    result = await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, null, withRegeneration, options, generationItem.NamespaceTransform).ConfigureAwait(true);
-                }
-            }
-            else
-            {
-                result = await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, null, withRegeneration, options, generationItem.NamespaceTransform).ConfigureAwait(true);
             }
 
-            return result;
+            return await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, null, withRegeneration, options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
         }
     }
 }
