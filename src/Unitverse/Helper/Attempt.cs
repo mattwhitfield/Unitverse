@@ -22,25 +22,13 @@
             }
             catch (InvalidOperationException ex)
             {
-                VsShellUtilities.ShowMessageBox(
-                    package,
-                    ex.Message,
-                    Constants.ExtensionName,
-                    OLEMSGICON.OLEMSGICON_WARNING,
-                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                VsMessageBox.Show(ex.Message, false, package);
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
 #pragma warning restore CA1031 // Do not catch general exception types
             {
-                VsShellUtilities.ShowMessageBox(
-                    package,
-                    string.Format(CultureInfo.CurrentCulture, "Exception raised\n{0}", ex),
-                    Constants.ExtensionName,
-                    OLEMSGICON.OLEMSGICON_CRITICAL,
-                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                VsMessageBox.Show(string.Format(CultureInfo.CurrentCulture, "Exception raised\n{0}", ex), true, package);
             }
         }
 
@@ -59,13 +47,7 @@
             {
                 await package.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                VsShellUtilities.ShowMessageBox(
-                    package,
-                    ex.Message,
-                    Constants.ExtensionName,
-                    OLEMSGICON.OLEMSGICON_WARNING,
-                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                VsMessageBox.Show(ex.Message, false, package);
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
@@ -73,13 +55,7 @@
             {
                 await package.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                VsShellUtilities.ShowMessageBox(
-                    package,
-                    string.Format(CultureInfo.CurrentCulture, "Exception raised\n{0}", ex),
-                    Constants.ExtensionName,
-                    OLEMSGICON.OLEMSGICON_CRITICAL,
-                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                VsMessageBox.Show(string.Format(CultureInfo.CurrentCulture, "Exception raised\n{0}", ex), true, package);
             }
         }
     }

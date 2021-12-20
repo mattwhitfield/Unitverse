@@ -154,13 +154,16 @@
                 {
                     var projectItem = source.Item;
 
-                    if (!withRegeneration && TargetFinder.FindExistingTargetItem(source, options.GenerationOptions, out _) == FindTargetStatus.Found)
+                    if (!withRegeneration && !options.GenerationOptions.PartialGenerationAllowed && TargetFinder.FindExistingTargetItem(source, options.GenerationOptions, out _) == FindTargetStatus.Found)
                     {
                         if (sources.Count == 1)
                         {
-                            throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because tests already exist. If you want to re-generate tests for this item, hold down the left Shift key and right-click the item.");
+                            throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because tests already exist. If you want to re-generate tests, hold down the left Shift key while opening the context menu and select the 'Regenerate tests' option. If you want to add new tests for any new code, enable the 'Partial Generation' option.");
                         }
-
+                        else
+                        {
+                            messageLogger.LogMessage("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because tests already exist.");
+                        }
                         continue;
                     }
 
@@ -173,7 +176,7 @@
                     if (targetProjectItems == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
                     {
                         // we asked to create targetProjectItems - so if it's null we effectively had a problem getting to the target project
-                        throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
+                        throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'.");
                     }
 
                     var sourceNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.Project);
@@ -198,6 +201,12 @@
             if (generationItems.Any())
             {
                 _ = _package.JoinableTaskFactory.RunAsync(() => Attempt.ActionAsync(() => CodeGenerator.GenerateCodeAsync(generationItems, withRegeneration, _package, projectMappings.Values, messageLogger), _package));
+            }
+            else
+            {
+                var message = "No tests could be created because tests already exist for all selected source items. If you want to re-generate tests, hold down the left Shift key while opening the context menu and select the 'Regenerate tests' option. If you want to add new tests for any new code, enable the 'Partial Generation' option.";
+                VsMessageBox.Show(message, true, _package);
+                messageLogger.LogMessage(message);
             }
         }
     }

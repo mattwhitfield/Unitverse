@@ -25,7 +25,7 @@
 
     public static class CoreGenerator
     {
-        public static async Task<GenerationResult> Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, SemanticModel targetModel, bool withRegeneration, IUnitTestGeneratorOptions options, Func<string, string> nameSpaceTransform)
+        public static async Task<GenerationResult> Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, SemanticModel targetModel, bool withRegeneration, IUnitTestGeneratorOptions options, Func<string, string> nameSpaceTransform, bool isSingleItemGeneration, IMessageLogger messageLogger)
         {
             if (nameSpaceTransform == null)
             {
@@ -62,35 +62,39 @@
                 targetNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.IdentifierName(targetNameSpace));
             }
 
-            return Generate(sourceModel, sourceSymbol, withRegeneration, options, targetNamespace, usingsEmitted, compilation, originalTargetNamespace);
+            return Generate(sourceModel, sourceSymbol, withRegeneration, options, targetNamespace, usingsEmitted, compilation, originalTargetNamespace, isSingleItemGeneration, messageLogger);
         }
 
-        private static TypeDeclarationSyntax AddGeneratedItems<T>(ClassModel classModel, TypeDeclarationSyntax declaration, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector, Func<T, bool> shouldGenerate, Func<NamingContext, T, NamingContext> nameDecorator, bool withRegeneration)
+        private static TypeDeclarationSyntax AddGeneratedItems<T>(ModelGenerationContext generationContext, TypeDeclarationSyntax declaration, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector, Func<T, bool> shouldGenerate, Func<NamingContext, T, NamingContext> nameDecorator)
         {
-            var namingContext = new NamingContext(classModel.ClassName);
+            var namingContext = new NamingContext(generationContext.Model.ClassName);
 
-            foreach (var member in selector(classModel))
+            foreach (var member in selector(generationContext.Model))
             {
                 if (shouldGenerate(member))
                 {
                     namingContext = nameDecorator(namingContext, member);
-                    foreach (var method in factory.CreateFor(member, classModel, namingContext))
+                    foreach (var method in factory.CreateFor(member, generationContext.Model, namingContext))
                     {
                         var methodName = method.Identifier.Text;
                         var existingMethod = declaration.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault(x => string.Equals(x.Identifier.Text, methodName, StringComparison.OrdinalIgnoreCase));
 
                         if (existingMethod != null)
                         {
-                            if (!withRegeneration)
+                            if (!generationContext.WithRegeneration && !generationContext.PartialGenerationAllowed)
                             {
-                                throw new InvalidOperationException("One or more of the generated methods ('" + methodName + "') already exists in the test class. In order to over-write existing tests, hold left shift while right-clicking and select the 'Regenerate' option.");
+                                throw new InvalidOperationException("One or more of the generated methods ('" + methodName + "') already exists in the test class. In order to over-write existing tests, hold left shift while right-clicking and select the 'Regenerate tests' option. Alternatively, you can enable the 'Partial Generation' option in the Visual Studio Options dialogue, which will only add new tests to existing test classes.");
                             }
-
-                            declaration = declaration.ReplaceNode(existingMethod, method);
+                            else if (generationContext.WithRegeneration)
+                            {
+                                declaration = declaration.ReplaceNode(existingMethod, method);
+                                generationContext.MethodsEmitted++;
+                            }
                         }
                         else
                         {
                             declaration = declaration.AddMembers(method);
+                            generationContext.MethodsEmitted++;
                         }
                     }
                 }
@@ -222,34 +226,34 @@
             return targetNamespace;
         }
 
-        private static TypeDeclarationSyntax ApplyStrategies(bool withRegeneration, TypeDeclarationSyntax targetType, IFrameworkSet frameworkSet, ClassModel classModel)
+        private static TypeDeclarationSyntax ApplyStrategies(TypeDeclarationSyntax targetType, ModelGenerationContext generationContext)
         {
-            targetType = new ClassDecorationStrategyFactory(frameworkSet).Apply(targetType, classModel);
+            targetType = new ClassDecorationStrategyFactory(generationContext.FrameworkSet).Apply(targetType, generationContext.Model);
 
-            if (!classModel.IsSingleItem || classModel.Constructors.Any())
+            if (!generationContext.Model.IsSingleItem || generationContext.Model.Constructors.Any())
             {
-                targetType = AddGeneratedItems(classModel, targetType, new ClassLevelGenerationStrategyFactory(frameworkSet), x => new[] { x }, x => x.Constructors.Any(c => c.ShouldGenerate), (c, x) => c, withRegeneration);
+                targetType = AddGeneratedItems(generationContext, targetType, new ClassLevelGenerationStrategyFactory(generationContext.FrameworkSet), x => new[] { x }, x => x.Constructors.Any(c => c.ShouldGenerate), (c, x) => c);
             }
 
-            if (classModel.Interfaces.Count > 0)
+            if (generationContext.Model.Interfaces.Count > 0)
             {
-                targetType = AddGeneratedItems(classModel, targetType, new InterfaceGenerationStrategyFactory(frameworkSet), x => new[] { x }, x => x.ShouldGenerate, (c, x) => c, withRegeneration);
+                targetType = AddGeneratedItems(generationContext, targetType, new InterfaceGenerationStrategyFactory(generationContext.FrameworkSet), x => new[] { x }, x => x.ShouldGenerate, (c, x) => c);
             }
 
-            targetType = AddGeneratedItems(classModel, targetType, new MethodGenerationStrategyFactory(frameworkSet), x => x.Methods, x => x.ShouldGenerate, (c, x) => c.WithMemberName(classModel.GetMethodUniqueName(x), x.Name), withRegeneration);
-            targetType = AddGeneratedItems(classModel, targetType, new OperatorGenerationStrategyFactory(frameworkSet), x => x.Operators, x => x.ShouldGenerate, (c, x) => c.WithMemberName(x.Name), withRegeneration);
-            targetType = AddGeneratedItems(classModel, targetType, new PropertyGenerationStrategyFactory(frameworkSet), x => x.Properties, x => x.ShouldGenerate, (c, x) => c.WithMemberName(x.Name), withRegeneration);
-            targetType = AddGeneratedItems(classModel, targetType, new IndexerGenerationStrategyFactory(frameworkSet), x => x.Indexers, x => x.ShouldGenerate, (c, x) => c.WithMemberName(classModel.GetIndexerName(x)), withRegeneration);
+            targetType = AddGeneratedItems(generationContext, targetType, new MethodGenerationStrategyFactory(generationContext.FrameworkSet), x => x.Methods, x => x.ShouldGenerate, (c, x) => c.WithMemberName(generationContext.Model.GetMethodUniqueName(x), x.Name));
+            targetType = AddGeneratedItems(generationContext, targetType, new OperatorGenerationStrategyFactory(generationContext.FrameworkSet), x => x.Operators, x => x.ShouldGenerate, (c, x) => c.WithMemberName(x.Name));
+            targetType = AddGeneratedItems(generationContext, targetType, new PropertyGenerationStrategyFactory(generationContext.FrameworkSet), x => x.Properties, x => x.ShouldGenerate, (c, x) => c.WithMemberName(x.Name));
+            targetType = AddGeneratedItems(generationContext, targetType, new IndexerGenerationStrategyFactory(generationContext.FrameworkSet), x => x.Indexers, x => x.ShouldGenerate, (c, x) => c.WithMemberName(generationContext.Model.GetIndexerName(x)));
             return targetType;
         }
 
-        private static GenerationResult CreateGenerationResult(CompilationUnitSyntax compilation, List<ClassModel> classModels)
+        private static GenerationResult CreateGenerationResult(CompilationUnitSyntax compilation, List<ClassModel> classModels, bool anyMethodsEmitted)
         {
             using (var workspace = new AdhocWorkspace())
             {
                 compilation = (CompilationUnitSyntax)Formatter.Format(compilation, workspace);
 
-                var generationResult = new GenerationResult(compilation.ToFullString());
+                var generationResult = new GenerationResult(compilation.ToFullString(), anyMethodsEmitted);
                 foreach (var asset in classModels.SelectMany(x => x.RequiredAssets).Distinct())
                 {
                     generationResult.RequiredAssets.Add(asset);
@@ -379,7 +383,7 @@
             return targetType;
         }
 
-        private static GenerationResult Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, bool withRegeneration, IUnitTestGeneratorOptions options, NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax originalTargetNamespace)
+        private static GenerationResult Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, bool withRegeneration, IUnitTestGeneratorOptions options, NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax originalTargetNamespace, bool isSingleItemGeneration, IMessageLogger messageLogger)
         {
             var frameworkSet = FrameworkSetFactory.Create(options);
             var model = new TestableItemExtractor(sourceModel.SyntaxTree, sourceModel);
@@ -394,13 +398,29 @@
                 }
             }
 
+            bool anyMethodsEmitted = false;
+
             foreach (var classModel in classModels)
             {
                 targetNamespace = AddTypeParameterAliases(classModel, frameworkSet.Context, targetNamespace);
 
-                var targetType = GetOrCreateTargetType(sourceSymbol, targetNamespace, frameworkSet, classModel, out var originalTargetType);
+                var targetType = GetOrCreateTargetType(targetNamespace, frameworkSet, classModel, out var originalTargetType);
 
-                targetType = ApplyStrategies(withRegeneration, targetType, frameworkSet, classModel);
+                var context = new ModelGenerationContext(classModel, frameworkSet, withRegeneration, options.GenerationOptions.PartialGenerationAllowed);
+                targetType = ApplyStrategies(targetType, context);
+
+                anyMethodsEmitted |= context.MethodsEmitted > 0;
+                if (context.MethodsEmitted == 0 && options.GenerationOptions.PartialGenerationAllowed)
+                {
+                    if (isSingleItemGeneration)
+                    {
+                        throw new InvalidOperationException("No new methods were added to the test class for the type '" + classModel.ClassName + "'. If you want to re-generate existing tests, please hold left shift while opening the context menu and select the 'Regenerate tests' option.");
+                    }
+                    else
+                    {
+                        messageLogger.LogMessage("No new methods were added to the test class for the type '" + classModel.ClassName + "'.");
+                    }
+                }
 
                 targetNamespace = AddTypeToTargetNamespace(originalTargetType, targetNamespace, targetType);
 
@@ -416,17 +436,17 @@
 
             compilation = AddTargetNamespaceToCompilation(originalTargetNamespace, compilation, targetNamespace, options.GenerationOptions);
 
-            var generationResult = CreateGenerationResult(compilation, classModels);
+            var generationResult = CreateGenerationResult(compilation, classModels, anyMethodsEmitted);
 
             return generationResult;
         }
 
-        private static TypeDeclarationSyntax GetOrCreateTargetType(SyntaxNode sourceSymbol, SyntaxNode targetNamespace, IFrameworkSet frameworkSet, ClassModel classModel, out TypeDeclarationSyntax originalTargetType)
+        private static TypeDeclarationSyntax GetOrCreateTargetType(SyntaxNode targetNamespace, IFrameworkSet frameworkSet, ClassModel classModel, out TypeDeclarationSyntax originalTargetType)
         {
             TypeDeclarationSyntax targetType = null;
             originalTargetType = null;
 
-            if (targetNamespace != null && sourceSymbol != null)
+            if (targetNamespace != null)
             {
                 var types = TestableItemExtractor.GetTypeDeclarations(targetNamespace);
 

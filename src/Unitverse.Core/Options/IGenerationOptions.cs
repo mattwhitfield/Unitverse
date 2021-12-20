@@ -19,5 +19,7 @@
         string TestTypeNaming { get; }
 
         bool EmitUsingsOutsideNamespace { get; }
+
+        bool PartialGenerationAllowed { get; }
     }
 }
