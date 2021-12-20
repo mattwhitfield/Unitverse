@@ -38,16 +38,8 @@ namespace Unitverse.Core.Tests.Models
         [Test]
         public void CanGetRequiredAssets()
         {
-            _testClass.RequiredAssets.Should().BeAssignableTo<IList<TargetAsset>>();
-            false.Should().Be(true, "Create or modify test");
-        }
-
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase("   ")]
-        public void CannotConstructWithInvalidFileContent(string value)
-        {
-            FluentActions.Invoking(() => new GenerationResult(value, true)).Should().Throw<ArgumentNullException>();
+            _testClass.RequiredAssets.Should().NotBeNull();
+            _testClass.RequiredAssets.Should().BeEmpty();
         }
 
         [Test]
