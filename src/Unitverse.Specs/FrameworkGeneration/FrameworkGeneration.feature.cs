@@ -182,7 +182,7 @@ testing = 1
         [NUnit.Framework.DescriptionAttribute("Framework Generation Test - AssertFail")]
         [NUnit.Framework.TestCaseAttribute("MsTest", "Assert.Fail(\"Create or modify test\");", null)]
         [NUnit.Framework.TestCaseAttribute("NUnit3", "Assert.Fail(\"Create or modify test\");", null)]
-        [NUnit.Framework.TestCaseAttribute("XUnit", "Assert.True(false, \"Create or modify test\");", null)]
+        [NUnit.Framework.TestCaseAttribute("XUnit", "throw new NotImplementedException(\"Create or modify test\");", null)]
         public virtual void FrameworkGenerationTest_AssertFail(string framework, string statement, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
