@@ -40,7 +40,7 @@
                 throw new ArgumentNullException(nameof(message));
             }
 
-            return SyntaxFactory.ExpressionStatement(AssertCall("True").WithArgumentList(Generate.Arguments(Generate.Literal(false), Generate.Literal(message))));
+            return SyntaxFactory.ThrowStatement(Generate.ObjectCreation(SyntaxFactory.IdentifierName("NotImplementedException"), Generate.Literal(message)));
         }
 
         public StatementSyntax AssertGreaterThan(ExpressionSyntax actual, ExpressionSyntax expected)

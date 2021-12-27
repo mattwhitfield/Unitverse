@@ -121,10 +121,10 @@ public class TestClass
 		And I expect it to contain the statement '<statement>'
 
 	Examples:
-	| framework | statement                                    |
-	| MsTest    | Assert.Fail("Create or modify test");        |
-	| NUnit3    | Assert.Fail("Create or modify test");        |
-	| XUnit     | Assert.True(false, "Create or modify test"); |
+	| framework | statement                                                   |
+	| MsTest    | Assert.Fail("Create or modify test");                       |
+	| NUnit3    | Assert.Fail("Create or modify test");                       |
+	| XUnit     | throw new NotImplementedException("Create or modify test"); |
 
 Scenario Outline: Framework Generation Test - AssertEqual
 	Given I have a class defined as 

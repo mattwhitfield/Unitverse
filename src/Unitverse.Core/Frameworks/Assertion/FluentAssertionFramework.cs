@@ -10,7 +10,14 @@
 
     public class FluentAssertionFramework : IAssertionFramework
     {
+        private readonly IAssertionFramework _baseFramework;
+
         public bool AssertThrowsAsyncIsAwaitable => true;
+
+        public FluentAssertionFramework(IAssertionFramework baseFramework)
+        {
+            _baseFramework = baseFramework ?? throw new ArgumentNullException(nameof(baseFramework));
+        }
 
         private static ExpressionSyntax Should(ExpressionSyntax actual)
         {
@@ -44,15 +51,7 @@
 
         public StatementSyntax AssertFail(string message)
         {
-            return SyntaxFactory.ExpressionStatement(
-                        SyntaxFactory.InvocationExpression(
-                            SyntaxFactory.MemberAccessExpression(
-                                SyntaxKind.SimpleMemberAccessExpression,
-                                Should(SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression)),
-                                SyntaxFactory.IdentifierName("Be")))
-                        .WithArgumentList(
-                            Generate.Arguments(
-                                SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression), SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, SyntaxFactory.Literal(message)))));
+            return _baseFramework.AssertFail(message);
         }
 
         public StatementSyntax AssertGreaterThan(ExpressionSyntax actual, ExpressionSyntax expected)

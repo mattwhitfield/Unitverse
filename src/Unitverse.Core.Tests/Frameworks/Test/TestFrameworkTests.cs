@@ -42,7 +42,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
         [TestCase(TestFrameworkTypes.NUnit2, "Assert.Fail(\"TestValue538721341\");")]
         [TestCase(TestFrameworkTypes.NUnit3, "Assert.Fail(\"TestValue538721341\");")]
         [TestCase(TestFrameworkTypes.MsTest, "Assert.Fail(\"TestValue538721341\");")]
-        [TestCase(TestFrameworkTypes.XUnit, "Assert.True(false, \"TestValue538721341\");")]
+        [TestCase(TestFrameworkTypes.XUnit, "throw new NotImplementedException(\"TestValue538721341\");")]
         public void CanCallAssertFail(TestFrameworkTypes frameworkTypes, string expectedOutput)
         {
             var testClass = CreateFramework(frameworkTypes);
