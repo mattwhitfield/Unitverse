@@ -12,6 +12,10 @@
 
         IUnitTestGeneratorOptions Options { get; }
 
+        IGenerationOptions GenerationOptions { get; }
+
+        INamingOptions NamingOptions { get; }
+
         VisualStudioWorkspace Workspace { get; }
 
         Task<object> GetServiceAsync(Type serviceType);
