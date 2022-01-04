@@ -117,7 +117,7 @@ When generating for a method with overloads, the names are decorated with 'WithP
 
 ### Setting options per-solution
 
-You can set settings per-solution if you need to (for example if you work with some code that uses MSTest and some that uses NUnit). In order to do this, you can create a `.unitTestGeneratorConfig` file, which is formatted similarly to .editorConfig files, just without the file type heading.
+You can set settings per-solution if you need to (for example if you work with some code that uses MSTest and some that uses NUnit). In order to do this, you can create a `.unitTestGeneratorConfig` file, which is formatted similarly to .editorConfig files, just ignoring the file type heading.
 
 You can set any member of the [IGenerationOptions](https://github.com/mattwhitfield/unittestgenerator/blob/master/src/Unitverse.Core/Options/IGenerationOptions.cs) or the [INamingOptions](https://github.com/mattwhitfield/unittestgenerator/blob/master/src/Unitverse.Core/Options/INamingOptions.cs) interfaces using this method. For example, the following content in a `.unitTestGeneratorConfig` would set the test framework to MSTest, the mocking framework to NSubstitute and the test project naming convention to `<project_name>.UnitTests`:
 
@@ -126,6 +126,8 @@ test_project_naming={0}.UnitTests
 framework-type=MSTest
 MockingFrameworkType=NSubstitute
 ```
+
+To generate a `.unitTestGeneratorConfig` file that contains all the options as they are set in the Visual Studio Options dialogue, you can go to the 'Options Export' configuration page which contains the functionality allowing you to export the current configuration.
 
 > Note that the formatting for the member names is case insensitive, and underscores and hyphens are ignored. Hence `frameworkType`, `framework-type`, `FRAMEWORK_TYPE` and `FRAME-WORK-TYPE` all resolve to the `FrameworkType` member of `IGenerationOptions`. The rules for file finding & resolution work exactly the same as they do for `.editorConfig` files - in short, all folders from the solution file to the root are searched for a `.unitTestGeneratorConfig` file, and files 'closer' to the solution file take precedence if the same option is set in more than one file.
 
