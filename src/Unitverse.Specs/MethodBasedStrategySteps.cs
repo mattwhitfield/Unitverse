@@ -31,7 +31,7 @@
         [When(@"I generate unit tests for the class using strategy '(.*)'")]
         public void WhenIGenerateUnitTestsForTheClass(string strategy)
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions(), false);
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             // ENHANCE - Replace with an Argument Transformation: https://specflow.org/documentation/Step-Argument-Transformations/
@@ -87,7 +87,7 @@
         [When(@"I generate tests for the method using the strategy '(.*)'")]
         public void WhenIGenerateTestsForTheMethod(string strategy)
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions(), false);
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             IGenerationStrategy<IMethodModel> generationStrategy = null;
@@ -124,7 +124,7 @@
         [When(@"I generate tests for the indexer using the strategy '(.*)'")]
         public void WhenIGenerateTestsForTheIndexer(string strategy)
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions(), false);
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             IGenerationStrategy<IIndexerModel> generationStrategy = null;
@@ -156,7 +156,7 @@
         [When(@"I generate tests for the operator using the strategy '(.*)'")]
         public void WhenIGenerateTestsForTheOperator(string strategy)
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions(), false);
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             IGenerationStrategy<IOperatorModel> generationStrategy = null;
@@ -183,7 +183,7 @@
         [When(@"I generate tests for the property using the strategy '(.*)'")]
         public void WhenIGenerateTestsForTheProperty(string strategy)
         {
-            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions());
+            var options = new UnitTestGeneratorOptions(new GenerationOptions(_context.TargetFramework, _context.MockFramework), new DefaultNamingOptions(), false);
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             IGenerationStrategy<IPropertyModel> generationStrategy = null;

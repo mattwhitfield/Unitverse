@@ -61,7 +61,7 @@ namespace Unitverse.Core.Tests.Strategies.ValueGeneration
             generationOptions.FrameworkType.Returns(TestFrameworkTypes.NUnit3);
             generationOptions.MockingFrameworkType.Returns(MockingFrameworkType.NSubstitute);
             generationOptions.TestTypeNaming.Returns("{0}Tests");
-            var options = new UnitTestGeneratorOptions(generationOptions, Substitute.For<INamingOptions>());
+            var options = new UnitTestGeneratorOptions(generationOptions, Substitute.For<INamingOptions>(), false);
             var frameworkSet = FrameworkSetFactory.Create(options);
             var expression = ValueGenerationStrategyFactory.GenerateFor(info, model, new HashSet<string>(StringComparer.OrdinalIgnoreCase),  frameworkSet);
 

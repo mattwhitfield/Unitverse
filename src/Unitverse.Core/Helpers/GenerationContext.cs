@@ -18,6 +18,18 @@
 
         public IEnumerable<string> GenericTypesVisited => _visitedGenericTypes;
 
+        public long InterfacesMocked { get; set; }
+
+        public long TypesConstructed { get; set; }
+
+        public long ValuesGenerated { get; set; }
+
+        public long TestClassesGenerated { get; set; }
+
+        public long TestMethodsGenerated { get; set; }
+
+        public long TestMethodsRegenerated { get; set; }
+
         public void AddEmittedType(ITypeSymbol typeInfo)
         {
             if (typeInfo == null)

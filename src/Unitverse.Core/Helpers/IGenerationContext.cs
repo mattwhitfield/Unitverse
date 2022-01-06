@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
 
-    public interface IGenerationContext
+    public interface IGenerationContext : IGenerationStatistics
     {
         IEnumerable<ITypeSymbol> EmittedTypes { get; }
 

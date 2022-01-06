@@ -114,6 +114,8 @@
             var messageLogger = new AggregateLogger();
             messageLogger.Initialize();
 
+            bool isSingleCreation = false;
+
             Attempt.Action(
                 () =>
             {
@@ -127,6 +129,7 @@
 
                 var options = _package.Options;
                 var sources = SolutionUtilities.GetSelectedFiles(_dte, true, options.GenerationOptions).Where(ProjectItemModel.IsSupported).ToList();
+                isSingleCreation = sources.Count == 1;
 
                 foreach (var source in sources)
                 {
@@ -146,7 +149,7 @@
                     {
                         var generationOptions = OptionsResolver.DetectFrameworks(targetProject, options.GenerationOptions);
 
-                        projectMappings[source.Project] = new ProjectMapping(source.Project, targetProject, new UnitTestGeneratorOptions(generationOptions, options.NamingOptions));
+                        projectMappings[source.Project] = new ProjectMapping(source.Project, targetProject, new UnitTestGeneratorOptions(generationOptions, options.NamingOptions, options.StatisticsCollectionEnabled));
                     }
                 }
 
@@ -156,7 +159,7 @@
 
                     if (!withRegeneration && !options.GenerationOptions.PartialGenerationAllowed && TargetFinder.FindExistingTargetItem(source, options.GenerationOptions, out _) == FindTargetStatus.Found)
                     {
-                        if (sources.Count == 1)
+                        if (isSingleCreation)
                         {
                             throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because tests already exist. If you want to re-generate tests, hold down the left Shift key while opening the context menu and select the 'Regenerate tests' option. If you want to add new tests for any new code, enable the 'Partial Generation' option.");
                         }
@@ -205,7 +208,12 @@
             else
             {
                 var message = "No tests could be created because tests already exist for all selected source items. If you want to re-generate tests, hold down the left Shift key while opening the context menu and select the 'Regenerate tests' option. If you want to add new tests for any new code, enable the 'Partial Generation' option.";
-                VsMessageBox.Show(message, true, _package);
+
+                if (!isSingleCreation)
+                {
+                    VsMessageBox.Show(message, true, _package);
+                }
+
                 messageLogger.LogMessage(message);
             }
         }

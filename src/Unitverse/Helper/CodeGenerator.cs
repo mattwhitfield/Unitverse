@@ -183,6 +183,11 @@
 
             var result = await GenerateAsync(withRegeneration, options, solution, generationItem, semanticModel, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
 
+            if (options.StatisticsCollectionEnabled)
+            {
+                StatisticsTracker.Track(result);
+            }
+
             generationItem.TargetContent = result.FileContent;
             generationItem.AnyMethodsEmitted = result.AnyMethodsEmitted;
 

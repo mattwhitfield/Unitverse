@@ -21,6 +21,7 @@
     [ProvideOptionPage(typeof(GenerationOptions), "Unitverse", "Generation Options", 0, 0, true)]
     [ProvideOptionPage(typeof(NamingOptions), "Unitverse", "Naming Options", 0, 0, true)]
     [ProvideOptionPage(typeof(ExportOptions), "Unitverse", "Options Export", 0, 0, true)]
+    [ProvideOptionPage(typeof(StatisticsOptions), "Unitverse", "Statistics", 0, 0, true)]
     public sealed class UnitTestGeneratorPackage : AsyncPackage, IUnitTestGeneratorPackage
     {
         public IGenerationOptions GenerationOptions => (GenerationOptions)GetDialogPage(typeof(GenerationOptions));
@@ -32,7 +33,8 @@
             get
             {
                 var solutionFilePath = Workspace?.CurrentSolution?.FilePath;
-                return UnitTestGeneratorOptionsFactory.Create(solutionFilePath, GenerationOptions, NamingOptions);
+                var statisticsOptions = (StatisticsOptions)GetDialogPage(typeof(StatisticsOptions));
+                return UnitTestGeneratorOptionsFactory.Create(solutionFilePath, GenerationOptions, NamingOptions, statisticsOptions.Enabled);
             }
         }
 

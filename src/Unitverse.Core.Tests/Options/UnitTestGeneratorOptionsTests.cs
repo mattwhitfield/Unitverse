@@ -4,6 +4,7 @@ namespace Unitverse.Core.Tests.Options
     using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Options;
+    using FluentAssertions;
 
     [TestFixture]
     public class UnitTestGeneratorOptionsTests
@@ -11,38 +12,52 @@ namespace Unitverse.Core.Tests.Options
         private UnitTestGeneratorOptions _testClass;
         private IGenerationOptions _generationOptions;
         private INamingOptions _namingOptions;
+        private bool _statisticsCollectionEnabled;
 
         [SetUp]
         public void SetUp()
         {
             _generationOptions = Substitute.For<IGenerationOptions>();
             _namingOptions = Substitute.For<INamingOptions>();
-            _testClass = new UnitTestGeneratorOptions(_generationOptions, _namingOptions);
+            _statisticsCollectionEnabled = true;
+            _testClass = new UnitTestGeneratorOptions(_generationOptions, _namingOptions, _statisticsCollectionEnabled);
         }
 
         [Test]
         public void CanConstruct()
         {
-            var instance = new UnitTestGeneratorOptions(_generationOptions, _namingOptions);
-            Assert.That(instance, Is.Not.Null);
+            var instance = new UnitTestGeneratorOptions(_generationOptions, _namingOptions, _statisticsCollectionEnabled);
+            instance.Should().NotBeNull();
         }
 
         [Test]
         public void CannotConstructWithNullGenerationOptions()
         {
-            Assert.Throws<ArgumentNullException>(() => new UnitTestGeneratorOptions(default(IGenerationOptions), Substitute.For<INamingOptions>()));
+            FluentActions.Invoking(() => new UnitTestGeneratorOptions(default(IGenerationOptions), Substitute.For<INamingOptions>(), true)).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullNamingOptions()
         {
-            Assert.Throws<ArgumentNullException>(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), default(INamingOptions)));
+            FluentActions.Invoking(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), default(INamingOptions), true)).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void GenerationOptionsIsInitializedCorrectly()
         {
-            Assert.That(_testClass.GenerationOptions, Is.EqualTo(_generationOptions));
+            _testClass.GenerationOptions.Should().BeSameAs(_generationOptions);
+        }
+
+        [Test]
+        public void NamingOptionsIsInitializedCorrectly()
+        {
+            _testClass.NamingOptions.Should().BeSameAs(_namingOptions);
+        }
+
+        [Test]
+        public void StatisticsCollectionEnabledIsInitializedCorrectly()
+        {
+            _testClass.StatisticsCollectionEnabled.Should().Be(_statisticsCollectionEnabled);
         }
     }
 }

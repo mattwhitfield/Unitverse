@@ -53,24 +53,29 @@
                     frameworkSet.Context.GenericTypes.TryGetValue(typeParameterSymbol.Name, out var derivedType);
                     if (derivedType is INamedTypeSymbol namedTypeSymbol)
                     {
+                        frameworkSet.Context.TypesConstructed++;
                         return GetClassDefaultAssignmentValue(model, visitedTypes, frameworkSet, namedTypeSymbol);
                     }
 
+                    frameworkSet.Context.ValuesGenerated++;
                     return ValueGenerationStrategyFactory.GenerateFor("string", typeParameterSymbol, model, visitedTypes,  frameworkSet);
                 }
 
                 if (ValueGenerationStrategyFactory.IsSupported(propertyType))
                 {
+                    frameworkSet.Context.ValuesGenerated++;
                     return ValueGenerationStrategyFactory.GenerateFor(propertyType, model, visitedTypes, frameworkSet);
                 }
 
                 if (propertyType.TypeKind == TypeKind.Interface)
                 {
+                    frameworkSet.Context.InterfacesMocked++;
                     return frameworkSet.MockingFramework.GetThrowawayReference(propertyType.ToTypeSyntax(frameworkSet.Context));
                 }
 
                 if (propertyType is INamedTypeSymbol namedType && (propertyType.TypeKind == TypeKind.Class || propertyType.TypeKind == TypeKind.Struct))
                 {
+                    frameworkSet.Context.TypesConstructed++;
                     return GetClassDefaultAssignmentValue(model, visitedTypes, frameworkSet, namedType);
                 }
 
