@@ -12,13 +12,13 @@ namespace Unitverse.Core.Tests.Options
         [Test]
         public static void CannotCallCreateWithNullGenerationOptions()
         {
-            Assert.Throws<ArgumentNullException>(() => UnitTestGeneratorOptionsFactory.Create("TestValue1494081794", default(IGenerationOptions), Substitute.For<INamingOptions>()));
+            Assert.Throws<ArgumentNullException>(() => UnitTestGeneratorOptionsFactory.Create("TestValue1494081794", default(IGenerationOptions), Substitute.For<INamingOptions>(), false));
         }
 
         [Test]
         public static void CannotCallCreateWithNullNamingOptions()
         {
-            Assert.Throws<ArgumentNullException>(() => UnitTestGeneratorOptionsFactory.Create("TestValue1494081794", Substitute.For<IGenerationOptions>(), default(INamingOptions)));
+            Assert.Throws<ArgumentNullException>(() => UnitTestGeneratorOptionsFactory.Create("TestValue1494081794", Substitute.For<IGenerationOptions>(), default(INamingOptions), false));
         }
 
         [TestCase(null)]
@@ -26,7 +26,7 @@ namespace Unitverse.Core.Tests.Options
         [TestCase("   ")]
         public static void CanCallCreateWithInvalidSolutionFilePath(string value)
         {
-            Assert.DoesNotThrow(() => UnitTestGeneratorOptionsFactory.Create(value, Substitute.For<IGenerationOptions>(), Substitute.For<INamingOptions>()));
+            Assert.DoesNotThrow(() => UnitTestGeneratorOptionsFactory.Create(value, Substitute.For<IGenerationOptions>(), Substitute.For<INamingOptions>(), false));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace Unitverse.Core.Tests.Options
                 File.WriteAllText(Path.Combine(pathB, ".unitTestGeneratorConfig"), "framework-type=NUnit3");
                 File.WriteAllText(Path.Combine(pathC, ".unitTestGeneratorConfig"), "framework-type=NUnit2");
 
-                var result = UnitTestGeneratorOptionsFactory.Create(solutionFilePath, generationOptions, namingOptions);
+                var result = UnitTestGeneratorOptionsFactory.Create(solutionFilePath, generationOptions, namingOptions, false);
                 Assert.That(result.GenerationOptions.FrameworkType, Is.EqualTo(TestFrameworkTypes.NUnit2));
                 Assert.That(result.GenerationOptions.MockingFrameworkType, Is.EqualTo(MockingFrameworkType.NSubstitute));
             }

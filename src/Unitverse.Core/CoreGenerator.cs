@@ -87,12 +87,15 @@
                             }
                             else if (generationContext.WithRegeneration)
                             {
+                                generationContext.FrameworkSet.Context.TestMethodsRegenerated++;
                                 declaration = declaration.ReplaceNode(existingMethod, method);
                                 generationContext.MethodsEmitted++;
                             }
                         }
                         else
                         {
+                            generationContext.FrameworkSet.Context.TestMethodsGenerated++;
+
                             declaration = declaration.AddMembers(method);
                             generationContext.MethodsEmitted++;
                         }
@@ -247,13 +250,13 @@
             return targetType;
         }
 
-        private static GenerationResult CreateGenerationResult(CompilationUnitSyntax compilation, List<ClassModel> classModels, bool anyMethodsEmitted)
+        private static GenerationResult CreateGenerationResult(CompilationUnitSyntax compilation, List<ClassModel> classModels, bool anyMethodsEmitted, IGenerationStatistics generationStatistics)
         {
             using (var workspace = new AdhocWorkspace())
             {
                 compilation = (CompilationUnitSyntax)Formatter.Format(compilation, workspace);
 
-                var generationResult = new GenerationResult(compilation.ToFullString(), anyMethodsEmitted);
+                var generationResult = new GenerationResult(compilation.ToFullString(), anyMethodsEmitted, generationStatistics);
                 foreach (var asset in classModels.SelectMany(x => x.RequiredAssets).Distinct())
                 {
                     generationResult.RequiredAssets.Add(asset);
@@ -331,6 +334,7 @@
 
                         if (parameterModel.TypeInfo.Type.TypeKind == TypeKind.Interface)
                         {
+                            frameworkSet.Context.InterfacesMocked++;
                             fieldTypeSyntax = frameworkSet.MockingFramework.GetFieldType(fieldTypeSyntax);
                             defaultExpression = frameworkSet.MockingFramework.GetFieldInitializer(parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context));
                         }
@@ -386,11 +390,14 @@
         private static GenerationResult Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, bool withRegeneration, IUnitTestGeneratorOptions options, NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax originalTargetNamespace, bool isSingleItemGeneration, IMessageLogger messageLogger)
         {
             var frameworkSet = FrameworkSetFactory.Create(options);
+
             var model = new TestableItemExtractor(sourceModel.SyntaxTree, sourceModel);
             var classModels = model.Extract(sourceSymbol).ToList();
 
             foreach (var c in classModels)
             {
+                frameworkSet.Context.TestClassesGenerated++;
+
                 c.SetTargetInstance(frameworkSet.NamingProvider.TargetFieldName.Resolve(new NamingContext(c.ClassName)));
                 if (c.Declaration.Parent is NamespaceDeclarationSyntax namespaceDeclaration)
                 {
@@ -436,7 +443,7 @@
 
             compilation = AddTargetNamespaceToCompilation(originalTargetNamespace, compilation, targetNamespace, options.GenerationOptions);
 
-            var generationResult = CreateGenerationResult(compilation, classModels, anyMethodsEmitted);
+            var generationResult = CreateGenerationResult(compilation, classModels, anyMethodsEmitted, frameworkSet.Context);
 
             return generationResult;
         }

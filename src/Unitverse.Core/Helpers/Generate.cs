@@ -374,6 +374,7 @@
                 ExpressionSyntax defaultExpression;
                 if (parameterModel.TypeInfo.Type.TypeKind == TypeKind.Interface)
                 {
+                    frameworkSet.Context.InterfacesMocked++;
                     defaultExpression = frameworkSet.MockingFramework.GetFieldInitializer(parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context));
                 }
                 else

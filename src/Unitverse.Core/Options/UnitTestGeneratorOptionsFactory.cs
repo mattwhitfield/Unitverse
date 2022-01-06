@@ -7,7 +7,7 @@
 
     public static class UnitTestGeneratorOptionsFactory
     {
-        public static IUnitTestGeneratorOptions Create(string solutionFilePath, IGenerationOptions generationOptions, INamingOptions namingOptions)
+        public static IUnitTestGeneratorOptions Create(string solutionFilePath, IGenerationOptions generationOptions, INamingOptions namingOptions, bool statisticsGenerationEnabled)
         {
             if (generationOptions == null)
             {
@@ -31,7 +31,7 @@
                 properties.ApplyTo(mutableNamingOptions);
             }
 
-            return new UnitTestGeneratorOptions(mutableGenerationOptions, mutableNamingOptions);
+            return new UnitTestGeneratorOptions(mutableGenerationOptions, mutableNamingOptions, statisticsGenerationEnabled);
         }
     }
 }

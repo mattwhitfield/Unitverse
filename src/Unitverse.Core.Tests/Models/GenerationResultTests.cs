@@ -6,6 +6,8 @@ namespace Unitverse.Core.Tests.Models
     using Unitverse.Core.Models;
     using System;
     using FluentAssertions;
+    using Unitverse.Core.Helpers;
+    using NSubstitute;
 
     [TestFixture]
     public class GenerationResultTests
@@ -13,19 +15,30 @@ namespace Unitverse.Core.Tests.Models
         private GenerationResult _testClass;
         private string _fileContent;
         private bool _anyMethodsEmitted;
+        private IGenerationStatistics _stats;
+        private IGenerationStatistics _sourceStatistics;
 
         [SetUp]
         public void SetUp()
         {
             _fileContent = "TestValue1767881884";
             _anyMethodsEmitted = false;
-            _testClass = new GenerationResult(_fileContent, _anyMethodsEmitted);
+            _sourceStatistics = Substitute.For<IGenerationStatistics>();
+            _stats = Substitute.For<IGenerationStatistics>();
+            _stats.InterfacesMocked.Returns(1);
+            _stats.TestClassesGenerated.Returns(2);
+            _stats.TestMethodsGenerated.Returns(3);
+            _stats.TestMethodsRegenerated.Returns(4);
+            _stats.TypesConstructed.Returns(5);
+            _stats.ValuesGenerated.Returns(6);
+
+            _testClass = new GenerationResult(_fileContent, _anyMethodsEmitted, _stats);
         }
 
         [Test]
         public void CanConstruct()
         {
-            var instance = new GenerationResult(_fileContent, _anyMethodsEmitted);
+            var instance = new GenerationResult(_fileContent, _anyMethodsEmitted, Substitute.For<IGenerationStatistics>());
             instance.Should().NotBeNull();
         }
 
@@ -33,6 +46,17 @@ namespace Unitverse.Core.Tests.Models
         public void FileContentIsInitializedCorrectly()
         {
             _testClass.FileContent.Should().BeSameAs(_fileContent);
+        }
+
+        [Test]
+        public void GenerationStatisticsAreInitializedCorrectly()
+        {
+            _testClass.InterfacesMocked.Should().Be(1);
+            _testClass.TestClassesGenerated.Should().Be(2);
+            _testClass.TestMethodsGenerated.Should().Be(3);
+            _testClass.TestMethodsRegenerated.Should().Be(4);
+            _testClass.TypesConstructed.Should().Be(5);
+            _testClass.ValuesGenerated.Should().Be(6);
         }
 
         [Test]
@@ -46,6 +70,12 @@ namespace Unitverse.Core.Tests.Models
         public void AnyMethodsEmittedIsInitializedCorrectly()
         {
             _testClass.AnyMethodsEmitted.Should().Be(_anyMethodsEmitted);
+        }
+
+        [Test]
+        public void CannotConstructWithNullSourceStatistics()
+        {
+            FluentActions.Invoking(() => new GenerationResult("TestValue281816781", true, default(IGenerationStatistics))).Should().Throw<ArgumentNullException>();
         }
     }
 }
