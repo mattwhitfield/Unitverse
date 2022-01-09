@@ -392,7 +392,7 @@
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             var model = new TestableItemExtractor(sourceModel.SyntaxTree, sourceModel);
-            var classModels = model.Extract(sourceSymbol).ToList();
+            var classModels = model.Extract(sourceSymbol, options).ToList();
 
             foreach (var c in classModels)
             {

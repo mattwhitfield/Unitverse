@@ -167,7 +167,7 @@
 
             var extractor = new TestableItemExtractor(tree, semanticModel);
 
-            var classModels = extractor.Extract(methodSyntax);
+            var classModels = extractor.Extract(methodSyntax, Substitute.For<IUnitTestGeneratorOptions>());
             var classModel = classModels.FirstOrDefault();
 
             Assert.That(classModel, Is.Not.Null);

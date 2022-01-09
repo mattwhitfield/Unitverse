@@ -53,8 +53,13 @@
         public bool EmitUsingsOutsideNamespace { get; set; } = false;
 
         [Category("Generation")]
-        [DisplayName("Partial Generation")]
+        [DisplayName("Partial generation")]
         [Description("When enabled, any new test methods are allowed to be added to the target test class without causing an error")]
         public bool PartialGenerationAllowed { get; set; } = true;
+
+        [Category("Generation")]
+        [DisplayName("Emit tests for internal members")]
+        [Description("Whether to emit tests for members marked as internal as well as public members")]
+        public bool EmitTestsForInternals { get; set; } = false;
     }
 }

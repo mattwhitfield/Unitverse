@@ -21,5 +21,7 @@
         bool EmitUsingsOutsideNamespace { get; }
 
         bool PartialGenerationAllowed { get; }
+
+        bool EmitTestsForInternals { get; }
     }
 }

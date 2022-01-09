@@ -27,5 +27,7 @@
         public bool EmitUsingsOutsideNamespace { get; }
 
         public bool PartialGenerationAllowed { get; } = false;
+
+        public bool EmitTestsForInternals { get; } = false;
     }
 }

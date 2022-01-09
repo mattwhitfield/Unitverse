@@ -7,6 +7,7 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class TestableItemExtractor
     {
@@ -33,9 +34,9 @@
             return typeList;
         }
 
-        public IEnumerable<ClassModel> Extract(SyntaxNode sourceSymbol)
+        public IEnumerable<ClassModel> Extract(SyntaxNode sourceSymbol, IUnitTestGeneratorOptions options)
         {
-            var models = ExtractClassModels(Tree).ToList();
+            var models = ExtractClassModels(Tree, options).ToList();
             if (sourceSymbol != null)
             {
                 models.Each(x => x.SetShouldGenerateForSingleItem(sourceSymbol));
@@ -44,12 +45,17 @@
             return models;
         }
 
-        private static HashSet<SyntaxKind> GetAllowedModifiers(TypeDeclarationSyntax syntax)
+        private static HashSet<SyntaxKind> GetAllowedModifiers(TypeDeclarationSyntax syntax, IUnitTestGeneratorOptions options)
         {
             var allowedModifiers = new HashSet<SyntaxKind> { SyntaxKind.PublicKeyword };
             if (syntax.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)))
             {
                 allowedModifiers.Add(SyntaxKind.ProtectedKeyword);
+            }
+
+            if (options.GenerationOptions.EmitTestsForInternals)
+            {
+                allowedModifiers.Add(SyntaxKind.InternalKeyword);
             }
 
             return allowedModifiers;
@@ -63,9 +69,9 @@
             }
         }
 
-        private ClassModel ExtractClassModel(TypeDeclarationSyntax syntax)
+        private ClassModel ExtractClassModel(TypeDeclarationSyntax syntax, IUnitTestGeneratorOptions options)
         {
-            var allowedModifiers = GetAllowedModifiers(syntax);
+            var allowedModifiers = GetAllowedModifiers(syntax, options);
 
             var model = new ClassModel(syntax, SemanticModel, false);
 
@@ -95,7 +101,7 @@
             return model;
         }
 
-        private IEnumerable<ClassModel> ExtractClassModels(SyntaxTree tree)
+        private IEnumerable<ClassModel> ExtractClassModels(SyntaxTree tree, IUnitTestGeneratorOptions options)
         {
             var root = tree.GetRoot();
 
@@ -104,7 +110,7 @@
 
             foreach (var syntax in typeList)
             {
-                var model = ExtractClassModel(syntax);
+                var model = ExtractClassModel(syntax, options);
 
                 fileUsings.ForEach(model.Usings.Add);
 

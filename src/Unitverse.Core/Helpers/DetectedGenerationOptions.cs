@@ -36,5 +36,7 @@
         public bool EmitUsingsOutsideNamespace => _baseOptions.EmitUsingsOutsideNamespace;
 
         public bool PartialGenerationAllowed => _baseOptions.PartialGenerationAllowed;
+
+        public bool EmitTestsForInternals => _baseOptions.EmitTestsForInternals;
     }
 }
