@@ -5,8 +5,10 @@
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
+    using NSubstitute;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     internal static class ClassModelProvider
     {
@@ -69,7 +71,7 @@
             var semanticModel = compilation.GetSemanticModel(tree);
 
             var model = new TestableItemExtractor(semanticModel.SyntaxTree, semanticModel);
-            return model.Extract(null).First();
+            return model.Extract(null, Substitute.For<IUnitTestGeneratorOptions>()).First();
         }
 
         public static void Consume<T>(this IEnumerable<T> enumerable)

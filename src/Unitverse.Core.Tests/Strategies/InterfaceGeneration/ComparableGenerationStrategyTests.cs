@@ -56,7 +56,7 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
             var syntaxTree = TestSemanticModelFactory.CreateTree(TestClasses.IComparableTestFile);
             var model = TestSemanticModelFactory.CreateSemanticModel(syntaxTree);
             var extractor = new TestableItemExtractor(syntaxTree, model);
-            var classModel = extractor.Extract(syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().First()).First();
+            var classModel = extractor.Extract(syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().First(), Substitute.For<IUnitTestGeneratorOptions>()).First();
 
             var result = _testClass.Create(classModel, classModel, new NamingContext("class"));
 

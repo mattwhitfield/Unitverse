@@ -3,8 +3,10 @@ namespace Unitverse.Core.Tests.Helpers
     using System;
     using System.Linq;
     using Microsoft.CodeAnalysis;
+    using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
 
     [TestFixture]
     public class TestableItemExtractorTests
@@ -43,7 +45,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void CanCallExtract()
         {
-            var result = _testClass.Extract(null).Single();
+            var result = _testClass.Extract(null, Substitute.For<IUnitTestGeneratorOptions>()).Single();
             Assert.That(result.Constructors.Count, Is.EqualTo(1));
             Assert.That(result.Methods.Count, Is.EqualTo(2));
             Assert.That(result.Indexers.Count, Is.EqualTo(1));
@@ -53,7 +55,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void CanCallExtractWithMethodSymbol()
         {
-            var result = _testClass.Extract(TestSemanticModelFactory.Method).Single();
+            var result = _testClass.Extract(TestSemanticModelFactory.Method, Substitute.For<IUnitTestGeneratorOptions>()).Single();
             Assert.That(result.Constructors.Count(x => x.ShouldGenerate), Is.EqualTo(0));
             Assert.That(result.Methods.Count(x => x.ShouldGenerate), Is.EqualTo(1));
             Assert.That(result.Indexers.Count(x => x.ShouldGenerate), Is.EqualTo(0));
@@ -63,7 +65,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void CanCallExtractWithConstructorSymbol()
         {
-            var result = _testClass.Extract(TestSemanticModelFactory.Constructor).Single();
+            var result = _testClass.Extract(TestSemanticModelFactory.Constructor, Substitute.For<IUnitTestGeneratorOptions>()).Single();
             Assert.That(result.Constructors.Count, Is.EqualTo(1));
             Assert.That(result.Methods.Count, Is.EqualTo(2));
             Assert.That(result.Indexers.Count, Is.EqualTo(1));
@@ -77,7 +79,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void CanCallExtractWithPropertySymbol()
         {
-            var result = _testClass.Extract(TestSemanticModelFactory.Property).Single();
+            var result = _testClass.Extract(TestSemanticModelFactory.Property, Substitute.For<IUnitTestGeneratorOptions>()).Single();
             Assert.That(result.Constructors.Count, Is.EqualTo(1));
             Assert.That(result.Methods.Count, Is.EqualTo(2));
             Assert.That(result.Indexers.Count, Is.EqualTo(1));
@@ -91,7 +93,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void CanCallExtractWithIndexerSymbol()
         {
-            var result = _testClass.Extract(TestSemanticModelFactory.Indexer).Single();
+            var result = _testClass.Extract(TestSemanticModelFactory.Indexer, Substitute.For<IUnitTestGeneratorOptions>()).Single();
             Assert.That(result.Constructors.Count, Is.EqualTo(1));
             Assert.That(result.Methods.Count, Is.EqualTo(2));
             Assert.That(result.Indexers.Count, Is.EqualTo(1));
@@ -105,7 +107,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void CanCallExtractWithTypeSymbol()
         {
-            var result = _testClass.Extract(TestSemanticModelFactory.Class).Single();
+            var result = _testClass.Extract(TestSemanticModelFactory.Class, Substitute.For<IUnitTestGeneratorOptions>()).Single();
             Assert.That(result.Constructors.Count, Is.EqualTo(1));
             Assert.That(result.Methods.Count, Is.EqualTo(2));
             Assert.That(result.Indexers.Count, Is.EqualTo(1));

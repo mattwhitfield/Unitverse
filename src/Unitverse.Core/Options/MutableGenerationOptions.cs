@@ -21,6 +21,7 @@
             AutoDetectFrameworkTypes = options.AutoDetectFrameworkTypes;
             EmitUsingsOutsideNamespace = options.EmitUsingsOutsideNamespace;
             PartialGenerationAllowed = options.PartialGenerationAllowed;
+            EmitTestsForInternals = options.EmitTestsForInternals;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -42,5 +43,7 @@
         public bool EmitUsingsOutsideNamespace { get; set; }
 
         public bool PartialGenerationAllowed { get; set; }
+
+        public bool EmitTestsForInternals { get; set; }
     }
 }

@@ -256,7 +256,7 @@ namespace Unitverse.Core.Tests.Helpers
         public static void CanCallSetupMethod()
         {
             var extractor = new TestableItemExtractor(TestSemanticModelFactory.Tree, TestSemanticModelFactory.Model);
-            var model = extractor.Extract(null).First();
+            var model = extractor.Extract(null, Substitute.For<IUnitTestGeneratorOptions>()).First();
             var targetTypeName = "TestValue1540739065";
             var options = Substitute.For<IUnitTestGeneratorOptions>();
             options.NamingOptions.TargetFieldName.Returns("_testClass");
