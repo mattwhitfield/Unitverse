@@ -62,7 +62,7 @@
         {
             var target = property.IsStatic ? sourceModel.TypeSyntax : sourceModel.TargetInstance;
 
-            var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet);
+            var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet, false);
             yield return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), defaultAssignmentValue));
             yield return _frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage);
         }

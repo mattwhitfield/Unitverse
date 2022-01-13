@@ -1,0 +1,16 @@
+namespace TestNamespace.SubNameSpace
+{
+	using System;
+
+
+	public class SomeClass
+	{
+		public delegate int PerformCalculation(int x, int y);
+
+		public SomeClass(Func<string> func, Func<int, int, string> func2, PerformCalculation del)
+		{
+		}
+
+		public Action<SomeClass, int> SomeAction { get; set; }
+	}
+}

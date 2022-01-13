@@ -57,7 +57,7 @@
 
             foreach (var parameter in method.Parameters)
             {
-                var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
+                var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet, true);
 
                 generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(
                     SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName(Strings.Create_var))

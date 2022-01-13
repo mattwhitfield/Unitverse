@@ -148,7 +148,7 @@
                 return objectCreation.WithArgumentList(SyntaxFactory.ArgumentList());
             }
 
-            return AssignmentValueHelper.GetDefaultAssignmentValue(TypeSymbol, SemanticModel, frameworkSet);
+            return AssignmentValueHelper.GetDefaultAssignmentValue(TypeSymbol, SemanticModel, frameworkSet, true);
         }
 
         public string GetMethodUniqueName(IMethodModel method)

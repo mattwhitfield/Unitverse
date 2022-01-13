@@ -340,7 +340,7 @@
                         }
                         else
                         {
-                            defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameterModel.TypeInfo, classModel.SemanticModel, frameworkSet);
+                            defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameterModel.TypeInfo, classModel.SemanticModel, frameworkSet, false);
                         }
 
                         var variable = SyntaxFactory.VariableDeclaration(fieldTypeSyntax)

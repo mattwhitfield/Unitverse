@@ -69,7 +69,7 @@
                                     SyntaxFactory.Identifier(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue))
                                 .WithInitializer(
                                     SyntaxFactory.EqualsValueClause(
-                                        AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet))))));
+                                        AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet, true))))));
 
             var target = property.IsStatic ? sourceModel.TypeSyntax : sourceModel.TargetInstance;
 
