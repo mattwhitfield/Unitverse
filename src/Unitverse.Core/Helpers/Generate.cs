@@ -412,6 +412,27 @@
             return SyntaxFactory.ArgumentList(ArgumentList(expressions));
         }
 
+        public static ParameterListSyntax ParameterList(IEnumerable<string> parameters)
+        {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            var tokens = new List<SyntaxNodeOrToken>();
+            foreach (var parameter in parameters)
+            {
+                if (tokens.Count > 0)
+                {
+                    tokens.Add(SyntaxFactory.Token(SyntaxKind.CommaToken));
+                }
+
+                tokens.Add(SyntaxFactory.Parameter(SyntaxFactory.Identifier(parameter)));
+            }
+
+            return SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList<ParameterSyntax>(tokens));
+        }
+
         private static SeparatedSyntaxList<ArgumentSyntax> ArgumentList(params CSharpSyntaxNode[] expressions)
         {
             if (expressions == null)

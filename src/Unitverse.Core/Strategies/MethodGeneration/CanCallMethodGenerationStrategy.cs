@@ -68,7 +68,7 @@
                     var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
 
                     generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(
-                        SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName(Strings.Create_var))
+                        SyntaxFactory.VariableDeclaration(AssignmentValueHelper.GetTypeOrImplicitType(parameter.TypeInfo.Type, _frameworkSet))
                                      .WithVariables(SyntaxFactory.SingletonSeparatedList(
                                                        SyntaxFactory.VariableDeclarator(parameter.Identifier)
                                                                     .WithInitializer(SyntaxFactory.EqualsValueClause(defaultAssignmentValue))))));

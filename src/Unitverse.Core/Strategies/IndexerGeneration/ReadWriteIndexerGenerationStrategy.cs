@@ -63,8 +63,7 @@
             var paramExpressions = indexer.Parameters.Select(param => AssignmentValueHelper.GetDefaultAssignmentValue(param.TypeInfo, sourceModel.SemanticModel, _frameworkSet)).ToArray();
 
             yield return SyntaxFactory.LocalDeclarationStatement(
-                SyntaxFactory.VariableDeclaration(
-                        SyntaxFactory.IdentifierName(Strings.Create_var))
+                SyntaxFactory.VariableDeclaration(AssignmentValueHelper.GetTypeOrImplicitType(indexer.TypeInfo.Type, _frameworkSet))
                     .WithVariables(
                         SyntaxFactory.SingletonSeparatedList(
                             SyntaxFactory.VariableDeclarator(

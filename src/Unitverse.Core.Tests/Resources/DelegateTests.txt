@@ -1,0 +1,61 @@
+namespace TestNamespace.SubNameSpace
+{
+	using System;
+
+	public class SomeClass
+	{
+		public SomeClass(int val)
+		{
+			Val = val;
+		}
+
+		public int Val { get; }
+	}
+
+    public static class TestClass
+    {
+        public static void ThisIsAMethod(Func<string> func)
+	    {
+	    }
+
+        public static void ThisIsAMethod2(Func<string, SomeClass> func)
+	    {
+	    }
+
+        public static void ThisIsAMethod3(Func<int, string, SomeClass> func)
+	    {
+	    }
+
+        public static void ThisIsAMethod4(Func<int, int, string, SomeClass> func)
+	    {
+	    }
+
+        public static void ThisIsAMethod5(Func<int, int, int, string, SomeClass> func)
+	    {
+	    }
+
+        public static void ThisIsAMethod6(Action action)
+	    {
+	    }
+
+        public static void ThisIsAMethod7(Action<SomeClass> action)
+	    {
+	    }
+
+        public static void ThisIsAMethod8(Action<SomeClass, int> action)
+	    {
+	    }
+
+        public static void ThisIsAMethod9(Action<SomeClass, int, int> action)
+	    {
+	    }
+
+        public static void ThisIsAMethod10(Action<SomeClass, int, int, int> action)
+	    {
+	    }
+
+        public static void ThisIsAMethod11(Action<SomeClass, int, int, int, int> action)
+	    {
+	    }
+    }
+}

@@ -62,7 +62,7 @@
         {
             yield return SyntaxFactory.LocalDeclarationStatement(
                 SyntaxFactory.VariableDeclaration(
-                        SyntaxFactory.IdentifierName(Strings.Create_var))
+                        AssignmentValueHelper.GetTypeOrImplicitType(property.TypeInfo.Type, _frameworkSet))
                     .WithVariables(
                         SyntaxFactory.SingletonSeparatedList(
                             SyntaxFactory.VariableDeclarator(

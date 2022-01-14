@@ -11,6 +11,16 @@
 
     public static class AssignmentValueHelper
     {
+        public static TypeSyntax GetTypeOrImplicitType(ITypeSymbol type, IFrameworkSet frameworkSet)
+        {
+            if (type.TypeKind == TypeKind.Delegate)
+            {
+                return type.ToTypeSyntax(frameworkSet.Context);
+            }
+
+            return SyntaxFactory.IdentifierName("var");
+        }
+
         public static ExpressionSyntax GetDefaultAssignmentValue(TypeInfo propertyType, SemanticModel model, IFrameworkSet frameworkSet)
         {
             if (frameworkSet == null)
@@ -79,10 +89,50 @@
                     return GetClassDefaultAssignmentValue(model, visitedTypes, frameworkSet, namedType);
                 }
 
+                if (propertyType is INamedTypeSymbol delegateType && (propertyType.TypeKind == TypeKind.Delegate))
+                {
+                    var invokeMethod = delegateType.DelegateInvokeMethod;
+                    if (invokeMethod != null)
+                    {
+                        return GetDefaultDelegateValue(model, visitedTypes, frameworkSet, invokeMethod);
+                    }
+                }
+
                 visitedTypes.Remove(fullName);
             }
 
             return SyntaxFactory.DefaultExpression(propertyType.ToTypeSyntax(frameworkSet.Context));
+        }
+
+        private static ExpressionSyntax GetDefaultDelegateValue(SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, IMethodSymbol invokeMethod)
+        {
+            var isVoid = invokeMethod.ReturnType.SpecialType == SpecialType.System_Void;
+
+            var parameterCount = invokeMethod.Parameters.Length;
+            LambdaExpressionSyntax lambda;
+            if (parameterCount == 0)
+            {
+                lambda = SyntaxFactory.ParenthesizedLambdaExpression();
+            }
+            else if (parameterCount == 1)
+            {
+                lambda = SyntaxFactory.SimpleLambdaExpression(SyntaxFactory.Parameter(SyntaxFactory.Identifier("x")));
+            }
+            else
+            {
+                var start = parameterCount < 4 ? 'x' : 'a';
+                var parameterList = Generate.ParameterList(Enumerable.Range(0, parameterCount).Select(x => ((char)(start + x)).ToString()));
+                lambda = SyntaxFactory.ParenthesizedLambdaExpression().WithParameterList(parameterList);
+            }
+
+            if (isVoid)
+            {
+                return lambda.WithBlock(SyntaxFactory.Block());
+            }
+            else
+            {
+                return lambda.WithExpressionBody(GetDefaultAssignmentValue(invokeMethod.ReturnType, model, visitedTypes, frameworkSet));
+            }
         }
 
         private static ExpressionSyntax GetClassDefaultAssignmentValue(SemanticModel semanticModel, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, INamedTypeSymbol namedType)
