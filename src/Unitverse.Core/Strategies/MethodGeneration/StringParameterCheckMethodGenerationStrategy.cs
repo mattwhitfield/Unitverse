@@ -79,7 +79,7 @@
                     var parameter = method.Parameters[index];
                     if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
                     {
-                        var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet, false);
+                        var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
 
                         if (index == i)
                         {
@@ -106,7 +106,7 @@
                         }
                         else
                         {
-                            paramList.Add(AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet, false));
+                            paramList.Add(AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet));
                         }
                     }
                 }

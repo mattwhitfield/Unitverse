@@ -60,18 +60,17 @@
 
         private IEnumerable<StatementSyntax> GetPropertyAssertionBodyStatements(IIndexerModel indexer, ClassModel sourceModel)
         {
-            var paramExpressions = indexer.Parameters.Select(param => AssignmentValueHelper.GetDefaultAssignmentValue(param.TypeInfo, sourceModel.SemanticModel, _frameworkSet, false)).ToArray();
+            var paramExpressions = indexer.Parameters.Select(param => AssignmentValueHelper.GetDefaultAssignmentValue(param.TypeInfo, sourceModel.SemanticModel, _frameworkSet)).ToArray();
 
             yield return SyntaxFactory.LocalDeclarationStatement(
-                SyntaxFactory.VariableDeclaration(
-                        SyntaxFactory.IdentifierName(Strings.Create_var))
+                SyntaxFactory.VariableDeclaration(AssignmentValueHelper.GetTypeOrImplicitType(indexer.TypeInfo.Type, _frameworkSet))
                     .WithVariables(
                         SyntaxFactory.SingletonSeparatedList(
                             SyntaxFactory.VariableDeclarator(
                                     SyntaxFactory.Identifier(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue))
                                 .WithInitializer(
                                     SyntaxFactory.EqualsValueClause(
-                                        AssignmentValueHelper.GetDefaultAssignmentValue(indexer.TypeInfo, sourceModel.SemanticModel, _frameworkSet, true))))));
+                                        AssignmentValueHelper.GetDefaultAssignmentValue(indexer.TypeInfo, sourceModel.SemanticModel, _frameworkSet))))));
 
             yield return _frameworkSet.AssertionFramework.AssertIsInstanceOf(Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), indexer.TypeInfo.ToTypeSyntax(_frameworkSet.Context), indexer.TypeInfo.Type.IsReferenceType);
 

@@ -379,7 +379,7 @@
                 }
                 else
                 {
-                    defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameterModel.TypeInfo, model.SemanticModel, frameworkSet, false);
+                    defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameterModel.TypeInfo, model.SemanticModel, frameworkSet);
                 }
 
                 setupMethod = setupMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(

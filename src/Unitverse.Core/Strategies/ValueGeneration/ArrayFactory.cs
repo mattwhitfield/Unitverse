@@ -35,11 +35,11 @@
                         SyntaxFactory.SeparatedList<ExpressionSyntax>(
                             new SyntaxNodeOrToken[]
                             {
-                                AssignmentValueHelper.GetDefaultAssignmentValue(arrayTypeSymbol.ElementType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet, true),
+                                AssignmentValueHelper.GetDefaultAssignmentValue(arrayTypeSymbol.ElementType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet),
                                 SyntaxFactory.Token(SyntaxKind.CommaToken),
-                                AssignmentValueHelper.GetDefaultAssignmentValue(arrayTypeSymbol.ElementType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet, true),
+                                AssignmentValueHelper.GetDefaultAssignmentValue(arrayTypeSymbol.ElementType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet),
                                 SyntaxFactory.Token(SyntaxKind.CommaToken),
-                                AssignmentValueHelper.GetDefaultAssignmentValue(arrayTypeSymbol.ElementType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet, true),
+                                AssignmentValueHelper.GetDefaultAssignmentValue(arrayTypeSymbol.ElementType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet),
                             })));
             }
 
@@ -80,15 +80,15 @@
                         SyntaxFactory.SeparatedList<ExpressionSyntax>(
                             new SyntaxNodeOrToken[]
                             {
-                                AssignmentValueHelper.GetDefaultAssignmentValue(targetType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet, true),
+                                AssignmentValueHelper.GetDefaultAssignmentValue(targetType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet),
                                 SyntaxFactory.Token(SyntaxKind.CommaToken),
-                                AssignmentValueHelper.GetDefaultAssignmentValue(targetType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet, true),
+                                AssignmentValueHelper.GetDefaultAssignmentValue(targetType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet),
                                 SyntaxFactory.Token(SyntaxKind.CommaToken),
-                                AssignmentValueHelper.GetDefaultAssignmentValue(targetType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet, true),
+                                AssignmentValueHelper.GetDefaultAssignmentValue(targetType, model, new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase), frameworkSet),
                             })));
             }
 
-            return AssignmentValueHelper.GetDefaultAssignmentValue(typeSymbol, model, frameworkSet, true);
+            return AssignmentValueHelper.GetDefaultAssignmentValue(typeSymbol, model, frameworkSet);
         }
 
         public static ExpressionSyntax Byte()

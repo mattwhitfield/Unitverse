@@ -11,22 +11,32 @@
 
     public static class AssignmentValueHelper
     {
-        public static ExpressionSyntax GetDefaultAssignmentValue(TypeInfo propertyType, SemanticModel model, IFrameworkSet frameworkSet, bool useExplicitTyping)
+        public static TypeSyntax GetTypeOrImplicitType(ITypeSymbol type, IFrameworkSet frameworkSet)
+        {
+            if (type.TypeKind == TypeKind.Delegate)
+            {
+                return type.ToTypeSyntax(frameworkSet.Context);
+            }
+
+            return SyntaxFactory.IdentifierName("var");
+        }
+
+        public static ExpressionSyntax GetDefaultAssignmentValue(TypeInfo propertyType, SemanticModel model, IFrameworkSet frameworkSet)
         {
             if (frameworkSet == null)
             {
                 throw new ArgumentNullException(nameof(frameworkSet));
             }
 
-            return GetDefaultAssignmentValue(propertyType.Type, model, new HashSet<string>(StringComparer.OrdinalIgnoreCase), frameworkSet, useExplicitTyping);
+            return GetDefaultAssignmentValue(propertyType.Type, model, new HashSet<string>(StringComparer.OrdinalIgnoreCase), frameworkSet);
         }
 
-        public static ExpressionSyntax GetDefaultAssignmentValue(ITypeSymbol propertyType, SemanticModel model, IFrameworkSet frameworkSet, bool useExplicitTyping)
+        public static ExpressionSyntax GetDefaultAssignmentValue(ITypeSymbol propertyType, SemanticModel model, IFrameworkSet frameworkSet)
         {
-            return GetDefaultAssignmentValue(propertyType, model, new HashSet<string>(StringComparer.OrdinalIgnoreCase), frameworkSet, useExplicitTyping);
+            return GetDefaultAssignmentValue(propertyType, model, new HashSet<string>(StringComparer.OrdinalIgnoreCase), frameworkSet);
         }
 
-        public static ExpressionSyntax GetDefaultAssignmentValue(ITypeSymbol propertyType, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, bool useExplicitTyping)
+        public static ExpressionSyntax GetDefaultAssignmentValue(ITypeSymbol propertyType, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
             if (propertyType == null)
             {
@@ -84,13 +94,7 @@
                     var invokeMethod = delegateType.DelegateInvokeMethod;
                     if (invokeMethod != null)
                     {
-                        var delegateSyntax = GetDefaultDelegateValue(model, visitedTypes, frameworkSet, invokeMethod);
-                        if (useExplicitTyping)
-                        {
-                            return SyntaxFactory.CastExpression(delegateType.ToTypeSyntax(frameworkSet.Context), SyntaxFactory.ParenthesizedExpression(delegateSyntax));
-                        }
-
-                        return delegateSyntax;
+                        return GetDefaultDelegateValue(model, visitedTypes, frameworkSet, invokeMethod);
                     }
                 }
 
@@ -127,9 +131,8 @@
             }
             else
             {
-                return lambda.WithExpressionBody(GetDefaultAssignmentValue(invokeMethod.ReturnType, model, visitedTypes, frameworkSet, false));
+                return lambda.WithExpressionBody(GetDefaultAssignmentValue(invokeMethod.ReturnType, model, visitedTypes, frameworkSet));
             }
-
         }
 
         private static ExpressionSyntax GetClassDefaultAssignmentValue(SemanticModel semanticModel, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, INamedTypeSymbol namedType)
@@ -163,7 +166,7 @@
                 foreach (var parameter in constructor.Parameters)
                 {
                     var visitedTypesThisParameter = new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase);
-                    parameters.Add(GetDefaultAssignmentValue(parameter.Type, semanticModel, visitedTypesThisParameter, frameworkSet, false));
+                    parameters.Add(GetDefaultAssignmentValue(parameter.Type, semanticModel, visitedTypesThisParameter, frameworkSet));
                 }
             }
 
@@ -202,7 +205,7 @@
                             .WithArgumentList(Generate.Arguments(factoryMethod.Parameters.Select(x =>
                             {
                                 var visitedTypesThisMember = new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase);
-                                return GetDefaultAssignmentValue(x.Type, semanticModel, visitedTypesThisMember, frameworkSet, false);
+                                return GetDefaultAssignmentValue(x.Type, semanticModel, visitedTypesThisMember, frameworkSet);
                             }).OfType<CSharpSyntaxNode>().ToArray()));
                         return true;
                     }
@@ -237,7 +240,7 @@
                         expressionSyntax = Generate.ObjectCreation(namedType.ToTypeSyntax(frameworkSet.Context), initializableProperties.Select(x =>
                         {
                             var visitedTypesThisMember = new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase);
-                            return Generate.Assignment(x.Name, GetDefaultAssignmentValue(x.Type, semanticModel, visitedTypesThisMember, frameworkSet, false));
+                            return Generate.Assignment(x.Name, GetDefaultAssignmentValue(x.Type, semanticModel, visitedTypesThisMember, frameworkSet));
                         }));
                         return true;
                     }

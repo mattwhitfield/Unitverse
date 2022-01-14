@@ -78,9 +78,9 @@
             if (withDefaults)
             {
                 argumentList.Add(SyntaxFactory.Token(SyntaxKind.CommaToken));
-                argumentList.Add(SyntaxFactory.Argument(AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet, true)));
+                argumentList.Add(SyntaxFactory.Argument(AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet)));
                 argumentList.Add(SyntaxFactory.Token(SyntaxKind.CommaToken));
-                argumentList.Add(SyntaxFactory.Argument(AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet, true)));
+                argumentList.Add(SyntaxFactory.Argument(AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet)));
             }
 
             yield return SyntaxFactory.ExpressionStatement(

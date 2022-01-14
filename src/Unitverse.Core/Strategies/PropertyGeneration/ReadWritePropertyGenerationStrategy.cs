@@ -62,14 +62,14 @@
         {
             yield return SyntaxFactory.LocalDeclarationStatement(
                 SyntaxFactory.VariableDeclaration(
-                        SyntaxFactory.IdentifierName(Strings.Create_var))
+                        AssignmentValueHelper.GetTypeOrImplicitType(property.TypeInfo.Type, _frameworkSet))
                     .WithVariables(
                         SyntaxFactory.SingletonSeparatedList(
                             SyntaxFactory.VariableDeclarator(
                                     SyntaxFactory.Identifier(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue))
                                 .WithInitializer(
                                     SyntaxFactory.EqualsValueClause(
-                                        AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet, true))))));
+                                        AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet))))));
 
             var target = property.IsStatic ? sourceModel.TypeSyntax : sourceModel.TargetInstance;
 

@@ -85,7 +85,8 @@
                     var parameter = method.Parameters[index];
                     if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
                     {
-                        var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet, true);
+                        var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
+                        var typeSyntax = AssignmentValueHelper.GetTypeOrImplicitType(parameter.TypeInfo.Type, _frameworkSet);
 
                         if (index == i)
                         {
@@ -93,7 +94,7 @@
                         }
 
                         generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(
-                            SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName(Strings.Create_var))
+                            SyntaxFactory.VariableDeclaration(typeSyntax)
                                 .WithVariables(SyntaxFactory.SingletonSeparatedList(
                                     SyntaxFactory.VariableDeclarator(parameter.Identifier)
                                         .WithInitializer(SyntaxFactory.EqualsValueClause(defaultAssignmentValue))))));
@@ -112,7 +113,7 @@
                         }
                         else
                         {
-                            paramList.Add(AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet, false));
+                            paramList.Add(AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet));
                         }
                     }
                 }

@@ -55,8 +55,7 @@ namespace Unitverse.Core.Tests.Helpers
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             var visitedTypes = new HashSet<string>();
-            var useExplicitTyping = false;
-            var result = AssignmentValueHelper.GetDefaultAssignmentValue(typeSymbol, model, visitedTypes, frameworkSet, useExplicitTyping);
+            var result = AssignmentValueHelper.GetDefaultAssignmentValue(typeSymbol, model, visitedTypes, frameworkSet);
 
             using (var workspace = new AdhocWorkspace())
             {
