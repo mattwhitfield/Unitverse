@@ -30,7 +30,12 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return model.Declaration.Modifiers.Any(x => string.Equals(x.Text, "abstract", StringComparison.OrdinalIgnoreCase));
+            if (model.Declaration.Modifiers.Any(x => string.Equals(x.Text, "abstract", StringComparison.OrdinalIgnoreCase)))
+            {
+                return true;
+            }
+
+            return model.Methods.Any(x => x.Node.Modifiers.Any(m => m.IsKind(SyntaxKind.ProtectedKeyword)));
         }
 
         public ClassDeclarationSyntax Create(ClassModel model)
