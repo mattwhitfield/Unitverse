@@ -27,8 +27,13 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return !model.Declaration.Modifiers.Any(x => string.Equals(x.Text, "static", StringComparison.OrdinalIgnoreCase) ||
-                                                         string.Equals(x.Text, "abstract", StringComparison.OrdinalIgnoreCase));
+            if (model.Declaration.Modifiers.Any(x => string.Equals(x.Text, "static", StringComparison.OrdinalIgnoreCase) ||
+                                                     string.Equals(x.Text, "abstract", StringComparison.OrdinalIgnoreCase)))
+            {
+                return false;
+            }
+
+            return model.Methods.All(x => !x.Node.Modifiers.Any(m => m.IsKind(SyntaxKind.ProtectedKeyword)));
         }
 
         public ClassDeclarationSyntax Create(ClassModel model)

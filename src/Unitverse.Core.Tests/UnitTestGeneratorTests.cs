@@ -15,6 +15,7 @@
     using System.Windows.Markup;
     using System.Xml;
     using System.Xml.Linq;
+    using EditorConfig.Core;
     using FakeItEasy;
     using FluentAssertions;
     using Microsoft.CodeAnalysis;
@@ -68,6 +69,32 @@
         {
             var classAsText = TestClasses.ResourceManager.GetString(resourceName, TestClasses.Culture);
 
+            var generationOptions = new MutableGenerationOptions(new DefaultGenerationOptions());
+            var namingOptions = new MutableNamingOptions(new DefaultNamingOptions());
+
+            generationOptions.FrameworkType = testFrameworkTypes;
+            generationOptions.MockingFrameworkType = mockingFrameworkType;
+            generationOptions.UseFluentAssertions = useFluentAssertions;
+
+            var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, false);
+
+            var lines = classAsText.Lines().Where(x => x.StartsWith("// #", StringComparison.Ordinal)).Select(x => x.Substring(4).Trim()).ToList();
+            if (lines.Any())
+            {
+                var properties = new Dictionary<string, string>();
+                foreach (var line in lines)
+                {
+                    var pair = line.Split('=');
+                    if (pair.Count() == 2)
+                    {
+                        properties[pair[0].Trim()] = pair[1].Trim();
+                    }
+                }
+
+                properties.ApplyTo(generationOptions);
+                properties.ApplyTo(namingOptions);
+            }
+
             var tree = CSharpSyntaxTree.ParseText(classAsText, new CSharpParseOptions(LanguageVersion.Latest));
 
             var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
@@ -107,15 +134,7 @@
 
             var semanticModel = compilation.GetSemanticModel(tree);
 
-            IUnitTestGeneratorOptions options = Substitute.For<IUnitTestGeneratorOptions>();
-            options.GenerationOptions.FrameworkType.Returns(testFrameworkTypes);
-            options.GenerationOptions.MockingFrameworkType.Returns(mockingFrameworkType);
-            options.GenerationOptions.UseFluentAssertions.Returns(useFluentAssertions);
-            var namingOptions = new DefaultNamingOptions();
-            options.NamingOptions.Returns(namingOptions);
-            options.GenerationOptions.TestFileNaming.Returns("{0}Tests");
-            options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
-            options.GenerationOptions.TestProjectNaming.Returns("{0}.Tests");
+            
             var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             Assert.IsNotNull(core);

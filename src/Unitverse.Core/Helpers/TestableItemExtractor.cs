@@ -45,25 +45,32 @@
             return models;
         }
 
-        private static HashSet<SyntaxKind> GetAllowedModifiers(TypeDeclarationSyntax syntax, IUnitTestGeneratorOptions options)
+        private static IList<Func<SyntaxTokenList, bool>> GetAllowedModifiers(TypeDeclarationSyntax syntax, IUnitTestGeneratorOptions options)
         {
-            var allowedModifiers = new HashSet<SyntaxKind> { SyntaxKind.PublicKeyword };
-            if (syntax.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)))
-            {
-                allowedModifiers.Add(SyntaxKind.ProtectedKeyword);
-            }
+            var functionList = new List<Func<SyntaxTokenList, bool>>();
 
+            // allow public
+            functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.PublicKeyword)));
+
+            // if we are allowing internals
             if (options.GenerationOptions.EmitTestsForInternals)
             {
-                allowedModifiers.Add(SyntaxKind.InternalKeyword);
+                // then we are good for protected, internal & protected internal
+                functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.InternalKeyword)));
+                functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.ProtectedKeyword)));
+            }
+            else
+            {
+                // now allowing internals - so just protected and not protected internal
+                functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.ProtectedKeyword)) && !list.Any(modifier => modifier.IsKind(SyntaxKind.InternalKeyword)));
             }
 
-            return allowedModifiers;
+            return functionList;
         }
 
-        private void AddModels<TIn, TOut>(TypeDeclarationSyntax type, Func<TIn, SyntaxTokenList> modifiersSelector, Func<TIn, TOut> converter, ICollection<SyntaxKind> allowedModifiers, ICollection<TOut> target)
+        private void AddModels<TIn, TOut>(TypeDeclarationSyntax type, Func<TIn, SyntaxTokenList> modifiersSelector, Func<TIn, TOut> converter, IList<Func<SyntaxTokenList, bool>> allowedModifiers, ICollection<TOut> target)
         {
-            foreach (var model in type.ChildNodes().OfType<TIn>().Where(x => modifiersSelector(x).Any(m => allowedModifiers.Contains(m.Kind()))).Select(converter))
+            foreach (var model in type.ChildNodes().OfType<TIn>().Where(x => allowedModifiers.Any(modifierFilter => modifierFilter(modifiersSelector(x)))).Select(converter))
             {
                 target.Add(model);
             }
