@@ -49,7 +49,7 @@
             return CreateModel(TestClasses.TypeGenericDisambiguation);
         }
 
-        private static ClassModel CreateModel(string classAsText)
+        public static ClassModel CreateModel(string classAsText)
         {
             var tree = CSharpSyntaxTree.ParseText(classAsText, new CSharpParseOptions(LanguageVersion.Latest));
 
@@ -72,6 +72,11 @@
 
             var model = new TestableItemExtractor(semanticModel.SyntaxTree, semanticModel);
             return model.Extract(null, Substitute.For<IUnitTestGeneratorOptions>()).First();
+        }
+
+        public static T GetNode<T>(this ClassModel model)
+        {
+            return model.Declaration.SyntaxTree.GetRoot().DescendantNodes().OfType<T>().First();
         }
 
         public static void Consume<T>(this IEnumerable<T> enumerable)

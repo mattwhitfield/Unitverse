@@ -25,5 +25,7 @@
         public bool PartialGenerationAllowed => false;
 
         public bool EmitTestsForInternals => false;
+
+        public bool AutomaticallyConfigureMocks => false;
     }
 }

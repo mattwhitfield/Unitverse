@@ -116,7 +116,7 @@
             }
             else if (parameterCount == 1)
             {
-                lambda = SyntaxFactory.SimpleLambdaExpression(SyntaxFactory.Parameter(SyntaxFactory.Identifier("x")));
+                lambda = SyntaxFactory.SimpleLambdaExpression(Generate.Parameter("x"));
             }
             else
             {

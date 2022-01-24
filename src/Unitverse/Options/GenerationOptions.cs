@@ -61,5 +61,10 @@
         [DisplayName("Emit tests for internal members")]
         [Description("Whether to emit tests for members marked as internal as well as public members")]
         public bool EmitTestsForInternals { get; set; } = false;
+
+        [Category("Generation")]
+        [DisplayName("Automatically configure mocks")]
+        [Description("Whether to detect calls to injected mocks and automatically emit setup and verification calls")]
+        public bool AutomaticallyConfigureMocks { get; set; } = true;
     }
 }

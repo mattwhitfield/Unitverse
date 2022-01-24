@@ -346,12 +346,12 @@
 
             var setupMethod = frameworkSet.TestFramework.CreateSetupMethod(targetTypeName);
 
-            var parametersEmitted = new HashSet<string>();
+            var parametersEmitted = new HashSet<ParameterModel>(new ParameterModelComparer());
 
             // generate fields for each constructor parameter
             foreach (var parameterModel in model.Constructors.SelectMany(x => x.Parameters))
             {
-                if (!parametersEmitted.Add(parameterModel.Name))
+                if (!parametersEmitted.Add(parameterModel))
                 {
                     continue;
                 }
@@ -412,6 +412,11 @@
             return SyntaxFactory.ArgumentList(ArgumentList(expressions));
         }
 
+        public static ParameterSyntax Parameter(string name)
+        {
+            return SyntaxFactory.Parameter(SyntaxFactory.Identifier(name));
+        }
+
         public static ParameterListSyntax ParameterList(IEnumerable<string> parameters)
         {
             if (parameters == null)
@@ -427,7 +432,7 @@
                     tokens.Add(SyntaxFactory.Token(SyntaxKind.CommaToken));
                 }
 
-                tokens.Add(SyntaxFactory.Parameter(SyntaxFactory.Identifier(parameter)));
+                tokens.Add(Parameter(parameter));
             }
 
             return SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList<ParameterSyntax>(tokens));

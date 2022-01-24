@@ -38,5 +38,7 @@
         public bool PartialGenerationAllowed => _baseOptions.PartialGenerationAllowed;
 
         public bool EmitTestsForInternals => _baseOptions.EmitTestsForInternals;
+
+        public bool AutomaticallyConfigureMocks => _baseOptions.AutomaticallyConfigureMocks;
     }
 }

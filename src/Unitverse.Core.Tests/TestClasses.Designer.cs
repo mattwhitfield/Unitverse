@@ -19,10 +19,10 @@ namespace Unitverse.Core.Tests {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class TestClasses {
+    public class TestClasses {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Unitverse.Core.Tests {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Unitverse.Core.Tests.TestClasses", typeof(TestClasses).Assembly);
@@ -51,7 +51,7 @@ namespace Unitverse.Core.Tests {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -93,7 +93,7 @@ namespace Unitverse.Core.Tests {
         ///		}
         /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string AbstractChainTextFile {
+        public static string AbstractChainTextFile {
             get {
                 return ResourceManager.GetString("AbstractChainTextFile", resourceCulture);
             }
@@ -127,7 +127,7 @@ namespace Unitverse.Core.Tests {
         ///
         ///		protected string Valu [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string AbstractClassTestFile {
+        public static string AbstractClassTestFile {
             get {
                 return ResourceManager.GetString("AbstractClassTestFile", resourceCulture);
             }
@@ -148,7 +148,7 @@ namespace Unitverse.Core.Tests {
         ///	}
         ///}.
         /// </summary>
-        internal static string AbstractImplicitConstructor {
+        public static string AbstractImplicitConstructor {
             get {
                 return ResourceManager.GetString("AbstractImplicitConstructor", resourceCulture);
             }
@@ -171,9 +171,11 @@ namespace Unitverse.Core.Tests {
         ///
         ///		protected abstract string PropectedProperty { get; }
         ///
-        ///        public abstract string CreateMessage(string item, long tenantId) [rest of string was truncated]&quot;;.
+        ///        public abstract string CreateMessage(string item, long tenantId);
+        ///
+        ///     [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string AbstractProperty {
+        public static string AbstractProperty {
             get {
                 return ResourceManager.GetString("AbstractProperty", resourceCulture);
             }
@@ -206,7 +208,7 @@ namespace Unitverse.Core.Tests {
         ///        {
         ///    [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string AbstractSelfReferencingClass {
+        public static string AbstractSelfReferencingClass {
             get {
                 return ResourceManager.GetString("AbstractSelfReferencingClass", resourceCulture);
             }
@@ -225,7 +227,7 @@ namespace Unitverse.Core.Tests {
         ///        public string Str1 =&gt; _str1;
         ///    }.
         /// </summary>
-        internal static string ArrowPropertyGetter {
+        public static string ArrowPropertyGetter {
             get {
                 return ResourceManager.GetString("ArrowPropertyGetter", resourceCulture);
             }
@@ -252,7 +254,7 @@ namespace Unitverse.Core.Tests {
         ///    }
         ///    public class C [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string AsyncMappingMethod {
+        public static string AsyncMappingMethod {
             get {
                 return ResourceManager.GetString("AsyncMappingMethod", resourceCulture);
             }
@@ -274,9 +276,101 @@ namespace Unitverse.Core.Tests {
         ///		    System.Console.WriteLine(&quot;Testing this&quot;);
         ///			return System.Threading.Tasks.Task.FromRes [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string AsyncMethod {
+        public static string AsyncMethod {
             get {
                 return ResourceManager.GetString("AsyncMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System.Threading.Tasks;
+        ///
+        ///namespace AssemblyCore
+        ///{
+        ///	public interface IDummyService
+        ///	{
+        ///        string SomeProp { get; set; }
+        ///
+        ///	    void NoReturnMethod();
+        ///
+        ///        int ReturnMethod();
+        ///
+        ///	    T GenericMethod&lt;T&gt;(T val);
+        ///
+        ///        Task&lt;string&gt; AsyncMethod(); 
+        ///	}
+        ///
+        ///	public interface IDummyService2
+        ///	{
+        ///        string SomeProp { get; }
+        ///
+        ///	    void NoReturnMethod(string s);
+        ///
+        ///        int ReturnMethod(string s);
+        ///        int ReturnMethod(string s, string s2);
+        ///        int ReturnMethod(string s,  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string AutomaticMockGeneration {
+            get {
+                return ResourceManager.GetString("AutomaticMockGeneration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System.Collections.Generic;
+        ///
+        ///namespace AssemblyCore
+        ///{
+        ///    public class InterfaceSample
+        ///    {
+        ///        private IList&lt;string&gt; _list;
+        ///
+        ///        public InterfaceSample(IList&lt;string&gt; list)
+        ///        {
+        ///            _list = list;
+        ///        }
+        ///
+        ///        public int Count()
+        ///        {
+        ///            return _list.Count;
+        ///        }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string AutomaticMockingFrameworkTypes {
+            get {
+                return ResourceManager.GetString("AutomaticMockingFrameworkTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace AssemblyCore
+        ///{
+        ///	public interface IDummyService
+        ///	{
+        ///        string SomeProp { get; set; }
+        ///	}
+        ///
+        ///	public interface IDummyService2
+        ///	{
+        ///        string SomeOtherProp { get; }
+        ///	}
+        ///
+        ///    public class InterfaceSample
+        ///    {
+        ///        private IDummyService _dummyService, _otherDummyService;
+        ///        private IDummyService2 _dummyService2;
+        ///
+        ///        public InterfaceSample(IDummyService dummyService)
+        ///        {
+        ///            _dummyService = dummyService;
+        ///        }
+        ///
+        ///        public InterfaceSample(IDumm [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string AutomaticMockingMixedDependencies {
+            get {
+                return ResourceManager.GetString("AutomaticMockingMixedDependencies", resourceCulture);
             }
         }
         
@@ -294,7 +388,7 @@ namespace Unitverse.Core.Tests {
         ///    }
         ///}.
         /// </summary>
-        internal static string ByteArray {
+        public static string ByteArray {
             get {
                 return ResourceManager.GetString("ByteArray", resourceCulture);
             }
@@ -334,9 +428,43 @@ namespace Unitverse.Core.Tests {
         ///    }
         ///}.
         /// </summary>
-        internal static string ChainedClassesTestFile {
+        public static string ChainedClassesTestFile {
             get {
                 return ResourceManager.GetString("ChainedClassesTestFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///{
+        ///
+        ///    public interface ITest
+        ///    {
+        ///        int ThisIsAProperty {get;set;}
+        ///    }
+        ///
+        ///    public interface ITest2
+        ///    {
+        ///        int ThisIsAnotherProperty {get;set;}
+        ///    }
+        ///
+        ///    public class Test : ITest
+        ///    {
+        ///        public int ThisIsAProperty { get; set; }
+        ///    }
+        ///
+        ///    public class TestBoth : ITest, ITest2
+        ///    {
+        ///        public int ThisIsAProperty { get; set; }
+        ///        public int ThisIsAnotherProperty {get;set;}
+        ///    }
+        ///
+        ///    public class TestClass&lt;T, R&gt;
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ConstrainedGenericSample {
+            get {
+                return ResourceManager.GetString("ConstrainedGenericSample", resourceCulture);
             }
         }
         
@@ -364,7 +492,7 @@ namespace Unitverse.Core.Tests {
         ///}
         ///.
         /// </summary>
-        internal static string ConstructorGenericTestFile {
+        public static string ConstructorGenericTestFile {
             get {
                 return ResourceManager.GetString("ConstructorGenericTestFile", resourceCulture);
             }
@@ -390,7 +518,7 @@ namespace Unitverse.Core.Tests {
         ///
         /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ConstructorSamplesTestFile {
+        public static string ConstructorSamplesTestFile {
             get {
                 return ResourceManager.GetString("ConstructorSamplesTestFile", resourceCulture);
             }
@@ -411,9 +539,70 @@ namespace Unitverse.Core.Tests {
         ///    }
         ///}.
         /// </summary>
-        internal static string DefaultParameterRequiresUsing {
+        public static string DefaultParameterRequiresUsing {
             get {
                 return ResourceManager.GetString("DefaultParameterRequiresUsing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///{
+        ///	using System;
+        ///
+        ///
+        ///	public class SomeClass
+        ///	{
+        ///		public delegate int PerformCalculation(int x, int y);
+        ///
+        ///		public SomeClass(Func&lt;string&gt; func, Func&lt;int, int, string&gt; func2, PerformCalculation del)
+        ///		{
+        ///		}
+        ///
+        ///		public Action&lt;SomeClass, int&gt; SomeAction { get; set; }
+        ///	}
+        ///}.
+        /// </summary>
+        public static string DelegateConstructorTests {
+            get {
+                return ResourceManager.GetString("DelegateConstructorTests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///{
+        ///	using System;
+        ///
+        ///	public class SomeClass
+        ///	{
+        ///		public SomeClass(int val)
+        ///		{
+        ///			Val = val;
+        ///		}
+        ///
+        ///		public int Val { get; }
+        ///	}
+        ///
+        ///    public static class TestClass
+        ///    {
+        ///        public static void ThisIsAMethod(Func&lt;string&gt; func)
+        ///	    {
+        ///	    }
+        ///
+        ///        public static void ThisIsAMethod2(Func&lt;string, SomeClass&gt; func)
+        ///	    {
+        ///	    }
+        ///
+        ///        public static void ThisIsAMethod3(Func&lt;int, string, SomeClass&gt; func)
+        ///	    {
+        ///	    }
+        ///
+        ///        public static void  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string DelegateTests {
+            get {
+                return ResourceManager.GetString("DelegateTests", resourceCulture);
             }
         }
         
@@ -436,7 +625,7 @@ namespace Unitverse.Core.Tests {
         ///    }
         ///}.
         /// </summary>
-        internal static string DependencyObjectTestFile {
+        public static string DependencyObjectTestFile {
             get {
                 return ResourceManager.GetString("DependencyObjectTestFile", resourceCulture);
             }
@@ -469,7 +658,7 @@ namespace Unitverse.Core.Tests {
         ///    }
         ///}.
         /// </summary>
-        internal static string ExtensionMethod {
+        public static string ExtensionMethod {
             get {
                 return ResourceManager.GetString("ExtensionMethod", resourceCulture);
             }
@@ -496,16 +685,34 @@ namespace Unitverse.Core.Tests {
         ///
         ///        private static IList&lt;string&gt; ArgumentList(params string[] expression [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Generate {
+        public static string Generate {
             get {
                 return ResourceManager.GetString("Generate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to using System;
+        ///using System.Collections;
+        ///using System.Collections.Generic;
+        ///using System.Collections.Concurrent;
+        ///using System.Linq;
+        ///
+        ///namespace QueueCrash
+        ///{
+        ///	public class DelayedConcurrentQueue&lt;T&gt; : IProducerConsumerCollection&lt;T&gt;
+        ///	{
+        ///		private readonly TimeSpan _delay;
+        ///		private readonly ConcurrentQueue&lt;Tuple&lt;DateTime, T&gt;&gt; _internalQueue;
+        ///		private int _count;
+        ///		private bool _isSynchronized;
+        ///		private object _syncRoot;
+        ///
+        ///		public void CopyTo(Array destinationArray, int index)
+        ///		{
+        ///			if (destina [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string GenericCollection {
+        public static string GenericCollection {
             get {
                 return ResourceManager.GetString("GenericCollection", resourceCulture);
             }
@@ -531,7 +738,7 @@ namespace Unitverse.Core.Tests {
         ///    }
         ///}.
         /// </summary>
-        internal static string GenericMethodTestFile {
+        public static string GenericMethodTestFile {
             get {
                 return ResourceManager.GetString("GenericMethodTestFile", resourceCulture);
             }
@@ -560,7 +767,7 @@ namespace Unitverse.Core.Tests {
         ///
         ///            return Value.CompareT [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string IComparableTestFile {
+        public static string IComparableTestFile {
             get {
                 return ResourceManager.GetString("IComparableTestFile", resourceCulture);
             }
@@ -593,7 +800,7 @@ namespace Unitverse.Core.Tests {
         ///        IEnumerator IEnumerable.GetEnumerator()
         ///       [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string IEnumerableClass {
+        public static string IEnumerableClass {
             get {
                 return ResourceManager.GetString("IEnumerableClass", resourceCulture);
             }
@@ -626,7 +833,7 @@ namespace Unitverse.Core.Tests {
         ///            get {
         ///             [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string IndexerTestFile {
+        public static string IndexerTestFile {
             get {
                 return ResourceManager.GetString("IndexerTestFile", resourceCulture);
             }
@@ -656,7 +863,7 @@ namespace Unitverse.Core.Tests {
         ///        {
         ///            await Task.Delay [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string InterfaceImplementationTestFile {
+        public static string InterfaceImplementationTestFile {
             get {
                 return ResourceManager.GetString("InterfaceImplementationTestFile", resourceCulture);
             }
@@ -690,9 +897,42 @@ namespace Unitverse.Core.Tests {
         ///        {
         ///            _dum [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string InterfaceSampleTestFile {
+        public static string InterfaceSampleTestFile {
             get {
                 return ResourceManager.GetString("InterfaceSampleTestFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System.Threading.Tasks;
+        ///
+        ///namespace AssemblyCore
+        ///{
+        ///	public interface IDummyService
+        ///	{
+        ///	    void NoReturnMethod();
+        ///
+        ///        int ReturnMetod();
+        ///
+        ///        Task&lt;string&gt; AsyncMethod(); 
+        ///
+        ///        Task  AsyncReturnTaskAsync();
+        ///
+        ///        Task&lt;int&gt; AsyncReturIntAsync();
+        ///
+        ///        Task&lt;string&gt; AsyncReturnStringAsync();
+        ///	}
+        ///
+        ///    public class InterfaceSample
+        ///    {
+        ///        private IDummyService _dummyService;
+        ///
+        ///        public InterfaceSample(IDummyService dummyService, string identifier)
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string InterfaceSampleWithOtherParam {
+            get {
+                return ResourceManager.GetString("InterfaceSampleWithOtherParam", resourceCulture);
             }
         }
         
@@ -717,9 +957,39 @@ namespace Unitverse.Core.Tests {
         ///        public OutputClass Map(InputClass inputClass)
         ///     [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string MappingMethod {
+        public static string MappingMethod {
             get {
                 return ResourceManager.GetString("MappingMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///		public TestClass(decimal @decimal) { }
+        ///
+        ///		public byte @byte { get; set; }
+        ///
+        ///		public short @short { get; }
+        ///
+        ///		public long @long { set { } }
+        ///
+        ///		public decimal @decimal { get; set; }
+        ///
+        ///        public static void @string(string @string, int i)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///        public static void ThisIsAMethod(string @string, int @int)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing t [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MethodWithReservedParamName {
+            get {
+                return ResourceManager.GetString("MethodWithReservedParamName", resourceCulture);
             }
         }
         
@@ -742,9 +1012,11 @@ namespace Unitverse.Core.Tests {
         ///        CleanupSolutionData = 20100,
         ///    }
         ///
-        ///	public static class WorkflowConstraintProviderFactory [rest of string was truncated]&quot;;.
+        ///	public static class WorkflowConstraintProviderFactory
+        ///    {
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string MultipleOverloads {
+        public static string MultipleOverloads {
             get {
                 return ResourceManager.GetString("MultipleOverloads", resourceCulture);
             }
@@ -772,9 +1044,37 @@ namespace Unitverse.Core.Tests {
         ///        }
         ///        public NestedClass(InnerPublicClass innerPubliClassOne [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string NestedClassTestFile {
+        public static string NestedClassTestFile {
             get {
                 return ResourceManager.GetString("NestedClassTestFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public interface ITest { }
+        ///
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(string stringProp, string? nonNullableStringProp)
+        ///        {
+        ///        }
+        /// 
+        ///        public TestClass(ITest? test)
+        ///        {
+        ///        }
+        /// 
+        ///        public TestClass(ITest test, string someOtherThing)
+        ///        {
+        ///        }
+        /// 
+        ///        public string GetFullName(string first, string? middle, string last) =&gt;
+        ///            middle != null ? $&quot;{first} {middle} {last}&quot; : $&quot;{first} {l [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string NullableReferenceTypes {
+            get {
+                return ResourceManager.GetString("NullableReferenceTypes", resourceCulture);
             }
         }
         
@@ -804,7 +1104,7 @@ namespace Unitverse.Core.Tests {
         ///		public static Calculator operator - (Calculator Calc1,  
         ///											  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string OperatorOverloading {
+        public static string OperatorOverloading {
             get {
                 return ResourceManager.GetString("OperatorOverloading", resourceCulture);
             }
@@ -832,7 +1132,7 @@ namespace Unitverse.Core.Tests {
         ///
         ///	    [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string OverloadGenericDisambiguation {
+        public static string OverloadGenericDisambiguation {
             get {
                 return ResourceManager.GetString("OverloadGenericDisambiguation", resourceCulture);
             }
@@ -855,7 +1155,7 @@ namespace Unitverse.Core.Tests {
         ///        public Guid ThisIsAProperty8 {get;set;}
         ///        public Guid ThisI [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string PocoInitialization {
+        public static string PocoInitialization {
             get {
                 return ResourceManager.GetString("PocoInitialization", resourceCulture);
             }
@@ -887,9 +1187,61 @@ namespace Unitverse.Core.Tests {
         ///        public string LastName
         ///      [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string PropertyChangeTestFile {
+        public static string PropertyChangeTestFile {
             get {
                 return ResourceManager.GetString("PropertyChangeTestFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # EmitTestsForInternals=true
+        ///namespace TestNamespace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///	    public void ThisIsAMethod(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///	    protected void ThisIsAMethodProtected(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///	    protected internal void ThisIsAMethodProtectedInternal(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLin [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ProtectedClassInternal {
+            get {
+                return ResourceManager.GetString("ProtectedClassInternal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # EmitTestsForInternals=false
+        ///namespace TestNamespace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///	    public void ThisIsAMethod(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///	    protected void ThisIsAMethodProtected(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///	    protected internal void ThisIsAMethodProtectedInternal(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLi [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ProtectedClassNoInternal {
+            get {
+                return ResourceManager.GetString("ProtectedClassNoInternal", resourceCulture);
             }
         }
         
@@ -916,7 +1268,7 @@ namespace Unitverse.Core.Tests {
         ///        public void OutParamMethodClass(string stringProp, out TestClass outParam)
         ///        [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string RefAndOutParameters {
+        public static string RefAndOutParameters {
             get {
                 return ResourceManager.GetString("RefAndOutParameters", resourceCulture);
             }
@@ -942,7 +1294,7 @@ namespace Unitverse.Core.Tests {
         ///    }
         ///}.
         /// </summary>
-        internal static string RepeatedValueTypeParameters {
+        public static string RepeatedValueTypeParameters {
             get {
                 return ResourceManager.GetString("RepeatedValueTypeParameters", resourceCulture);
             }
@@ -978,7 +1330,7 @@ namespace Unitverse.Core.Tests {
         ///	    {
         ///		    System.C [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string SampleClassTestFile {
+        public static string SampleClassTestFile {
             get {
                 return ResourceManager.GetString("SampleClassTestFile", resourceCulture);
             }
@@ -996,9 +1348,10 @@ namespace Unitverse.Core.Tests {
         ///        private static readonly Regex SemanticVersionRegex = new Regex(@&quot;^(?&lt;Version&gt;\d+(\s*\.\s*\d+){0,3})(?&lt;Release&gt;-[a-z][0-9a-z-]*)?$&quot;, Flags);
         ///
         ///        private SemanticVersion(Version version, string specialVersion)
-        ///      [rest of string was truncated]&quot;;.
+        ///        {
+        ///             [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string SemanticVersion {
+        public static string SemanticVersion {
             get {
                 return ResourceManager.GetString("SemanticVersion", resourceCulture);
             }
@@ -1030,7 +1383,7 @@ namespace Unitverse.Core.Tests {
         ///			{
         ///				throw new ArgumentNullException(nameof(baseName)) [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Singleton {
+        public static string Singleton {
             get {
                 return ResourceManager.GetString("Singleton", resourceCulture);
             }
@@ -1059,7 +1412,7 @@ namespace Unitverse.Core.Tests {
         ///    }
         ///}.
         /// </summary>
-        internal static string StaticTestFile {
+        public static string StaticTestFile {
             get {
                 return ResourceManager.GetString("StaticTestFile", resourceCulture);
             }
@@ -1085,7 +1438,7 @@ namespace Unitverse.Core.Tests {
         ///    }
         ///}.
         /// </summary>
-        internal static string TypeGenericDisambiguation {
+        public static string TypeGenericDisambiguation {
             get {
                 return ResourceManager.GetString("TypeGenericDisambiguation", resourceCulture);
             }
@@ -1110,7 +1463,7 @@ namespace Unitverse.Core.Tests {
         ///    }
         ///}.
         /// </summary>
-        internal static string WinformTestFile {
+        public static string WinformTestFile {
             get {
                 return ResourceManager.GetString("WinformTestFile", resourceCulture);
             }

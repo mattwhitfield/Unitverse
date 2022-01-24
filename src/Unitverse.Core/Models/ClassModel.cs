@@ -27,7 +27,11 @@
                 SymbolDisplayTypeQualificationStyle.NameAndContainingTypes,
                 SymbolDisplayGenericsOptions.IncludeTypeParameters,
                 miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes)));
+
+            DependencyMap = ConstructorFieldAssignmentExtractor.ExtractMapFrom(declaration, semanticModel);
         }
+
+        public ClassDependencyMap DependencyMap { get; }
 
         public INamedTypeSymbol TypeSymbol { get; }
 

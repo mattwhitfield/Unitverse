@@ -5,6 +5,8 @@
 
     public interface IFrameworkSet
     {
+        IUnitTestGeneratorOptions Options { get; }
+
         ITestFramework TestFramework { get; }
 
         IMockingFramework MockingFramework { get; }

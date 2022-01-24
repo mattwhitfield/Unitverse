@@ -55,7 +55,17 @@
 
             var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanCall, namingContext, method.IsAsync, model.IsStatic);
 
+            var mockSetupStatements = new List<StatementSyntax>();
+            var mockAssertionStatements = new List<StatementSyntax>();
+
+            if (_frameworkSet.Options.GenerationOptions.AutomaticallyConfigureMocks)
+            {
+                PrepareMockCalls(model, method, mockSetupStatements, mockAssertionStatements);
+            }
+
             var paramExpressions = new List<CSharpSyntaxNode>();
+
+            generatedMethod = EmitStatementListWithTrivia(generatedMethod, mockSetupStatements, "// Set up mocks" + Environment.NewLine, Environment.NewLine + Environment.NewLine);
 
             foreach (var parameter in method.Parameters)
             {
@@ -118,11 +128,90 @@
                 bodyStatement = SyntaxFactory.ExpressionStatement(methodCall);
             }
 
+            if (mockAssertionStatements.Count > 0)
+            {
+                bodyStatement = bodyStatement.WithTrailingTrivia(SyntaxFactory.Comment(Environment.NewLine + Environment.NewLine));
+            }
+
             generatedMethod = generatedMethod.AddBodyStatements(bodyStatement);
+
+            generatedMethod = EmitStatementListWithTrivia(generatedMethod, mockAssertionStatements, "// Verify mocks" + Environment.NewLine, Environment.NewLine + Environment.NewLine);
 
             generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
 
             yield return generatedMethod;
+        }
+
+        private static MethodDeclarationSyntax EmitStatementListWithTrivia(MethodDeclarationSyntax method, List<StatementSyntax> statements, string leadingComment, string trailingComment)
+        {
+            if (statements.Any())
+            {
+                for (int i = 0; i < statements.Count; i++)
+                {
+                    var statement = statements[i];
+                    if (i == 0)
+                    {
+                        statement = statement.WithLeadingTrivia(SyntaxFactory.Comment(leadingComment));
+                    }
+
+                    if (i == statements.Count - 1)
+                    {
+                        statement = statement.WithTrailingTrivia(SyntaxFactory.Comment(trailingComment));
+                    }
+
+                    method = method.AddBodyStatements(statement);
+                }
+            }
+
+            return method;
+        }
+
+        private void PrepareMockCalls(ClassModel model, IMethodModel method, List<StatementSyntax> mockSetupStatements, List<StatementSyntax> mockAssertionStatements)
+        {
+            var mappedInterfaceFields = model.DependencyMap.MappedInterfaceFields.ToList();
+            var dependencyMap = InvocationExtractor.ExtractFrom(method.Node, model.SemanticModel, mappedInterfaceFields);
+
+            foreach (var field in mappedInterfaceFields)
+            {
+                var fieldType = model.DependencyMap.GetTypeSymbolFor(field);
+                if (fieldType != null)
+                {
+                    var constructorParameters = model.DependencyMap.GetConstructorParametersFor(field);
+                    foreach (var constructorParameter in constructorParameters)
+                    {
+                        var mockFieldName = model.GetConstructorParameterFieldName(constructorParameter, _frameworkSet.NamingProvider);
+                        foreach (var dependencyMethod in dependencyMap.GetAccessedMethodSymbolsFor(field))
+                        {
+                            if (dependencyMethod.ContainingType == fieldType)
+                            {
+                                var isAsync = dependencyMethod.ReturnType is INamedTypeSymbol namedType && namedType.Name == "Task" && namedType.ContainingNamespace.ToDisplayString() == "System.Threading.Tasks";
+                                var isPlainTaskReturnType = isAsync && ((INamedTypeSymbol)dependencyMethod.ReturnType).TypeArguments.Length == 0;
+
+                                if (!dependencyMethod.ReturnsVoid && !isPlainTaskReturnType)
+                                {
+                                    mockSetupStatements.Add(SyntaxFactory.ExpressionStatement(_frameworkSet.MockingFramework.GetSetupFor(dependencyMethod, mockFieldName, model.SemanticModel, _frameworkSet)));
+                                }
+
+                                var assertion = _frameworkSet.MockingFramework.GetAssertionFor(dependencyMethod, mockFieldName, model.SemanticModel, _frameworkSet);
+                                if (isAsync && _frameworkSet.MockingFramework.AwaitAsyncAssertions)
+                                {
+                                    assertion = SyntaxFactory.AwaitExpression(assertion);
+                                }
+
+                                mockAssertionStatements.Add(SyntaxFactory.ExpressionStatement(assertion));
+                            }
+                        }
+
+                        foreach (var dependencyProperty in dependencyMap.GetAccessedPropertySymbolsFor(field))
+                        {
+                            if (dependencyProperty.ContainingType == fieldType)
+                            {
+                                mockSetupStatements.Add(SyntaxFactory.ExpressionStatement(_frameworkSet.MockingFramework.GetSetupFor(dependencyProperty, mockFieldName, model.SemanticModel, _frameworkSet)));
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
