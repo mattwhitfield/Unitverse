@@ -16,7 +16,7 @@ namespace Unitverse.Core.Tests.Helpers
             var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
 
             var result = IdentifierNameExtractor.ExtractFrom(classModel.GetNode<ConstructorDeclarationSyntax>());
-            result.Should().BeEquivalentTo("IDummyService", "IDummyService2", "_dummyService", "dummyService", "System", "ArgumentNullException", "_dummyService2", "dummyService2", "_someIntField", "dummyService");
+            result.Should().BeEquivalentTo("IDummyService", "IDummyService2", "_dummyService", "dummyService", "_dummyService2", "dummyService2", "_someIntField", "dummyService");
         }
 
         [Test]

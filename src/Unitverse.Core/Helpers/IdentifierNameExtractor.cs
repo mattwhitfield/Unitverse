@@ -35,5 +35,9 @@
         public override void VisitInvocationExpression(InvocationExpressionSyntax node)
         {
         }
+
+        public override void VisitThrowExpression(ThrowExpressionSyntax node)
+        {
+        }
     }
 }
