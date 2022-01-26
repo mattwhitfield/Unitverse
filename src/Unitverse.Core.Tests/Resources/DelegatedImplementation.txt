@@ -1,0 +1,49 @@
+using System.Threading.Tasks;
+
+namespace AssemblyCore
+{
+	public interface IService
+	{
+        string SomeProp { get; }
+        string SomeProp2 { get; set; }
+
+	    int SomeMethod(string s);
+
+	    Task<int> SomeAsyncMethod(string s);
+	}
+
+    public class DelegatingService : IService
+    {
+        private IService _service;
+
+        public DelegatingService(IService service)
+        {
+            _service = service ?? throw new System.ArgumentNullException(nameof(service));
+        }
+
+        public string SomeProp => _service.SomeProp;
+
+        public string SomeProp2
+        {
+            get
+            {
+                return _service.SomeProp2;
+            }
+            set
+            {
+                _service.SomeProp2 = value;
+            }
+        }
+
+
+        public int SomeMethod(string s)
+        {
+            return _service.SomeMethod(_service.SomeProp2);
+        }
+
+        public Task<int> SomeAsyncMethod(string s)
+        {
+            return _service.SomeAsyncMethod(s);
+        }
+    }
+}

@@ -1,6 +1,7 @@
 ﻿namespace Unitverse.Core.Models
 {
     using System.Collections.Generic;
+    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
@@ -10,6 +11,8 @@
         bool IsAsync { get; }
 
         bool IsVoid { get; }
+
+        IMethodSymbol Symbol { get; }
 
         IList<ParameterModel> Parameters { get; }
 

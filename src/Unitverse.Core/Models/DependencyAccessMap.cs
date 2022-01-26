@@ -10,7 +10,7 @@
         private Dictionary<string, HashSet<IMethodSymbol>> _methodCalls = new Dictionary<string, HashSet<IMethodSymbol>>();
         private Dictionary<string, HashSet<IPropertySymbol>> _propertyCalls = new Dictionary<string, HashSet<IPropertySymbol>>();
 
-        public DependencyAccessMap(IEnumerable<Tuple<IMethodSymbol, string>> methodCalls, IEnumerable<Tuple<IPropertySymbol, string>> propertyCalls)
+        public DependencyAccessMap(IEnumerable<Tuple<IMethodSymbol, string>> methodCalls, IEnumerable<Tuple<IPropertySymbol, string>> propertyCalls, int invocationCount, int memberAccessCount)
         {
             if (methodCalls is null)
             {
@@ -41,7 +41,14 @@
 
                 set.Add(property.Item1);
             }
+
+            InvocationCount = invocationCount;
+            MemberAccessCount = memberAccessCount;
         }
+
+        public int InvocationCount { get; }
+
+        public int MemberAccessCount { get; }
 
         public IEnumerable<IMethodSymbol> GetAccessedMethodSymbolsFor(string dependencyFieldName)
         {

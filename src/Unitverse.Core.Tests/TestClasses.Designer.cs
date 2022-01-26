@@ -570,6 +570,37 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to using System.Threading.Tasks;
+        ///
+        ///namespace AssemblyCore
+        ///{
+        ///	public interface IService
+        ///	{
+        ///        string SomeProp { get; set; }
+        ///
+        ///	    int SomeMethod(string s);
+        ///
+        ///	    Task&lt;int&gt; SomeAsyncMethod(string s);
+        ///	}
+        ///
+        ///    public class DelegatingService : IService
+        ///    {
+        ///        private IService _service;
+        ///
+        ///        public InterfaceSample(IService service)
+        ///        {
+        ///            _service = service ?? throw new System.ArgumentNullException(nameof(service));
+        ///        }
+        ///
+        ///        public string SomeProp =&gt; _ser [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string DelegatedImplementation {
+            get {
+                return ResourceManager.GetString("DelegatedImplementation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
         ///{
         ///	using System;

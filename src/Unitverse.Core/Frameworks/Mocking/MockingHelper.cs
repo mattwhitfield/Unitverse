@@ -11,14 +11,33 @@
 
     public static class MockingHelper
     {
-        public static ExpressionSyntax GetMethodCall(IMethodSymbol dependencyMethodCall, string mockFieldName, Func<ITypeSymbol, IGenerationContext, ExpressionSyntax> getArgument, IGenerationContext context)
+        public static Func<int, ITypeSymbol, IGenerationContext, ExpressionSyntax> TranslateArgumentFunc(Func<ITypeSymbol, IGenerationContext, ExpressionSyntax> getArgument, IEnumerable<string> parameters)
+        {
+            if (parameters == null)
+            {
+                return (i, t, g) => getArgument(t, g);
+            }
+
+            var list = parameters.ToList();
+            return (i, t, g) =>
+            {
+                if (i >= list.Count)
+                {
+                    return getArgument(t, g);
+                }
+
+                return SyntaxFactory.IdentifierName(list[i]);
+            };
+        }
+
+        public static ExpressionSyntax GetMethodCall(IMethodSymbol dependencyMethodCall, string mockFieldName, Func<int, ITypeSymbol, IGenerationContext, ExpressionSyntax> getArgument, IGenerationContext context)
         {
             var target = SyntaxFactory.IdentifierName(mockFieldName);
 
             return GetMethodCall(dependencyMethodCall, target, getArgument, context);
         }
 
-        public static ExpressionSyntax GetMethodCall(IMethodSymbol dependencyMethodCall, ExpressionSyntax target, Func<ITypeSymbol, IGenerationContext, ExpressionSyntax> getArgument, IGenerationContext context)
+        public static ExpressionSyntax GetMethodCall(IMethodSymbol dependencyMethodCall, ExpressionSyntax target, Func<int, ITypeSymbol, IGenerationContext, ExpressionSyntax> getArgument, IGenerationContext context)
         {
             SimpleNameSyntax methodReference;
             if (dependencyMethodCall.TypeArguments.Any())
@@ -35,7 +54,7 @@
                         SyntaxKind.SimpleMemberAccessExpression,
                         target,
                         methodReference))
-                .WithArgumentList(Generate.Arguments(dependencyMethodCall.Parameters.Select(x => getArgument(x.Type, context))));
+                .WithArgumentList(Generate.Arguments(dependencyMethodCall.Parameters.Select((x, i) => getArgument(i, x.Type, context))));
         }
 
         public static TypeArgumentListSyntax TypeArgumentList(IEnumerable<ITypeSymbol> typeSymbols, IGenerationContext context)

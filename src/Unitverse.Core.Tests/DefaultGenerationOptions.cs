@@ -26,6 +26,6 @@
 
         public bool EmitTestsForInternals => false;
 
-        public bool AutomaticallyConfigureMocks => false;
+        public bool AutomaticallyConfigureMocks => true;
     }
 }

@@ -35,13 +35,15 @@
             var extractor = new InvocationExtractor(semanticModel, targetFields);
             node.Accept(extractor);
 
-            return new DependencyAccessMap(extractor._methodCalls, extractor._propertyCalls);
+            return new DependencyAccessMap(extractor._methodCalls, extractor._propertyCalls, extractor._invocationCount, extractor._memberAccessCount);
         }
 
         private readonly List<Tuple<IMethodSymbol, string>> _methodCalls = new List<Tuple<IMethodSymbol, string>>();
         private readonly List<Tuple<IPropertySymbol, string>> _propertyCalls = new List<Tuple<IPropertySymbol, string>>();
         private readonly SemanticModel _semanticModel;
         private readonly HashSet<string> _targetFields;
+        private int _invocationCount;
+        private int _memberAccessCount;
 
         public override void VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
         {
@@ -52,6 +54,7 @@
                 return;
             }
 
+            _memberAccessCount++;
             if (node.Expression is IdentifierNameSyntax identifierName)
             {
                 if (_targetFields.Contains(identifierName.Identifier.Text))
@@ -71,6 +74,7 @@
         public override void VisitInvocationExpression(InvocationExpressionSyntax node)
         {
             base.VisitInvocationExpression(node);
+            _invocationCount++;
 
             if (node.Expression is MemberAccessExpressionSyntax memberAccessExpression)
             {

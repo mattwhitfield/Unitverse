@@ -66,9 +66,9 @@
                         .WithTypeArgumentList(MockingHelper.TypeArgumentList(new[] { typeSymbol }, context))));
         }
 
-        public ExpressionSyntax GetSetupFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet)
+        public ExpressionSyntax GetSetupFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, ExpressionSyntax expectedReturnValue, IEnumerable<string> parameters)
         {
-            var methodCall = MockingHelper.GetMethodCall(dependencyMethod, mockFieldName, GetArgument, _context);
+            var methodCall = MockingHelper.GetMethodCall(dependencyMethod, mockFieldName, MockingHelper.TranslateArgumentFunc(GetArgument, parameters), _context);
 
             var methodReference = SyntaxFactory.IdentifierName("Returns");
 
@@ -77,10 +77,10 @@
                         SyntaxKind.SimpleMemberAccessExpression,
                         methodCall,
                         methodReference))
-                    .WithArgumentList(Generate.Arguments(AssignmentValueHelper.GetDefaultAssignmentValue(MockingHelper.ReduceAsyncReturnType(dependencyMethod.ReturnType), model, frameworkSet)));
+                    .WithArgumentList(Generate.Arguments(expectedReturnValue));
         }
 
-        public ExpressionSyntax GetSetupFor(IPropertySymbol dependencyProperty, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet)
+        public ExpressionSyntax GetSetupFor(IPropertySymbol dependencyProperty, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, ExpressionSyntax expectedReturnValue)
         {
             var propertyAccess = SyntaxFactory.MemberAccessExpression(
                                     SyntaxKind.SimpleMemberAccessExpression,
@@ -94,10 +94,10 @@
                             SyntaxKind.SimpleMemberAccessExpression,
                             propertyAccess,
                             methodReference))
-                    .WithArgumentList(Generate.Arguments(AssignmentValueHelper.GetDefaultAssignmentValue(dependencyProperty.Type, model, frameworkSet)));
+                    .WithArgumentList(Generate.Arguments(expectedReturnValue));
         }
 
-        public ExpressionSyntax GetAssertionFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet)
+        public ExpressionSyntax GetAssertionFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, IEnumerable<string> parameters)
         {
             var received = SyntaxFactory.InvocationExpression(
                 SyntaxFactory.MemberAccessExpression(
@@ -105,7 +105,7 @@
                     SyntaxFactory.IdentifierName(mockFieldName),
                     SyntaxFactory.IdentifierName("Received")));
 
-            return MockingHelper.GetMethodCall(dependencyMethod, received, GetArgument, frameworkSet.Context);
+            return MockingHelper.GetMethodCall(dependencyMethod, received, MockingHelper.TranslateArgumentFunc(GetArgument, parameters), frameworkSet.Context);
         }
 
         public bool AwaitAsyncAssertions => true;

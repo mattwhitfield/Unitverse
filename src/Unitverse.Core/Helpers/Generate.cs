@@ -392,6 +392,25 @@
             return setupMethod;
         }
 
+        // TODO - use these all over the place
+        public static LocalDeclarationStatementSyntax VariableDeclaration(ITypeSymbol type, IFrameworkSet frameworkSet, string name, ExpressionSyntax defaultValue)
+        {
+            var variableDeclaration = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(name))
+                                                   .WithInitializer(SyntaxFactory.EqualsValueClause(defaultValue));
+
+            return SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.VariableDeclaration(AssignmentValueHelper.GetTypeOrImplicitType(type, frameworkSet))
+                                .WithVariables(SyntaxFactory.SingletonSeparatedList(variableDeclaration)));
+        }
+
+        public static LocalDeclarationStatementSyntax ImplicitlyTypedVariableDeclaration(string name, ExpressionSyntax defaultValue)
+        {
+            var variableDeclaration = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(name))
+                                                   .WithInitializer(SyntaxFactory.EqualsValueClause(defaultValue));
+
+            return SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName("var"))
+                                .WithVariables(SyntaxFactory.SingletonSeparatedList(variableDeclaration)));
+        }
+
         public static ParenthesizedLambdaExpressionSyntax ParenthesizedLambdaExpression(ExpressionSyntax expression)
         {
             if (expression is ParenthesizedLambdaExpressionSyntax parenthesizedLambda)
