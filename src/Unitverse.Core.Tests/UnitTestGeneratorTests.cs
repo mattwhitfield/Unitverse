@@ -110,6 +110,7 @@
                 MetadataReference.CreateFromFile(typeof(Window).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(UIElement).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(DependencyObject).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(ValueTask<>).Assembly.Location),
                 MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.dll")),
                 MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Core.dll")),
                 MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Runtime.dll")),

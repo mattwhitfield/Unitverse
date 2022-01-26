@@ -6,6 +6,7 @@ namespace Unitverse.Core.Tests.Frameworks
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
+    using FluentAssertions;
 
     [TestFixture]
     public class FrameworkSetTests
@@ -14,9 +15,10 @@ namespace Unitverse.Core.Tests.Frameworks
         private ITestFramework _testFramework;
         private IMockingFramework _mockingFramework;
         private IAssertionFramework _assertionFramework;
-        private INamingProvider _namingProvder;
         private IGenerationContext _context;
         private string _testTypeNaming;
+        private IUnitTestGeneratorOptions _options;
+        private INamingProvider _namingProvider;
 
         [SetUp]
         public void SetUp()
@@ -24,48 +26,49 @@ namespace Unitverse.Core.Tests.Frameworks
             _testFramework = Substitute.For<ITestFramework>();
             _mockingFramework = Substitute.For<IMockingFramework>();
             _assertionFramework = Substitute.For<IAssertionFramework>();
-            _namingProvder = Substitute.For<INamingProvider>();
-
+            _namingProvider = Substitute.For<INamingProvider>();
             _context = Substitute.For<IGenerationContext>();
             _testTypeNaming = "TestValue455103231";
-            _testClass = new FrameworkSet(_testFramework, _mockingFramework, _assertionFramework, _namingProvder, _context, _testTypeNaming);
+            _options = Substitute.For<IUnitTestGeneratorOptions>();
+
+            _testClass = new FrameworkSet(_testFramework, _mockingFramework, _assertionFramework, _namingProvider, _context, _testTypeNaming, _options);
         }
 
         [Test]
         public void CanConstruct()
         {
-            var instance = new FrameworkSet(_testFramework, _mockingFramework, _assertionFramework, _namingProvder, _context, _testTypeNaming);
-            Assert.That(instance, Is.Not.Null);
+            var instance = new FrameworkSet(_testFramework, _mockingFramework, _assertionFramework, _namingProvider, _context, _testTypeNaming, _options);
+            instance.Should().NotBeNull();
         }
 
         [Test]
         public void CannotConstructWithNullTestFramework()
         {
-            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(default(ITestFramework), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), "TestValue1808135505"));
+            FluentActions.Invoking(() => new FrameworkSet(default(ITestFramework), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), "TestValue800970825", Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullMockingFramework()
         {
-            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(Substitute.For<ITestFramework>(), default(IMockingFramework), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), "TestValue888012024"));
+            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<ITestFramework>(), default(IMockingFramework), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), "TestValue1430299096", Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullAssertionFramework()
         {
-            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), default(IAssertionFramework), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), "TestValue1975092699"));
+            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), default(IAssertionFramework), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), "TestValue1900892022", Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullNamingProvider()
         {
-            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), default(INamingProvider), Substitute.For<IGenerationContext>(), "TestValue1975092699"));
+            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), default(INamingProvider), Substitute.For<IGenerationContext>(), "TestValue1239307533", Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullContext()
         {
-            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), default(IGenerationContext), "TestValue1975092699"));
+            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), default(IGenerationContext), "TestValue1680076439", Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(null)]
@@ -73,37 +76,55 @@ namespace Unitverse.Core.Tests.Frameworks
         [TestCase("   ")]
         public void CannotConstructWithInvalidTestTypeNaming(string value)
         {
-            Assert.Throws<ArgumentNullException>(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), value));
+            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), value, Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
+        }
+
+        [Test]
+        public void CannotConstructWithNullOptions()
+        {
+            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), "TestValue969625404", default(IUnitTestGeneratorOptions))).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void TestFrameworkIsInitializedCorrectly()
         {
-            Assert.That(_testClass.TestFramework, Is.EqualTo(_testFramework));
+            _testClass.TestFramework.Should().BeSameAs(_testFramework);
         }
 
         [Test]
         public void MockingFrameworkIsInitializedCorrectly()
         {
-            Assert.That(_testClass.MockingFramework, Is.EqualTo(_mockingFramework));
+            _testClass.MockingFramework.Should().BeSameAs(_mockingFramework);
         }
 
         [Test]
         public void AssertionFrameworkIsInitializedCorrectly()
         {
-            Assert.That(_testClass.AssertionFramework, Is.EqualTo(_assertionFramework));
+            _testClass.AssertionFramework.Should().BeSameAs(_assertionFramework);
         }
 
         [Test]
         public void ContextIsInitializedCorrectly()
         {
-            Assert.That(_testClass.Context, Is.EqualTo(_context));
+            _testClass.Context.Should().BeSameAs(_context);
         }
 
         [Test]
         public void TestTypeNamingIsInitializedCorrectly()
         {
-            Assert.That(_testClass.TestTypeNaming, Is.EqualTo(_testTypeNaming));
+            _testClass.TestTypeNaming.Should().BeSameAs(_testTypeNaming);
+        }
+
+        [Test]
+        public void NamingProviderIsInitializedCorrectly()
+        {
+            _testClass.NamingProvider.Should().BeSameAs(_namingProvider);
+        }
+
+        [Test]
+        public void OptionsIsInitializedCorrectly()
+        {
+            _testClass.Options.Should().BeSameAs(_options);
         }
     }
 }

@@ -1,0 +1,19 @@
+using System.Collections.Generic;
+
+namespace AssemblyCore
+{
+    public class InterfaceSample
+    {
+        private IList<string> _list;
+
+        public InterfaceSample(IList<string> list)
+        {
+            _list = list;
+        }
+
+        public int Count()
+        {
+            return _list.Count;
+        }
+    }
+}

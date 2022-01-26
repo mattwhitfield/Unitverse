@@ -23,11 +23,14 @@
             Parameters = parameters ?? new List<ParameterModel>();
             IsVoid = string.Equals(node.ReturnType.ToFullString().Trim(), Strings.Generate_Method__void, StringComparison.OrdinalIgnoreCase);
 
-            if (ModelExtensions.GetDeclaredSymbol(model, node) is IMethodSymbol methodSymbol)
+            Symbol = ModelExtensions.GetDeclaredSymbol(model, node) as IMethodSymbol;
+            if (Symbol != null)
             {
-                IsAsync = methodSymbol.IsAwaitableNonDynamic();
+                IsAsync = Symbol.IsAwaitableNonDynamic();
             }
         }
+
+        public IMethodSymbol Symbol { get; }
 
         public bool IsAsync { get; }
 

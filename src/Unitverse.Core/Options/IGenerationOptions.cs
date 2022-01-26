@@ -23,5 +23,7 @@
         bool PartialGenerationAllowed { get; }
 
         bool EmitTestsForInternals { get; }
+
+        bool AutomaticallyConfigureMocks { get; }
     }
 }

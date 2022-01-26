@@ -55,6 +55,9 @@
 
             var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanCall, namingContext, method.IsAsync, model.IsStatic);
 
+            var interfaceMethodsImplemented = model.GetImplementedInterfaceSymbolsFor(method.Symbol);
+            var testIsComplete = MockHelper.PrepareMockCalls(model, method.Node, null, interfaceMethodsImplemented, method.Parameters.Select(x => x.Name), _frameworkSet, out var mockSetupStatements, out var mockAssertionStatements);
+
             var paramExpressions = new List<CSharpSyntaxNode>();
 
             foreach (var parameter in method.Parameters)
@@ -83,6 +86,9 @@
                     }
                 }
             }
+
+            var leadingTrivia = paramExpressions.Any() ? Environment.NewLine : null;
+            generatedMethod = MockHelper.EmitStatementListWithTrivia(generatedMethod, mockSetupStatements, leadingTrivia, Environment.NewLine + Environment.NewLine);
 
             var methodCall = method.Invoke(model, false, _frameworkSet, paramExpressions.ToArray());
 
@@ -118,9 +124,19 @@
                 bodyStatement = SyntaxFactory.ExpressionStatement(methodCall);
             }
 
+            if (mockAssertionStatements.Count > 0)
+            {
+                bodyStatement = bodyStatement.WithTrailingTrivia(SyntaxFactory.Comment(Environment.NewLine + Environment.NewLine));
+            }
+
             generatedMethod = generatedMethod.AddBodyStatements(bodyStatement);
 
-            generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
+            generatedMethod = MockHelper.EmitStatementListWithTrivia(generatedMethod, mockAssertionStatements, null, testIsComplete ? string.Empty : Environment.NewLine + Environment.NewLine);
+
+            if (!testIsComplete)
+            {
+                generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
+            }
 
             yield return generatedMethod;
         }

@@ -70,8 +70,8 @@
         {
             var propertyLambda = SyntaxFactory.Argument(
                 SyntaxFactory.SimpleLambdaExpression(
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier(Strings.Identifier_x)),
-                    SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(Strings.Identifier_x), SyntaxFactory.IdentifierName(property.Name))));
+                    Generate.Parameter("x"),
+                    SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("x"), SyntaxFactory.IdentifierName(property.Name))));
 
             var argumentList = new List<SyntaxNodeOrToken> { propertyLambda };
 

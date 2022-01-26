@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
@@ -52,30 +53,33 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic)
-                .AddBodyStatements(GetPropertyAssertionBodyStatements(property, model).ToArray());
+            var target = property.IsStatic ? model.TypeSyntax : model.TargetInstance;
+
+            var interfaceMethodsImplemented = model.GetImplementedInterfaceSymbolsFor(property.Symbol);
+            MockHelper.PrepareMockCalls(model, property.Node, property.Access(target), interfaceMethodsImplemented, Enumerable.Empty<string>(), _frameworkSet, out var mockSetupStatements, out var mockAssertionStatements);
+
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic);
+
+            method = MockHelper.EmitStatementListWithTrivia(method, mockSetupStatements, null, Environment.NewLine + Environment.NewLine);
+
+            var defaultValue = AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, model.SemanticModel, _frameworkSet);
+            var declareTestValue = Generate.VariableDeclaration(property.TypeInfo.Type, _frameworkSet, Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue, defaultValue);
+
+            method = method.AddBodyStatements(declareTestValue);
+
+            method = method.AddBodyStatements(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue))));
+
+            var bodyStatement = _frameworkSet.AssertionFramework.AssertEqual(property.Access(target), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue), property.TypeInfo.Type.IsReferenceType);
+            if (mockAssertionStatements.Count > 0)
+            {
+                bodyStatement = bodyStatement.WithTrailingTrivia(SyntaxFactory.Comment(Environment.NewLine + Environment.NewLine));
+            }
+
+            method = method.AddBodyStatements(bodyStatement);
+
+            method = MockHelper.EmitStatementListWithTrivia(method, mockAssertionStatements, null, Environment.NewLine + Environment.NewLine);
 
             yield return method;
-        }
-
-        private IEnumerable<StatementSyntax> GetPropertyAssertionBodyStatements(IPropertyModel property, ClassModel sourceModel)
-        {
-            yield return SyntaxFactory.LocalDeclarationStatement(
-                SyntaxFactory.VariableDeclaration(
-                        AssignmentValueHelper.GetTypeOrImplicitType(property.TypeInfo.Type, _frameworkSet))
-                    .WithVariables(
-                        SyntaxFactory.SingletonSeparatedList(
-                            SyntaxFactory.VariableDeclarator(
-                                    SyntaxFactory.Identifier(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue))
-                                .WithInitializer(
-                                    SyntaxFactory.EqualsValueClause(
-                                        AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet))))));
-
-            var target = property.IsStatic ? sourceModel.TypeSyntax : sourceModel.TargetInstance;
-
-            yield return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue)));
-
-            yield return _frameworkSet.AssertionFramework.AssertEqual(property.Access(target), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue), property.TypeInfo.Type.IsReferenceType);
         }
     }
 }

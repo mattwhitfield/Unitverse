@@ -1,5 +1,6 @@
 ﻿namespace Unitverse.Core.Models
 {
+    using System;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -8,13 +9,22 @@
 
     public class PropertyModel : TestableModel<PropertyDeclarationSyntax>, IPropertyModel
     {
-        public PropertyModel(string name, PropertyDeclarationSyntax node, TypeInfo typeInfo)
+        public PropertyModel(string name, PropertyDeclarationSyntax node, TypeInfo typeInfo, SemanticModel model)
             : base(name, node)
         {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             TypeInfo = typeInfo;
+
+            Symbol = ModelExtensions.GetDeclaredSymbol(model, node) as IPropertySymbol;
         }
 
         public TypeInfo TypeInfo { get; }
+
+        public IPropertySymbol Symbol { get; }
 
         public bool HasGet => (Node.AccessorList?.Accessors != null && Node.AccessorList.Accessors.Any(x => x.IsKind(SyntaxKind.GetAccessorDeclaration) && !x.Modifiers.Any(m => m.IsKind(SyntaxKind.PrivateKeyword)))) || Node.ExpressionBody?.Expression != null;
 

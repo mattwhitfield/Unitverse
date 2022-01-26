@@ -142,6 +142,15 @@
   <data name="AsyncMethod" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\AsyncMethod.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="AutomaticMockGeneration" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AutomaticMockGeneration.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="AutomaticMockingFrameworkTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AutomaticMockingFrameworkTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="AutomaticMockingMixedDependencies" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AutomaticMockingMixedDependencies.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="ByteArray" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ByteArray.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -162,6 +171,9 @@
   </data>
   <data name="DelegateConstructorTests" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\DelegateConstructorTests.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DelegatedImplementation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\DelegatedImplementation.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="DelegateTests" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\DelegateTests.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

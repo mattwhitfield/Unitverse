@@ -158,7 +158,7 @@
 
             var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic);
 
-            method = method.AddParameterListParameters(SyntaxFactory.Parameter(SyntaxFactory.Identifier(Strings.MsTestTestFramework_CreateTestCaseMethod_value)).WithType(valueType));
+            method = method.AddParameterListParameters(Generate.Parameter(Strings.MsTestTestFramework_CreateTestCaseMethod_value).WithType(valueType));
             method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("Theory"))));
 
             foreach (var testValue in testValues)

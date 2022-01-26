@@ -66,11 +66,51 @@ Consider this simple class:
 
  ![Example source class](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/assets/SourceClass.png)
 
-Although the constructor and methods are not implemented, it serves as a good example because the extension generates tests based on signatures only. The following illustrates the results of generating tests for this class.
+Although the constructor and methods are not implemented, it serves as a good example because the extension largely generates tests based on signatures only (see the section below on inspection based output). The following illustrates the results of generating tests for this class.
 
  ![Example generated test class with annotations](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/assets/SourceClassTestsAnnotated.png)
 
 Notice that the dependency for the class has been automatically mocked & injected, and there are generated tests for the constructor. There are also tests to verify that parameters can’t be null for both constructors and methods. Note that the generator is producing values required for testing – both initializing a POCO using an object initializer and an immutable class by providing values for its constructor.
+
+### Inspection based output
+
+From version 0.84 of Unitverse, inspection based output is emitted by default. This looks at the dependencies injected into the constructor, the fields in which they are stored, and method calls to those fields. This information is then used to emit a default configuration for the mocks used in the method. In most cases, this will emit a simple 'return this for any argument' configuration, and return a generated test value. Code will also be emitted to check that mocks were called after invocation. The aim of this mode is not to 'write tests for you' but simply to give you something to work from when configuring your mocks and reduce the need to type.
+
+An example of a test with automatically mocked dependencies might look like:
+
+	[Fact]
+	public async Task CanCallSampleAsyncMethod()
+	{
+		_dummyService.AsyncMethod().Returns("TestValue176244767");
+		_dummyService2.AsyncMethod(Arg.Any<string>()).Returns("TestValue1611247444");
+
+		await _testClass.SampleAsyncMethod();
+
+		await _dummyService.Received().AsyncMethod();
+		await _dummyService2.Received().AsyncMethod(Arg.Any<string>());
+
+		throw new NotImplementedException("Create or modify test");
+	}
+
+In the case that a test class implements an interface, and also takes an instance of that interface as a dependency, a delegation test will be emitted for methods that make simple calls to the injected dependency. An example here would be a service wrapper that mostly delegates behaviour to the injected dependency, but modifies some calls.
+
+An example of a delegation test might look like:
+
+	[Fact]
+	public async Task CanCallSomeAsyncMethod()
+	{
+		var s = "TestValue123183904";
+		
+		var expectedReturnValue = 861463483;
+		_service.SomeAsyncMethod(s).Returns(expectedReturnValue);
+
+		var result = await _testClass.SomeAsyncMethod(s);
+
+		await _service.Received().SomeAsyncMethod(s);
+		result.Should().Be(expectedReturnValue);
+	}
+
+These two examples are obviously similar, but the delegation test is a little more specific, tying the mocked dependency to the parameters passed in to the method being tested.
 
 ## Controlling the process
 
@@ -80,10 +120,13 @@ The Unitverse extension options page allows for control of various aspects of th
 
 * Select the test and mocking frameworks to be used
 * Control the naming conventions for: test projects, classes, and files
+* Control preferences around using placement, generation without projects & partial generation
+* Control whether mock configuration calls are automatically emitted
+* Control whether tests for internal members are emitted
 
 _Note: The default for project naming is **‘{0}.Tests’**. For example, a project named **MyProject** would be associated with a test project called **MyProject.Tests**._
 
-_Note: The default for the class and file naming is **‘{0}Tests’**. For example, a class called **MyClass** would be associated with a test class called **MyClassTests**._
+_Note: The default for the class and file naming is **‘{0}Tests’**. For example, a class called **MyClass** would be associated with a test class called **MyClassTests** and a file called a class called **MyClass.cs** would be associated with a test class called **MyClassTests.cs**._
 
 ### Test Method Naming Options
 

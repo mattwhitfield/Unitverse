@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
@@ -53,5 +54,63 @@
                         .WithTypeArgumentList(
                             SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(type)))));
         }
+
+        private ExpressionSyntax GetArgument(ITypeSymbol typeSymbol, IGenerationContext context)
+        {
+            return SyntaxFactory.MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        SyntaxFactory.GenericName(SyntaxFactory.Identifier("A")).WithTypeArgumentList(MockingHelper.TypeArgumentList(new[] { typeSymbol }, context)),
+                        SyntaxFactory.IdentifierName("_"));
+        }
+
+        public ExpressionSyntax GetSetupFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, ExpressionSyntax expectedReturnValue, IEnumerable<string> parameters)
+        {
+            var methodCall = MockingHelper.GetMethodCall(dependencyMethod, mockFieldName, MockingHelper.TranslateArgumentFunc(GetArgument, parameters), _context);
+
+            var methodReference = SyntaxFactory.IdentifierName("Returns");
+
+            return SyntaxFactory.InvocationExpression(
+                    SyntaxFactory.MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        ACallTo(methodCall),
+                        methodReference))
+                    .WithArgumentList(Generate.Arguments(expectedReturnValue));
+        }
+
+        public ExpressionSyntax GetSetupFor(IPropertySymbol dependencyProperty, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, ExpressionSyntax expectedReturnValue)
+        {
+            var propertyAccess = SyntaxFactory.MemberAccessExpression(
+                                    SyntaxKind.SimpleMemberAccessExpression,
+                                    SyntaxFactory.IdentifierName(mockFieldName),
+                                    SyntaxFactory.IdentifierName(dependencyProperty.Name));
+
+            var methodReference = SyntaxFactory.IdentifierName("Returns");
+
+            return SyntaxFactory.InvocationExpression(
+                    SyntaxFactory.MemberAccessExpression(
+                            SyntaxKind.SimpleMemberAccessExpression,
+                            ACallTo(propertyAccess),
+                            methodReference))
+                    .WithArgumentList(Generate.Arguments(expectedReturnValue));
+        }
+
+        public ExpressionSyntax GetAssertionFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, IEnumerable<string> parameters)
+        {
+            var methodCall = MockingHelper.GetMethodCall(dependencyMethod, mockFieldName, MockingHelper.TranslateArgumentFunc(GetArgument, parameters), frameworkSet.Context);
+
+            return SyntaxFactory.InvocationExpression(
+                    SyntaxFactory.MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        ACallTo(methodCall),
+                        SyntaxFactory.IdentifierName("MustHaveHappened")));
+        }
+
+        private ExpressionSyntax ACallTo(ExpressionSyntax methodCall)
+        {
+            var aCallTo = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("A"), SyntaxFactory.IdentifierName("CallTo"));
+            return SyntaxFactory.InvocationExpression(aCallTo).WithArgumentList(Generate.Arguments(SyntaxFactory.ParenthesizedLambdaExpression().WithExpressionBody(methodCall)));
+        }
+
+        public bool AwaitAsyncAssertions => false;
     }
 }

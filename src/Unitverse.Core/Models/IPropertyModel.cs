@@ -9,6 +9,8 @@
 
         bool HasSet { get; }
 
+        IPropertySymbol Symbol { get; }
+
         TypeInfo TypeInfo { get; }
 
         bool IsStatic { get; }

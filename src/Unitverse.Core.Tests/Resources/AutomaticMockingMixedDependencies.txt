@@ -1,0 +1,34 @@
+namespace AssemblyCore
+{
+	public interface IDummyService
+	{
+        string SomeProp { get; set; }
+	}
+
+	public interface IDummyService2
+	{
+        string SomeOtherProp { get; }
+	}
+
+    public class InterfaceSample
+    {
+        private IDummyService _dummyService, _otherDummyService;
+        private IDummyService2 _dummyService2;
+
+        public InterfaceSample(IDummyService dummyService)
+        {
+            _dummyService = dummyService;
+        }
+
+        public InterfaceSample(IDummyService2 dummyService)
+        {
+            _dummyService2 = dummyService;
+        }
+
+        public void SampleNoReturn(string srr)
+        {
+            var s = _dummyService.SomeProp;
+            var t = _dummyService2.SomeOtherProp;
+        }
+    }
+}

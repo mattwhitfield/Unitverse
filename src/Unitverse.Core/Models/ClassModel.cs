@@ -27,7 +27,28 @@
                 SymbolDisplayTypeQualificationStyle.NameAndContainingTypes,
                 SymbolDisplayGenericsOptions.IncludeTypeParameters,
                 miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes)));
+
+            DependencyMap = ConstructorFieldAssignmentExtractor.ExtractMapFrom(declaration, semanticModel);
+
+            foreach (var interfaceImpl in TypeSymbol.AllInterfaces)
+            {
+                foreach (var interfaceMember in interfaceImpl.GetMembers())
+                {
+                    var implementation = TypeSymbol.FindImplementationForInterfaceMember(interfaceMember);
+                    if (implementation != null)
+                    {
+                        if (!_implementedInterfaceSymbols.TryGetValue(implementation, out var list))
+                        {
+                            _implementedInterfaceSymbols[implementation] = list = new List<ISymbol>();
+                        }
+
+                        list.Add(interfaceMember);
+                    }
+                }
+            }
         }
+
+        public ClassDependencyMap DependencyMap { get; }
 
         public INamedTypeSymbol TypeSymbol { get; }
 
@@ -66,6 +87,18 @@
         public TypeSyntax TypeSyntax { get; set; }
 
         public IList<UsingDirectiveSyntax> Usings { get; } = new List<UsingDirectiveSyntax>();
+
+        private IDictionary<ISymbol, IList<ISymbol>> _implementedInterfaceSymbols { get; } = new Dictionary<ISymbol, IList<ISymbol>>();
+
+        public IList<ISymbol> GetImplementedInterfaceSymbolsFor(ISymbol symbol)
+        {
+            if (symbol != null && _implementedInterfaceSymbols.TryGetValue(symbol, out var list))
+            {
+                return list;
+            }
+
+            return new List<ISymbol>();
+        }
 
         public void SetShouldGenerateForSingleItem(SyntaxNode syntaxNode)
         {

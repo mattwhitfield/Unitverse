@@ -182,7 +182,7 @@
 
             var typeInfo = SemanticModel.GetTypeInfo(property.Type);
 
-            return new PropertyModel(propertyName, property, typeInfo);
+            return new PropertyModel(propertyName, property, typeInfo, SemanticModel);
         }
     }
 }
