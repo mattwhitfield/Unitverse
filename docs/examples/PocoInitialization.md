@@ -1,7 +1,7 @@
 ﻿## PocoInitialization
-Description
+Demonstrates how test values are produced to initialize POCO members when the type is consumed
 
-### Source Type
+### Source Type(s)
 ``` csharp
 public class SomePoco
 {
@@ -33,7 +33,7 @@ public class TestClassTests
 
     public TestClassTests()
     {
-        _poco = new SomePoco { Identity = 427266051, Description = "TestValue166470585", UniqueCode = new Guid("1b64e1ac-afdd-4692-9d56-aa3f4467ce74") };
+        _poco = new SomePoco { Identity = 1896117029, Description = "TestValue377514313", UniqueCode = new Guid("8a91a0d6-994b-4156-a72b-e781ca0845da") };
         _testClass = new TestClass(_poco);
     }
 

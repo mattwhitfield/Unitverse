@@ -32,33 +32,63 @@ namespace Unitverse.ExampleGenerator
 {
     internal class Program
     {
-        static async Task Main(string[] args)
+        static async Task<int> Main(string[] args)
         {
-            var currentPath = new FileInfo(typeof(Program).Assembly.Location).Directory;
-            while (!string.Equals(currentPath.Name, "src", StringComparison.OrdinalIgnoreCase))
+            try
             {
-                currentPath = currentPath.Parent;
+                var currentPath = new FileInfo(typeof(Program).Assembly.Location).Directory;
+                while (!string.Equals(currentPath.Name, "src", StringComparison.OrdinalIgnoreCase))
+                {
+                    currentPath = currentPath.Parent;
+                }
+                currentPath = currentPath.Parent.GetDirectories().First(x => string.Equals(x.Name, "docs", StringComparison.OrdinalIgnoreCase));
+
+                var set = Examples.ResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
+                var entryKeys = new List<Tuple<string, string>>();
+                foreach (DictionaryEntry entry in set)
+                {
+                    var exampleName = entry.Key.ToString();
+                    var classAsText = Examples.ResourceManager.GetString(exampleName, Examples.Culture);
+                    var description = GetDescription(classAsText);
+
+                    await WriteExample(currentPath, exampleName, description, classAsText);
+
+                    entryKeys.Add(Tuple.Create(entry.Key.ToString(), description));
+                }
+
+                var file = new FileInfo(Path.Combine(currentPath.FullName, "examples.md"));
+                using (var writer = new StreamWriter(file.FullName, false, Encoding.UTF8))
+                {
+                    writer.WriteLine("# Examples");
+                    writer.WriteLine("This section contains examples of the output that Unitverse outputs, refreshed every build. Each example aims to demonstrate a particular scenario which is described in the following table.");
+                    writer.WriteLine();
+                    writer.WriteLine("| Example | Description |");
+                    writer.WriteLine("| --- | --- |");
+                    foreach (var pair in entryKeys)
+                    {
+                        writer.WriteLine("| [" + pair.Item1 + "](examples/" + pair.Item1 + ".md) | " + pair.Item2 + " |");
+                    }
+                }
+
+                return 0;
             }
-            currentPath = currentPath.Parent.GetDirectories().First(x => string.Equals(x.Name, "docs", StringComparison.OrdinalIgnoreCase));
-
-            var set = Examples.ResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
-            var entryKeys = new List<Tuple<string, string>>();
-            foreach (DictionaryEntry entry in set)
+            catch (Exception ex)
             {
-                var exampleName = entry.Key.ToString();
-                var classAsText = Examples.ResourceManager.GetString(exampleName, Examples.Culture);
-                var description = GetDescription(classAsText);
-
-                await WriteExample(currentPath, exampleName, description, classAsText);
-
-                entryKeys.Add(Tuple.Create(entry.Key.ToString(), description));
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                return -1;
             }
         }
 
         private static string GetDescription(string classAsText)
         {
-            // TODO
-            return "Description";
+            var description = classAsText.Lines().FirstOrDefault(x => x.StartsWith("// $"));
+            if (description == null)
+            {
+                return "No description available.";
+            }
+
+            return description.Substring("// $".Length).Trim();
         }
 
         static async Task WriteExample(DirectoryInfo docsFolder, string exampleName, string description, string classAsText)

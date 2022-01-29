@@ -5,7 +5,7 @@
         "internalName": "UnitverseVS2022", 
         "tags": [ "C#", "dependency injection", "FakeItEasy", "Moq", "MSTest", "NSubstitute", "NUnit", "unit testing", "xunit", "generation", "test generation" ]
     },
-    "overview": "README.md",           
+    "overview": "MarketplaceOverview.md",           
     "priceCategory": "free",             
     "publisher": "mattwhitfield",       
     "private": false,                     

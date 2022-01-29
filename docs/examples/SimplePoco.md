@@ -1,7 +1,7 @@
 ﻿## SimplePoco
-Description
+Demonstrates how tests are generated for a simple POCO type
 
-### Source Type
+### Source Type(s)
 ``` csharp
 public class SomePoco
 {
@@ -26,7 +26,7 @@ public class SomePocoTests
     [Fact]
     public void CanSetAndGetIdentity()
     {
-        var testValue = 601128017;
+        var testValue = 1381233515;
         _testClass.Identity = testValue;
         _testClass.Identity.Should().Be(testValue);
     }
@@ -34,7 +34,7 @@ public class SomePocoTests
     [Fact]
     public void CanSetAndGetDescription()
     {
-        var testValue = "TestValue404443222";
+        var testValue = "TestValue116732967";
         _testClass.Description = testValue;
         _testClass.Description.Should().BeSameAs(testValue);
     }
@@ -42,7 +42,7 @@ public class SomePocoTests
     [Fact]
     public void CanSetAndGetUniqueCode()
     {
-        var testValue = new Guid("13abbdfb-24e1-4965-b976-6c5dd4e4f4d9");
+        var testValue = new Guid("fd302cdf-4a85-4e26-8fa7-e6af33fe1d3f");
         _testClass.UniqueCode = testValue;
         _testClass.UniqueCode.Should().Be(testValue);
     }

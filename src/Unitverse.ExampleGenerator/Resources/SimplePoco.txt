@@ -1,3 +1,5 @@
+// $ Demonstrates how tests are generated for a simple POCO type
+
 namespace TestNamespace.SubNameSpace
 {
 	using System;

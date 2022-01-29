@@ -1,3 +1,5 @@
+// $ Demonstrates how test values are produced to initialize POCO members when the type is consumed
+
 namespace TestNamespace.SubNameSpace
 {
 	using System;
@@ -9,11 +11,11 @@ namespace TestNamespace.SubNameSpace
         public Guid UniqueCode { get; set; }
     }
 
-    public class TestClass
+    public class ConsumingClass
     {
 		SomePoco _poco;
 
-        public TestClass(SomePoco poco)
+        public ConsumingClass(SomePoco poco)
         {
 			_poco = poco;
         }
