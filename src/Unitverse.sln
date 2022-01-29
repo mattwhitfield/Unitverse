@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unitverse.Specs", "Unitverse.Specs\Unitverse.Specs.csproj", "{AC219820-5613-43BC-9067-D4BF70EB26E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unitverse.ExampleGenerator", "Unitverse.ExampleGenerator\Unitverse.ExampleGenerator.csproj", "{947C9206-5471-42A5-9945-ABC91212A62D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{AC219820-5613-43BC-9067-D4BF70EB26E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC219820-5613-43BC-9067-D4BF70EB26E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC219820-5613-43BC-9067-D4BF70EB26E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{947C9206-5471-42A5-9945-ABC91212A62D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{947C9206-5471-42A5-9945-ABC91212A62D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{947C9206-5471-42A5-9945-ABC91212A62D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{947C9206-5471-42A5-9945-ABC91212A62D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

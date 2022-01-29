@@ -44,7 +44,7 @@
         {
             return string.IsNullOrEmpty(input) ?
                 Enumerable.Empty<string>() :
-                input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                input.Split(new[] { "\r\n" }, StringSplitOptions.None);
         }
     }
 }
