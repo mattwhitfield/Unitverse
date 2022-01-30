@@ -1,10 +1,12 @@
+// # nullable=true
+
 namespace TestNamespace.SubNameSpace
 {
     public interface ITest { }
 
     public class TestClass
     {
-        public TestClass(string stringProp, string? nonNullableStringProp)
+        public TestClass(string stringProp, string? nullableStringProp)
         {
         }
  
@@ -22,10 +24,10 @@ namespace TestNamespace.SubNameSpace
         public void SomeMethod(ITest? test)
         { }
 
-        public void SomeMethod(ITest test, string someOtherThing)
+        public void SomeMethodNoNullability(ITest test, string someOtherThing)
         { }
 
-        public void MethodForWhichNoNullabilityTestShouldBeEmitted(ITest? test)
+        public void SomeMethodMixedNullability(ITest? test, string someOtherThing)
         { }
     }
 }

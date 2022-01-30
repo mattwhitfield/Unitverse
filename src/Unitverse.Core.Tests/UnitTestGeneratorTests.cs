@@ -78,6 +78,7 @@
 
             var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, false);
 
+            var nullableReferenceTypes = false;
             var lines = classAsText.Lines().Where(x => x.StartsWith("// #", StringComparison.Ordinal)).Select(x => x.Substring(4).Trim()).ToList();
             if (lines.Any())
             {
@@ -93,6 +94,10 @@
 
                 properties.ApplyTo(generationOptions);
                 properties.ApplyTo(namingOptions);
+                if (properties.Any(x => string.Equals(x.Key, "nullable", StringComparison.OrdinalIgnoreCase) && string.Equals(x.Value, "true", StringComparison.OrdinalIgnoreCase)))
+                {
+                    nullableReferenceTypes = true;
+                }
             }
 
             var tree = CSharpSyntaxTree.ParseText(classAsText, new CSharpParseOptions(LanguageVersion.Latest));
@@ -132,6 +137,17 @@
                 "MyTest",
                 syntaxTrees: new[] { tree },
                 references: references);
+
+            if (nullableReferenceTypes)
+            {
+                var src = compilation.Options;
+                var newOptions = new CSharpCompilationOptions(src.OutputKind, src.ReportSuppressedDiagnostics, src.ModuleName, src.MainTypeName, src.ScriptClassName, src.Usings, src.OptimizationLevel, src.CheckOverflow, src.AllowUnsafe, src.CryptoKeyContainer, src.CryptoKeyFile, src.CryptoPublicKey, src.DelaySign, src.Platform, src.GeneralDiagnosticOption, src.WarningLevel, src.SpecificDiagnosticOptions, src.ConcurrentBuild, src.Deterministic, src.XmlReferenceResolver, src.SourceReferenceResolver, src.MetadataReferenceResolver, src.AssemblyIdentityComparer, src.StrongNameProvider, src.PublicSign, src.MetadataImportOptions, NullableContextOptions.Enable);
+                compilation = CSharpCompilation.Create(
+                    "MyTest",
+                    syntaxTrees: new[] { tree },
+                    references: references,
+                    newOptions);
+            }
 
             var semanticModel = compilation.GetSemanticModel(tree);
 

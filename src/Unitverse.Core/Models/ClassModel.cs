@@ -28,6 +28,8 @@
                 SymbolDisplayGenericsOptions.IncludeTypeParameters,
                 miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes)));
 
+            NullableReferenceTypesEnabled = SemanticModel.Compilation.Options.NullableContextOptions != NullableContextOptions.Disable;
+
             DependencyMap = ConstructorFieldAssignmentExtractor.ExtractMapFrom(declaration, semanticModel);
 
             foreach (var interfaceImpl in TypeSymbol.AllInterfaces)
@@ -88,7 +90,9 @@
 
         public IList<UsingDirectiveSyntax> Usings { get; } = new List<UsingDirectiveSyntax>();
 
-        private IDictionary<ISymbol, IList<ISymbol>> _implementedInterfaceSymbols { get; } = new Dictionary<ISymbol, IList<ISymbol>>();
+        private IDictionary<ISymbol, IList<ISymbol>> _implementedInterfaceSymbols = new Dictionary<ISymbol, IList<ISymbol>>();
+
+        public bool NullableReferenceTypesEnabled { get; }
 
         public IList<ISymbol> GetImplementedInterfaceSymbolsFor(ISymbol symbol)
         {

@@ -69,7 +69,7 @@
 
                 namingContext = namingContext.WithParameterName(method.Parameters[i].Name.ToPascalCase());
 
-                var isNonNullable = method.Parameters[i].Node.Type is NullableTypeSyntax;
+                var isNonNullable = model.NullableReferenceTypesEnabled && !(method.Parameters[i].Node.Type is NullableTypeSyntax);
                 object[] testValues = isNonNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
 
                 var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotCallWithInvalid, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues);

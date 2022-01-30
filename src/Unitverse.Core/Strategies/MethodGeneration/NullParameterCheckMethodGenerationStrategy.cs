@@ -70,7 +70,7 @@
                     continue;
                 }
 
-                if (method.Parameters[i].Node.Type is NullableTypeSyntax)
+                if (model.NullableReferenceTypesEnabled && !(method.Parameters[i].Node.Type is NullableTypeSyntax))
                 {
                     continue;
                 }
