@@ -118,10 +118,58 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="AbstractClass" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AbstractClass.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="AsyncMethod" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AsyncMethod.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="AutomaticMockGeneration" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AutomaticMockGeneration.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ConstrainedGenericType" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ConstrainedGenericType.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DelegateGeneration" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\DelegateGeneration.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ExtensionMethod" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ExtensionMethod.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="GenericMethod" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\GenericMethod.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="IComparableTests" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\IComparableTests.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="IndexerTests" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\IndexerTests.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MappingMethod" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\MappingMethod.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MultipleOverloads" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\MultipleOverloads.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="NullableReferenceTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\NullableReferenceTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="OperatorOverloading" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\OperatorOverloading.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="PocoInitialization" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\PocoInitialization.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="RefAndOutParameters" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RefAndOutParameters.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="SimplePoco" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\SimplePoco.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Singleton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Singleton.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="StaticClass" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\StaticClass.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

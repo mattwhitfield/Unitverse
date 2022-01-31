@@ -1,0 +1,18 @@
+// $ Demonstrates the tests generated for a type that contains an indexer
+
+namespace Unitverse.Examples
+{
+    public class TypeWithIndexer 
+    {
+        public string this[string cookieName]
+        {
+            get { return "hello"; }
+        } 
+
+        public string this[string cookieName, int cookieId]
+        {
+            get { return "hello"; }
+            set { }
+        } 
+    }
+}

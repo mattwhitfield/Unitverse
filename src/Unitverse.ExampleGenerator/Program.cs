@@ -64,7 +64,7 @@ namespace Unitverse.ExampleGenerator
                     writer.WriteLine();
                     writer.WriteLine("| Example | Description |");
                     writer.WriteLine("| --- | --- |");
-                    foreach (var pair in entryKeys)
+                    foreach (var pair in entryKeys.OrderBy(x => x.Item1))
                     {
                         writer.WriteLine("| [" + pair.Item1 + "](examples/" + pair.Item1 + ".md) | " + pair.Item2 + " |");
                     }

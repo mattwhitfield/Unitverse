@@ -10,11 +10,11 @@ public class SomePoco
     public Guid UniqueCode { get; set; }
 }
 
-public class TestClass
+public class ConsumingClass
 {
     SomePoco _poco;
 
-    public TestClass(SomePoco poco)
+    public ConsumingClass(SomePoco poco)
     {
         _poco = poco;
     }
@@ -26,28 +26,28 @@ public class TestClass
 
 ### Generated Tests
 ``` csharp
-public class TestClassTests
+public class ConsumingClassTests
 {
-    private TestClass _testClass;
+    private ConsumingClass _testClass;
     private SomePoco _poco;
 
-    public TestClassTests()
+    public ConsumingClassTests()
     {
-        _poco = new SomePoco { Identity = 1896117029, Description = "TestValue377514313", UniqueCode = new Guid("8a91a0d6-994b-4156-a72b-e781ca0845da") };
-        _testClass = new TestClass(_poco);
+        _poco = new SomePoco { Identity = 1791895263, Description = "TestValue601642341", UniqueCode = new Guid("3fcc11cf-5004-414e-bfcf-2742a316390c") };
+        _testClass = new ConsumingClass(_poco);
     }
 
     [Fact]
     public void CanConstruct()
     {
-        var instance = new TestClass(_poco);
+        var instance = new ConsumingClass(_poco);
         instance.Should().NotBeNull();
     }
 
     [Fact]
     public void CannotConstructWithNullPoco()
     {
-        FluentActions.Invoking(() => new TestClass(default(SomePoco))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new ConsumingClass(default(SomePoco))).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]

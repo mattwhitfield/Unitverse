@@ -1,6 +1,6 @@
 // $ Demonstrates how test values are produced to initialize POCO members when the type is consumed
 
-namespace TestNamespace.SubNameSpace
+namespace Unitverse.Examples
 {
 	using System;
 

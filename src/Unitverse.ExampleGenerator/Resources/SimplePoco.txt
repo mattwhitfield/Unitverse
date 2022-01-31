@@ -1,8 +1,8 @@
 // $ Demonstrates how tests are generated for a simple POCO type
 
-namespace TestNamespace.SubNameSpace
+namespace Unitverse.Examples
 {
-	using System;
+    using System;
 
     public class SomePoco
     {

@@ -1,0 +1,26 @@
+// $ Shows how unitverse generates a test to verify mappings between input parameter type and return type where the types share property names
+
+namespace Unitverse.Examples
+{
+    public class InputClass
+    {
+        public string SomeProperty { get; }
+        public string SomeOtherProperty { get; set; }
+        public string InputOnlyProperty { get; set; }
+    }
+
+    public class OutputClass
+    {
+        public string SomeProperty { get; set; }
+        public string SomeOtherProperty { get; set; }
+        public string OutputOnlyProperty { get; set; }
+    }
+	
+    public class MappingClass
+    {
+        public OutputClass Map(InputClass inputClass)
+        {
+            return null;
+        }
+    }
+}

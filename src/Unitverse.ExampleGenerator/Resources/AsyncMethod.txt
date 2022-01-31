@@ -1,0 +1,19 @@
+// $ Demonstrates how tests are generated for async methods, as well as showing how the assertion framework is driven differently for async methods
+
+namespace Unitverse.Examples
+{
+    public class TestClass
+    {
+        public System.Threading.Tasks.Task ThisIsAnAsyncMethod(string methodName, int methodValue)
+        {
+            System.Console.WriteLine("Testing this");
+            return System.Threading.Tasks.Task.CompletedTask;
+        }
+
+        public System.Threading.Tasks.Task<int> ThisIsAnAsyncMethodWithReturnType(string methodName, int methodValue)
+        {
+            System.Console.WriteLine("Testing this");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+    }
+}

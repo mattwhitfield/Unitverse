@@ -1,0 +1,29 @@
+// $ Shows how Unitverse will omit `null` tests for parameters declared to explicitly accept null
+
+namespace Unitverse.Examples
+{
+    public interface ITest { }
+
+    public class TestClass
+    {
+        public TestClass(string notNullable, string? nullable)
+        {
+        }
+ 
+        public TestClass(ITest? test)
+        {
+        }
+ 
+        public TestClass(ITest test, string someOtherThing)
+        {
+        }
+ 
+        public string GetFullName(string first, string? middle, string last) => middle != null ? $"{first} {middle} {last}" : $"{first} {last}";
+
+        public void SomeMethod(ITest test, string someOtherThing)
+        { }
+
+        public void MethodForWhichNoNullabilityTestShouldBeEmitted(ITest? test)
+        { }
+    }
+}
