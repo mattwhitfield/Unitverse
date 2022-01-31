@@ -42,7 +42,7 @@ public class SomePocoTests
     [Fact]
     public void CanSetAndGetUniqueCode()
     {
-        var testValue = new Guid("18f9ab0f-b06f-4c92-ac3c-47e192cf813e");
+        var testValue = new Guid("97408286-a3e4-cf95-ff46-699c73c4a1cd");
         _testClass.UniqueCode = testValue;
         _testClass.UniqueCode.Should().Be(testValue);
     }
