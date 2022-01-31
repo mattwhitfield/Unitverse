@@ -3,75 +3,71 @@ Demonstrates how Unitverse generates tests when the source class is abstract or 
 
 ### Source Type(s)
 ``` csharp
-public abstract class TestClass1
+public abstract class TestClass
 {
-    protected TestClass1()
+    protected TestClass()
     { }
 
-    public abstract int SomeMethodShouldNot();
+    protected abstract int AbstractMethod();
 
-    public abstract int SomeMethodMaybe(int i);
+    protected virtual int ProtectedMethod() => 1;
 
-    public abstract int SomeMethodMaybe(int i, int j);
+    public virtual int SomeMethod(int i) => 1;
 
-    public abstract int SomeMethodMaybe<T>(int i);
-
-    public abstract int SomeMethodMaybe<T>(int i, int j);
-}
-
-public abstract class TestClass2 : TestClass1
-{
-    protected TestClass2()
-    { }
-
-    public override int SomeMethodShouldNot() { return 1; }
-
-    public override int SomeMethodMaybe(int i, int j) { return 1; }
-
-    public abstract int SomeMethodShould();
-}
-
-public abstract class TestClass3 : TestClass2
-{
-    protected TestClass3()
-    { }
-
-    public abstract int SomeMethodShould2();
+    public virtual int GenericMethod<T>(int i) => 1;
 }
 
 ```
 
 ### Generated Tests
 ``` csharp
-private class TestTestClass3 : TestClass3
+public class TestClassTests
 {
-    public TestTestClass3() : base()
+    private class TestTestClass : TestClass
     {
+        public TestTestClass() : base()
+        {
+        }
+
+        public int PublicProtectedMethod()
+        {
+            return base.ProtectedMethod();
+        }
+
+        protected override int AbstractMethod()
+        {
+            return default(int);
+        }
     }
 
-    public override int SomeMethodShould2()
+    private TestTestClass _testClass;
+
+    public TestClassTests()
     {
-        return default(int);
+        _testClass = new TestTestClass();
     }
 
-    public override int SomeMethodMaybe(int i)
+    [Fact]
+    public void CanCallProtectedMethod()
     {
-        return default(int);
+        var result = _testClass.PublicProtectedMethod();
+        throw new NotImplementedException("Create or modify test");
     }
 
-    public override int SomeMethodShould()
+    [Fact]
+    public void CanCallSomeMethod()
     {
-        return default(int);
+        var i = 534011718;
+        var result = _testClass.SomeMethod(i);
+        throw new NotImplementedException("Create or modify test");
     }
 
-    public override int SomeMethodMaybe<T>(int i)
+    [Fact]
+    public void CanCallGenericMethod()
     {
-        return default(int);
-    }
-
-    public override int SomeMethodMaybe<T>(int i, int j)
-    {
-        return default(int);
+        var i = 237820880;
+        var result = _testClass.GenericMethod<T>(i);
+        throw new NotImplementedException("Create or modify test");
     }
 }
 

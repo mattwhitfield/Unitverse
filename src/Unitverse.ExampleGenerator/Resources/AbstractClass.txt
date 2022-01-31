@@ -4,40 +4,17 @@ using System.IO;
 using System.Windows;
 
 namespace Unitverse.Examples {
-
-    public abstract class TestClass1
+    public abstract class TestClass
     {
-        protected TestClass1()
+        protected TestClass()
         { }
  
-        public abstract int SomeMethodShouldNot();
+        protected abstract int AbstractMethod();
 
-        public abstract int SomeMethodMaybe(int i);
+        protected virtual int ProtectedMethod() => 1;
 
-        public abstract int SomeMethodMaybe(int i, int j);
+        public virtual int SomeMethod(int i) => 1;
 
-        public abstract int SomeMethodMaybe<T>(int i);
-
-        public abstract int SomeMethodMaybe<T>(int i, int j);
-    }
-
-    public abstract class TestClass2 : TestClass1
-    {
-        protected TestClass2()
-        { }
- 
-        public override int SomeMethodShouldNot() { return 1; }
-
-        public override int SomeMethodMaybe(int i, int j) { return 1; }
-
-        public abstract int SomeMethodShould();
-    }
-
-    public abstract class TestClass3 : TestClass2
-    {
-        protected TestClass3()
-        { }
- 
-        public abstract int SomeMethodShould2();
+        public virtual int GenericMethod<T>(int i) => 1;
     }
 }
