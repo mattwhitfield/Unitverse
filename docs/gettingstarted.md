@@ -17,11 +17,11 @@ _**Important:** Regenerating a test will replace code that you have added to the
 
 Using the code editor context menu:
 
-![Code editor context menu](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/assets/CodeEditorContextMenu.png)
+![Code editor context menu](assets/CodeEditorContextMenu.png)
 
 Using the solution explorer context menu:
 
-![Solution Explorer context menu](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/assets/SolutionContextMenu.png)
+![Solution Explorer context menu](assets/SolutionContextMenu.png)
 
 **Regenerate tests** and **Go to tests** are not available at higher levels in the solution explorer (for example when you have a folder or project selected). **Regenerate tests** is not shown by default, to prevent accidental overwriting of test code. Hold SHIFT while you open the context menu to use this option.
 
@@ -29,11 +29,11 @@ Using the solution explorer context menu:
 
 Consider this simple class:
 
- ![Example source class](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/assets/SourceClass.png)
+ ![Example source class](assets/SourceClass.png)
 
 Although the constructor and methods are not implemented, it serves as a good example because the extension largely generates tests based on signatures only. The following illustrates the results of generating tests for this class.
 
- ![Example generated test class with annotations](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/assets/SourceClassTestsAnnotated.png)
+ ![Example generated test class with annotations](assets/SourceClassTestsAnnotated.png)
 
 Notice that the dependency for the class has been automatically mocked & injected, and there are generated tests for the constructor. There are also tests to verify that parameters can’t be null for both constructors and methods. Note that the generator is producing values required for testing – both initializing a POCO using an object initializer and an immutable class by providing values for its constructor.
 
