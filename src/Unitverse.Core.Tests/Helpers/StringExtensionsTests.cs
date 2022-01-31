@@ -30,7 +30,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public static void CanCallLines()
         {
-            var input = "Test\rValue\nOne";
+            var input = "Test\r\nValue\r\nOne";
             var result = input.Lines();
             Assert.That(result.SequenceEqual(new[] { "Test", "Value", "One" }));
         }
