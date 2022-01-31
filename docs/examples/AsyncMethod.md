@@ -34,8 +34,8 @@ public class TestClassTests
     [Fact]
     public async Task CanCallThisIsAnAsyncMethod()
     {
-        var methodName = "TestValue106791138";
-        var methodValue = 1017938334;
+        var methodName = "TestValue534011718";
+        var methodValue = 237820880;
         await _testClass.ThisIsAnAsyncMethod(methodName, methodValue);
         throw new NotImplementedException("Create or modify test");
     }
@@ -46,14 +46,14 @@ public class TestClassTests
     [InlineData("   ")]
     public async Task CannotCallThisIsAnAsyncMethodWithInvalidMethodName(string value)
     {
-        await FluentActions.Invoking(() => _testClass.ThisIsAnAsyncMethod(value, 107939520)).Should().ThrowAsync<ArgumentNullException>();
+        await FluentActions.Invoking(() => _testClass.ThisIsAnAsyncMethod(value, 1002897798)).Should().ThrowAsync<ArgumentNullException>();
     }
 
     [Fact]
     public async Task CanCallThisIsAnAsyncMethodWithReturnType()
     {
-        var methodName = "TestValue298751031";
-        var methodValue = 471194639;
+        var methodName = "TestValue1657007234";
+        var methodValue = 1412011072;
         var result = await _testClass.ThisIsAnAsyncMethodWithReturnType(methodName, methodValue);
         throw new NotImplementedException("Create or modify test");
     }
@@ -64,7 +64,7 @@ public class TestClassTests
     [InlineData("   ")]
     public async Task CannotCallThisIsAnAsyncMethodWithReturnTypeWithInvalidMethodName(string value)
     {
-        await FluentActions.Invoking(() => _testClass.ThisIsAnAsyncMethodWithReturnType(value, 1900855920)).Should().ThrowAsync<ArgumentNullException>();
+        await FluentActions.Invoking(() => _testClass.ThisIsAnAsyncMethodWithReturnType(value, 929393559)).Should().ThrowAsync<ArgumentNullException>();
     }
 }
 

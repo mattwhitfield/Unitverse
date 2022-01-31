@@ -42,8 +42,8 @@ public class TestClassTests
     [Fact]
     public void CanCallRefParamMethodString()
     {
-        var stringProp = "TestValue649693393";
-        var refParam = "TestValue1513152691";
+        var stringProp = "TestValue534011718";
+        var refParam = "TestValue237820880";
         _testClass.RefParamMethodString(stringProp, ref refParam);
         throw new NotImplementedException("Create or modify test");
     }
@@ -54,7 +54,7 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotCallRefParamMethodStringWithInvalidStringProp(string value)
     {
-        var refParam = "TestValue124253187";
+        var refParam = "TestValue1002897798";
         FluentActions.Invoking(() => _testClass.RefParamMethodString(value, ref refParam)).Should().Throw<ArgumentNullException>();
     }
 
@@ -65,13 +65,13 @@ public class TestClassTests
     public void CannotCallRefParamMethodStringWithInvalidRefParam(string value)
     {
         var refParam = default(string);
-        FluentActions.Invoking(() => _testClass.RefParamMethodString("TestValue1615285520", ref refParam)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.RefParamMethodString("TestValue1657007234", ref refParam)).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public void CanCallOutParamMethodString()
     {
-        var stringProp = "TestValue1319870701";
+        var stringProp = "TestValue929393559";
         _testClass.OutParamMethodString(stringProp, out var outParam);
         throw new NotImplementedException("Create or modify test");
     }
@@ -88,7 +88,7 @@ public class TestClassTests
     [Fact]
     public void CanCallRefParamMethodClass()
     {
-        var stringProp = "TestValue431736428";
+        var stringProp = "TestValue760389092";
         var refParam = new TestClass();
         _testClass.RefParamMethodClass(stringProp, ref refParam);
         throw new NotImplementedException("Create or modify test");
@@ -98,7 +98,7 @@ public class TestClassTests
     public void CannotCallRefParamMethodClassWithNullRefParam()
     {
         var refParam = default(TestClass);
-        FluentActions.Invoking(() => _testClass.RefParamMethodClass("TestValue1327345765", ref refParam)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.RefParamMethodClass("TestValue2026928803", ref refParam)).Should().Throw<ArgumentNullException>();
     }
 
     [Theory]
@@ -114,7 +114,7 @@ public class TestClassTests
     [Fact]
     public void CanCallOutParamMethodClass()
     {
-        var stringProp = "TestValue883647018";
+        var stringProp = "TestValue217468053";
         _testClass.OutParamMethodClass(stringProp, out var outParam);
         throw new NotImplementedException("Create or modify test");
     }

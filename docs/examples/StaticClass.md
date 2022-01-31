@@ -29,8 +29,8 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod()
     {
-        var methodName = "TestValue1356147625";
-        var methodValue = CultureInfo.CurrentCulture;
+        var methodName = "TestValue534011718";
+        var methodValue = CultureInfo.InvariantCulture;
         TestClass.ThisIsAMethod(methodName, methodValue);
         throw new NotImplementedException("Create or modify test");
     }
@@ -38,7 +38,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethodWithNullMethodValue()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod("TestValue1763320508", default(CultureInfo))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod("TestValue1002897798", default(CultureInfo))).Should().Throw<ArgumentNullException>();
     }
 
     [Theory]
@@ -60,7 +60,7 @@ public static class TestClassTests
     [Fact]
     public static void CanSetAndGetThisIsAProperty()
     {
-        var testValue = 2093377629;
+        var testValue = 1412011072;
         TestClass.ThisIsAProperty = testValue;
         TestClass.ThisIsAProperty.Should().Be(testValue);
     }

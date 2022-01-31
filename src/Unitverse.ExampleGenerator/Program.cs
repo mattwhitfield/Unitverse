@@ -27,6 +27,7 @@ using Moq;
 using FakeItEasy;
 using Xunit;
 using NUnit.Framework;
+using Unitverse.Core.Strategies.ValueGeneration;
 
 namespace Unitverse.ExampleGenerator
 {
@@ -153,7 +154,7 @@ namespace Unitverse.ExampleGenerator
 
             var semanticModel = compilation.GetSemanticModel(tree);
 
-
+            ValueGenerationStrategyFactory.SetRandom(1);
             var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             var generatedTree = CSharpSyntaxTree.ParseText(core.FileContent, new CSharpParseOptions(LanguageVersion.Latest));

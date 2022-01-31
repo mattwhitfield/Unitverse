@@ -25,7 +25,7 @@ public static class ExtensionMethodClassTests
     [Fact]
     public static void CanCallToOtherWithString()
     {
-        var source = "TestValue1304261093";
+        var source = "TestValue534011718";
         var result = source.ToOther();
         throw new NotImplementedException("Create or modify test");
     }

@@ -59,7 +59,7 @@ public class CalculatorTests
 
     public CalculatorTests()
     {
-        _n = 1662458408;
+        _n = 534011718;
         _testClass = new Calculator(_n);
     }
 
@@ -73,8 +73,8 @@ public class CalculatorTests
     [Fact]
     public void CanCallPlusOperator()
     {
-        var Calc1 = new Calculator(72883637);
-        var Calc2 = new Calculator(1721488486);
+        var Calc1 = new Calculator(237820880);
+        var Calc2 = new Calculator(1002897798);
         var result = Calc1 + Calc2;
         throw new NotImplementedException("Create or modify test");
     }
@@ -82,20 +82,20 @@ public class CalculatorTests
     [Fact]
     public void CannotCallPlusOperatorWithNullCalc1()
     {
-        FluentActions.Invoking(() => { var result = default(Calculator) + new Calculator(809386036); }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => { var result = default(Calculator) + new Calculator(1657007234); }).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public void CannotCallPlusOperatorWithNullCalc2()
     {
-        FluentActions.Invoking(() => { var result = new Calculator(887471499) + default(Calculator); }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => { var result = new Calculator(1412011072) + default(Calculator); }).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public void CanCallMinusOperator()
     {
-        var Calc1 = new Calculator(924537961);
-        var Calc2 = new Calculator(739146100);
+        var Calc1 = new Calculator(929393559);
+        var Calc2 = new Calculator(760389092);
         var result = Calc1 - Calc2;
         throw new NotImplementedException("Create or modify test");
     }
@@ -103,19 +103,19 @@ public class CalculatorTests
     [Fact]
     public void CannotCallMinusOperatorWithNullCalc1()
     {
-        FluentActions.Invoking(() => { var result = default(Calculator) - new Calculator(1818006218); }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => { var result = default(Calculator) - new Calculator(2026928803); }).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public void CannotCallMinusOperatorWithNullCalc2()
     {
-        FluentActions.Invoking(() => { var result = new Calculator(972655142) - default(Calculator); }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => { var result = new Calculator(217468053) - default(Calculator); }).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public void CanCallUnaryMinusOperator()
     {
-        var Calc1 = new Calculator(421780883);
+        var Calc1 = new Calculator(1379662799);
         var result = -Calc1;
         throw new NotImplementedException("Create or modify test");
     }
@@ -129,8 +129,8 @@ public class CalculatorTests
     [Fact]
     public void CanCallMultiplicationOperator()
     {
-        var Calc1 = new Calculator(19213251);
-        var Calc2 = new Calculator(1295958250);
+        var Calc1 = new Calculator(61497087);
+        var Calc2 = new Calculator(532638534);
         var result = Calc1 * Calc2;
         throw new NotImplementedException("Create or modify test");
     }
@@ -138,20 +138,20 @@ public class CalculatorTests
     [Fact]
     public void CannotCallMultiplicationOperatorWithNullCalc1()
     {
-        FluentActions.Invoking(() => { var result = default(Calculator) * new Calculator(1322527255); }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => { var result = default(Calculator) * new Calculator(687431273); }).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public void CannotCallMultiplicationOperatorWithNullCalc2()
     {
-        FluentActions.Invoking(() => { var result = new Calculator(2004768536) * default(Calculator); }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => { var result = new Calculator(2125508764) * default(Calculator); }).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public void CanCallDivisionOperator()
     {
-        var Calc1 = new Calculator(1480344831);
-        var Calc2 = new Calculator(1430192166);
+        var Calc1 = new Calculator(1464848243);
+        var Calc2 = new Calculator(1406361028);
         var result = Calc1 / Calc2;
         throw new NotImplementedException("Create or modify test");
     }
@@ -159,13 +159,13 @@ public class CalculatorTests
     [Fact]
     public void CannotCallDivisionOperatorWithNullCalc1()
     {
-        FluentActions.Invoking(() => { var result = default(Calculator) / new Calculator(1436059913); }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => { var result = default(Calculator) / new Calculator(607156385); }).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public void CannotCallDivisionOperatorWithNullCalc2()
     {
-        FluentActions.Invoking(() => { var result = new Calculator(1459832762) / default(Calculator); }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => { var result = new Calculator(1321446349) / default(Calculator); }).Should().Throw<ArgumentNullException>();
     }
 }
 

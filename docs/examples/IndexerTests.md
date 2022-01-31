@@ -33,17 +33,17 @@ public class TypeWithIndexerTests
     [Fact]
     public void CanGetIndexerForString()
     {
-        _testClass["TestValue402395593"].Should().BeAssignableTo<string>();
+        _testClass["TestValue534011718"].Should().BeAssignableTo<string>();
         throw new NotImplementedException("Create or modify test");
     }
 
     [Fact]
     public void CanSetAndGetIndexerForStringAndInt()
     {
-        var testValue = "TestValue854389529";
-        _testClass["TestValue1006944135", 2111336371].Should().BeAssignableTo<string>();
-        _testClass["TestValue1006944135", 2111336371] = testValue;
-        _testClass["TestValue1006944135", 2111336371].Should().BeSameAs(testValue);
+        var testValue = "TestValue1657007234";
+        _testClass["TestValue237820880", 1002897798].Should().BeAssignableTo<string>();
+        _testClass["TestValue237820880", 1002897798] = testValue;
+        _testClass["TestValue237820880", 1002897798].Should().BeSameAs(testValue);
     }
 }
 

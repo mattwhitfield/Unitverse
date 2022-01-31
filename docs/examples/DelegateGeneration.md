@@ -69,7 +69,7 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod()
     {
-        Func<string> func = () => "TestValue11861649";
+        Func<string> func = () => "TestValue237820880";
         TestClass.ThisIsAMethod(func);
         throw new NotImplementedException("Create or modify test");
     }
@@ -83,7 +83,7 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod2()
     {
-        Func<string, SomeClass> func = x => new SomeClass(402792421);
+        Func<string, SomeClass> func = x => new SomeClass(1002897798);
         TestClass.ThisIsAMethod2(func);
         throw new NotImplementedException("Create or modify test");
     }
@@ -97,7 +97,7 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod3()
     {
-        Func<int, string, SomeClass> func = (x, y) => new SomeClass(1914358930);
+        Func<int, string, SomeClass> func = (x, y) => new SomeClass(1657007234);
         TestClass.ThisIsAMethod3(func);
         throw new NotImplementedException("Create or modify test");
     }
@@ -111,7 +111,7 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod4()
     {
-        Func<int, int, string, SomeClass> func = (x, y, z) => new SomeClass(1603385745);
+        Func<int, int, string, SomeClass> func = (x, y, z) => new SomeClass(1412011072);
         TestClass.ThisIsAMethod4(func);
         throw new NotImplementedException("Create or modify test");
     }
@@ -125,7 +125,7 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod5()
     {
-        Func<int, int, int, string, SomeClass> func = (a, b, c, d) => new SomeClass(128612374);
+        Func<int, int, int, string, SomeClass> func = (a, b, c, d) => new SomeClass(929393559);
         TestClass.ThisIsAMethod5(func);
         throw new NotImplementedException("Create or modify test");
     }

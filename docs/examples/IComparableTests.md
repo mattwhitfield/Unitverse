@@ -49,7 +49,7 @@ public class TestComparableGenericTests
 
     public TestComparableGenericTests()
     {
-        _value = 1116806310;
+        _value = 534011718;
         _testClass = new TestComparableGeneric(_value);
     }
 
@@ -96,7 +96,7 @@ public class TestComparableGenericTests
     [Fact]
     public void CanCallCompareToWithTestComparableGeneric()
     {
-        var obj = new TestComparableGeneric(227997615);
+        var obj = new TestComparableGeneric(237820880);
         var result = _testClass.CompareTo(obj);
         throw new NotImplementedException("Create or modify test");
     }
@@ -110,7 +110,7 @@ public class TestComparableGenericTests
     [Fact]
     public void CanCallCompareToWithValue()
     {
-        var value = 114237885;
+        var value = 1002897798;
         var result = _testClass.CompareTo(value);
         throw new NotImplementedException("Create or modify test");
     }

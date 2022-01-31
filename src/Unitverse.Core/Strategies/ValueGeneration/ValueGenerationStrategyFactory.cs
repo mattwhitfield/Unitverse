@@ -11,7 +11,12 @@
 
     public static class ValueGenerationStrategyFactory
     {
-        internal static readonly Random Random = new Random();
+        internal static Random Random { get; private set; } = new Random();
+
+        public static void SetRandom(int seed)
+        {
+            Random = new Random(seed);
+        }
 
         private static IEnumerable<IValueGenerationStrategy> Strategies =>
             new IValueGenerationStrategy[]

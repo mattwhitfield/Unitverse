@@ -41,7 +41,7 @@ public class MappingClassTests
     [Fact]
     public void CanCallMap()
     {
-        var inputClass = new InputClass { SomeOtherProperty = "TestValue451370593", InputOnlyProperty = "TestValue1727968365" };
+        var inputClass = new InputClass { SomeOtherProperty = "TestValue929393559", InputOnlyProperty = "TestValue760389092" };
         var result = _testClass.Map(inputClass);
         throw new NotImplementedException("Create or modify test");
     }
@@ -55,7 +55,7 @@ public class MappingClassTests
     [Fact]
     public void MapPerformsMapping()
     {
-        var inputClass = new InputClass { SomeOtherProperty = "TestValue1758450055", InputOnlyProperty = "TestValue66790043" };
+        var inputClass = new InputClass { SomeOtherProperty = "TestValue2026928803", InputOnlyProperty = "TestValue217468053" };
         var result = _testClass.Map(inputClass);
         result.SomeProperty.Should().BeSameAs(inputClass.SomeProperty);
         result.SomeOtherProperty.Should().BeSameAs(inputClass.SomeOtherProperty);

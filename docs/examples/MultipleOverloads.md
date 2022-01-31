@@ -31,7 +31,7 @@ public static class FluentFactoryTests
     public static void CanCallFollows()
     {
         var stage = Stage.First;
-        var followedStages = new[] { Stage.Second, Stage.First, Stage.Third };
+        var followedStages = new[] { Stage.First, Stage.Second, Stage.Fourth };
         var result = stage.Follows(followedStages);
         throw new NotImplementedException("Create or modify test");
     }
@@ -39,14 +39,14 @@ public static class FluentFactoryTests
     [Fact]
     public static void CannotCallFollowsWithNullFollowedStages()
     {
-        FluentActions.Invoking(() => Stage.Second.Follows(default(Stage[]))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => Stage.Third.Follows(default(Stage[]))).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public static void CanCallAndWithFirstConstraintAndSecondConstraint()
     {
-        var firstConstraint = new Tuple<Stage, IList<Stage>>(Stage.Third, new[] { Stage.Second, Stage.First, Stage.First });
-        var secondConstraint = new Tuple<Stage, IList<Stage>>(Stage.Third, new[] { Stage.First, Stage.Third, Stage.First });
+        var firstConstraint = new Tuple<Stage, IList<Stage>>(Stage.Second, new[] { Stage.Second, Stage.Fourth, Stage.First });
+        var secondConstraint = new Tuple<Stage, IList<Stage>>(Stage.Third, new[] { Stage.First, Stage.First, Stage.Second });
         var result = firstConstraint.And(secondConstraint);
         throw new NotImplementedException("Create or modify test");
     }
@@ -54,20 +54,20 @@ public static class FluentFactoryTests
     [Fact]
     public static void CannotCallAndWithFirstConstraintAndSecondConstraintWithNullFirstConstraint()
     {
-        FluentActions.Invoking(() => default(Tuple<Stage, IList<Stage>>).And(new Tuple<Stage, IList<Stage>>(Stage.Third, new[] { Stage.First, Stage.Third, Stage.First }))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => default(Tuple<Stage, IList<Stage>>).And(new Tuple<Stage, IList<Stage>>(Stage.Fourth, new[] { Stage.Third, Stage.Third, Stage.Second }))).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public static void CannotCallAndWithFirstConstraintAndSecondConstraintWithNullSecondConstraint()
     {
-        FluentActions.Invoking(() => new Tuple<Stage, IList<Stage>>(Stage.Second, new[] { Stage.First, Stage.Third, Stage.Fourth }).And(default(Tuple<Stage, IList<Stage>>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new Tuple<Stage, IList<Stage>>(Stage.Third, new[] { Stage.Third, Stage.Third, Stage.Fourth }).And(default(Tuple<Stage, IList<Stage>>))).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public static void CanCallAndWithConstraintsAndAdditionalConstraint()
     {
         var constraints = Substitute.For<IDictionary<Stage, IList<Stage>>>();
-        var additionalConstraint = new Tuple<Stage, IList<Stage>>(Stage.First, new[] { Stage.Second, Stage.Fourth, Stage.Fourth });
+        var additionalConstraint = new Tuple<Stage, IList<Stage>>(Stage.First, new[] { Stage.First, Stage.Second, Stage.Fourth });
         var result = constraints.And(additionalConstraint);
         throw new NotImplementedException("Create or modify test");
     }
@@ -75,7 +75,7 @@ public static class FluentFactoryTests
     [Fact]
     public static void CannotCallAndWithConstraintsAndAdditionalConstraintWithNullConstraints()
     {
-        FluentActions.Invoking(() => default(IDictionary<Stage, IList<Stage>>).And(new Tuple<Stage, IList<Stage>>(Stage.Second, new[] { Stage.Fourth, Stage.First, Stage.Second }))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => default(IDictionary<Stage, IList<Stage>>).And(new Tuple<Stage, IList<Stage>>(Stage.First, new[] { Stage.Fourth, Stage.Second, Stage.Fourth }))).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]

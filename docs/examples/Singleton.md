@@ -40,7 +40,7 @@ public class TestClassTests
     [Fact]
     public void CanCallGetTableName()
     {
-        var baseName = "TestValue1645757808";
+        var baseName = "TestValue534011718";
         var result = _testClass.GetTableName(baseName);
         throw new NotImplementedException("Create or modify test");
     }

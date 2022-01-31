@@ -26,7 +26,7 @@ public class SomePocoTests
     [Fact]
     public void CanSetAndGetIdentity()
     {
-        var testValue = 209937000;
+        var testValue = 534011718;
         _testClass.Identity = testValue;
         _testClass.Identity.Should().Be(testValue);
     }
@@ -34,7 +34,7 @@ public class SomePocoTests
     [Fact]
     public void CanSetAndGetDescription()
     {
-        var testValue = "TestValue1447971113";
+        var testValue = "TestValue237820880";
         _testClass.Description = testValue;
         _testClass.Description.Should().BeSameAs(testValue);
     }
@@ -42,7 +42,7 @@ public class SomePocoTests
     [Fact]
     public void CanSetAndGetUniqueCode()
     {
-        var testValue = new Guid("45e8cdb2-e4ce-4c04-a3fd-460e4560f483");
+        var testValue = new Guid("18f9ab0f-b06f-4c92-ac3c-47e192cf813e");
         _testClass.UniqueCode = testValue;
         _testClass.UniqueCode.Should().Be(testValue);
     }
