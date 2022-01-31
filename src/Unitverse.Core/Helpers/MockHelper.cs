@@ -1,19 +1,17 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Unitverse.Core.Frameworks;
-using Unitverse.Core.Frameworks.Mocking;
-using Unitverse.Core.Models;
-
-namespace Unitverse.Core.Helpers
+﻿namespace Unitverse.Core.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Frameworks.Mocking;
+    using Unitverse.Core.Models;
+
     public static class MockHelper
     {
-
         public static MethodDeclarationSyntax EmitStatementListWithTrivia(MethodDeclarationSyntax method, List<StatementSyntax> statements, string leadingComment, string trailingComment)
         {
             if (statements.Any())

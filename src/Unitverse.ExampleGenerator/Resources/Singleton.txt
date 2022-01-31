@@ -1,0 +1,27 @@
+// $ Demonstrates how Unitverse attempts to use a static property to get a type instance when the constructor is private
+
+namespace Unitverse.Examples
+{
+    using System;
+
+    public class TestClass
+    {
+        static TestClass()
+        {
+            Instance = new TestClass();
+        }
+
+        private TestClass()
+        {
+        }
+
+        public static TestClass Instance { get; }
+
+        public bool IsShared => true;
+
+        public string GetTableName(string baseName)
+        {
+            return baseName;
+        }
+    }
+}

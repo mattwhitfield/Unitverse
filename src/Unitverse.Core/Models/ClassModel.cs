@@ -88,7 +88,7 @@
 
         public IList<UsingDirectiveSyntax> Usings { get; } = new List<UsingDirectiveSyntax>();
 
-        private IDictionary<ISymbol, IList<ISymbol>> _implementedInterfaceSymbols { get; } = new Dictionary<ISymbol, IList<ISymbol>>();
+        private IDictionary<ISymbol, IList<ISymbol>> _implementedInterfaceSymbols = new Dictionary<ISymbol, IList<ISymbol>>();
 
         public IList<ISymbol> GetImplementedInterfaceSymbolsFor(ISymbol symbol)
         {

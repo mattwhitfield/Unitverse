@@ -1,0 +1,13 @@
+// $ Demonstrates how tests are generated for a simple POCO type
+
+namespace Unitverse.Examples
+{
+    using System;
+
+    public class SomePoco
+    {
+        public int Identity { get; set; }
+        public string Description { get; set; }
+        public Guid UniqueCode { get; set; }
+    }
+}

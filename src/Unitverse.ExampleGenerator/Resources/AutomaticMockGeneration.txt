@@ -1,0 +1,74 @@
+// $ Demonstrates how dependencies injected into constructors are tracked, and mock configuration calls emitted for any detected dependencies
+
+using System.Threading.Tasks;
+
+namespace Unitverse.Examples
+{
+    public interface IDummyService
+    {
+        string SomeProp { get; set; }
+
+        void NoReturnMethod();
+
+        int ReturnMethod();
+
+        T GenericMethod<T>(T val);
+
+        Task<string> AsyncMethod(); 
+    }
+
+    public interface IDummyService2
+    {
+        string SomeProp { get; }
+
+        void NoReturnMethod(string s);
+
+        int ReturnMethod(string s);
+        int ReturnMethod(string s, string s2);
+        int ReturnMethod(string s, object o);
+
+        Task<string> AsyncMethod(string s); 
+    }
+
+    public static class DummyExt
+    {
+        public static int ReturnMethod(this IDummyService2 d, string s, string s2, string s3)
+        {
+            return 0;
+        }
+    }
+
+    public class AutomaticMockGenerationExample
+    {
+        private IDummyService _dummyService, _otherDummyService;
+        private IDummyService2 _dummyService2;
+        private int _someIntField;
+
+        public AutomaticMockGenerationExample(IDummyService dummyService, IDummyService2 dummyService2)
+        {
+            _dummyService = dummyService ?? throw new System.ArgumentNullException(nameof(dummyService));
+            _dummyService2 = dummyService2;
+            _someIntField = dummyService.ReturnMethod();
+            dummyService = null;
+        }
+
+        public async Task SampleAsyncMethod()
+        {
+            await _dummyService.AsyncMethod();
+            await _dummyService2.AsyncMethod("foo");
+        }
+
+        public void SampleNoReturn(string srr)
+        {
+            _dummyService.NoReturnMethod();
+            _dummyService.NoReturnMethod();
+            _dummyService.NoReturnMethod();
+            var s = _dummyService.GenericMethod(srr);
+
+            _dummyService.SomeProp += _dummyService2.SomeProp;
+            
+            var value = _dummyService2.ReturnMethod("sds", "s");
+            var value2 = _dummyService2.ReturnMethod("sds", "s", "s3");
+        }
+    }
+}

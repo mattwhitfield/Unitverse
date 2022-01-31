@@ -11,7 +11,15 @@
 
     public static class ValueGenerationStrategyFactory
     {
-        internal static readonly Random Random = new Random();
+        internal static Random Random { get; private set; } = new Random();
+
+        internal static bool PredictableGeneration { get; private set; }
+
+        public static void UsePredictableGeneration(int seed)
+        {
+            PredictableGeneration = true;
+            Random = new Random(seed);
+        }
 
         private static IEnumerable<IValueGenerationStrategy> Strategies =>
             new IValueGenerationStrategy[]
@@ -21,15 +29,15 @@
                 new SimpleValueGenerationStrategy(() => Generate.Literal((long)Random.Next(int.MaxValue)), "long", "long?"),
                 new SimpleValueGenerationStrategy(() => CastedLiteral(Random.Next(int.MaxValue), SyntaxKind.UIntKeyword), "uint", "uint?"),
                 new SimpleValueGenerationStrategy(() => CastedLiteral(Random.Next(int.MaxValue), SyntaxKind.ULongKeyword), "ulong", "ulong?"),
-                new SimpleValueGenerationStrategy(() => Generate.Literal((decimal)((Random.NextDouble() * int.MaxValue) * 0.99d)), "decimal", "decimal?"),
+                new SimpleValueGenerationStrategy(() => Generate.Literal((decimal)GenerateDouble()), "decimal", "decimal?"),
                 new SimpleValueGenerationStrategy(() => CastedLiteral(Random.Next(short.MaxValue), SyntaxKind.ShortKeyword), "short", "short?"),
                 new SimpleValueGenerationStrategy(() => CastedLiteral(Random.Next(ushort.MaxValue), SyntaxKind.UShortKeyword), "ushort", "ushort?"),
                 new SimpleValueGenerationStrategy(() => CastedLiteral(Random.Next(byte.MaxValue), SyntaxKind.ByteKeyword), "byte", "byte?"),
                 new SimpleValueGenerationStrategy(() => CastedLiteral(Random.Next(sbyte.MaxValue), SyntaxKind.SByteKeyword), "sbyte", "sbyte?"),
-                new SimpleValueGenerationStrategy(() => Generate.ObjectCreation(SyntaxFactory.IdentifierName("Guid"), Generate.Literal(Guid.NewGuid().ToString())), "System.Guid", "System.Guid?"),
+                new SimpleValueGenerationStrategy(() => Generate.ObjectCreation(SyntaxFactory.IdentifierName("Guid"), Generate.Literal(GetGuid().ToString())), "System.Guid", "System.Guid?"),
                 new SimpleValueGenerationStrategy(() => Generate.PropertyAccess(SyntaxFactory.IdentifierName("DateTime"), "UtcNow"), "System.DateTime", "System.DateTime?"),
                 new SimpleValueGenerationStrategy(() => Generate.PropertyAccess(SyntaxFactory.IdentifierName("DateTimeOffset"), "UtcNow"), "System.DateTimeOffset", "System.DateTimeOffset?"),
-                new SimpleValueGenerationStrategy(() => Generate.Literal((Random.NextDouble() * int.MaxValue) * 0.99d), "double", "double?"),
+                new SimpleValueGenerationStrategy(() => Generate.Literal(GenerateDouble()), "double", "double?"),
                 new SimpleValueGenerationStrategy(() => Generate.Literal((float)(Random.NextDouble() * short.MaxValue)), "float", "float?"),
                 new SimpleValueGenerationStrategy(() => (Random.Next(int.MaxValue) % 2) > 0 ? Generate.Literal(true) : Generate.Literal(false), "bool", "bool?"),
                 new SimpleValueGenerationStrategy(() => SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("CultureInfo"), SyntaxFactory.IdentifierName((Random.Next(int.MaxValue) % 2) > 0 ? "CurrentCulture" : "InvariantCulture")), "System.Globalization.CultureInfo"),
@@ -46,6 +54,30 @@
                 new SimpleValueGenerationStrategy(BrushFactory.Color, "System.Drawing.Color"),
                 new SimpleValueGenerationStrategy(BrushFactory.Colors, "System.Windows.Media.Color"),
             };
+
+        private static double GenerateDouble()
+        {
+            var doubleValue = Random.NextDouble() * int.MaxValue * 0.99d;
+
+            if (doubleValue - Math.Floor(doubleValue) < 0.01)
+            {
+                doubleValue += 0.5;
+            }
+
+            return doubleValue;
+        }
+
+        private static Guid GetGuid()
+        {
+            if (PredictableGeneration)
+            {
+                var array = new byte[16];
+                Random.NextBytes(array);
+                return new Guid(array);
+            }
+
+            return Guid.NewGuid();
+        }
 
         public static ExpressionSyntax GenerateFor(ITypeSymbol symbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {

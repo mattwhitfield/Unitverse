@@ -1,0 +1,25 @@
+// $ Demonstrates how test values are produced to initialize POCO members when the type is consumed
+
+namespace Unitverse.Examples
+{
+	using System;
+
+    public class SomePoco
+    {
+        public int Identity { get; set; }
+        public string Description { get; set; }
+        public Guid UniqueCode { get; set; }
+    }
+
+    public class ConsumingClass
+    {
+		SomePoco _poco;
+
+        public ConsumingClass(SomePoco poco)
+        {
+			_poco = poco;
+        }
+ 
+        public SomePoco Poco => _poco;
+    }
+}

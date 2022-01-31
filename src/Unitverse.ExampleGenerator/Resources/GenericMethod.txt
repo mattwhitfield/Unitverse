@@ -1,0 +1,14 @@
+// $ Demonstrates how Unitverse generates tests for generic methods
+
+using System;
+
+namespace Unitverse.Examples
+{
+    public class GenericSource
+    {
+        public void DoStuff<T>(Guid g, DateTime dtParam, T theThing, int? thing2)
+        {
+             
+        }
+    }
+}

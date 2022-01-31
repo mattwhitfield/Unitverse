@@ -1,0 +1,23 @@
+// $ Demonstrates how Unitverse generates tests when the source class is static
+
+namespace Unitverse.Examples
+{
+    using System.Globalization;
+
+    public static class TestClass
+    {
+        public static void ThisIsAMethod(string methodName, CultureInfo methodValue)
+        {
+            System.Console.WriteLine("Testing this");
+        }
+
+        public static string WillReturnAString()
+        {
+            return "Hello";
+        }
+
+        public static int ThisIsAProperty { get; set; }
+
+        public static string GetITest { get; }
+    }
+}
