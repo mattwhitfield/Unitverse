@@ -1,5 +1,5 @@
-// # EmitTestsForInternals=false
-// # EmitSubclassForProtectedMethods=false
+// # EmitTestsForInternals=true
+// # EmitSubclassForProtectedMethods=true
 namespace TestNamespace
 {
     public class TestClass

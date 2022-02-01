@@ -27,5 +27,7 @@
         public bool EmitTestsForInternals => false;
 
         public bool AutomaticallyConfigureMocks => true;
+
+        public bool EmitSubclassForProtectedMethods => true;
     }
 }

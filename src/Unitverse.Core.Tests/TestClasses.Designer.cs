@@ -83,15 +83,11 @@ namespace Unitverse.Core.Tests {
         ///
         ///		public abstract int SomeMethodMaybe&lt;T&gt;(int i, int j);
         ///
+        ///		protected virtual int SomeMethodArrowImplementation(int i) =&gt; 1;
+        ///
         ///	}
         ///
-        ///	public abstract class TestClass2 : TestClass1
-        ///	{
-        ///		protected TestClass2()
-        ///		{
-        ///
-        ///		}
-        /// [rest of string was truncated]&quot;;.
+        ///	public abstract cla [rest of string was truncated]&quot;;.
         /// </summary>
         public static string AbstractChainTextFile {
             get {
@@ -576,7 +572,8 @@ namespace Unitverse.Core.Tests {
         ///{
         ///	public interface IService
         ///	{
-        ///        string SomeProp { get; set; }
+        ///        string SomeProp { get; }
+        ///        string SomeProp2 { get; set; }
         ///
         ///	    int SomeMethod(string s);
         ///
@@ -587,12 +584,12 @@ namespace Unitverse.Core.Tests {
         ///    {
         ///        private IService _service;
         ///
-        ///        public InterfaceSample(IService service)
+        ///        public DelegatingService(IService service)
         ///        {
         ///            _service = service ?? throw new System.ArgumentNullException(nameof(service));
         ///        }
         ///
-        ///        public string SomeProp =&gt; _ser [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string DelegatedImplementation {
             get {
@@ -1226,6 +1223,7 @@ namespace Unitverse.Core.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to // # EmitTestsForInternals=true
+        ///// # EmitSubclassForProtectedMethods=false
         ///namespace TestNamespace
         ///{
         ///    public class TestClass
@@ -1240,13 +1238,20 @@ namespace Unitverse.Core.Tests {
         ///		    System.Console.WriteLine(&quot;Testing this&quot;);
         ///	    }
         ///
-        ///	    protected internal void ThisIsAMethodProtectedInternal(string methodName, int methodValue)
-        ///	    {
-        ///		    System.Console.WriteLin [rest of string was truncated]&quot;;.
+        ///	    protected internal void ThisIsAMethodProtectedInternal(string methodName, int methodV [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string ProtectedClassInternal {
+        public static string ProtectedClassInternalNoProtected {
             get {
-                return ResourceManager.GetString("ProtectedClassInternal", resourceCulture);
+                return ResourceManager.GetString("ProtectedClassInternalNoProtected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ProtectedClassInternalProtected {
+            get {
+                return ResourceManager.GetString("ProtectedClassInternalProtected", resourceCulture);
             }
         }
         
@@ -1270,9 +1275,18 @@ namespace Unitverse.Core.Tests {
         ///	    {
         ///		    System.Console.WriteLi [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string ProtectedClassNoInternal {
+        public static string ProtectedClassNoInternalNoProtected {
             get {
-                return ResourceManager.GetString("ProtectedClassNoInternal", resourceCulture);
+                return ResourceManager.GetString("ProtectedClassNoInternalNoProtected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ProtectedClassNoInternalProtected {
+            get {
+                return ResourceManager.GetString("ProtectedClassNoInternalProtected", resourceCulture);
             }
         }
         

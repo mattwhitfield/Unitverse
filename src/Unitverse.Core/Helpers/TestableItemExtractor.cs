@@ -55,13 +55,21 @@
             // if we are allowing internals
             if (options.GenerationOptions.EmitTestsForInternals)
             {
-                // then we are good for protected, internal & protected internal
-                functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.InternalKeyword)));
-                functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.ProtectedKeyword)));
+                if (options.GenerationOptions.EmitSubclassForProtectedMethods)
+                {
+                    // then we are good for protected, internal & protected internal
+                    functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.ProtectedKeyword)));
+                    functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.InternalKeyword)));
+                }
+                else
+                {
+                    // otherwise we are just good for internal
+                    functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.InternalKeyword)) && !list.Any(modifier => modifier.IsKind(SyntaxKind.ProtectedKeyword)));
+                }
             }
-            else
+            else if (options.GenerationOptions.EmitSubclassForProtectedMethods)
             {
-                // now allowing internals - so just protected and not protected internal
+                // not allowing internals - so just protected and not protected internal
                 functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.ProtectedKeyword)) && !list.Any(modifier => modifier.IsKind(SyntaxKind.InternalKeyword)));
             }
 

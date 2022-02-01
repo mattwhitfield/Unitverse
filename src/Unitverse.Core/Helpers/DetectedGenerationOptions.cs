@@ -40,5 +40,7 @@
         public bool EmitTestsForInternals => _baseOptions.EmitTestsForInternals;
 
         public bool AutomaticallyConfigureMocks => _baseOptions.AutomaticallyConfigureMocks;
+
+        public bool EmitSubclassForProtectedMethods => _baseOptions.EmitSubclassForProtectedMethods;
     }
 }
