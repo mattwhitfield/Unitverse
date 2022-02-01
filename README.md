@@ -12,7 +12,7 @@ The best way to view the documentation is to visit visit the [documentation on t
 * [Getting started](docs/gettingstarted.md) - covering basic usage and how to start generating tests.
 * [Features](docs/features.md) - covers the features offered by Unitverse along with in-depth descriptions.
 * [Configuration](docs/configuration.md) - covering the configuration options available, as well as details on how to configure the extension through source code.
-* [Examples](docs/examples.md) - presents a selection of sample scenarios showing the source code and the generated tests.
+* [Examples](docs/examples/index.md) - presents a selection of sample scenarios showing the source code and the generated tests.
 
 # Contributing
 
