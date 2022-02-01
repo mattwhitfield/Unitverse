@@ -239,13 +239,13 @@
     <value>Resources\PropertyChangeTestFile.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ProtectedClassInternalNoProtected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ProtectedClassNoInternal1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>Resources\ProtectedClassInternalNoProtected.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ProtectedClassInternalProtected" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ProtectedClassInternalProtected.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ProtectedClassNoInternalNoProtected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ProtectedClassNoInternal.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
+    <value>Resources\ProtectedClassNoInternalNoProtected.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="ProtectedClassNoInternalProtected" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ProtectedClassNoInternalProtected.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
