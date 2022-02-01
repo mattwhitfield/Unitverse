@@ -433,6 +433,15 @@
 
         public static ParameterSyntax Parameter(string name)
         {
+            bool isKeyword = CSharpKeywordIdentifier.IsCSharpKeyword(name) ||
+                             SyntaxFacts.GetKeywordKind(name) != SyntaxKind.None ||
+                             SyntaxFacts.GetContextualKeywordKind(name) != SyntaxKind.None;
+
+            if (isKeyword)
+            {
+                name = "@" + name;
+            }
+
             return SyntaxFactory.Parameter(SyntaxFactory.Identifier(name));
         }
 

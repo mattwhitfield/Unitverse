@@ -20,6 +20,8 @@ namespace TestNamespace {
 
 		public abstract int SomeMethodMaybe<T>(int i, int j);
 
+		protected virtual int SomeMethodArrowImplementation(int i) => 1;
+
 	}
 
 	public abstract class TestClass2 : TestClass1

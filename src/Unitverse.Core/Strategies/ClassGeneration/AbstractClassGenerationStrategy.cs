@@ -139,6 +139,7 @@
                     .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
                     .WithIdentifier(SyntaxFactory.Identifier(className))
                     .WithBody(SyntaxFactory.Block())
+                    .WithExpressionBody(null)
                     .WithInitializer(
                         SyntaxFactory.ConstructorInitializer(
                             SyntaxKind.BaseConstructorInitializer,
@@ -151,7 +152,7 @@
             return classDeclaration;
         }
 
-        private static ClassDeclarationSyntax InheritProtectedMethods(ClassModel model, ClassDeclarationSyntax classDeclaration)
+        private ClassDeclarationSyntax InheritProtectedMethods(ClassModel model, ClassDeclarationSyntax classDeclaration)
         {
             foreach (var method in model.Methods)
             {
@@ -192,29 +193,36 @@
                     methodStatement = SyntaxFactory.ReturnStatement(baseInvocation);
                 }
 
-                var newMethod = method.Node;
-
+                SyntaxTokenList modifiers;
                 if (method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.StaticKeyword)))
                 {
-                    newMethod = newMethod.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.StaticKeyword)));
+                    modifiers = SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.StaticKeyword));
                 }
                 else
                 {
-                    newMethod = newMethod.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)));
+                    modifiers = SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
                 }
 
-                newMethod = newMethod
-                    .WithIdentifier(SyntaxFactory.Identifier("Public" + method.Name))
-                    .WithBody(SyntaxFactory.Block(SyntaxFactory.SingletonList(methodStatement)));
+                var methodSymbol = model.SemanticModel.GetDeclaredSymbol(method.Node);
 
-                if (method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)))
+                if (methodSymbol != null)
                 {
-                    newMethod = newMethod.AddModifiers(SyntaxFactory.Token(SyntaxKind.OverrideKeyword));
+                    var newMethod = Generate.Method(method.Name, method.IsAsync, false)
+                        .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList(methodSymbol.Parameters.Select(x => Generate.Parameter(x.Name).WithType(x.Type.ToTypeSyntax(_frameworkSet.Context))))))
+                        .WithIdentifier(SyntaxFactory.Identifier("Public" + method.Name))
+                        .WithModifiers(modifiers)
+                        .WithReturnType(methodSymbol.ReturnType.ToTypeSyntax(_frameworkSet.Context))
+                        .WithBody(SyntaxFactory.Block(SyntaxFactory.SingletonList(methodStatement)));
+
+                    if (method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)))
+                    {
+                        newMethod = newMethod.AddModifiers(SyntaxFactory.Token(SyntaxKind.OverrideKeyword));
+                    }
+
+                    method.MutateName("Public" + method.Name);
+
+                    classDeclaration = classDeclaration.AddMembers(newMethod);
                 }
-
-                method.MutateName("Public" + method.Name);
-
-                classDeclaration = classDeclaration.AddMembers(newMethod);
             }
 
             return classDeclaration;
@@ -330,7 +338,7 @@
             foreach (var method in methodCatalog.Values)
             {
                 var methodOverride = Generate.Method(method.Name, method.IsAsync, false)
-                    .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList(method.Parameters.Select(x => SyntaxFactory.Parameter(default(SyntaxList<AttributeListSyntax>), default(SyntaxTokenList), x.Type.ToTypeSyntax(_frameworkSet.Context), SyntaxFactory.Identifier(x.Name), null)))))
+                    .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList(method.Parameters.Select(x => Generate.Parameter(x.Name).WithType(x.Type.ToTypeSyntax(_frameworkSet.Context))))))
                     .WithModifiers(GetOverrideTokens(method.DeclaredAccessibility))
                     .WithIdentifier(SyntaxFactory.Identifier(method.Name))
                     .WithReturnType(method.ReturnType.ToTypeSyntax(_frameworkSet.Context));

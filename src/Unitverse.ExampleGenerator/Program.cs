@@ -212,7 +212,7 @@ namespace Unitverse.ExampleGenerator
         {
             StringBuilder sb = new StringBuilder();
 
-            var types = tree.GetRoot().DescendantNodesAndSelf().OfType<TypeDeclarationSyntax>();
+            var types = tree.GetRoot().DescendantNodesAndSelf().OfType<TypeDeclarationSyntax>().Where(x => !x.Ancestors().Any(a => a is TypeDeclarationSyntax));
             if (lastOnly)
             {
                 types = new[] { types.Last() };

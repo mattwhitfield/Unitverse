@@ -1,6 +1,10 @@
 # Introduction
 
-Unitverse is an extension for Visual Studio 2019 and 2022 that generates tests for classes written in C#. There is a bunch of information about the extension in the documentation.
+Unitverse is an extension for [Visual Studio 2019](https://marketplace.visualstudio.com/items?itemName=MattWhitfield.Unitverse) and [Visual Studio 2022](https://marketplace.visualstudio.com/items?itemName=MattWhitfield.UnitverseVS2022) that generates tests for classes written in C#. There is a bunch of information about the extension in the documentation.
+
+# Documentation
+
+The best way to view the documentation is to visit visit the [documentation on the readthedocs.io](https://unitverse.readthedocs.io/). Alternatively, you can view the documentation right here on GitHub using the links to sections below.
 
 ## Documentation Sections
 
