@@ -37,4 +37,4 @@ Although the constructor and methods are not implemented, it serves as a good ex
 
 Notice that the dependency for the class has been automatically mocked & injected, and there are generated tests for the constructor. There are also tests to verify that parameters can’t be null for both constructors and methods. Note that the generator is producing values required for testing – both initializing a POCO using an object initializer and an immutable class by providing values for its constructor.
 
-For more examples of the output that Unitverse generates, please see the [Examples section](examples.md).
+For more examples of the output that Unitverse generates, please see the [Examples section](examples/index.md).

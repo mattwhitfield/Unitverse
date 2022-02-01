@@ -57,7 +57,7 @@ namespace Unitverse.ExampleGenerator
                     entryKeys.Add(Tuple.Create(entry.Key.ToString(), description));
                 }
 
-                var file = new FileInfo(Path.Combine(currentPath.FullName, "examples.md"));
+                var file = new FileInfo(Path.Combine(currentPath.FullName, "examples", "index.md"));
                 using (var writer = new StreamWriter(file.FullName, false, Encoding.UTF8))
                 {
                     writer.WriteLine("# Examples");
