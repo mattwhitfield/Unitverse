@@ -66,5 +66,10 @@
         [DisplayName("Automatically configure mocks")]
         [Description("Whether to detect calls to injected mocks and automatically emit setup and verification calls")]
         public bool AutomaticallyConfigureMocks { get; set; } = true;
+
+        [Category("Generation")]
+        [DisplayName("Emit subclass for protected members")]
+        [Description("Whether to emit a subclass that exposes protected methods to allow them to be tested")]
+        public bool EmitSubclassForProtectedMethods { get; set; } = true;
     }
 }

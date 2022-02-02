@@ -24,6 +24,8 @@
 
         bool EmitTestsForInternals { get; }
 
+        bool EmitSubclassForProtectedMethods { get; }
+
         bool AutomaticallyConfigureMocks { get; }
     }
 }

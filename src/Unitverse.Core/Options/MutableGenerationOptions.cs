@@ -23,6 +23,7 @@
             PartialGenerationAllowed = options.PartialGenerationAllowed;
             EmitTestsForInternals = options.EmitTestsForInternals;
             AutomaticallyConfigureMocks = options.AutomaticallyConfigureMocks;
+            EmitSubclassForProtectedMethods = options.EmitSubclassForProtectedMethods;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -46,6 +47,8 @@
         public bool PartialGenerationAllowed { get; set; }
 
         public bool EmitTestsForInternals { get; set; }
+
+        public bool EmitSubclassForProtectedMethods { get; set; }
 
         public bool AutomaticallyConfigureMocks { get; set; }
     }

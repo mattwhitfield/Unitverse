@@ -31,5 +31,7 @@
         public bool EmitTestsForInternals { get; } = false;
 
         public bool AutomaticallyConfigureMocks { get; } = true;
+
+        public bool EmitSubclassForProtectedMethods { get; } = true;
     }
 }

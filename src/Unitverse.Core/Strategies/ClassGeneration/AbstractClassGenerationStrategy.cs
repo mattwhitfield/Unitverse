@@ -35,7 +35,12 @@
                 return true;
             }
 
-            return model.Methods.Any(x => x.Node.Modifiers.Any(m => m.IsKind(SyntaxKind.ProtectedKeyword)));
+            if (_frameworkSet.Options.GenerationOptions.EmitSubclassForProtectedMethods)
+            {
+                return model.Methods.Any(x => x.Node.Modifiers.Any(m => m.IsKind(SyntaxKind.ProtectedKeyword)));
+            }
+
+            return false;
         }
 
         public ClassDeclarationSyntax Create(ClassModel model)

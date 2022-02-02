@@ -1,0 +1,27 @@
+// # EmitTestsForInternals=true
+// # EmitSubclassForProtectedMethods=false
+namespace TestNamespace
+{
+    public class TestClass
+    {
+	    public void ThisIsAMethod(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+
+	    protected void ThisIsAMethodProtected(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+
+	    protected internal void ThisIsAMethodProtectedInternal(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+
+	    internal void ThisIsAMethodInternal(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+    }
+}
