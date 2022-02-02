@@ -6,7 +6,7 @@ The Unitverse Visual Studio extension generates tests for classes written in C#.
 * [Getting started](gettingstarted.md) - covering basic usage and how to start generating tests.
 * [Features](features.md) - covers the features offered by Unitverse along with in-depth descriptions.
 * [Configuration](configuration.md) - covering the configuration options available, as well as details on how to configure the extension through source code.
-* [Examples](examples.md) - presents a selection of sample scenarios showing the source code and the generated tests.
+* [Examples](examples/index.md) - presents a selection of sample scenarios showing the source code and the generated tests.
 
 ## Supported Environments
 
