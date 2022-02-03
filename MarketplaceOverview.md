@@ -4,6 +4,8 @@
 ## Introduction
 The Unitverse extension generates tests for classes written in C#. The extension covers basic tests automatically (for example, checking for correct property initialization), and creates placeholder tests for methods. Unitverse aims to produce tests that compile, so that you can generate tests as you code, but still focus on what you are doing rather than divert your attention to fixing broken generated code. Unitverse also allows incremental test generation - as you add new members to your types you can add tests for those new members quickly through the editor. Also, if you refactor methods or constructor signatures, you can regenerate those tests quickly and easily.
 
+For more in-depth documentation, visit the [documentation on the readthedocs.io](https://unitverse.readthedocs.io/).
+
 ## Using the Extension
 
 Using the code editor context menu:
@@ -35,5 +37,3 @@ FluentAssertions can also be used for assertions, replacing the assertions built
 ### Framework Auto-Detection
 
 If Unitverse finds a test project related to the source project, it will look at the project references to determine what test and mocking frameworks to use. It will automatically use FluentAssertions if present. You can turn off framework auto-detection by going to Tools->Options->Unitverse.
-
-For more in-depth documentation, visit the [documentation on the readthedocs.io](https://unitverse.readthedocs.io/).
