@@ -1,6 +1,8 @@
 ﻿## AbstractClass
 Demonstrates how Unitverse generates tests when the source class is abstract or contains protected methods, as well as how inheritance chains are accounted for
 
+test broken bit
+
 ### Source Type(s)
 ``` csharp
 public abstract class TestClass
