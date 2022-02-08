@@ -9,6 +9,10 @@ This section contains examples of the output that Unitverse outputs, refreshed e
 | [ConstrainedGenericType](examples/ConstrainedGenericType.md) | Demonstrates how appropriate types are selected for the generation of tests for generic types with type constraints |
 | [DelegateGeneration](examples/DelegateGeneration.md) | Demonstrates how Unitverse generates default values for method parameters when the parameter is a delegate type |
 | [ExtensionMethod](examples/ExtensionMethod.md) | Demonstrates how Unitverse generates tests for extension methods |
+| [FrameworksFluentAssertions](examples/FrameworksFluentAssertions.md) | Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework. Also shows using FluentAssertions for the assertion framework. |
+| [FrameworksMsTestMoq](examples/FrameworksMsTestMoq.md) | Demonstrates how tests are generated using MsTest for the test framework and Moq for the mocking framework |
+| [FrameworksNUnitFakeItEasy](examples/FrameworksNUnitFakeItEasy.md) | Demonstrates how tests are generated using NUnit 3 for the test framework and FakeItEasy for the mocking framework |
+| [FrameworksXUnitNSubstitute](examples/FrameworksXUnitNSubstitute.md) | Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework |
 | [GenericMethod](examples/GenericMethod.md) | Demonstrates how Unitverse generates tests for generic methods |
 | [IComparableTests](examples/IComparableTests.md) | Demonstrates the tests generated for a type that implements IComparable |
 | [IndexerTests](examples/IndexerTests.md) | Demonstrates the tests generated for a type that contains an indexer |

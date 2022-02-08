@@ -67,19 +67,18 @@ namespace Unitverse.ExampleGenerator {
         ///using System.Windows;
         ///
         ///namespace Unitverse.Examples {
-        ///
-        ///    public abstract class TestClass1
+        ///    public abstract class TestClass
         ///    {
-        ///        protected TestClass1()
+        ///        protected TestClass()
         ///        { }
         /// 
-        ///        public abstract int SomeMethodShouldNot();
+        ///        protected abstract int AbstractMethod();
         ///
-        ///        public abstract int SomeMethodMaybe(int i);
+        ///        protected virtual int ProtectedMethod() =&gt; 1;
         ///
-        ///        public abstract int SomeMethodMaybe(int i, int j);
+        ///        public virtual int SomeMethod(int i) =&gt; 1;
         ///
-        ///    [rest of string was truncated]&quot;;.
+        ///        public  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AbstractClass {
             get {
@@ -229,6 +228,116 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // $ Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework. Also shows using FluentAssertions for the assertion framework.
+        ///// # FrameworkType=XUnit
+        ///// # MockingFrameworkType=NSubstitute
+        ///// # UseFluentAssertions=true
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///    public interface IDependency
+        ///    {
+        ///        void Method();
+        ///    }
+        ///
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(IDependency dependency)
+        ///        { }
+        ///
+        ///        public void Som [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FrameworksFluentAssertions {
+            get {
+                return ResourceManager.GetString("FrameworksFluentAssertions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // $ Demonstrates how tests are generated using MsTest for the test framework and Moq for the mocking framework
+        ///// # FrameworkType=MSTest
+        ///// # MockingFrameworkType=Moq
+        ///// # UseFluentAssertions=false
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///    public interface IDependency
+        ///    {
+        ///        void Method();
+        ///    }
+        ///
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(IDependency dependency)
+        ///        { }
+        ///
+        ///        public void SomeMethod(string methodName, int methodValue)
+        ///        {
+        ///            System.Co [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FrameworksMsTestMoq {
+            get {
+                return ResourceManager.GetString("FrameworksMsTestMoq", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // $ Demonstrates how tests are generated using NUnit 3 for the test framework and FakeItEasy for the mocking framework
+        ///// # FrameworkType=NUnit3
+        ///// # MockingFrameworkType=FakeItEasy
+        ///// # UseFluentAssertions=false
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///    public interface IDependency
+        ///    {
+        ///        void Method();
+        ///    }
+        ///
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(IDependency dependency)
+        ///        { }
+        ///
+        ///        public void SomeMethod(string methodName, int methodValue)
+        ///        {
+        ///       [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FrameworksNUnitFakeItEasy {
+            get {
+                return ResourceManager.GetString("FrameworksNUnitFakeItEasy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // $ Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework
+        ///// # FrameworkType=XUnit
+        ///// # MockingFrameworkType=NSubstitute
+        ///// # UseFluentAssertions=false
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///    public interface IDependency
+        ///    {
+        ///        void Method();
+        ///    }
+        ///
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(IDependency dependency)
+        ///        { }
+        ///
+        ///        public void SomeMethod(string methodName, int methodValue)
+        ///        {
+        ///        [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FrameworksXUnitNSubstitute {
+            get {
+                return ResourceManager.GetString("FrameworksXUnitNSubstitute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to // $ Demonstrates how Unitverse generates tests for generic methods
         ///
         ///using System;
@@ -305,25 +414,21 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace Unitverse.Examples
+        ///   Looks up a localized string similar to // $ Shows how unitverse generates a test to verify mappings between input parameter type and return type where the types share property names
+        ///
+        ///namespace Unitverse.Examples
         ///{
         ///    public class InputClass
         ///    {
         ///        public string SomeProperty { get; }
         ///        public string SomeOtherProperty { get; set; }
-        ///        public string WriteOnlyProperty { set { } }
+        ///        public string InputOnlyProperty { get; set; }
         ///    }
         ///
         ///    public class OutputClass
         ///    {
         ///        public string SomeProperty { get; set; }
-        ///        public string SomeOtherProperty { get; set; }
-        ///        public string WriteOnlyProperty { get; set; }
-        ///    }
-        ///	
-        ///    public class MappingClass
-        ///    {
-        ///        public OutputClass Map(Input [rest of string was truncated]&quot;;.
+        ///        public string SomeOtherProperty { get; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MappingMethod {
             get {
