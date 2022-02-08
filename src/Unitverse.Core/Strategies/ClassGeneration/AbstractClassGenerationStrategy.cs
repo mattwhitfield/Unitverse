@@ -208,7 +208,7 @@
                     modifiers = SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
                 }
 
-                var methodSymbol = model.SemanticModel.GetDeclaredSymbol(method.Node);
+                var methodSymbol = method.Symbol;
 
                 if (methodSymbol != null)
                 {
@@ -272,7 +272,7 @@
 
         private ClassDeclarationSyntax ImplementAbstractMethods(ClassModel model, ClassDeclarationSyntax classDeclaration)
         {
-            var symbol = model.SemanticModel.GetDeclaredSymbol(model.Declaration);
+            var symbol = model.TypeSymbol;
             if (symbol == null)
             {
                 return classDeclaration;

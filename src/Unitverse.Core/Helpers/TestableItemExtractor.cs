@@ -104,13 +104,9 @@
             model.DefaultConstructor = model.Constructors.OrderByDescending(x => x.Parameters.Count).FirstOrDefault();
 
             // populate interface models
-            if (syntax is ClassDeclarationSyntax classDeclaration)
+            foreach (var declaredSymbolInterface in model.TypeSymbol.Interfaces)
             {
-                var declaredSymbol = SemanticModel.GetDeclaredSymbol(classDeclaration);
-                foreach (var declaredSymbolInterface in declaredSymbol.Interfaces)
-                {
-                    model.Interfaces.Add(new InterfaceModel(declaredSymbolInterface));
-                }
+                model.Interfaces.Add(new InterfaceModel(declaredSymbolInterface));
             }
 
             return model;
