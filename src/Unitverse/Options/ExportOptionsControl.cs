@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using Unitverse.Core;
 using Unitverse.Core.Options;
 
 namespace Unitverse.Options
@@ -22,7 +23,7 @@ namespace Unitverse.Options
                 ThreadHelper.ThrowIfNotOnUIThread();
 
                 var vsShell = (IVsShell)ServiceProvider.GlobalProvider.GetService(typeof(IVsShell));
-                if (vsShell != null && vsShell.IsPackageLoaded(new Guid("35B315F3-278A-4C3F-81D6-4DC2264828AA"), out var myPackage) == VSConstants.S_OK)
+                if (vsShell != null && vsShell.IsPackageLoaded(new Guid(Constants.ExtensionGuid), out var myPackage) == VSConstants.S_OK)
                 {
                     var unitTestGeneratorPackage = (IUnitTestGeneratorPackage)myPackage;
 
@@ -32,7 +33,7 @@ namespace Unitverse.Options
 
                         if (fbd.ShowDialog() == DialogResult.OK)
                         {
-                            var targetPath = Path.Combine(fbd.SelectedPath, ".unitTestGeneratorConfig");
+                            var targetPath = Path.Combine(fbd.SelectedPath, CoreConstants.ConfigFileName);
                             if (File.Exists(targetPath))
                             {
                                 if (MessageBox.Show(this, "The file '" + targetPath + "' already exists. Would you like to over-write it?", "File exists", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
