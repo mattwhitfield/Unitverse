@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using Unitverse.Core.Options;
-using Unitverse.Helper;
 
 namespace Unitverse.Options
 {

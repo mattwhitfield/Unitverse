@@ -1,7 +1,5 @@
 ﻿namespace Unitverse.Core.Options
 {
-    using System;
-
     public class NamingContext
     {
         public NamingContext(string typeName)

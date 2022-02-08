@@ -2,15 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using EnvDTE;
-    using EnvDTE100;
     using EnvDTE80;
     using Microsoft.VisualStudio.Shell;
-    using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
-    using Unitverse.Properties;
 
     public static class SolutionUtilities
     {

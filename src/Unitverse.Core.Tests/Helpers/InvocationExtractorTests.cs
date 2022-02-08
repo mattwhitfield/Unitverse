@@ -7,7 +7,6 @@ namespace Unitverse.Core.Tests.Helpers
     using Microsoft.CodeAnalysis;
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using System.Linq;
     using NSubstitute;
 

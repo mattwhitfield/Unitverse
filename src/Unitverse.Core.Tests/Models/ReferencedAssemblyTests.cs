@@ -1,6 +1,5 @@
 namespace Unitverse.Core.Tests.Models
 {
-    using Unitverse.Core.Models;
     using System;
     using NUnit.Framework;
 

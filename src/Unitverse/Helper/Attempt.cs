@@ -2,9 +2,6 @@
 {
     using System;
     using System.Globalization;
-    using Microsoft.VisualStudio.Shell;
-    using Microsoft.VisualStudio.Shell.Interop;
-    using Constants = Unitverse.Constants;
     using Task = System.Threading.Tasks.Task;
 
     public static class Attempt

@@ -1,8 +1,6 @@
 namespace Unitverse.Core.Tests.Models
 {
-    using System.Collections.Generic;
     using NUnit.Framework;
-    using Unitverse.Core.Assets;
     using Unitverse.Core.Models;
     using System;
     using FluentAssertions;
