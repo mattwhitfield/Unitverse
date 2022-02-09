@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -63,13 +62,13 @@
             method = MockHelper.EmitStatementListWithTrivia(method, mockSetupStatements, null, Environment.NewLine + Environment.NewLine);
 
             var defaultValue = AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, model.SemanticModel, _frameworkSet);
-            var declareTestValue = Generate.VariableDeclaration(property.TypeInfo.Type, _frameworkSet, Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue, defaultValue);
+            var declareTestValue = Generate.VariableDeclaration(property.TypeInfo.Type, _frameworkSet, "testValue", defaultValue);
 
             method = method.AddBodyStatements(declareTestValue);
 
-            method = method.AddBodyStatements(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue))));
+            method = method.AddBodyStatements(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), SyntaxFactory.IdentifierName("testValue"))));
 
-            var bodyStatement = _frameworkSet.AssertionFramework.AssertEqual(property.Access(target), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue), property.TypeInfo.Type.IsReferenceType);
+            var bodyStatement = _frameworkSet.AssertionFramework.AssertEqual(property.Access(target), SyntaxFactory.IdentifierName("testValue"), property.TypeInfo.Type.IsReferenceType);
             if (mockAssertionStatements.Count > 0)
             {
                 bodyStatement = bodyStatement.WithTrailingTrivia(SyntaxFactory.Comment(Environment.NewLine + Environment.NewLine));

@@ -29,7 +29,7 @@
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()
         {
-            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.FakeItEasyMockingFramework_GetUsings_FakeItEasy));
+            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("FakeItEasy"));
         }
 
         public ExpressionSyntax GetThrowawayReference(TypeSyntax type)
@@ -50,7 +50,7 @@
                     SyntaxKind.SimpleMemberAccessExpression,
                     SyntaxFactory.IdentifierName("A"),
                     SyntaxFactory.GenericName(
-                            SyntaxFactory.Identifier(Strings.FakeItEasyMockingFramework_MockInterface_Fake))
+                            SyntaxFactory.Identifier("Fake"))
                         .WithTypeArgumentList(
                             SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(type)))));
         }

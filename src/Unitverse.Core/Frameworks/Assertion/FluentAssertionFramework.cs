@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
-    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
@@ -38,7 +36,7 @@
 
             if (expected != null)
             {
-                return invocation.WithArgumentList(SyntaxFactory.ArgumentList(SyntaxFactory.SingletonSeparatedList(SyntaxFactory.Argument(expected))));
+                return invocation.WithArgumentList(Generate.Arguments(expected));
             }
 
             return invocation;

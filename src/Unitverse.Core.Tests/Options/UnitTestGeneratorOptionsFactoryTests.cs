@@ -58,9 +58,9 @@ namespace Unitverse.Core.Tests.Options
                 var namingOptions = Substitute.For<INamingOptions>();
                 generationOptions.MockingFrameworkType.Returns(MockingFrameworkType.NSubstitute);
 
-                File.WriteAllText(Path.Combine(pathA, ".unitTestGeneratorConfig"), "framework-type=XUnit");
-                File.WriteAllText(Path.Combine(pathB, ".unitTestGeneratorConfig"), "framework-type=NUnit3");
-                File.WriteAllText(Path.Combine(pathC, ".unitTestGeneratorConfig"), "framework-type=NUnit2");
+                File.WriteAllText(Path.Combine(pathA, CoreConstants.ConfigFileName), "framework-type=XUnit");
+                File.WriteAllText(Path.Combine(pathB, CoreConstants.ConfigFileName), "framework-type=NUnit3");
+                File.WriteAllText(Path.Combine(pathC, CoreConstants.ConfigFileName), "framework-type=NUnit2");
 
                 var result = UnitTestGeneratorOptionsFactory.Create(solutionFilePath, generationOptions, namingOptions, false);
                 Assert.That(result.GenerationOptions.FrameworkType, Is.EqualTo(TestFrameworkTypes.NUnit2));

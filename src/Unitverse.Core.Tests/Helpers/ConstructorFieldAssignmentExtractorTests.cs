@@ -6,7 +6,6 @@ namespace Unitverse.Core.Tests.Helpers
     using FluentAssertions;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis;
-    using Unitverse.Core.Options;
     using NSubstitute;
     using Microsoft.CodeAnalysis.CSharp;
     using System.Linq;

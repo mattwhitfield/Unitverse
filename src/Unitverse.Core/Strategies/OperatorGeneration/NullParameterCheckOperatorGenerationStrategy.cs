@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -89,16 +88,7 @@
                 var assignment = SyntaxFactory.ParenthesizedLambdaExpression(
                     SyntaxFactory.Block(
                         SyntaxFactory.SingletonList<StatementSyntax>(
-                            SyntaxFactory.LocalDeclarationStatement(
-                                SyntaxFactory.VariableDeclaration(
-                                        SyntaxFactory.IdentifierName(Strings.Create_var))
-                                    .WithVariables(
-                                        SyntaxFactory.SingletonSeparatedList(
-                                            SyntaxFactory.VariableDeclarator(
-                                                    SyntaxFactory.Identifier(Strings.CanCallMethodGenerationStrategy_Create_result))
-                                                .WithInitializer(
-                                                    SyntaxFactory.EqualsValueClause(
-                                                        methodCall))))))));
+                            Generate.ImplicitlyTypedVariableDeclaration("result", methodCall))));
 
                 generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), assignment));
 

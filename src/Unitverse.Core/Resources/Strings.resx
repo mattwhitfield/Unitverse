@@ -123,68 +123,11 @@
   <data name="FrameworkSetFactory_Create_Couldn_t_find_the_required_testing_framework" xml:space="preserve">
     <value>Couldn't find the required testing framework</value>
   </data>
-  <data name="ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue" xml:space="preserve">
-    <value>testValue</value>
-  </data>
-  <data name="UnitTestGenerator_AddUsingStatements_System" xml:space="preserve">
-    <value>System</value>
-  </data>
-  <data name="FakeItEasyMockingFramework_GetUsings_FakeItEasy" xml:space="preserve">
-    <value>FakeItEasy</value>
-  </data>
   <data name="PlaceholderAssertionMessage" xml:space="preserve">
     <value>Create or modify test</value>
   </data>
-  <data name="FakeItEasyMockingFramework_MockInterface_Fake" xml:space="preserve">
-    <value>Fake</value>
-  </data>
-  <data name="MoqMockingFramework_GetUsings_Moq" xml:space="preserve">
-    <value>Moq</value>
-  </data>
-  <data name="MoqMockingFramework_MockInterface_Mock" xml:space="preserve">
-    <value>Mock</value>
-  </data>
-  <data name="NSubstituteMockingFramework_GetUsings_NSubstitute" xml:space="preserve">
-    <value>NSubstitute</value>
-  </data>
-  <data name="NSubstituteMockingFramework_MockInterface_For" xml:space="preserve">
-    <value>For</value>
-  </data>
-  <data name="RhinoMocksMockingFramework_GetUsings_Rhino_Mocks" xml:space="preserve">
-    <value>Rhino.Mocks</value>
-  </data>
-  <data name="RhinoMocksMockingFramework_MockInterface_GenerateStub" xml:space="preserve">
-    <value>GenerateStub</value>
-  </data>
-  <data name="MsTestTestFramework_GetUsings_Microsoft_VisualStudio_TestTools_UnitTesting" xml:space="preserve">
-    <value>Microsoft.VisualStudio.TestTools.UnitTesting</value>
-  </data>
-  <data name="MsTestTestFramework_CreateTestCaseMethod_value" xml:space="preserve">
-    <value>value</value>
-  </data>
-  <data name="NUnit3TestFramework_GetUsings_System_Threading" xml:space="preserve">
-    <value>System.Threading</value>
-  </data>
-  <data name="NUnitTestFramework_GetUsings_NUnit_Framework" xml:space="preserve">
-    <value>NUnit.Framework</value>
-  </data>
-  <data name="NUnitTestFramework_AssertIsInstanceOf_InstanceOf" xml:space="preserve">
-    <value>InstanceOf</value>
-  </data>
   <data name="TargetNameTransform_GetTargetFileName_Cannot_not_derive_target_file_name__please_check_the_test_file_naming_setting_" xml:space="preserve">
     <value>Cannot not derive target file name, please check the test file naming setting.</value>
-  </data>
-  <data name="XUnitTestFramework_GetUsings_Xunit" xml:space="preserve">
-    <value>Xunit</value>
-  </data>
-  <data name="XUnitTestFramework_AssertIsInstanceOf_IsType" xml:space="preserve">
-    <value>IsType</value>
-  </data>
-  <data name="Generate_Method__void" xml:space="preserve">
-    <value>void</value>
-  </data>
-  <data name="Generate_Method_Task" xml:space="preserve">
-    <value>Task</value>
   </data>
   <data name="Generate_Literal_Can_only_emit_literals_for_strings_and_numeric_expressions" xml:space="preserve">
     <value>Can only emit literals for strings and numeric expressions</value>
@@ -203,17 +146,5 @@
   </data>
   <data name="TestableModel_MutateName_Cannot_mutate_name_more_than_once" xml:space="preserve">
     <value>Cannot mutate name more than once</value>
-  </data>
-  <data name="CanConstructMultiConstructorGenerationStrategy_Create_instance" xml:space="preserve">
-    <value>instance</value>
-  </data>
-  <data name="CanCallMethodGenerationStrategy_Create_result" xml:space="preserve">
-    <value>result</value>
-  </data>
-  <data name="Create_var" xml:space="preserve">
-    <value>var</value>
-  </data>
-  <data name="Identifier_x" xml:space="preserve">
-    <value>x</value>
   </data>
 </root>

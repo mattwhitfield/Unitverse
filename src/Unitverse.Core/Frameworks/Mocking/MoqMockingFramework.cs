@@ -19,7 +19,7 @@
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()
         {
-            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.MoqMockingFramework_GetUsings_Moq));
+            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Moq"));
         }
 
         public TypeSyntax GetFieldType(TypeSyntax type)
@@ -29,7 +29,7 @@
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return SyntaxFactory.GenericName(SyntaxFactory.Identifier(Strings.MoqMockingFramework_MockInterface_Mock))
+            return SyntaxFactory.GenericName(SyntaxFactory.Identifier("Mock"))
                                 .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(type)));
         }
 
@@ -69,7 +69,7 @@
             }
 
             _context.MocksUsed = true;
-            return SyntaxFactory.ObjectCreationExpression(SyntaxFactory.GenericName(SyntaxFactory.Identifier(Strings.MoqMockingFramework_MockInterface_Mock))
+            return SyntaxFactory.ObjectCreationExpression(SyntaxFactory.GenericName(SyntaxFactory.Identifier("Mock"))
                                                                        .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(type))))
                                 .WithArgumentList(SyntaxFactory.ArgumentList());
         }

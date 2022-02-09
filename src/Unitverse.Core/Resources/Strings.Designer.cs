@@ -61,51 +61,6 @@ namespace Unitverse.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to result.
-        /// </summary>
-        internal static string CanCallMethodGenerationStrategy_Create_result {
-            get {
-                return ResourceManager.GetString("CanCallMethodGenerationStrategy_Create_result", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to instance.
-        /// </summary>
-        internal static string CanConstructMultiConstructorGenerationStrategy_Create_instance {
-            get {
-                return ResourceManager.GetString("CanConstructMultiConstructorGenerationStrategy_Create_instance", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to var.
-        /// </summary>
-        internal static string Create_var {
-            get {
-                return ResourceManager.GetString("Create_var", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to FakeItEasy.
-        /// </summary>
-        internal static string FakeItEasyMockingFramework_GetUsings_FakeItEasy {
-            get {
-                return ResourceManager.GetString("FakeItEasyMockingFramework_GetUsings_FakeItEasy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Fake.
-        /// </summary>
-        internal static string FakeItEasyMockingFramework_MockInterface_Fake {
-            get {
-                return ResourceManager.GetString("FakeItEasyMockingFramework_MockInterface_Fake", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Couldn&apos;t find the required mocking framework.
         /// </summary>
         internal static string FrameworkSetFactory_Create_Couldn_t_find_the_required_mocking_framework {
@@ -133,69 +88,6 @@ namespace Unitverse.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to void.
-        /// </summary>
-        internal static string Generate_Method__void {
-            get {
-                return ResourceManager.GetString("Generate_Method__void", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Task.
-        /// </summary>
-        internal static string Generate_Method_Task {
-            get {
-                return ResourceManager.GetString("Generate_Method_Task", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to x.
-        /// </summary>
-        internal static string Identifier_x {
-            get {
-                return ResourceManager.GetString("Identifier_x", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Moq.
-        /// </summary>
-        internal static string MoqMockingFramework_GetUsings_Moq {
-            get {
-                return ResourceManager.GetString("MoqMockingFramework_GetUsings_Moq", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Mock.
-        /// </summary>
-        internal static string MoqMockingFramework_MockInterface_Mock {
-            get {
-                return ResourceManager.GetString("MoqMockingFramework_MockInterface_Mock", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to value.
-        /// </summary>
-        internal static string MsTestTestFramework_CreateTestCaseMethod_value {
-            get {
-                return ResourceManager.GetString("MsTestTestFramework_CreateTestCaseMethod_value", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Microsoft.VisualStudio.TestTools.UnitTesting.
-        /// </summary>
-        internal static string MsTestTestFramework_GetUsings_Microsoft_VisualStudio_TestTools_UnitTesting {
-            get {
-                return ResourceManager.GetString("MsTestTestFramework_GetUsings_Microsoft_VisualStudio_TestTools_UnitTesting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Could not find type identifier..
         /// </summary>
         internal static string NameExtractor_GetClassName_Could_not_find_type_identifier_ {
@@ -205,83 +97,11 @@ namespace Unitverse.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NSubstitute.
-        /// </summary>
-        internal static string NSubstituteMockingFramework_GetUsings_NSubstitute {
-            get {
-                return ResourceManager.GetString("NSubstituteMockingFramework_GetUsings_NSubstitute", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to For.
-        /// </summary>
-        internal static string NSubstituteMockingFramework_MockInterface_For {
-            get {
-                return ResourceManager.GetString("NSubstituteMockingFramework_MockInterface_For", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to System.Threading.
-        /// </summary>
-        internal static string NUnit3TestFramework_GetUsings_System_Threading {
-            get {
-                return ResourceManager.GetString("NUnit3TestFramework_GetUsings_System_Threading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to InstanceOf.
-        /// </summary>
-        internal static string NUnitTestFramework_AssertIsInstanceOf_InstanceOf {
-            get {
-                return ResourceManager.GetString("NUnitTestFramework_AssertIsInstanceOf_InstanceOf", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to NUnit.Framework.
-        /// </summary>
-        internal static string NUnitTestFramework_GetUsings_NUnit_Framework {
-            get {
-                return ResourceManager.GetString("NUnitTestFramework_GetUsings_NUnit_Framework", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create or modify test.
         /// </summary>
         internal static string PlaceholderAssertionMessage {
             get {
                 return ResourceManager.GetString("PlaceholderAssertionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to testValue.
-        /// </summary>
-        internal static string ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue {
-            get {
-                return ResourceManager.GetString("ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Rhino.Mocks.
-        /// </summary>
-        internal static string RhinoMocksMockingFramework_GetUsings_Rhino_Mocks {
-            get {
-                return ResourceManager.GetString("RhinoMocksMockingFramework_GetUsings_Rhino_Mocks", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to GenerateStub.
-        /// </summary>
-        internal static string RhinoMocksMockingFramework_MockInterface_GenerateStub {
-            get {
-                return ResourceManager.GetString("RhinoMocksMockingFramework_MockInterface_GenerateStub", resourceCulture);
             }
         }
         
@@ -330,33 +150,6 @@ namespace Unitverse.Core.Resources {
         internal static string TestableModel_MutateName_Cannot_mutate_name_more_than_once {
             get {
                 return ResourceManager.GetString("TestableModel_MutateName_Cannot_mutate_name_more_than_once", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to System.
-        /// </summary>
-        internal static string UnitTestGenerator_AddUsingStatements_System {
-            get {
-                return ResourceManager.GetString("UnitTestGenerator_AddUsingStatements_System", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to IsType.
-        /// </summary>
-        internal static string XUnitTestFramework_AssertIsInstanceOf_IsType {
-            get {
-                return ResourceManager.GetString("XUnitTestFramework_AssertIsInstanceOf_IsType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Xunit.
-        /// </summary>
-        internal static string XUnitTestFramework_GetUsings_Xunit {
-            get {
-                return ResourceManager.GetString("XUnitTestFramework_GetUsings_Xunit", resourceCulture);
             }
         }
     }

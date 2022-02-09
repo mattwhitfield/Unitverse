@@ -15,7 +15,6 @@
     using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.ClassGeneration;
     using TechTalk.SpecFlow;
-    using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
     [Binding]
     public class ClassBasedStrategySteps

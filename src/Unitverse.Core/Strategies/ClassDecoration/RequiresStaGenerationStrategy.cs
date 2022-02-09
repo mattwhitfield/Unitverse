@@ -22,7 +22,7 @@
 
         public TypeDeclarationSyntax Apply(TypeDeclarationSyntax declaration, ClassModel model)
         {
-            var typeInfo = model.SemanticModel.GetDeclaredSymbol(model.Declaration);
+            var typeInfo = model.TypeSymbol;
             if (typeInfo == null)
             {
                 return declaration;

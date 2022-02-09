@@ -1,7 +1,6 @@
 namespace Unitverse.Core.Tests.Helpers
 {
     using Unitverse.Core.Helpers;
-    using System;
     using NUnit.Framework;
     using FluentAssertions;
 

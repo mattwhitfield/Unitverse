@@ -205,7 +205,7 @@
 
         private static NamespaceDeclarationSyntax AddUsingStatements(NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, IFrameworkSet frameworkSet, List<ClassModel> classModels)
         {
-            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.UnitTestGenerator_AddUsingStatements_System)));
+            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System")));
             targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, frameworkSet.TestFramework.GetUsings());
             targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, frameworkSet.AssertionFramework.GetUsings());
             if (frameworkSet.Context.MocksUsed)
@@ -434,7 +434,7 @@
                 foreach (var parameter in frameworkSet.Context.GenericTypesVisited)
                 {
                     targetNamespace = targetNamespace.AddUsings(
-                        SyntaxFactory.UsingDirective(SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName(Strings.UnitTestGenerator_AddUsingStatements_System), SyntaxFactory.IdentifierName("String")))
+                        SyntaxFactory.UsingDirective(SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName("System"), SyntaxFactory.IdentifierName("String")))
                             .WithAlias(SyntaxFactory.NameEquals(SyntaxFactory.IdentifierName(parameter))));
                 }
             }

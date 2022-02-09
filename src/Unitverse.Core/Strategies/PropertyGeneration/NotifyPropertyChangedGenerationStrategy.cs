@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -12,7 +11,6 @@
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
-    using Unitverse.Core.Resources;
 
     public class NotifyPropertyChangedGenerationStrategy : IGenerationStrategy<IPropertyModel>
     {

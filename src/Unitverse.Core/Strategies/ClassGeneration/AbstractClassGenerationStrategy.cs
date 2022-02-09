@@ -208,7 +208,7 @@
                     modifiers = SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
                 }
 
-                var methodSymbol = model.SemanticModel.GetDeclaredSymbol(method.Node);
+                var methodSymbol = method.Symbol;
 
                 if (methodSymbol != null)
                 {
@@ -272,7 +272,7 @@
 
         private ClassDeclarationSyntax ImplementAbstractMethods(ClassModel model, ClassDeclarationSyntax classDeclaration)
         {
-            var symbol = model.SemanticModel.GetDeclaredSymbol(model.Declaration);
+            var symbol = model.TypeSymbol;
             if (symbol == null)
             {
                 return classDeclaration;
@@ -353,7 +353,7 @@
                     methodOverride = methodOverride.WithTypeParameterList(SyntaxFactory.TypeParameterList(SyntaxFactory.SeparatedList(method.TypeParameters.Select(x => SyntaxFactory.TypeParameter(x.Name)))));
                 }
 
-                if (!string.Equals(method.ReturnType.ToFullName(), Strings.Generate_Method__void, StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(method.ReturnType.ToFullName(), "void", StringComparison.OrdinalIgnoreCase))
                 {
                     var methodStatement = SyntaxFactory.ReturnStatement(SyntaxFactory.DefaultExpression(method.ReturnType.ToTypeSyntax(_frameworkSet.Context)));
                     methodOverride = methodOverride.WithBody(SyntaxFactory.Block(methodStatement));
@@ -439,7 +439,7 @@
                                 SyntaxFactory.AssignmentExpression(
                                     SyntaxKind.SimpleAssignmentExpression,
                                     baseMember,
-                                    SyntaxFactory.IdentifierName(Strings.MsTestTestFramework_CreateTestCaseMethod_value))))
+                                    SyntaxFactory.IdentifierName("value"))))
                         .WithSemicolonToken(
                             SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
@@ -461,7 +461,7 @@
                                 SyntaxFactory.AssignmentExpression(
                                     SyntaxKind.SimpleAssignmentExpression,
                                     baseMember,
-                                    SyntaxFactory.IdentifierName(Strings.MsTestTestFramework_CreateTestCaseMethod_value))))
+                                    SyntaxFactory.IdentifierName("value"))))
                         .WithSemicolonToken(
                             SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 

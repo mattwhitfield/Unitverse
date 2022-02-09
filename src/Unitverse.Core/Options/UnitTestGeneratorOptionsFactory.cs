@@ -19,7 +19,7 @@
 
             if (!string.IsNullOrWhiteSpace(solutionFilePath))
             {
-                var allFiles = new EditorConfigParser(".unitTestGeneratorConfig").GetConfigurationFilesTillRoot(solutionFilePath);
+                var allFiles = new EditorConfigParser(CoreConstants.ConfigFileName).GetConfigurationFilesTillRoot(solutionFilePath);
                 var allProperties = allFiles.SelectMany(x => x.Sections).SelectMany(x => x);
                 var properties = new Dictionary<string, string>();
                 foreach (var pair in allProperties)

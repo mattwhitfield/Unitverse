@@ -28,7 +28,7 @@
 
             if (_requiresSystemThreading)
             {
-                yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.NUnit3TestFramework_GetUsings_System_Threading));
+                yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System.Threading"));
             }
         }
     }

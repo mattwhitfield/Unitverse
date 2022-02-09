@@ -1,13 +1,11 @@
 ﻿namespace Unitverse.Helper
 {
     using System.Linq;
-    using System.Management.Instrumentation;
     using EnvDTE;
     using Microsoft.VisualStudio.Shell;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
-    using Unitverse.Properties;
     using VSLangProj;
     using VSLangProj80;
 

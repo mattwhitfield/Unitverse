@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -80,18 +79,13 @@
                     if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
                     {
                         var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
-                        var typeSyntax = AssignmentValueHelper.GetTypeOrImplicitType(parameter.TypeInfo.Type, _frameworkSet);
 
                         if (index == i)
                         {
                             defaultAssignmentValue = SyntaxFactory.DefaultExpression(method.Parameters[i].TypeInfo.ToTypeSyntax(_frameworkSet.Context));
                         }
 
-                        generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(
-                            SyntaxFactory.VariableDeclaration(typeSyntax)
-                                .WithVariables(SyntaxFactory.SingletonSeparatedList(
-                                    SyntaxFactory.VariableDeclarator(parameter.Identifier)
-                                        .WithInitializer(SyntaxFactory.EqualsValueClause(defaultAssignmentValue))))));
+                        generatedMethod = generatedMethod.AddBodyStatements(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
 
                         paramList.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Name)).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
                     }
@@ -103,7 +97,7 @@
                     {
                         if (index == i)
                         {
-                            paramList.Add(SyntaxFactory.IdentifierName(Strings.MsTestTestFramework_CreateTestCaseMethod_value));
+                            paramList.Add(SyntaxFactory.IdentifierName("value"));
                         }
                         else
                         {

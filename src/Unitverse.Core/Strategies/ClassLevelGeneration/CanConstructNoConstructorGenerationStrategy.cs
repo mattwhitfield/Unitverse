@@ -53,18 +53,9 @@
 
             var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanConstruct, namingContext, false, false);
 
-            generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(
-                SyntaxFactory.VariableDeclaration(
-                        SyntaxFactory.IdentifierName(Strings.Create_var))
-                    .WithVariables(
-                        SyntaxFactory.SingletonSeparatedList(
-                            SyntaxFactory.VariableDeclarator(
-                                    SyntaxFactory.Identifier(Strings.CanConstructMultiConstructorGenerationStrategy_Create_instance))
-                                .WithInitializer(
-                                    SyntaxFactory.EqualsValueClause(
-                                        Generate.ObjectCreation(model.TypeSyntax)))))));
+            generatedMethod = generatedMethod.AddBodyStatements(Generate.ImplicitlyTypedVariableDeclaration("instance", Generate.ObjectCreation(model.TypeSyntax)));
 
-            generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName(Strings.CanConstructMultiConstructorGenerationStrategy_Create_instance)));
+            generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));
 
             yield return generatedMethod;
         }
