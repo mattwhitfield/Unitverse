@@ -394,7 +394,7 @@
 
         public static LocalDeclarationStatementSyntax VariableDeclaration(ITypeSymbol type, IFrameworkSet frameworkSet, string name, ExpressionSyntax defaultValue)
         {
-            var variableDeclaration = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(name))
+            var variableDeclaration = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(KeywordSafeName(name)))
                                                    .WithInitializer(SyntaxFactory.EqualsValueClause(defaultValue));
 
             return SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.VariableDeclaration(AssignmentValueHelper.GetTypeOrImplicitType(type, frameworkSet))
@@ -403,7 +403,7 @@
 
         public static LocalDeclarationStatementSyntax ImplicitlyTypedVariableDeclaration(string name, ExpressionSyntax defaultValue)
         {
-            var variableDeclaration = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(name))
+            var variableDeclaration = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(KeywordSafeName(name)))
                                                    .WithInitializer(SyntaxFactory.EqualsValueClause(defaultValue));
 
             return SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName("var"))
@@ -430,7 +430,7 @@
             return SyntaxFactory.ArgumentList(ArgumentList(expressions));
         }
 
-        public static ParameterSyntax Parameter(string name)
+        public static string KeywordSafeName(string name)
         {
             bool isKeyword = CSharpKeywordIdentifier.IsCSharpKeyword(name) ||
                              SyntaxFacts.GetKeywordKind(name) != SyntaxKind.None ||
@@ -438,10 +438,15 @@
 
             if (isKeyword)
             {
-                name = "@" + name;
+                return "@" + name;
             }
 
-            return SyntaxFactory.Parameter(SyntaxFactory.Identifier(name));
+            return name;
+        }
+
+        public static ParameterSyntax Parameter(string name)
+        {
+            return SyntaxFactory.Parameter(SyntaxFactory.Identifier(KeywordSafeName(name)));
         }
 
         public static ParameterListSyntax ParameterList(IEnumerable<string> parameters)
