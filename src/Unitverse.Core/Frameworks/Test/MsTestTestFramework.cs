@@ -56,18 +56,14 @@
             }
 
             return SyntaxFactory.ExpressionStatement(AssertCall("IsTrue").WithArgumentList(
-                SyntaxFactory.ArgumentList(
-                    SyntaxFactory.SingletonSeparatedList<ArgumentSyntax>(
-                        SyntaxFactory.Argument(
-                            SyntaxFactory.BinaryExpression(
-                                SyntaxKind.GreaterThanExpression, actual, expected))))));
+                Generate.Arguments(SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanExpression, actual, expected))));
         }
 
         public StatementSyntax AssertIsInstanceOf(ExpressionSyntax value, TypeSyntax type, bool isReferenceType)
         {
             if (value == null)
             {
-                throw new ArgumentNullException(Strings.MsTestTestFramework_CreateTestCaseMethod_value);
+                throw new ArgumentNullException(nameof(value));
             }
 
             if (type == null)
@@ -91,18 +87,14 @@
             }
 
             return SyntaxFactory.ExpressionStatement(AssertCall("IsTrue").WithArgumentList(
-                SyntaxFactory.ArgumentList(
-                    SyntaxFactory.SingletonSeparatedList<ArgumentSyntax>(
-                        SyntaxFactory.Argument(
-                            SyntaxFactory.BinaryExpression(
-                                SyntaxKind.LessThanExpression, actual, expected))))));
+                Generate.Arguments(SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression, actual, expected))));
         }
 
         public StatementSyntax AssertNotNull(ExpressionSyntax value)
         {
             if (value == null)
             {
-                throw new ArgumentNullException(Strings.MsTestTestFramework_CreateTestCaseMethod_value);
+                throw new ArgumentNullException(nameof(value));
             }
 
             return SyntaxFactory.ExpressionStatement(AssertCall("IsNotNull").WithArgumentList(Generate.Arguments(value)));
@@ -156,7 +148,7 @@
 
             var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, false);
 
-            method = method.AddParameterListParameters(Generate.Parameter(Strings.MsTestTestFramework_CreateTestCaseMethod_value).WithType(valueType));
+            method = method.AddParameterListParameters(Generate.Parameter("value").WithType(valueType));
             method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("DataTestMethod"))));
 
             foreach (var testValue in testValues)
@@ -186,7 +178,7 @@
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()
         {
-            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.MsTestTestFramework_GetUsings_Microsoft_VisualStudio_TestTools_UnitTesting));
+            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Microsoft.VisualStudio.TestTools.UnitTesting"));
         }
 
         private static InvocationExpressionSyntax AssertCall(string assertMethod)

@@ -61,21 +61,13 @@
         {
             var paramExpressions = indexer.Parameters.Select(param => AssignmentValueHelper.GetDefaultAssignmentValue(param.TypeInfo, sourceModel.SemanticModel, _frameworkSet)).ToArray();
 
-            yield return SyntaxFactory.LocalDeclarationStatement(
-                SyntaxFactory.VariableDeclaration(AssignmentValueHelper.GetTypeOrImplicitType(indexer.TypeInfo.Type, _frameworkSet))
-                    .WithVariables(
-                        SyntaxFactory.SingletonSeparatedList(
-                            SyntaxFactory.VariableDeclarator(
-                                    SyntaxFactory.Identifier(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue))
-                                .WithInitializer(
-                                    SyntaxFactory.EqualsValueClause(
-                                        AssignmentValueHelper.GetDefaultAssignmentValue(indexer.TypeInfo, sourceModel.SemanticModel, _frameworkSet))))));
+            yield return Generate.VariableDeclaration(indexer.TypeInfo.Type, _frameworkSet, "testValue", AssignmentValueHelper.GetDefaultAssignmentValue(indexer.TypeInfo, sourceModel.SemanticModel, _frameworkSet));
 
             yield return _frameworkSet.AssertionFramework.AssertIsInstanceOf(Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), indexer.TypeInfo.ToTypeSyntax(_frameworkSet.Context), indexer.TypeInfo.Type.IsReferenceType);
 
-            yield return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue)));
+            yield return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), SyntaxFactory.IdentifierName("testValue")));
 
-            yield return _frameworkSet.AssertionFramework.AssertEqual(Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), SyntaxFactory.IdentifierName(Strings.ReadWritePropertyGenerationStrategy_GetPropertyAssertionBodyStatements_testValue), indexer.TypeInfo.Type.IsReferenceType);
+            yield return _frameworkSet.AssertionFramework.AssertEqual(Generate.IndexerAccess(sourceModel.TargetInstance, paramExpressions), SyntaxFactory.IdentifierName("testValue"), indexer.TypeInfo.Type.IsReferenceType);
         }
     }
 }

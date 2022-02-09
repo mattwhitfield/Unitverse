@@ -36,7 +36,7 @@
 
             if (expected != null)
             {
-                return invocation.WithArgumentList(SyntaxFactory.ArgumentList(SyntaxFactory.SingletonSeparatedList(SyntaxFactory.Argument(expected))));
+                return invocation.WithArgumentList(Generate.Arguments(expected));
             }
 
             return invocation;

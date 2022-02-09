@@ -29,7 +29,7 @@
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()
         {
-            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.NSubstituteMockingFramework_GetUsings_NSubstitute));
+            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("NSubstitute"));
         }
 
         public ExpressionSyntax GetThrowawayReference(TypeSyntax type)
@@ -50,7 +50,7 @@
                     SyntaxKind.SimpleMemberAccessExpression,
                     SyntaxFactory.IdentifierName("Substitute"),
                     SyntaxFactory.GenericName(
-                            SyntaxFactory.Identifier(Strings.NSubstituteMockingFramework_MockInterface_For))
+                            SyntaxFactory.Identifier("For"))
                         .WithTypeArgumentList(
                             SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(type)))));
         }

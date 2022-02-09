@@ -21,7 +21,7 @@
             }
 
             Parameters = parameters ?? new List<ParameterModel>();
-            IsVoid = string.Equals(node.ReturnType.ToFullString().Trim(), Strings.Generate_Method__void, StringComparison.OrdinalIgnoreCase);
+            IsVoid = string.Equals(node.ReturnType.ToFullString().Trim(), "void", StringComparison.OrdinalIgnoreCase);
 
             Symbol = ModelExtensions.GetDeclaredSymbol(model, node) as IMethodSymbol;
             if (Symbol != null)

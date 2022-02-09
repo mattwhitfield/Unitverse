@@ -64,32 +64,21 @@
                     SyntaxFactory.DefaultExpression(typeSyntax))
                 .AsLocalVariableDeclarationStatementSyntax();
 
-            yield return FrameworkSet.AssertionFramework.AssertEqual(
-                SyntaxHelper.CreateInvocationStatement(
-                    SyntaxFactory.IdentifierName("baseValue"),
-                    SyntaxFactory.IdentifierName("CompareTo"),
-                    SyntaxFactory.IdentifierName("equalToBaseValue")),
-                SyntaxFactory.LiteralExpression(
-                    SyntaxKind.NumericLiteralExpression,
-                    SyntaxFactory.Literal(0)), false);
+            yield return FrameworkSet.AssertionFramework.AssertEqual(CreateInvocationStatement("baseValue", "CompareTo", "equalToBaseValue"), Generate.Literal(0), false);
 
-            yield return FrameworkSet.AssertionFramework.AssertLessThan(
-                SyntaxHelper.CreateInvocationStatement(
-                    SyntaxFactory.IdentifierName("baseValue"),
-                    SyntaxFactory.IdentifierName("CompareTo"),
-                    SyntaxFactory.IdentifierName("greaterThanBaseValue")),
-                SyntaxFactory.LiteralExpression(
-                    SyntaxKind.NumericLiteralExpression,
-                    SyntaxFactory.Literal(0)));
+            yield return FrameworkSet.AssertionFramework.AssertLessThan(CreateInvocationStatement("baseValue", "CompareTo", "greaterThanBaseValue"), Generate.Literal(0));
 
-            yield return FrameworkSet.AssertionFramework.AssertGreaterThan(
-                SyntaxHelper.CreateInvocationStatement(
-                    SyntaxFactory.IdentifierName("greaterThanBaseValue"),
-                    SyntaxFactory.IdentifierName("CompareTo"),
-                    SyntaxFactory.IdentifierName("baseValue")),
-                SyntaxFactory.LiteralExpression(
-                    SyntaxKind.NumericLiteralExpression,
-                    SyntaxFactory.Literal(0)));
+            yield return FrameworkSet.AssertionFramework.AssertGreaterThan(CreateInvocationStatement("greaterThanBaseValue", "CompareTo", "baseValue"), Generate.Literal(0));
+        }
+
+        private static InvocationExpressionSyntax CreateInvocationStatement(string targetName, string memberName, string parameterName)
+        {
+            return SyntaxFactory.InvocationExpression(
+                    SyntaxFactory.MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        SyntaxFactory.IdentifierName(targetName),
+                        SyntaxFactory.IdentifierName(memberName)))
+                .WithArgumentList(Generate.Arguments(SyntaxFactory.IdentifierName(parameterName)));
         }
     }
 }

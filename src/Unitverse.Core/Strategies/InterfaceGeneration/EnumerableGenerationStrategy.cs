@@ -84,7 +84,7 @@
                                 enumerableTypeSymbol.ToTypeSyntax(FrameworkSet.Context),
                                 enumerableTypeSymbol.IsReferenceType)))))
                 .WithDeclaration(
-                    SyntaxHelper.CreateVariableDeclaration("enumerator", SyntaxFactory.InvocationExpression(
+                    SyntaxHelper.CreateVariableDeclaration(SyntaxFactory.IdentifierName("var"), "enumerator", SyntaxFactory.InvocationExpression(
                         SyntaxFactory.MemberAccessExpression(
                             SyntaxKind.SimpleMemberAccessExpression,
                             SyntaxFactory.IdentifierName("enumerable"),

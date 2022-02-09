@@ -56,18 +56,14 @@
             }
 
             return SyntaxFactory.ExpressionStatement(AssertCall("True").WithArgumentList(
-                SyntaxFactory.ArgumentList(
-                    SyntaxFactory.SingletonSeparatedList<ArgumentSyntax>(
-                        SyntaxFactory.Argument(
-                            SyntaxFactory.BinaryExpression(
-                                SyntaxKind.GreaterThanExpression, actual, expected))))));
+                Generate.Arguments(SyntaxFactory.BinaryExpression(SyntaxKind.GreaterThanExpression, actual, expected))));
         }
 
         public StatementSyntax AssertIsInstanceOf(ExpressionSyntax value, TypeSyntax type, bool isReferenceType)
         {
             if (value == null)
             {
-                throw new ArgumentNullException(Strings.MsTestTestFramework_CreateTestCaseMethod_value);
+                throw new ArgumentNullException(nameof(value));
             }
 
             if (type == null)
@@ -79,7 +75,7 @@
                     SyntaxFactory.MemberAccessExpression(
                         SyntaxKind.SimpleMemberAccessExpression,
                         SyntaxFactory.IdentifierName("Assert"),
-                        SyntaxFactory.GenericName(SyntaxFactory.Identifier(Strings.XUnitTestFramework_AssertIsInstanceOf_IsType))
+                        SyntaxFactory.GenericName(SyntaxFactory.Identifier("IsType"))
                             .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(type)))))
                 .WithArgumentList(Generate.Arguments(value)));
         }
@@ -97,18 +93,14 @@
             }
 
             return SyntaxFactory.ExpressionStatement(AssertCall("True").WithArgumentList(
-                SyntaxFactory.ArgumentList(
-                    SyntaxFactory.SingletonSeparatedList<ArgumentSyntax>(
-                        SyntaxFactory.Argument(
-                            SyntaxFactory.BinaryExpression(
-                                SyntaxKind.LessThanExpression, actual, expected))))));
+                Generate.Arguments(SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression, actual, expected))));
         }
 
         public StatementSyntax AssertNotNull(ExpressionSyntax value)
         {
             if (value == null)
             {
-                throw new ArgumentNullException(Strings.MsTestTestFramework_CreateTestCaseMethod_value);
+                throw new ArgumentNullException(nameof(value));
             }
 
             return SyntaxFactory.ExpressionStatement(AssertCall("NotNull").WithArgumentList(Generate.Arguments(value)));
@@ -158,7 +150,7 @@
 
             var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic);
 
-            method = method.AddParameterListParameters(Generate.Parameter(Strings.MsTestTestFramework_CreateTestCaseMethod_value).WithType(valueType));
+            method = method.AddParameterListParameters(Generate.Parameter("value").WithType(valueType));
             method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("Theory"))));
 
             foreach (var testValue in testValues)
@@ -188,7 +180,7 @@
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()
         {
-            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.XUnitTestFramework_GetUsings_Xunit));
+            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Xunit"));
         }
 
         private static InvocationExpressionSyntax AssertCall(string assertMethod)

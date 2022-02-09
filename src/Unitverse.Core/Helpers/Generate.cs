@@ -20,11 +20,11 @@
                 throw new ArgumentNullException(nameof(name));
             }
 
-            var method = SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName(Strings.Generate_Method__void), name).AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+            var method = SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName("void"), name).AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
 
             if (isAsync)
             {
-                method = SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName(Strings.Generate_Method_Task), name).AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+                method = SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName("Task"), name).AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
 
                 if (isStatic)
                 {
@@ -392,7 +392,6 @@
             return setupMethod;
         }
 
-        // TODO - use these all over the place
         public static LocalDeclarationStatementSyntax VariableDeclaration(ITypeSymbol type, IFrameworkSet frameworkSet, string name, ExpressionSyntax defaultValue)
         {
             var variableDeclaration = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(name))

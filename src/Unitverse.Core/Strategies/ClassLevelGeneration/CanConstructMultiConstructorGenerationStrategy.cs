@@ -63,16 +63,15 @@
 
                 if (isFirst)
                 {
-                    var variables = SyntaxFactory.SingletonSeparatedList(SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(Strings.CanConstructMultiConstructorGenerationStrategy_Create_instance)).WithInitializer(SyntaxFactory.EqualsValueClause(creationExpression)));
-                    generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName(Strings.Create_var)).WithVariables(variables)));
+                    generatedMethod = generatedMethod.AddBodyStatements(Generate.ImplicitlyTypedVariableDeclaration("instance", creationExpression));
                     isFirst = false;
                 }
                 else
                 {
-                    generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(Strings.CanConstructMultiConstructorGenerationStrategy_Create_instance), creationExpression)));
+                    generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("instance"), creationExpression)));
                 }
 
-                generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName(Strings.CanConstructMultiConstructorGenerationStrategy_Create_instance)));
+                generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));
             }
 
             yield return generatedMethod;

@@ -57,28 +57,15 @@
             foreach (var parameter in method.Parameters)
             {
                 var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
-                var typeSyntax = AssignmentValueHelper.GetTypeOrImplicitType(parameter.TypeInfo.Type, _frameworkSet);
 
-                generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(
-                    SyntaxFactory.VariableDeclaration(typeSyntax)
-                                 .WithVariables(SyntaxFactory.SingletonSeparatedList(
-                                                   SyntaxFactory.VariableDeclarator(parameter.Identifier)
-                                                                .WithInitializer(SyntaxFactory.EqualsValueClause(defaultAssignmentValue))))));
+                generatedMethod = generatedMethod.AddBodyStatements(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
 
                 paramExpressions.Add(SyntaxFactory.IdentifierName(parameter.Name));
             }
 
             var methodCall = method.Invoke(model, false, _frameworkSet, paramExpressions.ToArray());
 
-            var bodyStatement = SyntaxFactory.LocalDeclarationStatement(
-                SyntaxFactory.VariableDeclaration(
-                        SyntaxFactory.IdentifierName(Strings.Create_var))
-                    .WithVariables(
-                        SyntaxFactory.SingletonSeparatedList(
-                            SyntaxFactory.VariableDeclarator(
-                                    SyntaxFactory.Identifier(Strings.CanCallMethodGenerationStrategy_Create_result))
-                                .WithInitializer(
-                                    SyntaxFactory.EqualsValueClause(methodCall)))));
+            var bodyStatement = Generate.ImplicitlyTypedVariableDeclaration("result", methodCall);
 
             generatedMethod = generatedMethod.AddBodyStatements(bodyStatement);
 

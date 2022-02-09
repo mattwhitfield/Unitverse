@@ -63,17 +63,13 @@
             {
                 if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.OutKeyword))
                 {
-                    paramExpressions.Add(SyntaxFactory.Argument(SyntaxFactory.DeclarationExpression(SyntaxFactory.IdentifierName(Strings.Create_var), SyntaxFactory.SingleVariableDesignation(parameter.Identifier))).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
+                    paramExpressions.Add(SyntaxFactory.Argument(SyntaxFactory.DeclarationExpression(SyntaxFactory.IdentifierName("var"), SyntaxFactory.SingleVariableDesignation(parameter.Identifier))).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
                 }
                 else
                 {
                     var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
 
-                    generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.LocalDeclarationStatement(
-                        SyntaxFactory.VariableDeclaration(AssignmentValueHelper.GetTypeOrImplicitType(parameter.TypeInfo.Type, _frameworkSet))
-                                     .WithVariables(SyntaxFactory.SingletonSeparatedList(
-                                                       SyntaxFactory.VariableDeclarator(parameter.Identifier)
-                                                                    .WithInitializer(SyntaxFactory.EqualsValueClause(defaultAssignmentValue))))));
+                    generatedMethod = generatedMethod.AddBodyStatements(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
 
                     if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
                     {
@@ -108,15 +104,7 @@
 
             if (requiresInstance)
             {
-                bodyStatement = SyntaxFactory.LocalDeclarationStatement(
-                    SyntaxFactory.VariableDeclaration(
-                            SyntaxFactory.IdentifierName(Strings.Create_var))
-                        .WithVariables(
-                            SyntaxFactory.SingletonSeparatedList(
-                                SyntaxFactory.VariableDeclarator(
-                                        SyntaxFactory.Identifier(Strings.CanCallMethodGenerationStrategy_Create_result))
-                                    .WithInitializer(
-                                        SyntaxFactory.EqualsValueClause(methodCall)))));
+                bodyStatement = Generate.ImplicitlyTypedVariableDeclaration("result", methodCall);
             }
             else
             {

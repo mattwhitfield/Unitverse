@@ -85,7 +85,7 @@
         {
             if (value == null)
             {
-                throw new ArgumentNullException(Strings.MsTestTestFramework_CreateTestCaseMethod_value);
+                throw new ArgumentNullException(nameof(value));
             }
 
             if (type == null)
@@ -99,7 +99,7 @@
                         SyntaxKind.SimpleMemberAccessExpression,
                         SyntaxFactory.IdentifierName("Is"),
                         SyntaxFactory.GenericName(
-                                SyntaxFactory.Identifier(Strings.NUnitTestFramework_AssertIsInstanceOf_InstanceOf))
+                                SyntaxFactory.Identifier("InstanceOf"))
                             .WithTypeArgumentList(
                                 SyntaxFactory.TypeArgumentList(
                                     SyntaxFactory.SingletonSeparatedList(type))))))));
@@ -130,7 +130,7 @@
         {
             if (value == null)
             {
-                throw new ArgumentNullException(Strings.MsTestTestFramework_CreateTestCaseMethod_value);
+                throw new ArgumentNullException(nameof(value));
             }
 
             return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(AssertThat)
@@ -193,7 +193,7 @@
 
             var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic);
 
-            method = method.AddParameterListParameters(Generate.Parameter(Strings.MsTestTestFramework_CreateTestCaseMethod_value).WithType(valueType));
+            method = method.AddParameterListParameters(Generate.Parameter("value").WithType(valueType));
 
             foreach (var testValue in testValues)
             {
@@ -222,7 +222,7 @@
 
         public virtual IEnumerable<UsingDirectiveSyntax> GetUsings()
         {
-            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(Strings.NUnitTestFramework_GetUsings_NUnit_Framework));
+            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("NUnit.Framework"));
         }
 
         private static StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string throws)
