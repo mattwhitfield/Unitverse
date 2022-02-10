@@ -10,6 +10,12 @@
 
         string CannotConstructWithInvalidNamingPattern { get; }
 
+        string CanInitializeNamingPattern { get; }
+
+        string CannotInitializeWithNullNamingPattern { get; }
+
+        string CannotInitializeWithInvalidNamingPattern { get; }
+
         string CanGetNamingPattern { get; }
 
         string CanSetAndGetNamingPattern { get; }

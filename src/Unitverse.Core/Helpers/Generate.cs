@@ -357,39 +357,56 @@
                 }
 
                 var fieldName = model.GetConstructorParameterFieldName(parameterModel, frameworkSet.NamingProvider);
-                var typeSyntax = parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context);
+                var typeInfo = parameterModel.TypeInfo;
 
-                if (parameterModel.TypeInfo.Type.TypeKind == TypeKind.Interface)
+                AddConstructorField(model, frameworkSet, ref classDeclaration, ref setupMethod, fieldName, typeInfo);
+            }
+
+            if (!model.Constructors.Any())
+            {
+                foreach (var propertyModel in model.Properties.Where(x => x.HasInit))
                 {
-                    typeSyntax = frameworkSet.MockingFramework.GetFieldType(typeSyntax);
+                    var fieldName = model.GetConstructorParameterFieldName(propertyModel, frameworkSet.NamingProvider);
+                    var typeInfo = propertyModel.TypeInfo;
+
+                    AddConstructorField(model, frameworkSet, ref classDeclaration, ref setupMethod, fieldName, typeInfo);
                 }
-
-                var variable = SyntaxFactory.VariableDeclaration(typeSyntax)
-                                        .AddVariables(SyntaxFactory.VariableDeclarator(fieldName));
-                var field = SyntaxFactory.FieldDeclaration(variable)
-                    .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
-
-                classDeclaration = classDeclaration.AddMembers(field);
-
-                ExpressionSyntax defaultExpression;
-                if (parameterModel.TypeInfo.Type.TypeKind == TypeKind.Interface)
-                {
-                    frameworkSet.Context.InterfacesMocked++;
-                    defaultExpression = frameworkSet.MockingFramework.GetFieldInitializer(parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context));
-                }
-                else
-                {
-                    defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameterModel.TypeInfo, model.SemanticModel, frameworkSet);
-                }
-
-                setupMethod = setupMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(
-                    SyntaxFactory.AssignmentExpression(
-                        SyntaxKind.SimpleAssignmentExpression,
-                        SyntaxFactory.IdentifierName(fieldName),
-                        defaultExpression)));
             }
 
             return setupMethod;
+        }
+
+        private static void AddConstructorField(ClassModel model, IFrameworkSet frameworkSet, ref ClassDeclarationSyntax classDeclaration, ref BaseMethodDeclarationSyntax setupMethod, string fieldName, TypeInfo typeInfo)
+        {
+            var typeSyntax = typeInfo.ToTypeSyntax(frameworkSet.Context);
+            if (typeInfo.Type.TypeKind == TypeKind.Interface)
+            {
+                typeSyntax = frameworkSet.MockingFramework.GetFieldType(typeSyntax);
+            }
+
+            var variable = SyntaxFactory.VariableDeclaration(typeSyntax)
+                                    .AddVariables(SyntaxFactory.VariableDeclarator(fieldName));
+            var field = SyntaxFactory.FieldDeclaration(variable)
+                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+
+            classDeclaration = classDeclaration.AddMembers(field);
+
+            ExpressionSyntax defaultExpression;
+            if (typeInfo.Type.TypeKind == TypeKind.Interface)
+            {
+                frameworkSet.Context.InterfacesMocked++;
+                defaultExpression = frameworkSet.MockingFramework.GetFieldInitializer(typeInfo.ToTypeSyntax(frameworkSet.Context));
+            }
+            else
+            {
+                defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(typeInfo, model.SemanticModel, frameworkSet);
+            }
+
+            setupMethod = setupMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(
+                SyntaxFactory.AssignmentExpression(
+                    SyntaxKind.SimpleAssignmentExpression,
+                    SyntaxFactory.IdentifierName(fieldName),
+                    defaultExpression)));
         }
 
         public static LocalDeclarationStatementSyntax VariableDeclaration(ITypeSymbol type, IFrameworkSet frameworkSet, string name, ExpressionSyntax defaultValue)

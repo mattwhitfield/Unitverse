@@ -1,0 +1,31 @@
+using System;
+using System.Collections.Generic;
+
+namespace TestNamespace 
+{
+    record Person
+    {
+        private readonly string _firstName;
+        private readonly string _lastName;
+    
+        public Guid Id { get; init; }
+    
+        public string FirstName
+        {
+            get => _firstName;
+            init => _firstName = (value ?? throw new ArgumentNullException(nameof(value)));
+        }
+    
+        public string? MiddleName { get; init; }
+    
+        public string LastName
+        {
+            get => _lastName;
+            init => _lastName = (value ?? throw new ArgumentNullException(nameof(value)));
+        }
+
+        public IList<string> IceCreamFlavours { get; init; }
+
+        public IList<string>? Movies { get; init; }
+    }
+}

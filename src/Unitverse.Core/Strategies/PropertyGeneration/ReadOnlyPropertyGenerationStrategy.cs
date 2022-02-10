@@ -37,6 +37,12 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
+            // if this is a record type without a primary constructor and this property has an init accessor
+            if (property.HasInit && !model.Constructors.Any() && !model.IsStatic)
+            {
+                return false;
+            }
+
             // readonly property without a constructor initializer parameter
             return property.HasGet && !property.HasSet && !model.Constructors.Any(x => x.Parameters.Any(p => string.Equals(p.Name, property.Name, StringComparison.OrdinalIgnoreCase)));
         }

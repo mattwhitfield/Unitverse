@@ -1,4 +1,4 @@
-﻿## FrameworksMsTestMoq
+﻿## Frameworks - MSTest & Moq
 Demonstrates how tests are generated using MsTest for the test framework and Moq for the mocking framework
 
 ### Source Type(s)

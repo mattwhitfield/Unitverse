@@ -1,3 +1,4 @@
+// ! Static Classes
 // $ Demonstrates how Unitverse generates tests when the source class is static
 
 namespace Unitverse.Examples

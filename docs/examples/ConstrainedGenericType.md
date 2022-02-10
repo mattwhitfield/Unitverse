@@ -1,4 +1,4 @@
-﻿## ConstrainedGenericType
+﻿## Constrained Generic Types
 Demonstrates how appropriate types are selected for the generation of tests for generic types with type constraints
 
 ### Source Type(s)

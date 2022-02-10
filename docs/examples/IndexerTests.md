@@ -1,4 +1,4 @@
-﻿## IndexerTests
+﻿## Indexers
 Demonstrates the tests generated for a type that contains an indexer
 
 ### Source Type(s)

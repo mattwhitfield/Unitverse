@@ -1,4 +1,4 @@
-﻿## NullableReferenceTypes
+﻿## Nullable Reference Types
 Shows how Unitverse will omit `null` tests for parameters declared to explicitly accept null
 
 ### Source Type(s)

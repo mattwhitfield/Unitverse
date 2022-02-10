@@ -1,4 +1,4 @@
-﻿## SimplePoco
+﻿## Simple POCO
 Demonstrates how tests are generated for a simple POCO type
 
 ### Source Type(s)

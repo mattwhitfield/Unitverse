@@ -1,4 +1,4 @@
-﻿## DelegateGeneration
+﻿## Delegate Generation
 Demonstrates how Unitverse generates default values for method parameters when the parameter is a delegate type
 
 ### Source Type(s)

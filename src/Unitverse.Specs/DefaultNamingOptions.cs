@@ -10,6 +10,12 @@
 
         public string CannotConstructWithInvalidNamingPattern { get; set; } = "CannotConstructWithInvalid{parameterName}";
 
+        public string CanInitializeNamingPattern { get; set; } = "CanInitialize";
+
+        public string CannotInitializeWithNullNamingPattern { get; set; } = "CannotInitializeWithNull{memberName}";
+
+        public string CannotInitializeWithInvalidNamingPattern { get; set; } = "CannotInitializeWithInvalid{memberName}";
+
         public string CanGetNamingPattern { get; set; } = "CanGet{memberName}";
 
         public string CanSetAndGetNamingPattern { get; set; } = "CanSetAndGet{memberName}";

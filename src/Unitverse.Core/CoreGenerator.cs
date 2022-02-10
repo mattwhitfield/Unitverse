@@ -12,7 +12,6 @@
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
-    using Unitverse.Core.Resources;
     using Unitverse.Core.Strategies;
     using Unitverse.Core.Strategies.ClassDecoration;
     using Unitverse.Core.Strategies.ClassGeneration;
@@ -233,10 +232,7 @@
         {
             targetType = new ClassDecorationStrategyFactory(generationContext.FrameworkSet).Apply(targetType, generationContext.Model);
 
-            if (!generationContext.Model.IsSingleItem || generationContext.Model.Constructors.Any())
-            {
-                targetType = AddGeneratedItems(generationContext, targetType, new ClassLevelGenerationStrategyFactory(generationContext.FrameworkSet), x => new[] { x }, x => x.Constructors.Any(c => c.ShouldGenerate), (c, x) => c);
-            }
+            targetType = AddGeneratedItems(generationContext, targetType, new ClassLevelGenerationStrategyFactory(generationContext.FrameworkSet), x => new[] { x }, x => x.Constructors.Any(c => c.ShouldGenerate) || (!x.Constructors.Any() && x.Properties.Any(p => p.HasInit)), (c, x) => c);
 
             if (generationContext.Model.Interfaces.Count > 0)
             {

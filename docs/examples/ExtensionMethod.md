@@ -1,4 +1,4 @@
-﻿## ExtensionMethod
+﻿## Extension Methods
 Demonstrates how Unitverse generates tests for extension methods
 
 ### Source Type(s)

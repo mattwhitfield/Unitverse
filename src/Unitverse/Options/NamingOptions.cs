@@ -22,6 +22,21 @@ namespace Unitverse.Options
         [Description("Naming format for the constructor test that checks string null or white space guards")]
         public string CannotConstructWithInvalidNamingPattern { get; set; } = "CannotConstructWithInvalid{parameterName}";
 
+        [Category("Initializers")]
+        [DisplayName("CanInitialize")]
+        [Description("Naming format for the main initializer test")]
+        public string CanInitializeNamingPattern { get; set; } = "CanInitialize";
+
+        [Category("Initializers")]
+        [DisplayName("CannotInitializeWithNull")]
+        [Description("Naming format for the initializer test that checks null guards")]
+        public string CannotInitializeWithNullNamingPattern { get; set; } = "CannotInitializeWithNull{memberName}";
+
+        [Category("Initializers")]
+        [DisplayName("CannotInitializeWithInvalid")]
+        [Description("Naming format for the initializer test that checks string null or white space guards")]
+        public string CannotInitializeWithInvalidNamingPattern { get; set; } = "CannotInitializeWithInvalid{memberName}";
+
         [Category("Properties && Indexers")]
         [DisplayName("CanGet")]
         [Description("Naming format for read-only property tests")]

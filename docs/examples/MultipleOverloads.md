@@ -1,4 +1,4 @@
-﻿## MultipleOverloads
+﻿## Multiple Overloads
 Shows how unitverse generates unambiguous names for methods that test multiple overloads of the same source method
 
 ### Source Type(s)

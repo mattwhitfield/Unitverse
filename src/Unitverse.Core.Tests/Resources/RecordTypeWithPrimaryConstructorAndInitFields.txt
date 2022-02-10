@@ -1,0 +1,24 @@
+using System;
+
+namespace TestNamespace 
+{
+    record Person(string FirstName, int IntProperty)
+    {
+        private readonly string _firstName;
+        private readonly string _lastName;
+    
+        public Guid Id { get; init; }
+    
+        public string FirstName
+        {
+            get => _firstName;
+            init => _firstName = (value ?? throw new ArgumentNullException(nameof(value)));
+        }
+    
+        public string LastName
+        {
+            get => _lastName;
+            init => _lastName = (value ?? throw new ArgumentNullException(nameof(value)));
+        }
+    }
+}

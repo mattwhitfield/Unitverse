@@ -1,0 +1,4 @@
+namespace TestNamespace 
+{
+	public record RecordType(string StringProperty, int IntProperty);
+}

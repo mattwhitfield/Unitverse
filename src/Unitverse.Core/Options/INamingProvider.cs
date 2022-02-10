@@ -10,6 +10,12 @@
 
         NameResolver CannotConstructWithInvalid { get; }
 
+        NameResolver CanInitialize { get; }
+
+        NameResolver CannotInitializeWithNull { get; }
+
+        NameResolver CannotInitializeWithInvalid { get; }
+
         NameResolver CanGet { get; }
 
         NameResolver CanSetAndGet { get; }

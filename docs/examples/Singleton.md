@@ -1,4 +1,4 @@
-﻿## Singleton
+﻿## Singletons
 Demonstrates how Unitverse attempts to use a static property to get a type instance when the constructor is private
 
 ### Source Type(s)

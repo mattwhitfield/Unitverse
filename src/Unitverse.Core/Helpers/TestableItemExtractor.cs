@@ -31,6 +31,7 @@
             var typeList = new List<TypeDeclarationSyntax>();
             typeList.AddRange(root.DescendantNodes().OfType<ClassDeclarationSyntax>().Where(x => !x.Ancestors().OfType<TypeDeclarationSyntax>().Any()));
             typeList.AddRange(root.DescendantNodes().OfType<StructDeclarationSyntax>().Where(x => !x.Ancestors().OfType<TypeDeclarationSyntax>().Any()));
+            typeList.AddRange(root.DescendantNodes().OfType<RecordDeclarationSyntax>().Where(x => !x.Ancestors().OfType<TypeDeclarationSyntax>().Any()));
             return typeList;
         }
 
@@ -95,6 +96,49 @@
             AddModels<MethodDeclarationSyntax, IMethodModel>(syntax, x => x.Modifiers, ExtractMethodModel, allowedModifiers, model.Methods);
             AddModels<PropertyDeclarationSyntax, IPropertyModel>(syntax, x => x.Modifiers, ExtractPropertyModel, allowedModifiers, model.Properties);
             AddModels<IndexerDeclarationSyntax, IIndexerModel>(syntax, x => x.Modifiers, ExtractIndexerModel, allowedModifiers, model.Indexers);
+
+            if (syntax is RecordDeclarationSyntax record)
+            {
+                if (record.ParameterList != null)
+                {
+                    var dummyContext = new GenerationContext();
+                    foreach (var recordContstructor in model.TypeSymbol.Constructors.Where(x => x.IsImplicitlyDeclared && !model.Constructors.Any(c => c == x)))
+                    {
+                        var constructor = SyntaxFactory.ConstructorDeclaration(model.ClassName);
+                        List<ParameterModel> parameters;
+
+                        if (record.ParameterList != null)
+                        {
+                            constructor = constructor.WithParameterList(record.ParameterList);
+                            parameters = ExtractParameters(record.ParameterList.Parameters);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        model.Constructors.Add(new ConstructorModel(model.ClassName, parameters, constructor));
+
+                        var allProperties = model.TypeSymbol.GetMembers().OfType<IPropertySymbol>();
+
+                        foreach (var parameter in parameters)
+                        {
+                            if (model.Properties.Any(x => x.Name == parameter.Name))
+                            {
+                                continue;
+                            }
+
+                            var propertyName = parameter.Name;
+
+                            var property = SyntaxFactory.PropertyDeclaration(parameter.TypeInfo.ToTypeSyntax(dummyContext), SyntaxFactory.Identifier(propertyName))
+                                                        .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
+                                                        .WithAccessorList(SyntaxFactory.AccessorList(SyntaxFactory.SingletonList(SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration))));
+
+                            model.Properties.Add(new PropertyModel(propertyName, property, parameter.TypeInfo, SemanticModel, allProperties.FirstOrDefault(x => x.Name == propertyName)));
+                        }
+                    }
+                }
+            }
 
             foreach (var methodModel in syntax.ChildNodes().OfType<MethodDeclarationSyntax>().Where(x => x.ExplicitInterfaceSpecifier != null).Select(ExtractMethodModel))
             {
@@ -186,7 +230,7 @@
 
             var typeInfo = SemanticModel.GetTypeInfo(property.Type);
 
-            return new PropertyModel(propertyName, property, typeInfo, SemanticModel);
+            return new PropertyModel(propertyName, property, typeInfo, SemanticModel, null);
         }
     }
 }

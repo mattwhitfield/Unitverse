@@ -36,6 +36,11 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
+            if (model.Declaration is RecordDeclarationSyntax)
+            {
+                return false;
+            }
+
             return model.Constructors.SelectMany(x => x.Parameters).Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String) && !model.IsStatic;
         }
 
@@ -59,7 +64,7 @@
 
                 if (isNonNullable)
                 {
-                    // all params are non-nullable, so skip
+                    // all params are explicitly nullable, so skip
                     continue;
                 }
 

@@ -42,29 +42,30 @@ namespace Unitverse.ExampleGenerator
                 currentPath = currentPath.Parent.GetDirectories().First(x => string.Equals(x.Name, "docs", StringComparison.OrdinalIgnoreCase));
 
                 var set = Examples.ResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
-                var entryKeys = new List<Tuple<string, string>>();
+                var entryKeys = new List<Tuple<string, string, string>>();
                 foreach (DictionaryEntry entry in set)
                 {
                     var exampleName = entry.Key.ToString();
                     var classAsText = Examples.ResourceManager.GetString(exampleName, Examples.Culture);
                     var description = GetDescription(classAsText);
+                    var title = GetName(classAsText, exampleName);
 
-                    await WriteExample(currentPath, exampleName, description, classAsText);
+                    await WriteExample(currentPath, exampleName, description, classAsText, title);
 
-                    entryKeys.Add(Tuple.Create(entry.Key.ToString(), description));
+                    entryKeys.Add(Tuple.Create(entry.Key.ToString(), title, description));
                 }
 
                 var file = new FileInfo(Path.Combine(currentPath.FullName, "examples", "index.md"));
                 using (var writer = new StreamWriter(file.FullName, false, Encoding.UTF8))
                 {
-                    writer.WriteLine("# Examples");
+                    writer.WriteLine("# Examples Overview");
                     writer.WriteLine("This section contains examples of the output that Unitverse outputs, refreshed every build. Each example aims to demonstrate a particular scenario which is described in the following table.");
                     writer.WriteLine();
                     writer.WriteLine("| Example | Description |");
                     writer.WriteLine("| --- | --- |");
-                    foreach (var pair in entryKeys.OrderBy(x => x.Item1))
+                    foreach (var pair in entryKeys.OrderBy(x => x.Item2))
                     {
-                        writer.WriteLine("| [" + pair.Item1 + "](examples/" + pair.Item1 + ".md) | " + pair.Item2 + " |");
+                        writer.WriteLine("| [" + pair.Item2 + "](" + pair.Item1 + ".md) | " + pair.Item3 + " |");
                     }
                 }
 
@@ -89,7 +90,18 @@ namespace Unitverse.ExampleGenerator
             return description.Substring("// $".Length).Trim();
         }
 
-        static async Task WriteExample(DirectoryInfo docsFolder, string exampleName, string description, string classAsText)
+        private static string GetName(string classAsText, string defaultName)
+        {
+            var description = classAsText.Lines().FirstOrDefault(x => x.StartsWith("// !"));
+            if (description == null)
+            {
+                return defaultName;
+            }
+
+            return description.Substring("// !".Length).Trim();
+        }
+
+        static async Task WriteExample(DirectoryInfo docsFolder, string exampleName, string description, string classAsText, string title)
         {
             var generationOptions = new MutableGenerationOptions(new DefaultGenerationOptions());
             var namingOptions = new MutableNamingOptions(new DefaultNamingOptions());
@@ -162,7 +174,7 @@ namespace Unitverse.ExampleGenerator
             var file = new FileInfo(Path.Combine(docsFolder.FullName, "examples", exampleName + ".md"));
             using (var writer = new StreamWriter(file.FullName, false, Encoding.UTF8))
             {
-                writer.WriteLine("## " + exampleName);
+                writer.WriteLine("## " + title);
                 writer.WriteLine(description);
                 writer.WriteLine();
                 writer.WriteLine("### Source Type(s)");

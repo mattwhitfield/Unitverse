@@ -110,11 +110,31 @@
             Indexers.Each(x => x.SetShouldGenerateForSingleItem(syntaxNode));
         }
 
-        public string GetConstructorParameterFieldName(ParameterModel parameter, INamingProvider namingProvider)
+        public string GetConstructorParameterFieldName(ParameterModel model, INamingProvider namingProvider)
         {
-            if (parameter == null)
+            if (model is null)
             {
-                throw new ArgumentNullException(nameof(parameter));
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            return GetConstructorParameterFieldName(model.Name, model.TypeInfo, namingProvider);
+        }
+
+        public string GetConstructorParameterFieldName(IPropertyModel model, INamingProvider namingProvider)
+        {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            return GetConstructorParameterFieldName(model.Name, model.TypeInfo, namingProvider);
+        }
+
+        private string GetConstructorParameterFieldName(string parameterName, TypeInfo typeInfo, INamingProvider namingProvider)
+        {
+            if (string.IsNullOrWhiteSpace(parameterName))
+            {
+                throw new ArgumentNullException(nameof(parameterName));
             }
 
             if (namingProvider is null)
@@ -122,16 +142,16 @@
                 throw new ArgumentNullException(nameof(namingProvider));
             }
 
-            var namingContext = new NamingContext(ClassName).WithParameterName(parameter.Name);
+            var namingContext = new NamingContext(ClassName).WithParameterName(parameterName);
 
             var baseFieldName = namingProvider.DependencyFieldName.Resolve(namingContext);
 
-            if (Constructors.SelectMany(x => x.Parameters).Where(x => string.Equals(x.Name, parameter.Name, StringComparison.OrdinalIgnoreCase)).Select(x => x.Type).Distinct().Count() < 2)
+            if (Constructors.SelectMany(x => x.Parameters).Where(x => string.Equals(x.Name, parameterName, StringComparison.OrdinalIgnoreCase)).Select(x => x.Type).Distinct().Count() < 2)
             {
                 return baseFieldName;
             }
 
-            return baseFieldName + parameter.TypeInfo.Type.Name;
+            return baseFieldName + typeInfo.Type.Name;
         }
 
         public string GetIndexerName(IIndexerModel indexer)
@@ -149,10 +169,20 @@
             return "IndexerFor" + indexer.Parameters.Select(x => x.TypeInfo.Type.GetLastNamePart().ToPascalCase()).Aggregate((x, y) => x + "And" + y);
         }
 
+        public ExpressionSyntax GetConstructorFieldReference(IPropertyModel model, IFrameworkSet frameworkSet)
+        {
+            return GetConstructorFieldReference(model.Name, model.TypeInfo, frameworkSet);
+        }
+
         public ExpressionSyntax GetConstructorFieldReference(ParameterModel model, IFrameworkSet frameworkSet)
         {
-            var identifierName = SyntaxFactory.IdentifierName(GetConstructorParameterFieldName(model, frameworkSet.NamingProvider));
-            if (model.TypeInfo.Type.TypeKind == TypeKind.Interface)
+            return GetConstructorFieldReference(model.Name, model.TypeInfo, frameworkSet);
+        }
+
+        private ExpressionSyntax GetConstructorFieldReference(string name, TypeInfo typeInfo, IFrameworkSet frameworkSet)
+        {
+            var identifierName = SyntaxFactory.IdentifierName(GetConstructorParameterFieldName(name, typeInfo, frameworkSet.NamingProvider));
+            if (typeInfo.Type.TypeKind == TypeKind.Interface)
             {
                 return frameworkSet.MockingFramework.GetFieldReference(identifierName);
             }
@@ -174,6 +204,15 @@
             if (targetConstructor != null && targetConstructor.Parameters.Count > 0)
             {
                 return objectCreation.WithArgumentList(Generate.Arguments(targetConstructor.Parameters.Select(x => GetConstructorFieldReference(x, frameworkSet))));
+            }
+
+            if (targetConstructor == null && Properties.Any(x => x.HasInit))
+            {
+                var initializableProperties = Properties.Where(x => x.HasInit).ToList();
+                if (initializableProperties.Any())
+                {
+                    return Generate.ObjectCreation(TypeSyntax, initializableProperties.Select(x => Generate.Assignment(x.Name, GetConstructorFieldReference(x, frameworkSet))));
+                }
             }
 
             if (targetConstructor != null || !Declaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Any())

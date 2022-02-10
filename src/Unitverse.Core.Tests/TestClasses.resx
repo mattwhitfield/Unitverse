@@ -250,6 +250,15 @@
   <data name="ProtectedClassNoInternalProtected" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ProtectedClassNoInternalProtected.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="RecordType" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RecordType.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="RecordTypeWithoutPrimaryConstructor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RecordTypeWithoutPrimaryConstructor.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="RecordTypeWithPrimaryConstructorAndInitFields" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RecordTypeWithPrimaryConstructorAndInitFields.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="RefAndOutParameters" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\RefAndOutParameters.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
