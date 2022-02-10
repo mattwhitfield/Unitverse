@@ -61,7 +61,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how Unitverse generates tests when the source class is abstract or contains protected methods, as well as how inheritance chains are accounted for
+        ///   Looks up a localized string similar to // ! Abstract Classes
+        ///// $ Demonstrates how Unitverse generates tests when the source class is abstract or contains protected methods, as well as how inheritance chains are accounted for
         ///
         ///using System.IO;
         ///using System.Windows;
@@ -76,9 +77,7 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///        protected virtual int ProtectedMethod() =&gt; 1;
         ///
-        ///        public virtual int SomeMethod(int i) =&gt; 1;
-        ///
-        ///        public  [rest of string was truncated]&quot;;.
+        ///        public virtual int SomeMethod(int i) = [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AbstractClass {
             get {
@@ -87,7 +86,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how tests are generated for async methods, as well as showing how the assertion framework is driven differently for async methods
+        ///   Looks up a localized string similar to // ! Async Methods
+        ///// $ Demonstrates how tests are generated for async methods, as well as showing how the assertion framework is driven differently for async methods
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -99,7 +99,7 @@ namespace Unitverse.ExampleGenerator {
         ///            return System.Threading.Tasks.Task.CompletedTask;
         ///        }
         ///
-        ///        public System.Threading.Tasks.Task&lt;int&gt; Thi [rest of string was truncated]&quot;;.
+        ///        public System.Threading [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AsyncMethod {
             get {
@@ -108,7 +108,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how dependencies injected into constructors are tracked, and mock configuration calls emitted for any detected dependencies
+        ///   Looks up a localized string similar to // ! Automatic Mock Generation
+        ///// $ Demonstrates how dependencies injected into constructors are tracked, and mock configuration calls emitted for any detected dependencies
         ///
         ///using System.Threading.Tasks;
         ///
@@ -127,9 +128,7 @@ namespace Unitverse.ExampleGenerator {
         ///        Task&lt;string&gt; AsyncMethod(); 
         ///    }
         ///
-        ///    public interface IDummyService2
-        ///    {
-        ///        string SomeProp [rest of string was truncated]&quot;;.
+        ///    public interface IDummyService2 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AutomaticMockGeneration {
             get {
@@ -138,7 +137,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how appropriate types are selected for the generation of tests for generic types with type constraints
+        ///   Looks up a localized string similar to // ! Constrained Generic Types
+        ///// $ Demonstrates how appropriate types are selected for the generation of tests for generic types with type constraints
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -158,8 +158,7 @@ namespace Unitverse.ExampleGenerator {
         ///    }
         ///
         ///    public class TestBoth : ITest, ITest2
-        ///    {
-        ///        public int ThisIsAP [rest of string was truncated]&quot;;.
+        ///   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ConstrainedGenericType {
             get {
@@ -168,7 +167,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how Unitverse generates default values for method parameters when the parameter is a delegate type
+        ///   Looks up a localized string similar to // ! Delegate Generation
+        ///// $ Demonstrates how Unitverse generates default values for method parameters when the parameter is a delegate type
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -190,7 +190,7 @@ namespace Unitverse.ExampleGenerator {
         ///        {
         ///        }
         ///
-        ///        public static void ThisIsAMethod2(Func&lt;stri [rest of string was truncated]&quot;;.
+        ///        public static voi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DelegateGeneration {
             get {
@@ -199,7 +199,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how Unitverse generates tests for extension methods
+        ///   Looks up a localized string similar to // ! Extension Methods
+        ///// $ Demonstrates how Unitverse generates tests for extension methods
         ///
         ///using System;
         ///using System.Drawing;
@@ -219,7 +220,7 @@ namespace Unitverse.ExampleGenerator {
         ///            return source;
         ///        }
         ///
-        ///        public static T ToOther&lt;T&gt;(this List&lt;T [rest of string was truncated]&quot;;.
+        ///        public static  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ExtensionMethod {
             get {
@@ -228,7 +229,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework. Also shows using FluentAssertions for the assertion framework.
+        ///   Looks up a localized string similar to // ! Frameworks - Fluent Assertions
+        ///// $ Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework. Also shows using FluentAssertions for the assertion framework.
         ///// # FrameworkType=XUnit
         ///// # MockingFrameworkType=NSubstitute
         ///// # UseFluentAssertions=true
@@ -243,9 +245,7 @@ namespace Unitverse.ExampleGenerator {
         ///    public class TestClass
         ///    {
         ///        public TestClass(IDependency dependency)
-        ///        { }
-        ///
-        ///        public void Som [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksFluentAssertions {
             get {
@@ -254,7 +254,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how tests are generated using MsTest for the test framework and Moq for the mocking framework
+        ///   Looks up a localized string similar to // ! Frameworks - MSTest &amp; Moq
+        ///// $ Demonstrates how tests are generated using MsTest for the test framework and Moq for the mocking framework
         ///// # FrameworkType=MSTest
         ///// # MockingFrameworkType=Moq
         ///// # UseFluentAssertions=false
@@ -272,8 +273,7 @@ namespace Unitverse.ExampleGenerator {
         ///        { }
         ///
         ///        public void SomeMethod(string methodName, int methodValue)
-        ///        {
-        ///            System.Co [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksMsTestMoq {
             get {
@@ -282,7 +282,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how tests are generated using NUnit 3 for the test framework and FakeItEasy for the mocking framework
+        ///   Looks up a localized string similar to // ! Frameworks - NUnit 3 &amp; FakeItEasy
+        ///// $ Demonstrates how tests are generated using NUnit 3 for the test framework and FakeItEasy for the mocking framework
         ///// # FrameworkType=NUnit3
         ///// # MockingFrameworkType=FakeItEasy
         ///// # UseFluentAssertions=false
@@ -299,9 +300,7 @@ namespace Unitverse.ExampleGenerator {
         ///        public TestClass(IDependency dependency)
         ///        { }
         ///
-        ///        public void SomeMethod(string methodName, int methodValue)
-        ///        {
-        ///       [rest of string was truncated]&quot;;.
+        ///        public void SomeMethod(string methodN [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksNUnitFakeItEasy {
             get {
@@ -310,7 +309,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework
+        ///   Looks up a localized string similar to // ! Frameworks - XUnit &amp; NSubstitute
+        ///// $ Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework
         ///// # FrameworkType=XUnit
         ///// # MockingFrameworkType=NSubstitute
         ///// # UseFluentAssertions=false
@@ -327,9 +327,7 @@ namespace Unitverse.ExampleGenerator {
         ///        public TestClass(IDependency dependency)
         ///        { }
         ///
-        ///        public void SomeMethod(string methodName, int methodValue)
-        ///        {
-        ///        [rest of string was truncated]&quot;;.
+        ///        public void SomeMethod(string methodNam [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksXUnitNSubstitute {
             get {
@@ -338,7 +336,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how Unitverse generates tests for generic methods
+        ///   Looks up a localized string similar to // ! Generic Methods
+        ///// $ Demonstrates how Unitverse generates tests for generic methods
         ///
         ///using System;
         ///
@@ -360,7 +359,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates the tests generated for a type that implements IComparable
+        ///   Looks up a localized string similar to // ! IComparable
+        ///// $ Demonstrates the tests generated for a type that implements IComparable
         ///
         ///using System;
         ///
@@ -378,8 +378,7 @@ namespace Unitverse.ExampleGenerator {
         ///        public int CompareTo(TestComparableGeneric obj)
         ///        {
         ///            if (obj == null)
-        ///            {
-        ///                 [rest of string was truncated]&quot;;.
+        ///            { [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string IComparableTests {
             get {
@@ -388,7 +387,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates the tests generated for a type that contains an indexer
+        ///   Looks up a localized string similar to // ! Indexers
+        ///// $ Demonstrates the tests generated for a type that contains an indexer
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -414,7 +414,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Shows how unitverse generates a test to verify mappings between input parameter type and return type where the types share property names
+        ///   Looks up a localized string similar to // ! Mapping Methods
+        ///// $ Shows how unitverse generates a test to verify mappings between input parameter type and return type where the types share property names
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -428,7 +429,7 @@ namespace Unitverse.ExampleGenerator {
         ///    public class OutputClass
         ///    {
         ///        public string SomeProperty { get; set; }
-        ///        public string SomeOtherProperty { get; [rest of string was truncated]&quot;;.
+        ///        public string So [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MappingMethod {
             get {
@@ -437,7 +438,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Shows how unitverse generates unambiguous names for methods that test multiple overloads of the same source method
+        ///   Looks up a localized string similar to // ! Multiple Overloads
+        ///// $ Shows how unitverse generates unambiguous names for methods that test multiple overloads of the same source method
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -456,8 +458,7 @@ namespace Unitverse.ExampleGenerator {
         ///    public static class FluentFactory
         ///    {
         ///        public static Tuple&lt;Stage, IList&lt;Stage&gt;&gt; Follows(this Stage stage, params Stage[] followedStages)
-        ///        {
-        ///		    return nu [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MultipleOverloads {
             get {
@@ -466,7 +467,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Shows how Unitverse will omit `null` tests for parameters declared to explicitly accept null
+        ///   Looks up a localized string similar to // ! Nullable Reference Types
+        ///// $ Shows how Unitverse will omit `null` tests for parameters declared to explicitly accept null
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -486,7 +488,7 @@ namespace Unitverse.ExampleGenerator {
         ///        {
         ///        }
         /// 
-        ///        public string GetFullName(string first, string? middle, string [rest of string was truncated]&quot;;.
+        ///        public string GetFullName(strin [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string NullableReferenceTypes {
             get {
@@ -495,7 +497,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Shows how Unitverse emits tests for declared unary and binary operators
+        ///   Looks up a localized string similar to // ! Operator Overloading
+        ///// $ Shows how Unitverse emits tests for declared unary and binary operators
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -513,8 +516,7 @@ namespace Unitverse.ExampleGenerator {
         ///        public static Calculator operator + (Calculator Calc1, Calculator Calc2) 
         ///        { 
         ///            Calculator Calc3 = new Calculator(0); 
-        ///            Calc3.number = Calc2.number + Calc1.number; 
-        ///            [rest of string was truncated]&quot;;.
+        ///            Calc3.number = Calc2.number +  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string OperatorOverloading {
             get {
@@ -523,7 +525,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how test values are produced to initialize POCO members when the type is consumed
+        ///   Looks up a localized string similar to // ! POCO Initialization
+        ///// $ Demonstrates how test values are produced to initialize POCO members when the type is consumed
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -545,7 +548,7 @@ namespace Unitverse.ExampleGenerator {
         ///			_poco = poco;
         ///        }
         /// 
-        ///        public SomePoco Poc [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PocoInitialization {
             get {
@@ -554,7 +557,50 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates the tests that Unitverse emits when methods contain `ref` or `out` parameters
+        ///   Looks up a localized string similar to // ! Record Types (init Properties)
+        ///// $ Demonstrates the tests generated for a record type that has properties that have init accessors
+        ///
+        ///using System;
+        ///using System.Collections.Generic;
+        ///
+        ///namespace TestNamespace 
+        ///{
+        ///    record Person
+        ///    {
+        ///        private readonly string _firstName;
+        ///        private readonly string _lastName;
+        ///    
+        ///        public Guid Id { get; init; }
+        ///    
+        ///        public string FirstName
+        ///        {
+        ///            get =&gt; _firstName;
+        ///            init =&gt; _firstName = (value ?? throw [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RecordTypeInitProperties {
+            get {
+                return ResourceManager.GetString("RecordTypeInitProperties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // ! Record Types (Primary Constructor)
+        ///// $ Demonstrates the tests generated for a simple primary constructor record type
+        ///
+        ///namespace TestNamespace 
+        ///{
+        ///	public record RecordType(string StringProperty, int IntProperty);
+        ///}.
+        /// </summary>
+        internal static string RecordTypesPrimaryConstructor {
+            get {
+                return ResourceManager.GetString("RecordTypesPrimaryConstructor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // ! ref &amp; out Parameters
+        ///// $ Demonstrates the tests that Unitverse emits when methods contain `ref` or `out` parameters
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -570,10 +616,7 @@ namespace Unitverse.ExampleGenerator {
         ///            outParam = &quot;&quot;;
         ///        }
         ///
-        ///        public void RefParamMethodClass(string stringProp, ref TestClass refParam)
-        ///        {
-        ///
-        ///      [rest of string was truncated]&quot;;.
+        ///        public void RefParamMethodClass(string stringProp, ref TestClass re [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RefAndOutParameters {
             get {
@@ -582,7 +625,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how tests are generated for a simple POCO type
+        ///   Looks up a localized string similar to // ! Simple POCO
+        ///// $ Demonstrates how tests are generated for a simple POCO type
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -603,7 +647,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how Unitverse attempts to use a static property to get a type instance when the constructor is private
+        ///   Looks up a localized string similar to // ! Singletons
+        ///// $ Demonstrates how Unitverse attempts to use a static property to get a type instance when the constructor is private
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -624,8 +669,7 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///        public bool IsShared =&gt; true;
         ///
-        ///        public string GetTableName(string baseName)
-        ///       [rest of string was truncated]&quot;;.
+        ///        public string GetTableName(string  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Singleton {
             get {
@@ -634,7 +678,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // $ Demonstrates how Unitverse generates tests when the source class is static
+        ///   Looks up a localized string similar to // ! Static Classes
+        ///// $ Demonstrates how Unitverse generates tests when the source class is static
         ///
         ///namespace Unitverse.Examples
         ///{
@@ -652,7 +697,7 @@ namespace Unitverse.ExampleGenerator {
         ///            return &quot;Hello&quot;;
         ///        }
         ///
-        ///        public static int ThisIsAProperty { get; se [rest of string was truncated]&quot;;.
+        ///        public static int This [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string StaticClass {
             get {

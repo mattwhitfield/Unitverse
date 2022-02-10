@@ -22,26 +22,26 @@ namespace Unitverse.Core.Tests.Models
             _name = "TestValue1619496715";
             _node = TestSemanticModelFactory.Property;
             _typeInfo = default(TypeInfo);
-            _testClass = new PropertyModel(_name, _node, _typeInfo, Substitute.For<SemanticModel>());
+            _testClass = new PropertyModel(_name, _node, _typeInfo, Substitute.For<SemanticModel>(), null);
         }
 
         [Test]
         public void CanConstruct()
         {
-            var instance = new PropertyModel(_name, _node, _typeInfo, Substitute.For<SemanticModel>());
+            var instance = new PropertyModel(_name, _node, _typeInfo, Substitute.For<SemanticModel>(), null);
             Assert.That(instance, Is.Not.Null);
         }
 
         [Test]
         public void CannotConstructWithNullNode()
         {
-            Assert.Throws<ArgumentNullException>(() => new PropertyModel("TestValue1565919566", default(PropertyDeclarationSyntax), default(TypeInfo), Substitute.For<SemanticModel>()));
+            Assert.Throws<ArgumentNullException>(() => new PropertyModel("TestValue1565919566", default(PropertyDeclarationSyntax), default(TypeInfo), Substitute.For<SemanticModel>(), null));
         }
 
         [Test]
         public void CannotConstructWithNullSemanticModel()
         {
-            Assert.Throws<ArgumentNullException>(() => new PropertyModel("TestValue1565919566", SyntaxFactory.PropertyDeclaration(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), "name"), default(TypeInfo), null));
+            Assert.Throws<ArgumentNullException>(() => new PropertyModel("TestValue1565919566", SyntaxFactory.PropertyDeclaration(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), "name"), default(TypeInfo), null, null));
         }
 
         [TestCase(null)]
@@ -49,7 +49,7 @@ namespace Unitverse.Core.Tests.Models
         [TestCase("   ")]
         public void CannotConstructWithInvalidName(string value)
         {
-            Assert.Throws<ArgumentNullException>(() => new PropertyModel(value, SyntaxFactory.PropertyDeclaration(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), "name"), default(TypeInfo), Substitute.For<SemanticModel>()));
+            Assert.Throws<ArgumentNullException>(() => new PropertyModel(value, SyntaxFactory.PropertyDeclaration(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), "name"), default(TypeInfo), Substitute.For<SemanticModel>(), null));
         }
 
         [Test]

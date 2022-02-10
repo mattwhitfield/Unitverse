@@ -1,4 +1,4 @@
-﻿## IComparableTests
+﻿## IComparable
 Demonstrates the tests generated for a type that implements IComparable
 
 ### Source Type(s)

@@ -1,0 +1,7 @@
+// ! Record Types (Primary Constructor)
+// $ Demonstrates the tests generated for a simple primary constructor record type
+
+namespace TestNamespace 
+{
+	public record RecordType(string StringProperty, int IntProperty);
+}

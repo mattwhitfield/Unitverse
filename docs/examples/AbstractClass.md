@@ -1,4 +1,4 @@
-﻿## AbstractClass
+﻿## Abstract Classes
 Demonstrates how Unitverse generates tests when the source class is abstract or contains protected methods, as well as how inheritance chains are accounted for
 
 ### Source Type(s)

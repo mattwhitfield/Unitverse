@@ -15,6 +15,9 @@
             CanConstructNamingPattern = options.CanConstructNamingPattern;
             CannotConstructWithNullNamingPattern = options.CannotConstructWithNullNamingPattern;
             CannotConstructWithInvalidNamingPattern = options.CannotConstructWithInvalidNamingPattern;
+            CanInitializeNamingPattern = options.CanInitializeNamingPattern;
+            CannotInitializeWithNullNamingPattern = options.CannotInitializeWithNullNamingPattern;
+            CannotInitializeWithInvalidNamingPattern = options.CannotInitializeWithInvalidNamingPattern;
             CanGetNamingPattern = options.CanGetNamingPattern;
             CanSetAndGetNamingPattern = options.CanSetAndGetNamingPattern;
             CanSetNamingPattern = options.CanSetNamingPattern;
@@ -37,6 +40,12 @@
         public string CannotConstructWithNullNamingPattern { get; set; }
 
         public string CannotConstructWithInvalidNamingPattern { get; set; }
+
+        public string CanInitializeNamingPattern { get; set; }
+
+        public string CannotInitializeWithNullNamingPattern { get; set; }
+
+        public string CannotInitializeWithInvalidNamingPattern { get; set; }
 
         public string CanGetNamingPattern { get; set; }
 

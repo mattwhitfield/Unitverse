@@ -21,6 +21,9 @@
             new CanConstructMultiConstructorGenerationStrategy(_frameworkSet),
             new NullParameterCheckConstructorGenerationStrategy(_frameworkSet),
             new StringParameterCheckConstructorGenerationStrategy(_frameworkSet),
+            new CanInitializeGenerationStrategy(_frameworkSet),
+            new NullPropertyCheckInitializerGenerationStrategy(_frameworkSet),
+            new StringPropertyCheckInitializerGenerationStrategy(_frameworkSet),
         };
     }
 }

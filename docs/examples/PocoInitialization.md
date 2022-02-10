@@ -1,4 +1,4 @@
-﻿## PocoInitialization
+﻿## POCO Initialization
 Demonstrates how test values are produced to initialize POCO members when the type is consumed
 
 ### Source Type(s)

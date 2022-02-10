@@ -127,9 +127,11 @@
                 references.Add(MetadataReference.CreateFromFile(typeof(IQueryAmbient).Assembly.Location));
             }
 
+            var externalInitTree = CSharpSyntaxTree.ParseText("namespace System.Runtime.CompilerServices { internal static class IsExternalInit { } }", new CSharpParseOptions(LanguageVersion.Latest));
+
             var compilation = CSharpCompilation.Create(
                 "MyTest",
-                syntaxTrees: new[] { tree },
+                syntaxTrees: new[] { tree, externalInitTree },
                 references: references);
 
             var semanticModel = compilation.GetSemanticModel(tree);
@@ -143,7 +145,7 @@
 
             var generatedTree = CSharpSyntaxTree.ParseText(core.FileContent, new CSharpParseOptions(LanguageVersion.Latest));
 
-            var syntaxTrees = new List<SyntaxTree> { tree, generatedTree };
+            var syntaxTrees = new List<SyntaxTree> { tree, externalInitTree, generatedTree };
 
             if (core.RequiredAssets.Any(x => x == TargetAsset.PropertyTester))
             {

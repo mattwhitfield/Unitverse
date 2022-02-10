@@ -1247,16 +1247,8 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string ProtectedClassInternalProtected {
-            get {
-                return ResourceManager.GetString("ProtectedClassInternalProtected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to // # EmitTestsForInternals=false
+        ///   Looks up a localized string similar to // # EmitTestsForInternals=true
+        ///// # EmitSubclassForProtectedMethods=true
         ///namespace TestNamespace
         ///{
         ///    public class TestClass
@@ -1271,9 +1263,32 @@ namespace Unitverse.Core.Tests {
         ///		    System.Console.WriteLine(&quot;Testing this&quot;);
         ///	    }
         ///
-        ///	    protected internal void ThisIsAMethodProtectedInternal(string methodName, int methodValue)
+        ///	    protected internal void ThisIsAMethodProtectedInternal(string methodName, int methodVa [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ProtectedClassInternalProtected {
+            get {
+                return ResourceManager.GetString("ProtectedClassInternalProtected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # EmitTestsForInternals=false
+        ///// # EmitSubclassForProtectedMethods=false
+        ///namespace TestNamespace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///	    public void ThisIsAMethod(string methodName, int methodValue)
         ///	    {
-        ///		    System.Console.WriteLi [rest of string was truncated]&quot;;.
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///	    protected void ThisIsAMethodProtected(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///	    protected internal void ThisIsAMethodProtectedInternal(string methodName, int method [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ProtectedClassNoInternalNoProtected {
             get {
@@ -1282,11 +1297,103 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to // # EmitTestsForInternals=false
+        ///// # EmitSubclassForProtectedMethods=true
+        ///namespace TestNamespace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///	    public void ThisIsAMethod(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///	    protected void ThisIsAMethodProtected(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///	    protected internal void ThisIsAMethodProtectedInternal(string methodName, int methodV [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ProtectedClassNoInternalProtected {
             get {
                 return ResourceManager.GetString("ProtectedClassNoInternalProtected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace TestNamespace 
+        ///{
+        ///	public record RecordType(string StringProperty, int IntProperty);
+        ///}
+        ///
+        ///namespace System.Runtime.CompilerServices
+        ///{
+        ///    internal static class IsExternalInit {}
+        ///}
+        ///.
+        /// </summary>
+        public static string RecordType {
+            get {
+                return ResourceManager.GetString("RecordType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///
+        ///namespace TestNamespace 
+        ///{
+        ///    record Person(string FirstName, int IntProperty)
+        ///    {
+        ///        private readonly string _firstName;
+        ///        private readonly string _lastName;
+        ///    
+        ///        public Guid Id { get; init; }
+        ///    
+        ///        public string FirstName
+        ///        {
+        ///            get =&gt; _firstName;
+        ///            init =&gt; _firstName = (value ?? throw new ArgumentNullException(nameof(value)));
+        ///        }
+        ///    
+        ///        public string LastName
+        ///        {
+        ///            get =&gt; _lastName;
+        ///      [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string RecordTypeWithoutPrimaryConstructor {
+            get {
+                return ResourceManager.GetString("RecordTypeWithoutPrimaryConstructor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///
+        ///namespace TestNamespace 
+        ///{
+        ///    record Person(string FirstName, int IntProperty)
+        ///    {
+        ///        private readonly string _firstName;
+        ///        private readonly string _lastName;
+        ///    
+        ///        public Guid Id { get; init; }
+        ///    
+        ///        public string FirstName
+        ///        {
+        ///            get =&gt; _firstName;
+        ///            init =&gt; _firstName = (value ?? throw new ArgumentNullException(nameof(value)));
+        ///        }
+        ///    
+        ///        public string LastName
+        ///        {
+        ///            get =&gt; _lastName;
+        ///      [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string RecordTypeWithPrimaryConstructorAndInitFields {
+            get {
+                return ResourceManager.GetString("RecordTypeWithPrimaryConstructorAndInitFields", resourceCulture);
             }
         }
         

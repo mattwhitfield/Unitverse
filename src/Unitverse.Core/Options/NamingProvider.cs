@@ -24,6 +24,12 @@
 
         public NameResolver CannotConstructWithInvalid => new NameResolver(_namingOptions.CannotConstructWithInvalidNamingPattern);
 
+        public NameResolver CanInitialize => new NameResolver(_namingOptions.CanInitializeNamingPattern);
+
+        public NameResolver CannotInitializeWithNull => new NameResolver(_namingOptions.CannotInitializeWithNullNamingPattern);
+
+        public NameResolver CannotInitializeWithInvalid => new NameResolver(_namingOptions.CannotInitializeWithInvalidNamingPattern);
+
         public NameResolver CanGet => new NameResolver(_namingOptions.CanGetNamingPattern);
 
         public NameResolver CanSetAndGet => new NameResolver(_namingOptions.CanSetAndGetNamingPattern);
