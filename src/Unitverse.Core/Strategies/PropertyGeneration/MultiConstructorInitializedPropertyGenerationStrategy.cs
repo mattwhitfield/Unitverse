@@ -7,6 +7,7 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
@@ -98,7 +99,7 @@
 
                 var parameterToCheck = model.Constructors.SelectMany(x => x.Parameters).First(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
 
-                yield return _frameworkSet.AssertionFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(parameterToCheck, _frameworkSet), parameterToCheck.TypeInfo.Type.IsReferenceType);
+                yield return _frameworkSet.AssertionFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(parameterToCheck, _frameworkSet), parameterToCheck.TypeInfo.Type.IsReferenceTypeAndNotString());
             }
         }
     }

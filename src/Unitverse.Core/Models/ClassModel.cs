@@ -267,6 +267,21 @@
             return string.Format(CultureInfo.InvariantCulture, "{0}With{1}", baseName, parameters.Any() ? parameters.Select(x => x.ToPascalCase()).Aggregate((x, y) => x + "And" + y) : "NoParameters");
         }
 
+        public string GetOperatorUniqueName(IOperatorModel model)
+        {
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (Operators.Count(x => x.OriginalName == model.OriginalName) == 1)
+            {
+                return model.OriginalName;
+            }
+
+            return string.Format(CultureInfo.InvariantCulture, "{0}With{1}", model.OriginalName, model.Parameters.Any() ? model.Parameters.Select(x => x.TypeInfo.Type.ToIdentifierName().ToPascalCase()).Aggregate((x, y) => x + "And" + y) : "NoParameters");
+        }
+
         internal void SetTargetInstance(string fieldName)
         {
             TargetFieldName = fieldName;

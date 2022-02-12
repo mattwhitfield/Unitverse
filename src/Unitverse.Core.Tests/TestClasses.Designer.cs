@@ -835,6 +835,60 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///
+        ///namespace SomeNamespace
+        ///{
+        ///    public struct Complex : IEquatable&lt;Complex&gt;
+        ///    {
+        ///        public Complex(double realPart, double imaginaryPart)
+        ///        {
+        ///            RealPart = realPart;
+        ///            ImaginaryPart = imaginaryPart;
+        ///        }
+        ///
+        ///        public double RealPart { get; set; }
+        ///        public double ImaginaryPart { get; set; }
+        ///
+        ///        public bool Equals(Complex other)
+        ///        {
+        ///            return (this.RealPart == other.RealPart)
+        ///                &amp;&amp; (this.ImaginaryPart  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IEquatableClass {
+            get {
+                return ResourceManager.GetString("IEquatableClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///
+        ///namespace SomeNamespace
+        ///{
+        ///    public struct Complex : IEquatable&lt;double&gt;
+        ///    {
+        ///        public Complex(double realPart, double imaginaryPart)
+        ///        {
+        ///            RealPart = realPart;
+        ///            ImaginaryPart = imaginaryPart;
+        ///        }
+        ///
+        ///        public double RealPart { get; set; }
+        ///        public double ImaginaryPart { get; set; }
+        ///
+        ///        public bool Equals(double otherReal)
+        ///        {
+        ///            return (this.RealPart == otherReal) &amp;&amp; (this.ImaginaryPart == 0.0);
+        ///        }        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IEquatableOtherType {
+            get {
+                return ResourceManager.GetString("IEquatableOtherType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///using System;
         ///using System.Drawing;
@@ -1325,13 +1379,7 @@ namespace Unitverse.Core.Tests {
         ///   Looks up a localized string similar to namespace TestNamespace 
         ///{
         ///	public record RecordType(string StringProperty, int IntProperty);
-        ///}
-        ///
-        ///namespace System.Runtime.CompilerServices
-        ///{
-        ///    internal static class IsExternalInit {}
-        ///}
-        ///.
+        ///}.
         /// </summary>
         public static string RecordType {
             get {
@@ -1341,10 +1389,11 @@ namespace Unitverse.Core.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to using System;
+        ///using System.Collections.Generic;
         ///
         ///namespace TestNamespace 
         ///{
-        ///    record Person(string FirstName, int IntProperty)
+        ///    record Person
         ///    {
         ///        private readonly string _firstName;
         ///        private readonly string _lastName;
@@ -1357,10 +1406,9 @@ namespace Unitverse.Core.Tests {
         ///            init =&gt; _firstName = (value ?? throw new ArgumentNullException(nameof(value)));
         ///        }
         ///    
-        ///        public string LastName
-        ///        {
-        ///            get =&gt; _lastName;
-        ///      [rest of string was truncated]&quot;;.
+        ///        public string? MiddleName { get; init; }
+        ///    
+        ///        public string L [rest of string was truncated]&quot;;.
         /// </summary>
         public static string RecordTypeWithoutPrimaryConstructor {
             get {

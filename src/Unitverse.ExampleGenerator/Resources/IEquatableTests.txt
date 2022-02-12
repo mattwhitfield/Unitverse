@@ -1,0 +1,42 @@
+// ! IEquatable
+// $ Demonstrates the tests generated for a type that implements IEquatable
+
+using System;
+
+namespace SomeNamespace
+{
+    public struct Complex : IEquatable<Complex>
+    {
+        public double RealPart { get; set; }
+        public double ImaginaryPart { get; set; }
+
+        public bool Equals(Complex other)
+        {
+            return (this.RealPart == other.RealPart)
+                && (this.ImaginaryPart == other.ImaginaryPart);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (other is Complex)
+                return this.Equals((Complex)other);
+            else
+                return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.RealPart.GetHashCode() ^ this.ImaginaryPart.GetHashCode();
+        }
+
+        public static bool operator ==(Complex term1, Complex term2)
+        {
+            return term1.Equals(term2);
+        }
+
+        public static bool operator !=(Complex term1, Complex term2)
+        {
+            return !term1.Equals(term2);
+        }
+    }
+}

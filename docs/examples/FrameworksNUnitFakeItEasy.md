@@ -1,4 +1,4 @@
-﻿## Frameworks - NUnit 3 & FakeItEasy
+﻿# Frameworks - NUnit 3 & FakeItEasy
 Demonstrates how tests are generated using NUnit 3 for the test framework and FakeItEasy for the mocking framework
 
 ### Source Type(s)

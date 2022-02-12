@@ -14,33 +14,20 @@
 
     public class ComparableGenerationStrategy : InterfaceGenerationStrategyBase
     {
-        private const string InterfaceNameForMatch = "System.IComparable";
+        public const string InterfaceNameForMatch = "System.IComparable";
 
         public ComparableGenerationStrategy(IFrameworkSet frameworkSet)
-            : base(frameworkSet)
+            : base(frameworkSet, InterfaceNameForMatch)
         {
         }
 
         protected override NameResolver GeneratedMethodNamePattern => FrameworkSet.NamingProvider.ImplementsIComparable;
 
-        public override string SupportedInterfaceName => InterfaceNameForMatch;
-
-        public override IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model, NamingContext namingContext)
-        {
-            if (model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
-            return GenerateMethods(classModel, model, namingContext, GetBodyStatements);
-        }
-
-        private IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
+        protected override IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
         {
             ITypeSymbol comparableTypeIdentifier = sourceModel.TypeSymbol;
             if (interfaceModel.IsGeneric)
             {
-                Debug.Assert(interfaceModel.GenericTypes.Count == 1, "Expecting one type argument for IComparable");
                 comparableTypeIdentifier = interfaceModel.GenericTypes.First();
             }
 

@@ -44,13 +44,6 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
         }
 
         [Test]
-        public void CanGetSupportedInterfaceName()
-        {
-            Assert.That(_testClass.SupportedInterfaceName, Is.InstanceOf<string>());
-            Assert.That(_testClass.SupportedInterfaceName, Is.EqualTo("System.IComparable"));
-        }
-
-        [Test]
         public void CanCallCreate()
         {
             var syntaxTree = TestSemanticModelFactory.CreateTree(TestClasses.IComparableTestFile);

@@ -1,4 +1,4 @@
-﻿## Mapping Methods
+﻿# Mapping Methods
 Shows how unitverse generates a test to verify mappings between input parameter type and return type where the types share property names
 
 ### Source Type(s)

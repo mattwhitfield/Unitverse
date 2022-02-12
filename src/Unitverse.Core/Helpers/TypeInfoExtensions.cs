@@ -8,6 +8,11 @@
 
     public static class TypeInfoExtensions
     {
+        public static bool IsReferenceTypeAndNotString(this ITypeSymbol symbol)
+        {
+            return symbol.IsReferenceType && symbol.SpecialType != SpecialType.System_String;
+        }
+
         public static string GetLastNamePart(this ITypeSymbol symbol)
         {
             var name = symbol.ToFullName();

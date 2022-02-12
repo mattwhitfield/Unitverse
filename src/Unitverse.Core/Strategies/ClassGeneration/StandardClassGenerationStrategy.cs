@@ -35,7 +35,7 @@
 
             if (_frameworkSet.Options.GenerationOptions.EmitSubclassForProtectedMethods)
             {
-                return model.Methods.All(x => !x.Node.Modifiers.Any(m => m.IsKind(SyntaxKind.ProtectedKeyword)));
+                return model.Methods.All(x => !x.Node.Modifiers.Any(m => m.IsKind(SyntaxKind.ProtectedKeyword))) && model.Properties.All(x => !x.Node.Modifiers.Any(m => m.IsKind(SyntaxKind.ProtectedKeyword)));
             }
 
             return true;

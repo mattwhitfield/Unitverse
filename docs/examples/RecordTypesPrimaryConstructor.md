@@ -1,4 +1,4 @@
-﻿## Record Types (Primary Constructor)
+﻿# Record Types (Primary Constructor)
 Demonstrates the tests generated for a simple primary constructor record type
 
 ### Source Type(s)
@@ -30,9 +30,28 @@ public class RecordTypeTests
     }
 
     [Fact]
+    public void ImplementsIEquatable_RecordType()
+    {
+        var same = new RecordType(_stringProperty, _intProperty);
+        var different = new RecordType("TestValue1002897798", 1657007234);
+        _testClass.Equals(default(object)).Should().BeFalse();
+        _testClass.Equals(new object()).Should().BeFalse();
+        _testClass.Equals((object)same).Should().BeTrue();
+        _testClass.Equals((object)different).Should().BeFalse();
+        _testClass.Equals(same).Should().BeTrue();
+        _testClass.Equals(different).Should().BeFalse();
+        _testClass.GetHashCode().Should().Be(same.GetHashCode());
+        _testClass.GetHashCode().Should().NotBe(different.GetHashCode());
+        (_testClass == same).Should().BeTrue();
+        (_testClass == different).Should().BeFalse();
+        (_testClass != same).Should().BeFalse();
+        (_testClass != different).Should().BeTrue();
+    }
+
+    [Fact]
     public void StringPropertyIsInitializedCorrectly()
     {
-        _testClass.StringProperty.Should().BeSameAs(_stringProperty);
+        _testClass.StringProperty.Should().Be(_stringProperty);
     }
 
     [Fact]

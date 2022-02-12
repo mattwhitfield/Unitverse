@@ -30,7 +30,24 @@
                 throw new ArgumentNullException(nameof(expected));
             }
 
-            return SyntaxFactory.ExpressionStatement(AssertCall("Equal").WithArgumentList(Generate.Arguments(expected, actual)));
+            var method = isReferenceType ? "Same" : "Equal";
+            return SyntaxFactory.ExpressionStatement(AssertCall(method).WithArgumentList(Generate.Arguments(expected, actual)));
+        }
+
+        public StatementSyntax AssertNotEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)
+        {
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            if (expected == null)
+            {
+                throw new ArgumentNullException(nameof(expected));
+            }
+
+            var method = isReferenceType ? "NotSame" : "NotEqual";
+            return SyntaxFactory.ExpressionStatement(AssertCall(method).WithArgumentList(Generate.Arguments(expected, actual)));
         }
 
         public StatementSyntax AssertFail(string message)
@@ -41,6 +58,26 @@
             }
 
             return SyntaxFactory.ThrowStatement(Generate.ObjectCreation(SyntaxFactory.IdentifierName("NotImplementedException"), Generate.Literal(message)));
+        }
+
+        public StatementSyntax AssertTrue(ExpressionSyntax actual)
+        {
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            return SyntaxFactory.ExpressionStatement(AssertCall("True").WithArgumentList(Generate.Arguments(actual)));
+        }
+
+        public StatementSyntax AssertFalse(ExpressionSyntax actual)
+        {
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            return SyntaxFactory.ExpressionStatement(AssertCall("False").WithArgumentList(Generate.Arguments(actual)));
         }
 
         public StatementSyntax AssertGreaterThan(ExpressionSyntax actual, ExpressionSyntax expected)

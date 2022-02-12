@@ -14,28 +14,16 @@
 
     public class EnumerableGenerationStrategy : InterfaceGenerationStrategyBase
     {
-        private const string InterfaceNameForMatch = "System.Collections.Generic.IEnumerable";
+        public const string InterfaceNameForMatch = "System.Collections.Generic.IEnumerable";
 
         public EnumerableGenerationStrategy(IFrameworkSet frameworkSet)
-            : base(frameworkSet)
+            : base(frameworkSet, InterfaceNameForMatch)
         {
         }
-
-        public override string SupportedInterfaceName => InterfaceNameForMatch;
 
         protected override NameResolver GeneratedMethodNamePattern => FrameworkSet.NamingProvider.ImplementsIEnumerable;
 
-        public override IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model, NamingContext namingContext)
-        {
-            if (model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
-            return GenerateMethods(classModel, model, namingContext, GetBodyStatements);
-        }
-
-        private IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
+        protected override IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
         {
             ITypeSymbol enumerableTypeSymbol = sourceModel.TypeSymbol;
             if (interfaceModel.IsGeneric)
