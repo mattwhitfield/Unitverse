@@ -68,7 +68,7 @@
 
             method = method.AddBodyStatements(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), SyntaxFactory.IdentifierName("testValue"))));
 
-            var bodyStatement = _frameworkSet.AssertionFramework.AssertEqual(property.Access(target), SyntaxFactory.IdentifierName("testValue"), property.TypeInfo.Type.IsReferenceType);
+            var bodyStatement = _frameworkSet.AssertionFramework.AssertEqual(property.Access(target), SyntaxFactory.IdentifierName("testValue"), property.TypeInfo.Type.IsReferenceTypeAndNotString());
             if (mockAssertionStatements.Count > 0)
             {
                 bodyStatement = bodyStatement.WithTrailingTrivia(SyntaxFactory.Comment(Environment.NewLine + Environment.NewLine));

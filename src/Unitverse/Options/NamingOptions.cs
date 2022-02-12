@@ -67,6 +67,11 @@ namespace Unitverse.Options
         [Description("Naming format for the IComparable implementation test")]
         public string ImplementsIComparableNamingPattern { get; set; } = "ImplementsIComparable{typeParameters}";
 
+        [Category("Interfaces")]
+        [DisplayName("ImplementsIEquatable")]
+        [Description("Naming format for the IEquatable implementation test")]
+        public string ImplementsIEquatableNamingPattern { get; set; } = "ImplementsIEquatable{typeParameters}";
+
         [Category("Methods")]
         [DisplayName("CanCall")]
         [Description("Naming format for the main method test")]

@@ -409,6 +409,16 @@
                     defaultExpression)));
         }
 
+        public static InvocationExpressionSyntax Invocation(ExpressionSyntax target, string method, params ExpressionSyntax[] arguments)
+        {
+            return SyntaxFactory.InvocationExpression(
+                                    SyntaxFactory.MemberAccessExpression(
+                                        SyntaxKind.SimpleMemberAccessExpression,
+                                        target,
+                                        SyntaxFactory.IdentifierName(method)))
+                                .WithArgumentList(Arguments(arguments));
+        }
+
         public static LocalDeclarationStatementSyntax VariableDeclaration(ITypeSymbol type, IFrameworkSet frameworkSet, string name, ExpressionSyntax defaultValue)
         {
             var variableDeclaration = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(KeywordSafeName(name)))

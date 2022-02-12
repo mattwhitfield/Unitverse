@@ -107,7 +107,7 @@
                                 if (isPlainInterfaceMethodRedirection && hasReturnType)
                                 {
                                     // add assert to check that 'result' is the same as 'expectedReturnValue'
-                                    mockAssertionStatements.Add(frameworkSet.AssertionFramework.AssertEqual(SyntaxFactory.IdentifierName("result"), SyntaxFactory.IdentifierName("expectedReturnValue"), returnType.IsReferenceType));
+                                    mockAssertionStatements.Add(frameworkSet.AssertionFramework.AssertEqual(SyntaxFactory.IdentifierName("result"), SyntaxFactory.IdentifierName("expectedReturnValue"), returnType.IsReferenceTypeAndNotString()));
                                 }
                             }
                         }
@@ -139,7 +139,7 @@
                                 if (isPlainInterfacePropertyRedirection)
                                 {
                                     // add assert to check that the property is the same as 'expectedValue'
-                                    mockAssertionStatements.Add(frameworkSet.AssertionFramework.AssertEqual(propertyAccess, SyntaxFactory.IdentifierName("expectedValue"), dependencyProperty.Type.IsReferenceType));
+                                    mockAssertionStatements.Add(frameworkSet.AssertionFramework.AssertEqual(propertyAccess, SyntaxFactory.IdentifierName("expectedValue"), dependencyProperty.Type.IsReferenceTypeAndNotString()));
                                 }
                             }
                         }

@@ -28,6 +28,8 @@
 
         public string ImplementsIComparableNamingPattern { get; set; } = "ImplementsIComparable{typeParameters}";
 
+        public string ImplementsIEquatableNamingPattern { get; set; } = "ImplementsIEquatable{typeParameters}";
+
         public string CanCallNamingPattern { get; set; } = "CanCall{memberName}";
 
         public string PerformsMappingNamingPattern { get; set; } = "{memberName}PerformsMapping";

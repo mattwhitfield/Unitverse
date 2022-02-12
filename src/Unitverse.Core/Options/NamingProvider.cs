@@ -40,6 +40,8 @@
 
         public NameResolver ImplementsIComparable => new NameResolver(_namingOptions.ImplementsIComparableNamingPattern);
 
+        public NameResolver ImplementsIEquatable => new NameResolver(_namingOptions.ImplementsIEquatableNamingPattern);
+
         public NameResolver PerformsMapping => new NameResolver(_namingOptions.PerformsMappingNamingPattern);
 
         public NameResolver CannotCallWithNull => new NameResolver(_namingOptions.CannotCallWithNullNamingPattern);

@@ -1,4 +1,4 @@
-﻿## Generic Methods
+﻿# Generic Methods
 Demonstrates how Unitverse generates tests for generic methods
 
 ### Source Type(s)

@@ -835,6 +835,39 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to namespace SomeNamespace
+        ///{
+        ///public struct Complex
+        ///{
+        ///    public double RealPart { get; set; }
+        ///    public double ImaginaryPart { get; set; }
+        ///}
+        ///
+        ///public bool Equals(Complex other)
+        ///{
+        ///    return (this.RealPart == other.RealPart)
+        ///        &amp;&amp; (this.ImaginaryPart == other.ImaginaryPart);
+        ///}
+        ///
+        ///public override bool Equals(object other)
+        ///{
+        ///    if (other is Complex)
+        ///        return this.Equals((Complex)other);
+        ///    else
+        ///        return false;
+        ///}
+        ///
+        ///public override int GetHashCode()
+        ///{
+        ///    return this.RealPart [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IEquatableClass {
+            get {
+                return ResourceManager.GetString("IEquatableClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///using System;
         ///using System.Drawing;
@@ -1325,13 +1358,7 @@ namespace Unitverse.Core.Tests {
         ///   Looks up a localized string similar to namespace TestNamespace 
         ///{
         ///	public record RecordType(string StringProperty, int IntProperty);
-        ///}
-        ///
-        ///namespace System.Runtime.CompilerServices
-        ///{
-        ///    internal static class IsExternalInit {}
-        ///}
-        ///.
+        ///}.
         /// </summary>
         public static string RecordType {
             get {
@@ -1341,10 +1368,11 @@ namespace Unitverse.Core.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to using System;
+        ///using System.Collections.Generic;
         ///
         ///namespace TestNamespace 
         ///{
-        ///    record Person(string FirstName, int IntProperty)
+        ///    record Person
         ///    {
         ///        private readonly string _firstName;
         ///        private readonly string _lastName;
@@ -1357,10 +1385,9 @@ namespace Unitverse.Core.Tests {
         ///            init =&gt; _firstName = (value ?? throw new ArgumentNullException(nameof(value)));
         ///        }
         ///    
-        ///        public string LastName
-        ///        {
-        ///            get =&gt; _lastName;
-        ///      [rest of string was truncated]&quot;;.
+        ///        public string? MiddleName { get; init; }
+        ///    
+        ///        public string L [rest of string was truncated]&quot;;.
         /// </summary>
         public static string RecordTypeWithoutPrimaryConstructor {
             get {

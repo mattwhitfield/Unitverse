@@ -1,4 +1,4 @@
-﻿## Automatic Mock Generation
+﻿# Automatic Mock Generation
 Demonstrates how dependencies injected into constructors are tracked, and mock configuration calls emitted for any detected dependencies
 
 ### Source Type(s)

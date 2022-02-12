@@ -1,4 +1,4 @@
-﻿## Static Classes
+﻿# Static Classes
 Demonstrates how Unitverse generates tests when the source class is static
 
 ### Source Type(s)

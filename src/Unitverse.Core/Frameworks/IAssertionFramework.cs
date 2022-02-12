@@ -9,7 +9,13 @@
 
         IEnumerable<UsingDirectiveSyntax> GetUsings();
 
+        StatementSyntax AssertTrue(ExpressionSyntax actual);
+
+        StatementSyntax AssertFalse(ExpressionSyntax actual);
+
         StatementSyntax AssertEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType);
+
+        StatementSyntax AssertNotEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType);
 
         StatementSyntax AssertFail(string message);
 

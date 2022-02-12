@@ -1,4 +1,4 @@
-﻿## Indexers
+﻿# Indexers
 Demonstrates the tests generated for a type that contains an indexer
 
 ### Source Type(s)
@@ -41,9 +41,9 @@ public class TypeWithIndexerTests
     public void CanSetAndGetIndexerForStringAndInt()
     {
         var testValue = "TestValue1657007234";
-        _testClass["TestValue237820880", 1002897798].Should().BeAssignableTo<string>();
+        _testClass["TestValue237820880", 1002897798].As<object>().Should().BeAssignableTo<string>();
         _testClass["TestValue237820880", 1002897798] = testValue;
-        _testClass["TestValue237820880", 1002897798].Should().BeSameAs(testValue);
+        _testClass["TestValue237820880", 1002897798].Should().Be(testValue);
     }
 }
 

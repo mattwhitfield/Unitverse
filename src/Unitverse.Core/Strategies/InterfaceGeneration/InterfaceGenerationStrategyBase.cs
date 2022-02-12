@@ -10,16 +10,21 @@
 
     public abstract class InterfaceGenerationStrategyBase : IGenerationStrategy<ClassModel>
     {
-        protected InterfaceGenerationStrategyBase(IFrameworkSet frameworkSet)
+        protected InterfaceGenerationStrategyBase(IFrameworkSet frameworkSet, string supportedInterfaceName)
         {
             FrameworkSet = frameworkSet ?? throw new ArgumentNullException(nameof(frameworkSet));
+            SupportedInterfaceName = supportedInterfaceName;
         }
 
         public virtual bool IsExclusive => false;
 
         public virtual int Priority => 2;
 
-        public abstract string SupportedInterfaceName { get; }
+        private string SupportedInterfaceName { get; }
+
+        public virtual int MinimumRequiredGenericParameterCount => 0;
+
+        public virtual int MaximumRequiredGenericParameterCount => 1;
 
         protected IFrameworkSet FrameworkSet { get; }
 
@@ -37,16 +42,19 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return classModel.Interfaces.Any(y => y.InterfaceName == SupportedInterfaceName);
+            return classModel.Interfaces.Any(y => y.InterfaceName == SupportedInterfaceName && y.GenericTypes.Count >= MinimumRequiredGenericParameterCount && y.GenericTypes.Count <= MaximumRequiredGenericParameterCount);
         }
 
-        public abstract IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model, NamingContext namingContext);
-
-        protected IEnumerable<MethodDeclarationSyntax> GenerateMethods(ClassModel classModel, ClassModel model, NamingContext namingContext, Func<ClassModel, IInterfaceModel, IEnumerable<StatementSyntax>> generateBody)
+        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model, NamingContext namingContext)
         {
-            if (classModel == null)
+            if (classModel is null)
             {
                 throw new ArgumentNullException(nameof(classModel));
+            }
+
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
             }
 
             foreach (var interfaceModel in classModel.Interfaces.Where(x => x.InterfaceName == SupportedInterfaceName))
@@ -55,9 +63,11 @@
                 namingContext = namingContext.WithInterfaceName(interfaceModel.InterfaceName).WithTypeParameters(typeParameters);
 
                 var method = FrameworkSet.TestFramework.CreateTestMethod(GeneratedMethodNamePattern, namingContext, false, model != null && model.IsStatic);
-                var body = generateBody(classModel, interfaceModel);
+                var body = GetBodyStatements(classModel, interfaceModel);
                 yield return method.AddBodyStatements(body.ToArray());
             }
         }
+
+        protected abstract IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel);
     }
 }

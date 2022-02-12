@@ -1,4 +1,4 @@
-﻿## ref & out Parameters
+﻿# ref & out Parameters
 Demonstrates the tests that Unitverse emits when methods contain `ref` or `out` parameters
 
 ### Source Type(s)
