@@ -202,6 +202,9 @@
   <data name="IEquatableClass" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\IEquatableClass.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="IEquatableOtherType" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\IEquatableOtherType.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="IndexerTestFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\IndexerTestFile.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

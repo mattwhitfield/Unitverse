@@ -835,35 +835,56 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace SomeNamespace
-        ///{
-        ///public struct Complex
-        ///{
-        ///    public double RealPart { get; set; }
-        ///    public double ImaginaryPart { get; set; }
-        ///}
+        ///   Looks up a localized string similar to using System;
         ///
-        ///public bool Equals(Complex other)
+        ///namespace SomeNamespace
         ///{
-        ///    return (this.RealPart == other.RealPart)
-        ///        &amp;&amp; (this.ImaginaryPart == other.ImaginaryPart);
-        ///}
+        ///    public struct Complex : IEquatable&lt;Complex&gt;
+        ///    {
+        ///        public Complex(double realPart, double imaginaryPart)
+        ///        {
+        ///            RealPart = realPart;
+        ///            ImaginaryPart = imaginaryPart;
+        ///        }
         ///
-        ///public override bool Equals(object other)
-        ///{
-        ///    if (other is Complex)
-        ///        return this.Equals((Complex)other);
-        ///    else
-        ///        return false;
-        ///}
+        ///        public double RealPart { get; set; }
+        ///        public double ImaginaryPart { get; set; }
         ///
-        ///public override int GetHashCode()
-        ///{
-        ///    return this.RealPart [rest of string was truncated]&quot;;.
+        ///        public bool Equals(Complex other)
+        ///        {
+        ///            return (this.RealPart == other.RealPart)
+        ///                &amp;&amp; (this.ImaginaryPart  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string IEquatableClass {
             get {
                 return ResourceManager.GetString("IEquatableClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///
+        ///namespace SomeNamespace
+        ///{
+        ///    public struct Complex : IEquatable&lt;double&gt;
+        ///    {
+        ///        public Complex(double realPart, double imaginaryPart)
+        ///        {
+        ///            RealPart = realPart;
+        ///            ImaginaryPart = imaginaryPart;
+        ///        }
+        ///
+        ///        public double RealPart { get; set; }
+        ///        public double ImaginaryPart { get; set; }
+        ///
+        ///        public bool Equals(double otherReal)
+        ///        {
+        ///            return (this.RealPart == otherReal) &amp;&amp; (this.ImaginaryPart == 0.0);
+        ///        }        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IEquatableOtherType {
+            get {
+                return ResourceManager.GetString("IEquatableOtherType", resourceCulture);
             }
         }
         

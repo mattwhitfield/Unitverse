@@ -1,0 +1,54 @@
+using System;
+
+namespace SomeNamespace
+{
+    public struct Complex : IEquatable<double>
+    {
+        public Complex(double realPart, double imaginaryPart)
+        {
+            RealPart = realPart;
+            ImaginaryPart = imaginaryPart;
+        }
+
+        public double RealPart { get; set; }
+        public double ImaginaryPart { get; set; }
+
+        public bool Equals(double otherReal)
+        {
+            return (this.RealPart == otherReal) && (this.ImaginaryPart == 0.0);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (other is double)
+                return this.Equals((double)other);
+            else
+                return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.RealPart.GetHashCode() ^ this.ImaginaryPart.GetHashCode();
+        }
+
+        public static bool operator ==(Complex term1, double term2)
+        {
+            return term1.Equals(term2);
+        }
+
+        public static bool operator ==(double term1, Complex term2)
+        {
+            return term2.Equals(term1);
+        }
+
+        public static bool operator !=(Complex term1, double term2)
+        {
+            return !term1.Equals(term2);
+        }
+
+        public static bool operator !=(double term1, Complex term2)
+        {
+            return !term2.Equals(term1);
+        }
+    }
+}
