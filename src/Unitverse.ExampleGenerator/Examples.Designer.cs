@@ -387,6 +387,33 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // ! IEquatable
+        ///// $ Demonstrates the tests generated for a type that implements IEquatable
+        ///
+        ///using System;
+        ///
+        ///namespace SomeNamespace
+        ///{
+        ///    public struct Complex : IEquatable&lt;Complex&gt;
+        ///    {
+        ///        public double RealPart { get; set; }
+        ///        public double ImaginaryPart { get; set; }
+        ///
+        ///        public bool Equals(Complex other)
+        ///        {
+        ///            return (this.RealPart == other.RealPart)
+        ///                &amp;&amp; (this.ImaginaryPart == other.ImaginaryPart);
+        ///        }
+        ///
+        ///        public override bool E [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string IEquatableTests {
+            get {
+                return ResourceManager.GetString("IEquatableTests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to // ! Indexers
         ///// $ Demonstrates the tests generated for a type that contains an indexer
         ///

@@ -6,6 +6,7 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
@@ -72,13 +73,13 @@
         {
             if (!model.Constructors.Any() && property.HasInit)
             {
-                yield return _frameworkSet.AssertionFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(property, _frameworkSet), property.TypeInfo.Type.IsReferenceType);
+                yield return _frameworkSet.AssertionFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(property, _frameworkSet), property.TypeInfo.Type.IsReferenceTypeAndNotString());
             }
             else
             {
                 var parameter = model.Constructors.SelectMany(x => x.Parameters).First(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
 
-                yield return _frameworkSet.AssertionFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(parameter, _frameworkSet), property.TypeInfo.Type.IsReferenceType);
+                yield return _frameworkSet.AssertionFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(parameter, _frameworkSet), property.TypeInfo.Type.IsReferenceTypeAndNotString());
             }
         }
     }

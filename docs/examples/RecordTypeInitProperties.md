@@ -1,4 +1,4 @@
-﻿## Record Types (init Properties)
+﻿# Record Types (init Properties)
 Demonstrates the tests generated for a record type that has properties that have init accessors
 
 ### Source Type(s)
@@ -90,6 +90,25 @@ public class PersonTests
     }
 
     [Fact]
+    public void ImplementsIEquatable_Person()
+    {
+        var same = new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours };
+        var different = new Person();
+        _testClass.Equals(default(object)).Should().BeFalse();
+        _testClass.Equals(new object()).Should().BeFalse();
+        _testClass.Equals((object)same).Should().BeTrue();
+        _testClass.Equals((object)different).Should().BeFalse();
+        _testClass.Equals(same).Should().BeTrue();
+        _testClass.Equals(different).Should().BeFalse();
+        _testClass.GetHashCode().Should().Be(same.GetHashCode());
+        _testClass.GetHashCode().Should().NotBe(different.GetHashCode());
+        (_testClass == same).Should().BeTrue();
+        (_testClass == different).Should().BeFalse();
+        (_testClass != same).Should().BeFalse();
+        (_testClass != different).Should().BeTrue();
+    }
+
+    [Fact]
     public void IdIsInitializedCorrectly()
     {
         _testClass.Id.Should().Be(_id);
@@ -98,19 +117,19 @@ public class PersonTests
     [Fact]
     public void FirstNameIsInitializedCorrectly()
     {
-        _testClass.FirstName.Should().BeSameAs(_firstName);
+        _testClass.FirstName.Should().Be(_firstName);
     }
 
     [Fact]
     public void MiddleNameIsInitializedCorrectly()
     {
-        _testClass.MiddleName.Should().BeSameAs(_middleName);
+        _testClass.MiddleName.Should().Be(_middleName);
     }
 
     [Fact]
     public void LastNameIsInitializedCorrectly()
     {
-        _testClass.LastName.Should().BeSameAs(_lastName);
+        _testClass.LastName.Should().Be(_lastName);
     }
 
     [Fact]

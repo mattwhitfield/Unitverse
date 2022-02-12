@@ -26,6 +26,16 @@
 
         public StatementSyntax AssertEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)
         {
+            return AssertEquality(actual, expected, isReferenceType, false);
+        }
+
+        public StatementSyntax AssertNotEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)
+        {
+            return AssertEquality(actual, expected, isReferenceType, true);
+        }
+
+        private StatementSyntax AssertEquality(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType, bool not)
+        {
             if (actual == null)
             {
                 throw new ArgumentNullException(nameof(actual));
@@ -36,12 +46,19 @@
                 throw new ArgumentNullException(nameof(expected));
             }
 
+            var method = isReferenceType ? "SameAs" : "EqualTo";
+            ExpressionSyntax target = SyntaxFactory.IdentifierName("Is");
+            if (not)
+            {
+                target = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, target, SyntaxFactory.IdentifierName("Not"));
+            }
+
             return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(AssertThat)
                 .WithArgumentList(Generate.Arguments(actual, SyntaxFactory.InvocationExpression(
                         SyntaxFactory.MemberAccessExpression(
                             SyntaxKind.SimpleMemberAccessExpression,
-                            SyntaxFactory.IdentifierName("Is"),
-                            SyntaxFactory.IdentifierName("EqualTo")))
+                            target,
+                            SyntaxFactory.IdentifierName(method)))
                     .WithArgumentList(Generate.Arguments(expected)))));
         }
 
@@ -79,6 +96,34 @@
                             SyntaxFactory.IdentifierName("Is"),
                             SyntaxFactory.IdentifierName("GreaterThan")))
                     .WithArgumentList(Generate.Arguments(expected)))));
+        }
+
+        public StatementSyntax AssertTrue(ExpressionSyntax actual)
+        {
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(AssertThat)
+                .WithArgumentList(Generate.Arguments(actual, SyntaxFactory.MemberAccessExpression(
+                            SyntaxKind.SimpleMemberAccessExpression,
+                            SyntaxFactory.IdentifierName("Is"),
+                            SyntaxFactory.IdentifierName("True")))));
+        }
+
+        public StatementSyntax AssertFalse(ExpressionSyntax actual)
+        {
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(AssertThat)
+                .WithArgumentList(Generate.Arguments(actual, SyntaxFactory.MemberAccessExpression(
+                            SyntaxKind.SimpleMemberAccessExpression,
+                            SyntaxFactory.IdentifierName("Is"),
+                            SyntaxFactory.IdentifierName("False")))));
         }
 
         public StatementSyntax AssertIsInstanceOf(ExpressionSyntax value, TypeSyntax type, bool isReferenceType)

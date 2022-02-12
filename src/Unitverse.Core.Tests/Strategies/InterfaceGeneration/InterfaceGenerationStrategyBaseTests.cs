@@ -16,25 +16,18 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
         private class TestInterfaceGenerationStrategyBase : InterfaceGenerationStrategyBase
         {
             public TestInterfaceGenerationStrategyBase(IFrameworkSet frameworkSet)
-                : base(frameworkSet)
+                : base(frameworkSet, "SomeThing")
             {
-            }
-
-            public IEnumerable<MethodDeclarationSyntax> PublicGenerateMethods(ClassModel classModel, ClassModel model, NamingContext namingContext, Func<ClassModel, IInterfaceModel, IEnumerable<StatementSyntax>> generateBody)
-            {
-                return GenerateMethods(classModel, model, namingContext, generateBody);
             }
 
             public IFrameworkSet PublicFrameworkSet => FrameworkSet;
 
             public NameResolver PublicGeneratedMethodNamePattern => GeneratedMethodNamePattern;
 
-            public override IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model, NamingContext namingContext)
+            protected override IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
             {
-                return default(IEnumerable<MethodDeclarationSyntax>);
+                yield break;
             }
-
-            public override string SupportedInterfaceName { get; }
 
             protected override NameResolver GeneratedMethodNamePattern { get; }
         }
@@ -65,12 +58,6 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
         public void CannotCallCanHandleWithNullModel()
         {
             Assert.Throws<ArgumentNullException>(() => _testClass.CanHandle(ClassModelProvider.Instance, default(ClassModel)));
-        }
-
-        [Test]
-        public void CannotCallGenerateMethodsWithNullClassModel()
-        {
-            Assert.Throws<ArgumentNullException>(() => _testClass.PublicGenerateMethods(default(ClassModel), ClassModelProvider.Instance, new NamingContext("class"), default(Func<ClassModel, IInterfaceModel, IEnumerable<StatementSyntax>>)).Consume());
         }
 
         [Test]

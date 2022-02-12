@@ -23,6 +23,7 @@
             CanSetNamingPattern = options.CanSetNamingPattern;
             ImplementsIEnumerableNamingPattern = options.ImplementsIEnumerableNamingPattern;
             ImplementsIComparableNamingPattern = options.ImplementsIComparableNamingPattern;
+            ImplementsIEquatableNamingPattern = options.ImplementsIEquatableNamingPattern;
             PerformsMappingNamingPattern = options.PerformsMappingNamingPattern;
             CannotCallWithNullNamingPattern = options.CannotCallWithNullNamingPattern;
             CannotCallWithInvalidNamingPattern = options.CannotCallWithInvalidNamingPattern;
@@ -56,6 +57,8 @@
         public string ImplementsIEnumerableNamingPattern { get; set; }
 
         public string ImplementsIComparableNamingPattern { get; set; }
+
+        public string ImplementsIEquatableNamingPattern { get; set; }
 
         public string PerformsMappingNamingPattern { get; set; }
 

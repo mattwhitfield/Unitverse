@@ -1,4 +1,4 @@
-﻿## Async Methods
+﻿# Async Methods
 Demonstrates how tests are generated for async methods, as well as showing how the assertion framework is driven differently for async methods
 
 ### Source Type(s)

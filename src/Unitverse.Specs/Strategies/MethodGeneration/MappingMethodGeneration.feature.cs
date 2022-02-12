@@ -142,12 +142,12 @@ public class OutputClass
   testRunner.And("I expect it to contain the statement \'var result = _testClass.Map(inputClass);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 35
-  testRunner.And("I expect it to contain the statement \'Assert.That(result.SomeProperty, Is.EqualTo" +
-                        "(inputClass.SomeProperty));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to contain the statement \'Assert.That(result.SomeProperty, Is.SameAs(" +
+                        "inputClass.SomeProperty));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 36
-  testRunner.And("I expect it to contain the statement \'Assert.That(result.SomeOtherProperty, Is.Eq" +
-                        "ualTo(inputClass.SomeOtherProperty));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to contain the statement \'Assert.That(result.SomeOtherProperty, Is.Sa" +
+                        "meAs(inputClass.SomeOtherProperty));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

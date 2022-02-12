@@ -32,5 +32,5 @@ public class OutputClass
 	Then I expect a method called 'MapPerformsMapping'
 		And I expect it to contain the variable 'inputClass'
 		And I expect it to contain the statement 'var result = _testClass.Map(inputClass);'
-		And I expect it to contain the statement 'Assert.That(result.SomeProperty, Is.EqualTo(inputClass.SomeProperty));'
-		And I expect it to contain the statement 'Assert.That(result.SomeOtherProperty, Is.EqualTo(inputClass.SomeOtherProperty));'
+		And I expect it to contain the statement 'Assert.That(result.SomeProperty, Is.SameAs(inputClass.SomeProperty));'
+		And I expect it to contain the statement 'Assert.That(result.SomeOtherProperty, Is.SameAs(inputClass.SomeOtherProperty));'

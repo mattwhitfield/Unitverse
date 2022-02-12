@@ -45,11 +45,5 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
         {
             Assert.Throws<ArgumentNullException>(() => _testClass.Create(ClassModelProvider.Instance, default(ClassModel), new NamingContext("class")).Consume());
         }
-
-        [Test]
-        public void CanGetSupportedInterfaceName()
-        {
-            Assert.That(_testClass.SupportedInterfaceName, Is.EqualTo("System.Collections.Generic.IEnumerable"));
-        }
     }
 }

@@ -19,6 +19,11 @@
 
         private static ExpressionSyntax Should(ExpressionSyntax actual)
         {
+            if (actual is BinaryExpressionSyntax)
+            {
+                actual = SyntaxFactory.ParenthesizedExpression(actual);
+            }
+
             return SyntaxFactory.InvocationExpression(
                                                     SyntaxFactory.MemberAccessExpression(
                                                         SyntaxKind.SimpleMemberAccessExpression,
@@ -47,6 +52,11 @@
             return SyntaxFactory.ExpressionStatement(Should(actual, isReferenceType ? "BeSameAs" : "Be", expected));
         }
 
+        public StatementSyntax AssertNotEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)
+        {
+            return SyntaxFactory.ExpressionStatement(Should(actual, isReferenceType ? "NotBeSameAs" : "NotBe", expected));
+        }
+
         public StatementSyntax AssertFail(string message)
         {
             return _baseFramework.AssertFail(message);
@@ -55,6 +65,16 @@
         public StatementSyntax AssertGreaterThan(ExpressionSyntax actual, ExpressionSyntax expected)
         {
             return SyntaxFactory.ExpressionStatement(Should(actual, "BeGreaterThan", expected));
+        }
+
+        public StatementSyntax AssertTrue(ExpressionSyntax actual)
+        {
+            return SyntaxFactory.ExpressionStatement(Should(actual, "BeTrue"));
+        }
+
+        public StatementSyntax AssertFalse(ExpressionSyntax actual)
+        {
+            return SyntaxFactory.ExpressionStatement(Should(actual, "BeFalse"));
         }
 
         public StatementSyntax AssertIsInstanceOf(ExpressionSyntax value, TypeSyntax type, bool isReferenceType)

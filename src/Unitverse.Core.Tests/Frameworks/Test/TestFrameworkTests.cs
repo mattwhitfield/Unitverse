@@ -35,7 +35,44 @@ namespace Unitverse.Core.Tests.Frameworks.Test
             var testClass = CreateFramework(frameworkTypes);
             var actual = Generate.Literal(1);
             var expected = Generate.Literal(1);
+            var result = testClass.AssertEqual(actual, expected, false);
+            Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
+        }
+
+        [TestCase(TestFrameworkTypes.NUnit2, "Assert.That(1, Is.SameAs(1));")]
+        [TestCase(TestFrameworkTypes.NUnit3, "Assert.That(1, Is.SameAs(1));")]
+        [TestCase(TestFrameworkTypes.MsTest, "Assert.AreSame(1, 1);")]
+        [TestCase(TestFrameworkTypes.XUnit, "Assert.Same(1, 1);")]
+        public void CanCallAssertEqualRef(TestFrameworkTypes frameworkTypes, string expectedOutput)
+        {
+            var testClass = CreateFramework(frameworkTypes);
+            var actual = Generate.Literal(1);
+            var expected = Generate.Literal(1);
             var result = testClass.AssertEqual(actual, expected, true);
+            Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
+        }
+
+        [TestCase(TestFrameworkTypes.NUnit2, "Assert.That(derf, Is.True);")]
+        [TestCase(TestFrameworkTypes.NUnit3, "Assert.That(derf, Is.True);")]
+        [TestCase(TestFrameworkTypes.MsTest, "Assert.IsTrue(derf);")]
+        [TestCase(TestFrameworkTypes.XUnit, "Assert.True(derf);")]
+        public void CanCallAssertTrue(TestFrameworkTypes frameworkTypes, string expectedOutput)
+        {
+            var testClass = CreateFramework(frameworkTypes);
+            var actual = SyntaxFactory.IdentifierName("derf");
+            var result = testClass.AssertTrue(actual);
+            Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
+        }
+
+        [TestCase(TestFrameworkTypes.NUnit2, "Assert.That(derf, Is.False);")]
+        [TestCase(TestFrameworkTypes.NUnit3, "Assert.That(derf, Is.False);")]
+        [TestCase(TestFrameworkTypes.MsTest, "Assert.IsFalse(derf);")]
+        [TestCase(TestFrameworkTypes.XUnit, "Assert.False(derf);")]
+        public void CanCallAssertFalse(TestFrameworkTypes frameworkTypes, string expectedOutput)
+        {
+            var testClass = CreateFramework(frameworkTypes);
+            var actual = SyntaxFactory.IdentifierName("derf");
+            var result = testClass.AssertFalse(actual);
             Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 

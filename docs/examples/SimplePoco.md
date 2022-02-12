@@ -1,4 +1,4 @@
-﻿## Simple POCO
+﻿# Simple POCO
 Demonstrates how tests are generated for a simple POCO type
 
 ### Source Type(s)
@@ -36,7 +36,7 @@ public class SomePocoTests
     {
         var testValue = "TestValue237820880";
         _testClass.Description = testValue;
-        _testClass.Description.Should().BeSameAs(testValue);
+        _testClass.Description.Should().Be(testValue);
     }
 
     [Fact]

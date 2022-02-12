@@ -30,7 +30,24 @@
                 throw new ArgumentNullException(nameof(expected));
             }
 
-            return SyntaxFactory.ExpressionStatement(AssertCall("AreEqual").WithArgumentList(Generate.Arguments(expected, actual)));
+            var method = isReferenceType ? "AreSame" : "AreEqual";
+            return SyntaxFactory.ExpressionStatement(AssertCall(method).WithArgumentList(Generate.Arguments(expected, actual)));
+        }
+
+        public StatementSyntax AssertNotEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)
+        {
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            if (expected == null)
+            {
+                throw new ArgumentNullException(nameof(expected));
+            }
+
+            var method = isReferenceType ? "AreNotSame" : "AreNotEqual";
+            return SyntaxFactory.ExpressionStatement(AssertCall(method).WithArgumentList(Generate.Arguments(expected, actual)));
         }
 
         public StatementSyntax AssertFail(string message)
@@ -88,6 +105,26 @@
 
             return SyntaxFactory.ExpressionStatement(AssertCall("IsTrue").WithArgumentList(
                 Generate.Arguments(SyntaxFactory.BinaryExpression(SyntaxKind.LessThanExpression, actual, expected))));
+        }
+
+        public StatementSyntax AssertTrue(ExpressionSyntax actual)
+        {
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            return SyntaxFactory.ExpressionStatement(AssertCall("IsTrue").WithArgumentList(Generate.Arguments(actual)));
+        }
+
+        public StatementSyntax AssertFalse(ExpressionSyntax actual)
+        {
+            if (actual == null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            return SyntaxFactory.ExpressionStatement(AssertCall("IsFalse").WithArgumentList(Generate.Arguments(actual)));
         }
 
         public StatementSyntax AssertNotNull(ExpressionSyntax value)

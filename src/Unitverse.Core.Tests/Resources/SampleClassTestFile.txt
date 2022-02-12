@@ -38,6 +38,8 @@ namespace TestNamespace.SubNameSpace
 
         public int ThisIsAProperty { get;set;}
 
+        protected int ProtectedProperty { get;set;}
+
         public ITest GetITest { get; }
 
         public TestClass ThisClass {get;set;}

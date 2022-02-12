@@ -26,6 +26,8 @@
 
         string ImplementsIComparableNamingPattern { get; }
 
+        string ImplementsIEquatableNamingPattern { get; }
+
         string PerformsMappingNamingPattern { get; }
 
         string CannotCallWithNullNamingPattern { get; }

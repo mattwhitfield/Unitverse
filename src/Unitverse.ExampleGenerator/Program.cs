@@ -174,7 +174,7 @@ namespace Unitverse.ExampleGenerator
             var file = new FileInfo(Path.Combine(docsFolder.FullName, "examples", exampleName + ".md"));
             using (var writer = new StreamWriter(file.FullName, false, Encoding.UTF8))
             {
-                writer.WriteLine("## " + title);
+                writer.WriteLine("# " + title);
                 writer.WriteLine(description);
                 writer.WriteLine();
                 writer.WriteLine("### Source Type(s)");

@@ -12,8 +12,9 @@
     {
         private static readonly Dictionary<string, Func<IFrameworkSet, IGenerationStrategy<ClassModel>>> StrategyFactories = new Dictionary<string, Func<IFrameworkSet, IGenerationStrategy<ClassModel>>>
         {
-            { "System.IComparable", frameworkSet => new ComparableGenerationStrategy(frameworkSet) },
-            { "System.Collections.Generic.IEnumerable", frameworkSet => new EnumerableGenerationStrategy(frameworkSet) },
+            { EquatableGenerationStrategy.InterfaceNameForMatch, frameworkSet => new EquatableGenerationStrategy(frameworkSet) },
+            { ComparableGenerationStrategy.InterfaceNameForMatch, frameworkSet => new ComparableGenerationStrategy(frameworkSet) },
+            { EnumerableGenerationStrategy.InterfaceNameForMatch, frameworkSet => new EnumerableGenerationStrategy(frameworkSet) },
         };
 
         private readonly IFrameworkSet _frameworkSet;

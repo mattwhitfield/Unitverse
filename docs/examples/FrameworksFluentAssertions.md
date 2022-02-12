@@ -1,4 +1,4 @@
-﻿## Frameworks - Fluent Assertions
+﻿# Frameworks - Fluent Assertions
 Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework. Also shows using FluentAssertions for the assertion framework.
 
 ### Source Type(s)

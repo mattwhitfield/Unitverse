@@ -51,6 +51,11 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
+            if (namingContext is null)
+            {
+                throw new ArgumentNullException(nameof(namingContext));
+            }
+
             var initializableProperties = model.Properties.Where(x => x.HasInit).ToList();
             foreach (var property in initializableProperties.Where(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType == SpecialType.System_String))
             {

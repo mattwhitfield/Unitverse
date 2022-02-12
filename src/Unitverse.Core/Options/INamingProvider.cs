@@ -26,6 +26,8 @@
 
         NameResolver ImplementsIComparable { get; }
 
+        NameResolver ImplementsIEquatable { get; }
+
         NameResolver PerformsMapping { get; }
 
         NameResolver CannotCallWithNull { get; }

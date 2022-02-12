@@ -15,6 +15,7 @@ This section contains examples of the output that Unitverse outputs, refreshed e
 | [Frameworks - XUnit & NSubstitute](FrameworksXUnitNSubstitute.md) | Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework |
 | [Generic Methods](GenericMethod.md) | Demonstrates how Unitverse generates tests for generic methods |
 | [IComparable](IComparableTests.md) | Demonstrates the tests generated for a type that implements IComparable |
+| [IEquatable](IEquatableTests.md) | Demonstrates the tests generated for a type that implements IEquatable |
 | [Indexers](IndexerTests.md) | Demonstrates the tests generated for a type that contains an indexer |
 | [Mapping Methods](MappingMethod.md) | Shows how unitverse generates a test to verify mappings between input parameter type and return type where the types share property names |
 | [Multiple Overloads](MultipleOverloads.md) | Shows how unitverse generates unambiguous names for methods that test multiple overloads of the same source method |

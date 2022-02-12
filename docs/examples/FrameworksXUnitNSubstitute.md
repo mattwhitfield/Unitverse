@@ -1,4 +1,4 @@
-﻿## Frameworks - XUnit & NSubstitute
+﻿# Frameworks - XUnit & NSubstitute
 Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework
 
 ### Source Type(s)
