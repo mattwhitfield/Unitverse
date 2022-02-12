@@ -1,3 +1,7 @@
+[![Visual Studio Marketplace Last Updated](https://img.shields.io/visual-studio-marketplace/last-updated/MattWhitfield.UnitverseVS2022?label=VS2022%20Last%20Updated)](https://marketplace.visualstudio.com/items?itemName=MattWhitfield.UnitverseVS2022)
+[![Visual Studio Marketplace Last Updated](https://img.shields.io/visual-studio-marketplace/last-updated/MattWhitfield.Unitverse?label=VS2019%20Last%20Updated)](https://marketplace.visualstudio.com/items?itemName=MattWhitfield.Unitverse)
+
+
 # Introduction
 
 Unitverse is an extension for [Visual Studio 2019](https://marketplace.visualstudio.com/items?itemName=MattWhitfield.Unitverse) and [Visual Studio 2022](https://marketplace.visualstudio.com/items?itemName=MattWhitfield.UnitverseVS2022) that generates tests for classes written in C#. There is a bunch of information about the extension in the documentation.
