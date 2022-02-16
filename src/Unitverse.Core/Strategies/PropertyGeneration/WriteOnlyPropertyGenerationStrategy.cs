@@ -24,6 +24,8 @@
 
         public int Priority => 2;
 
+        public Func<IStrategyOptions, bool> IsEnabled => x => x.PropertyChecksAreEnabled;
+
         public bool CanHandle(IPropertyModel property, ClassModel model)
         {
             if (property == null)

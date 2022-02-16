@@ -7,5 +7,7 @@
         IGenerationOptions GenerationOptions { get; }
 
         INamingOptions NamingOptions { get; }
+
+        IStrategyOptions StrategyOptions { get; }
     }
 }

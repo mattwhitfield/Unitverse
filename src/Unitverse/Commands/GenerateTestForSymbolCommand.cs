@@ -223,7 +223,7 @@
                 }
 
                 var generationOptions = OptionsResolver.DetectFrameworks(targetProject, options.GenerationOptions);
-                var resolvedOptions = new UnitTestGeneratorOptions(generationOptions, options.NamingOptions, options.StatisticsCollectionEnabled);
+                var resolvedOptions = new UnitTestGeneratorOptions(generationOptions, options.NamingOptions, options.StrategyOptions, options.StatisticsCollectionEnabled);
 
                 var projectMappings = new List<ProjectMapping>();
                 var set = new HashSet<TargetAsset>();

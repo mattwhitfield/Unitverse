@@ -25,6 +25,8 @@
 
         public int Priority => 1;
 
+        public Func<IStrategyOptions, bool> IsEnabled => x => x.ConstructorParameterChecksAreEnabled;
+
         public bool CanHandle(ClassModel method, ClassModel model)
         {
             if (method is null)

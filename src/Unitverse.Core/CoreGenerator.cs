@@ -73,7 +73,7 @@
                 if (shouldGenerate(member))
                 {
                     namingContext = nameDecorator(namingContext, member);
-                    foreach (var method in factory.CreateFor(member, generationContext.Model, namingContext))
+                    foreach (var method in factory.CreateFor(member, generationContext.Model, namingContext, generationContext.FrameworkSet.Options.StrategyOptions))
                     {
                         var methodName = method.Identifier.Text;
                         var existingMethod = declaration.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault(x => string.Equals(x.Identifier.Text, methodName, StringComparison.OrdinalIgnoreCase));

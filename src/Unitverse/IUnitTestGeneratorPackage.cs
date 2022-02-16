@@ -16,6 +16,8 @@
 
         INamingOptions NamingOptions { get; }
 
+        IStrategyOptions StrategyOptions { get; }
+
         VisualStudioWorkspace Workspace { get; }
 
         Task<object> GetServiceAsync(Type serviceType);

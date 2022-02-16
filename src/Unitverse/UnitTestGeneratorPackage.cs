@@ -20,6 +20,7 @@
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(GenerationOptions), "Unitverse", "Generation Options", 0, 0, true)]
     [ProvideOptionPage(typeof(NamingOptions), "Unitverse", "Naming Options", 0, 0, true)]
+    [ProvideOptionPage(typeof(StrategyOptions), "Unitverse", "Strategy Options", 0, 0, true)]
     [ProvideOptionPage(typeof(ExportOptions), "Unitverse", "Options Export", 0, 0, true)]
     [ProvideOptionPage(typeof(StatisticsOptions), "Unitverse", "Statistics", 0, 0, true)]
     public sealed class UnitTestGeneratorPackage : AsyncPackage, IUnitTestGeneratorPackage
@@ -28,13 +29,15 @@
 
         public INamingOptions NamingOptions => (NamingOptions)GetDialogPage(typeof(NamingOptions));
 
+        public IStrategyOptions StrategyOptions => (StrategyOptions)GetDialogPage(typeof(StrategyOptions));
+
         public IUnitTestGeneratorOptions Options
         {
             get
             {
                 var solutionFilePath = Workspace?.CurrentSolution?.FilePath;
                 var statisticsOptions = (StatisticsOptions)GetDialogPage(typeof(StatisticsOptions));
-                return UnitTestGeneratorOptionsFactory.Create(solutionFilePath, GenerationOptions, NamingOptions, statisticsOptions.Enabled);
+                return UnitTestGeneratorOptionsFactory.Create(solutionFilePath, GenerationOptions, NamingOptions, StrategyOptions, statisticsOptions.Enabled);
             }
         }
 

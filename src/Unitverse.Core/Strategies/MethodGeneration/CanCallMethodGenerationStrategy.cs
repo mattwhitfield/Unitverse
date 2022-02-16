@@ -25,6 +25,8 @@
 
         public int Priority => 1;
 
+        public Func<IStrategyOptions, bool> IsEnabled => x => x.MethodCallChecksAreEnabled;
+
         public bool CanHandle(IMethodModel method, ClassModel model)
         {
             if (method is null)

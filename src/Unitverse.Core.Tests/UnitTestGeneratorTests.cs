@@ -70,12 +70,13 @@
 
             var generationOptions = new MutableGenerationOptions(new DefaultGenerationOptions());
             var namingOptions = new MutableNamingOptions(new DefaultNamingOptions());
+            var strategyOptions = new MutableStrategyOptions(new DefaultStrategyOptions());
 
             generationOptions.FrameworkType = testFrameworkTypes;
             generationOptions.MockingFrameworkType = mockingFrameworkType;
             generationOptions.UseFluentAssertions = useFluentAssertions;
 
-            var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, false);
+            var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false);
 
             var lines = classAsText.Lines().Where(x => x.StartsWith("// #", StringComparison.Ordinal)).Select(x => x.Substring(4).Trim()).ToList();
             if (lines.Any())
@@ -92,6 +93,7 @@
 
                 properties.ApplyTo(generationOptions);
                 properties.ApplyTo(namingOptions);
+                properties.ApplyTo(strategyOptions);
             }
 
             var tree = CSharpSyntaxTree.ParseText(classAsText, new CSharpParseOptions(LanguageVersion.Latest));

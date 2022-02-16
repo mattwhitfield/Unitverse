@@ -23,6 +23,8 @@
 
         public int Priority => 3;
 
+        public Func<IStrategyOptions, bool> IsEnabled => x => x.InitializedPropertyChecksAreEnabled;
+
         public bool CanHandle(IPropertyModel property, ClassModel model)
         {
             if (property is null)

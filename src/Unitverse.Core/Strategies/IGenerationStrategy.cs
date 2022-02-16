@@ -1,5 +1,6 @@
 ﻿namespace Unitverse.Core.Strategies
 {
+    using System;
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Models;
@@ -10,6 +11,8 @@
         bool IsExclusive { get; }
 
         int Priority { get; }
+
+        Func<IStrategyOptions, bool> IsEnabled { get; }
 
         bool CanHandle(T member, ClassModel model);
 

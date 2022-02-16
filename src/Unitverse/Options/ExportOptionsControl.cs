@@ -42,7 +42,7 @@ namespace Unitverse.Options
                                 }
                             }
 
-                            ConfigExporter.WriteTo(targetPath, new object[] { unitTestGeneratorPackage.GenerationOptions, unitTestGeneratorPackage.NamingOptions });
+                            ConfigExporter.WriteTo(targetPath, new object[] { unitTestGeneratorPackage.GenerationOptions, unitTestGeneratorPackage.NamingOptions, unitTestGeneratorPackage.StrategyOptions });
 
                             MessageBox.Show(this, "Options written to: " + targetPath, "Unitverse", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }

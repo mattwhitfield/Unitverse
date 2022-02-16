@@ -30,6 +30,8 @@
 
         protected abstract NameResolver GeneratedMethodNamePattern { get; }
 
+        public Func<IStrategyOptions, bool> IsEnabled => x => x.InterfaceImplementationChecksAreEnabled;
+
         public virtual bool CanHandle(ClassModel classModel, ClassModel model)
         {
             if (classModel == null)

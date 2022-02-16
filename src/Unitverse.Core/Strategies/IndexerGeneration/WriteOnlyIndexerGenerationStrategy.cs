@@ -24,6 +24,8 @@
 
         public int Priority => 2;
 
+        public Func<IStrategyOptions, bool> IsEnabled => x => x.IndexerChecksAreEnabled;
+
         public bool CanHandle(IIndexerModel indexer, ClassModel model)
         {
             if (indexer == null)

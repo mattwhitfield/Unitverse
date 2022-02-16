@@ -23,6 +23,8 @@
 
         public int Priority => 1;
 
+        public Func<IStrategyOptions, bool> IsEnabled => x => x.OperatorChecksAreEnabled;
+
         public bool CanHandle(IOperatorModel method, ClassModel model)
         {
             if (method is null)
