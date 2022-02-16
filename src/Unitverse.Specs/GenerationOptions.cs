@@ -11,6 +11,11 @@
             MockingFrameworkType = mockFramework;
         }
 
+        public static IUnitTestGeneratorOptions Get(TestFrameworkTypes testFramework, MockingFrameworkType mockFramework)
+        {
+            return new UnitTestGeneratorOptions(new GenerationOptions(testFramework, mockFramework), new DefaultNamingOptions(), new DefaultStrategyOptions(), false);
+        }
+
         public TestFrameworkTypes FrameworkType { get; }
         public MockingFrameworkType MockingFrameworkType { get; }
         public bool CreateProjectAutomatically { get; } = true;

@@ -7,7 +7,7 @@
 
     public static class UnitTestGeneratorOptionsFactory
     {
-        public static IUnitTestGeneratorOptions Create(string solutionFilePath, IGenerationOptions generationOptions, INamingOptions namingOptions, bool statisticsGenerationEnabled)
+        public static IUnitTestGeneratorOptions Create(string solutionFilePath, IGenerationOptions generationOptions, INamingOptions namingOptions, IStrategyOptions strategyOptions, bool statisticsGenerationEnabled)
         {
             if (generationOptions == null)
             {
@@ -16,6 +16,7 @@
 
             var mutableGenerationOptions = new MutableGenerationOptions(generationOptions);
             var mutableNamingOptions = new MutableNamingOptions(namingOptions);
+            var mutableStrategyOptions = new MutableStrategyOptions(strategyOptions);
 
             if (!string.IsNullOrWhiteSpace(solutionFilePath))
             {
@@ -29,9 +30,10 @@
 
                 properties.ApplyTo(mutableGenerationOptions);
                 properties.ApplyTo(mutableNamingOptions);
+                properties.ApplyTo(mutableStrategyOptions);
             }
 
-            return new UnitTestGeneratorOptions(mutableGenerationOptions, mutableNamingOptions, statisticsGenerationEnabled);
+            return new UnitTestGeneratorOptions(mutableGenerationOptions, mutableNamingOptions, mutableStrategyOptions, statisticsGenerationEnabled);
         }
     }
 }

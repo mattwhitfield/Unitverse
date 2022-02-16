@@ -660,6 +660,40 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // # ConstructorChecksAreEnabled=false
+        ///// # ConstructorParameterChecksAreEnabled=false
+        ///// # MethodParameterChecksAreEnabled=false
+        ///// # PropertyChecksAreEnabled=false
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///
+        ///    public interface ITest
+        ///    {
+        ///        int ThisIsAProperty {get;set;}
+        ///    }
+        ///
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(string stringProp, ITest iTest)
+        ///        {
+        ///
+        ///        }
+        /// 
+        ///        public TestClass(int? nullableIntProp, ITest iTest)
+        ///        {
+        ///
+        ///        }
+        /// 
+        ///      [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ExcludedStrategies {
+            get {
+                return ResourceManager.GetString("ExcludedStrategies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///using System;
         ///using System.Drawing;

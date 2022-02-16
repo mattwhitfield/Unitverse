@@ -10,11 +10,16 @@
     {
         protected abstract IEnumerable<IGenerationStrategy<T>> Strategies { get; }
 
-        public IEnumerable<MethodDeclarationSyntax> CreateFor(T item, ClassModel model, NamingContext namingContext)
+        public IEnumerable<MethodDeclarationSyntax> CreateFor(T item, ClassModel model, NamingContext namingContext, IStrategyOptions strategyOptions)
         {
             var strategies = Strategies.Where(x => x.CanHandle(item, model)).OrderByDescending(x => x.Priority);
             foreach (var strategy in strategies)
             {
+                if (!strategy.IsEnabled(strategyOptions))
+                {
+                    continue;
+                }
+
                 foreach (var method in strategy.Create(item, model, namingContext))
                 {
                     yield return method;

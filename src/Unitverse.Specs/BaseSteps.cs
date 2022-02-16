@@ -26,7 +26,7 @@
             _context.SemanticModel = model;
 
             var extractor = new TestableItemExtractor(syntaxTree, model);
-            _context.ClassModel = extractor.Extract(syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().First(), new UnitTestGeneratorOptions(new GenerationOptions(TestFrameworkTypes.NUnit3, MockingFrameworkType.NSubstitute), new DefaultNamingOptions(), false)).First();
+            _context.ClassModel = extractor.Extract(syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().First(), new UnitTestGeneratorOptions(new GenerationOptions(TestFrameworkTypes.NUnit3, MockingFrameworkType.NSubstitute), new DefaultNamingOptions(), new DefaultStrategyOptions(), false)).First();
         }
 
         [Given(@"I set my test framework to '(.*)'")]

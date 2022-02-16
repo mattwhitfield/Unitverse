@@ -26,6 +26,8 @@
 
         public int Priority => 1;
 
+        public Func<IStrategyOptions, bool> IsEnabled => x => x.MappingMethodChecksAreEnabled;
+
         public bool CanHandle(IMethodModel method, ClassModel model)
         {
             if (method is null)

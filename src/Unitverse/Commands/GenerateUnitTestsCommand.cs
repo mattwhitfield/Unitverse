@@ -149,7 +149,7 @@
                     {
                         var generationOptions = OptionsResolver.DetectFrameworks(targetProject, options.GenerationOptions);
 
-                        projectMappings[source.Project] = new ProjectMapping(source.Project, targetProject, new UnitTestGeneratorOptions(generationOptions, options.NamingOptions, options.StatisticsCollectionEnabled));
+                        projectMappings[source.Project] = new ProjectMapping(source.Project, targetProject, new UnitTestGeneratorOptions(generationOptions, options.NamingOptions, options.StrategyOptions, options.StatisticsCollectionEnabled));
                     }
                 }
 
