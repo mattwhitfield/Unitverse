@@ -1,6 +1,6 @@
-// # Arrange=Set it up yo
-// # Act=Do that funky thang
-// # Assert=Check everything went exactly amazingly
+// # ArrangeComment=Set it up yo
+// # ActComment=Do that funky thang
+// # AssertComment=Check everything went exactly amazingly
 
 namespace TestNamespace.SubNameSpace
 {
