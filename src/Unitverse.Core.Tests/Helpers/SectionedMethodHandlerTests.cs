@@ -21,13 +21,81 @@ namespace Unitverse.Core.Tests.Helpers
         public void SetUp()
         {
             _method = SyntaxFactory.MethodDeclaration(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.VoidKeyword)), "method");
-            _testClass = new SectionedMethodHandler(_method);
+            _testClass = new SectionedMethodHandler(_method, "Arrange", "Act", "Assert");
         }
 
         [Test]
         public void CannotConstructWithNullMethod()
         {
             FluentActions.Invoking(() => new SectionedMethodHandler(default(MethodDeclarationSyntax))).Should().Throw<ArgumentNullException>();
+        }
+
+        [Test]
+        public void SingleTransitionNoComments()
+        {
+            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass.Arrange(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
+            AssertOutput("var someVar = 5;");
+        }
+
+        [Test]
+        public void EndingBlankLineNoComments()
+        {
+            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass.Arrange(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
+            _testClass.BlankLine();
+            AssertOutput("var someVar = 5;");
+        }
+
+        [Test]
+        public void DoubleTransitionNoComments()
+        {
+            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass.Arrange(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
+            _testClass.Act(Generate.ImplicitlyTypedVariableDeclaration("someVar2", Generate.Literal(6)));
+            AssertOutput("var someVar = 5;", "", "var someVar2 = 6;");
+        }
+
+        [Test]
+        public void DoubleTransitionExplicitBlankNoComments()
+        {
+            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass.Arrange(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
+            _testClass.BlankLine();
+            _testClass.Act(Generate.ImplicitlyTypedVariableDeclaration("someVar2", Generate.Literal(6)));
+            AssertOutput("var someVar = 5;", "", "var someVar2 = 6;");
+        }
+
+        [Test]
+        public void DoubleTransitionStupidBlankNoComments()
+        {
+            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass.Arrange(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
+            _testClass.BlankLine();
+            _testClass.BlankLine();
+            _testClass.BlankLine();
+            _testClass.BlankLine();
+            _testClass.BlankLine();
+            _testClass.Act(Generate.ImplicitlyTypedVariableDeclaration("someVar2", Generate.Literal(6)));
+            AssertOutput("var someVar = 5;", "", "var someVar2 = 6;");
+        }
+
+        [Test]
+        public void PlainEmitNoComments()
+        {
+            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass.Emit(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
+            AssertOutput("var someVar = 5;");
+        }
+
+        [Test]
+        public void PlainEmitBlankLinesNoComments()
+        {
+            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass.Emit(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
+            _testClass.BlankLine();
+            _testClass.Emit(Generate.ImplicitlyTypedVariableDeclaration("someVar2", Generate.Literal(6)));
+            AssertOutput("var someVar = 5;", "", "var someVar2 = 6;");
         }
 
         [Test]

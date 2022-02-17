@@ -8,15 +8,24 @@
 
     public class SectionedMethodHandler
     {
+        // todo - remove
         public SectionedMethodHandler(MethodDeclarationSyntax method)
+            : this(method, "Arrange", "Act", "Assert")
         {
-            Method = method ?? throw new ArgumentNullException(nameof(method));
         }
 
-        // todo - constructor params
-        private readonly string _arrangeComment = "Arrange";
-        private readonly string _actComment = "Act";
-        private readonly string _assertComment = "Assert";
+
+        public SectionedMethodHandler(MethodDeclarationSyntax method, string arrangeComment, string actComment, string assertComment)
+        {
+            Method = method ?? throw new ArgumentNullException(nameof(method));
+            _arrangeComment = arrangeComment;
+            _actComment = actComment;
+            _assertComment = assertComment;
+        }
+
+        private readonly string _arrangeComment;
+        private readonly string _actComment;
+        private readonly string _assertComment;
 
         private enum Section
         {
@@ -127,12 +136,15 @@
                 {
                     case Section.Arrange:
                         comment = _arrangeComment;
+                        _blankLineRequired = _anyEmitted;
                         break;
                     case Section.Act:
                         comment = _actComment;
+                        _blankLineRequired = _anyEmitted;
                         break;
                     case Section.Assert:
                         comment = _assertComment;
+                        _blankLineRequired = _anyEmitted;
                         break;
                 }
 
