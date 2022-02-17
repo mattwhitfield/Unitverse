@@ -34,9 +34,14 @@ public class TestClassTests
     [Fact]
     public async Task CanCallThisIsAnAsyncMethod()
     {
+        // Arrange
         var methodName = "TestValue534011718";
         var methodValue = 237820880;
+
+        // Act
         await _testClass.ThisIsAnAsyncMethod(methodName, methodValue);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -52,9 +57,14 @@ public class TestClassTests
     [Fact]
     public async Task CanCallThisIsAnAsyncMethodWithReturnType()
     {
+        // Arrange
         var methodName = "TestValue1657007234";
         var methodValue = 1412011072;
+
+        // Act
         var result = await _testClass.ThisIsAnAsyncMethodWithReturnType(methodName, methodValue);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 

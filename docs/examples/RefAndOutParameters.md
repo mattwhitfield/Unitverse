@@ -42,9 +42,14 @@ public class TestClassTests
     [Fact]
     public void CanCallRefParamMethodString()
     {
+        // Arrange
         var stringProp = "TestValue534011718";
         var refParam = "TestValue237820880";
+
+        // Act
         _testClass.RefParamMethodString(stringProp, ref refParam);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -71,8 +76,13 @@ public class TestClassTests
     [Fact]
     public void CanCallOutParamMethodString()
     {
+        // Arrange
         var stringProp = "TestValue929393559";
+
+        // Act
         _testClass.OutParamMethodString(stringProp, out var outParam);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -88,9 +98,14 @@ public class TestClassTests
     [Fact]
     public void CanCallRefParamMethodClass()
     {
+        // Arrange
         var stringProp = "TestValue760389092";
         var refParam = new TestClass();
+
+        // Act
         _testClass.RefParamMethodClass(stringProp, ref refParam);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -114,8 +129,13 @@ public class TestClassTests
     [Fact]
     public void CanCallOutParamMethodClass()
     {
+        // Arrange
         var stringProp = "TestValue217468053";
+
+        // Act
         _testClass.OutParamMethodClass(stringProp, out var outParam);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 

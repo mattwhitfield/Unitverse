@@ -18,7 +18,7 @@
             }
 
             var context = new GenerationContext();
-            var testFramework = Create(options.GenerationOptions.FrameworkType);
+            var testFramework = CreateTestFramework(options);
             IAssertionFramework assertionFramework = testFramework;
             return new FrameworkSet(testFramework, Create(options.GenerationOptions.MockingFrameworkType, context), options.GenerationOptions.UseFluentAssertions ? new FluentAssertionFramework(assertionFramework) : assertionFramework, new NamingProvider(options.NamingOptions), context, options.GenerationOptions.TestTypeNaming, options);
         }
@@ -38,26 +38,28 @@
             }
         }
 
-        private static ITestFramework Create(TestFrameworkTypes testFrameworkTypes)
+        private static ITestFramework CreateTestFramework(IUnitTestGeneratorOptions options)
         {
+            var testFrameworkTypes = options.GenerationOptions.FrameworkType;
+
             if ((testFrameworkTypes & TestFrameworkTypes.XUnit) > 0)
             {
-                return new XUnitTestFramework();
+                return new XUnitTestFramework(options);
             }
 
             if ((testFrameworkTypes & TestFrameworkTypes.NUnit3) > 0)
             {
-                return new NUnit3TestFramework();
+                return new NUnit3TestFramework(options);
             }
 
             if ((testFrameworkTypes & TestFrameworkTypes.NUnit2) > 0)
             {
-                return new NUnit2TestFramework();
+                return new NUnit2TestFramework(options);
             }
 
             if ((testFrameworkTypes & TestFrameworkTypes.MsTest) > 0)
             {
-                return new MsTestTestFramework();
+                return new MsTestTestFramework(options);
             }
 
             throw new NotSupportedException(Strings.FrameworkSetFactory_Create_Couldn_t_find_the_required_testing_framework);

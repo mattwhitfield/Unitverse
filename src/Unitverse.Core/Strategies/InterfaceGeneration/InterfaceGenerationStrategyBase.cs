@@ -5,6 +5,7 @@
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
@@ -65,11 +66,11 @@
                 namingContext = namingContext.WithInterfaceName(interfaceModel.InterfaceName).WithTypeParameters(typeParameters);
 
                 var method = FrameworkSet.TestFramework.CreateTestMethod(GeneratedMethodNamePattern, namingContext, false, model != null && model.IsStatic);
-                var body = GetBodyStatements(classModel, interfaceModel);
-                yield return method.AddBodyStatements(body.ToArray());
+                AddBodyStatements(classModel, interfaceModel, method);
+                yield return method.Method;
             }
         }
 
-        protected abstract IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel);
+        protected abstract void AddBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel, SectionedMethodHandler method);
     }
 }

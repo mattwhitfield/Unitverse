@@ -69,8 +69,13 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod()
     {
+        // Arrange
         Func<string> func = () => "TestValue237820880";
+
+        // Act
         TestClass.ThisIsAMethod(func);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -83,8 +88,13 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod2()
     {
+        // Arrange
         Func<string, SomeClass> func = x => new SomeClass(1002897798);
+
+        // Act
         TestClass.ThisIsAMethod2(func);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -97,8 +107,13 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod3()
     {
+        // Arrange
         Func<int, string, SomeClass> func = (x, y) => new SomeClass(1657007234);
+
+        // Act
         TestClass.ThisIsAMethod3(func);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -111,8 +126,13 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod4()
     {
+        // Arrange
         Func<int, int, string, SomeClass> func = (x, y, z) => new SomeClass(1412011072);
+
+        // Act
         TestClass.ThisIsAMethod4(func);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -125,8 +145,13 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod5()
     {
+        // Arrange
         Func<int, int, int, string, SomeClass> func = (a, b, c, d) => new SomeClass(929393559);
+
+        // Act
         TestClass.ThisIsAMethod5(func);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -139,8 +164,13 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod6()
     {
+        // Arrange
         Action action = () => { };
+
+        // Act
         TestClass.ThisIsAMethod6(action);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -153,8 +183,13 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod7()
     {
+        // Arrange
         Action<SomeClass> action = x => { };
+
+        // Act
         TestClass.ThisIsAMethod7(action);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -167,8 +202,13 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod8()
     {
+        // Arrange
         Action<SomeClass, int> action = (x, y) => { };
+
+        // Act
         TestClass.ThisIsAMethod8(action);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -181,8 +221,13 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod9()
     {
+        // Arrange
         Action<SomeClass, int, int> action = (x, y, z) => { };
+
+        // Act
         TestClass.ThisIsAMethod9(action);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -195,8 +240,13 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod10()
     {
+        // Arrange
         Action<SomeClass, int, int, int> action = (a, b, c, d) => { };
+
+        // Act
         TestClass.ThisIsAMethod10(action);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -209,8 +259,13 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod11()
     {
+        // Arrange
         Action<SomeClass, int, int, int, int> action = (a, b, c, d, e) => { };
+
+        // Act
         TestClass.ThisIsAMethod11(action);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 

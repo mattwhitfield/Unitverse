@@ -46,7 +46,10 @@ public class TestClassTests
     [Test]
     public void CanConstruct()
     {
+        // Act
         var instance = new TestClass(_dependency);
+
+        // Assert
         Assert.That(instance, Is.Not.Null);
     }
 
@@ -59,9 +62,14 @@ public class TestClassTests
     [Test]
     public void CanCallSomeMethod()
     {
+        // Arrange
         var methodName = "TestValue534011718";
         var methodValue = 237820880;
+
+        // Act
         _testClass.SomeMethod(methodName, methodValue);
+
+        // Assert
         Assert.Fail("Create or modify test");
     }
 
@@ -76,9 +84,14 @@ public class TestClassTests
     [Test]
     public async Task CanCallSomeAsyncMethod()
     {
+        // Arrange
         var methodName = "TestValue1657007234";
         var methodValue = 1412011072;
+
+        // Act
         var result = await _testClass.SomeAsyncMethod(methodName, methodValue);
+
+        // Assert
         Assert.Fail("Create or modify test");
     }
 

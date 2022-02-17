@@ -52,11 +52,22 @@ public class TestClassTests
     [Fact]
     public void CanConstruct()
     {
+        // Act
         var instance = new TestClass(_notNullable, _nullable);
+
+        // Assert
         instance.Should().NotBeNull();
+
+        // Act
         instance = new TestClass(_testITest);
+
+        // Assert
         instance.Should().NotBeNull();
+
+        // Act
         instance = new TestClass(_testITest, _someOtherThing);
+
+        // Assert
         instance.Should().NotBeNull();
     }
 
@@ -95,10 +106,15 @@ public class TestClassTests
     [Fact]
     public void CanCallGetFullName()
     {
+        // Arrange
         var first = "TestValue760389092";
         var middle = "TestValue2026928803";
         var last = "TestValue217468053";
+
+        // Act
         var result = _testClass.GetFullName(first, middle, last);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -131,9 +147,14 @@ public class TestClassTests
     [Fact]
     public void CanCallSomeMethod()
     {
+        // Arrange
         var test = Substitute.For<ITest>();
         var someOtherThing = "TestValue1406361028";
+
+        // Act
         _testClass.SomeMethod(test, someOtherThing);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -155,8 +176,13 @@ public class TestClassTests
     [Fact]
     public void CanCallMethodForWhichNoNullabilityTestShouldBeEmitted()
     {
+        // Arrange
         var test = Substitute.For<ITest>();
+
+        // Act
         _testClass.MethodForWhichNoNullabilityTestShouldBeEmitted(test);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 }

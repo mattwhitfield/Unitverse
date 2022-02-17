@@ -23,7 +23,7 @@
 
         protected override NameResolver GeneratedMethodNamePattern => FrameworkSet.NamingProvider.ImplementsIEnumerable;
 
-        protected override IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
+        protected override void AddBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel, SectionedMethodHandler method)
         {
             ITypeSymbol enumerableTypeSymbol = sourceModel.TypeSymbol;
             if (interfaceModel.IsGeneric)
@@ -32,25 +32,25 @@
                 enumerableTypeSymbol = interfaceModel.GenericTypes.First();
             }
 
-            yield return SyntaxHelper.CreateVariableDeclaration(
+            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
                 sourceModel.TypeSymbol.ToTypeSyntax(FrameworkSet.Context),
                 "enumerable",
                 SyntaxFactory.DefaultExpression(sourceModel.TypeSyntax))
-                .AsLocalVariableDeclarationStatementSyntax();
+                .AsLocalVariableDeclarationStatementSyntax());
 
-            yield return SyntaxHelper.CreateVariableDeclaration(
+            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
                 SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)),
                 "expectedCount",
                 SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(-1)))
-                .AsLocalVariableDeclarationStatementSyntax();
+                .AsLocalVariableDeclarationStatementSyntax());
 
-            yield return SyntaxHelper.CreateVariableDeclaration(
+            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
                 SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)),
                 "actualCount",
                 SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(0)))
-                .AsLocalVariableDeclarationStatementSyntax();
+                .AsLocalVariableDeclarationStatementSyntax());
 
-            yield return SyntaxFactory.UsingStatement(
+            method.Act(SyntaxFactory.UsingStatement(
                 SyntaxFactory.Block(
                     FrameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("enumerator")),
                     SyntaxFactory.WhileStatement(
@@ -76,9 +76,9 @@
                         SyntaxFactory.MemberAccessExpression(
                             SyntaxKind.SimpleMemberAccessExpression,
                             SyntaxFactory.IdentifierName("enumerable"),
-                            SyntaxFactory.IdentifierName("GetEnumerator")))));
+                            SyntaxFactory.IdentifierName("GetEnumerator"))))));
 
-            yield return FrameworkSet.AssertionFramework.AssertEqual(SyntaxFactory.IdentifierName("actualCount"), SyntaxFactory.IdentifierName("expectedCount"), false);
+            method.Assert(FrameworkSet.AssertionFramework.AssertEqual(SyntaxFactory.IdentifierName("actualCount"), SyntaxFactory.IdentifierName("expectedCount"), false));
         }
     }
 }

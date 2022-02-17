@@ -23,7 +23,7 @@
 
         protected override NameResolver GeneratedMethodNamePattern => FrameworkSet.NamingProvider.ImplementsIComparable;
 
-        protected override IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
+        protected override void AddBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel, SectionedMethodHandler method)
         {
             ITypeSymbol comparableTypeIdentifier = sourceModel.TypeSymbol;
             if (interfaceModel.IsGeneric)
@@ -33,29 +33,29 @@
 
             var typeSyntax = comparableTypeIdentifier.ToTypeSyntax(FrameworkSet.Context);
 
-            yield return SyntaxHelper.CreateVariableDeclaration(
+            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
                     sourceModel.TypeSymbol.ToTypeSyntax(FrameworkSet.Context),
                     "baseValue",
                     SyntaxFactory.DefaultExpression(sourceModel.TypeSyntax))
-                .AsLocalVariableDeclarationStatementSyntax();
+                .AsLocalVariableDeclarationStatementSyntax());
 
-            yield return SyntaxHelper.CreateVariableDeclaration(
+            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
                     typeSyntax,
                     "equalToBaseValue",
                     SyntaxFactory.DefaultExpression(typeSyntax))
-                .AsLocalVariableDeclarationStatementSyntax();
+                .AsLocalVariableDeclarationStatementSyntax());
 
-            yield return SyntaxHelper.CreateVariableDeclaration(
+            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
                     typeSyntax,
                     "greaterThanBaseValue",
                     SyntaxFactory.DefaultExpression(typeSyntax))
-                .AsLocalVariableDeclarationStatementSyntax();
+                .AsLocalVariableDeclarationStatementSyntax());
 
-            yield return FrameworkSet.AssertionFramework.AssertEqual(CreateInvocationStatement("baseValue", "CompareTo", "equalToBaseValue"), Generate.Literal(0), false);
+            method.Assert(FrameworkSet.AssertionFramework.AssertEqual(CreateInvocationStatement("baseValue", "CompareTo", "equalToBaseValue"), Generate.Literal(0), false));
 
-            yield return FrameworkSet.AssertionFramework.AssertLessThan(CreateInvocationStatement("baseValue", "CompareTo", "greaterThanBaseValue"), Generate.Literal(0));
+            method.Assert(FrameworkSet.AssertionFramework.AssertLessThan(CreateInvocationStatement("baseValue", "CompareTo", "greaterThanBaseValue"), Generate.Literal(0)));
 
-            yield return FrameworkSet.AssertionFramework.AssertGreaterThan(CreateInvocationStatement("greaterThanBaseValue", "CompareTo", "baseValue"), Generate.Literal(0));
+            method.Assert(FrameworkSet.AssertionFramework.AssertGreaterThan(CreateInvocationStatement("greaterThanBaseValue", "CompareTo", "baseValue"), Generate.Literal(0)));
         }
 
         private static InvocationExpressionSyntax CreateInvocationStatement(string targetName, string memberName, string parameterName)

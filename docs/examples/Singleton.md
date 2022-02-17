@@ -40,8 +40,13 @@ public class TestClassTests
     [Fact]
     public void CanCallGetTableName()
     {
+        // Arrange
         var baseName = "TestValue534011718";
+
+        // Act
         var result = _testClass.GetTableName(baseName);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -57,14 +62,20 @@ public class TestClassTests
     [Fact]
     public void CanGetInstance()
     {
+        // Assert
         TestClass.Instance.Should().BeAssignableTo<TestClass>();
+
+        // Arrange
         throw new NotImplementedException("Create or modify test");
     }
 
     [Fact]
     public void CanGetIsShared()
     {
+        // Assert
         _testClass.IsShared.As<object>().Should().BeAssignableTo<bool>();
+
+        // Arrange
         throw new NotImplementedException("Create or modify test");
     }
 }

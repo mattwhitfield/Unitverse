@@ -27,11 +27,16 @@ public class GenericSourceTests
     [Fact]
     public void CanCallDoStuff()
     {
+        // Arrange
         var g = new Guid("8286d046-9740-a3e4-95cf-ff46699c73c4");
         var dtParam = DateTime.UtcNow;
         var theThing = "TestValue607156385";
         var thing2 = 1321446349;
+
+        // Act
         _testClass.DoStuff<T>(g, dtParam, theThing, thing2);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 }

@@ -65,18 +65,19 @@
 
                 if (isFirst)
                 {
-                    generatedMethod = generatedMethod.AddBodyStatements(Generate.ImplicitlyTypedVariableDeclaration("instance", creationExpression));
+                    generatedMethod.Act(Generate.ImplicitlyTypedVariableDeclaration("instance", creationExpression));
                     isFirst = false;
                 }
                 else
                 {
-                    generatedMethod = generatedMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("instance"), creationExpression)));
+                    generatedMethod.Act(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("instance"), creationExpression)));
                 }
 
-                generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));
+                generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));
+                generatedMethod.BlankLine();
             }
 
-            yield return generatedMethod;
+            yield return generatedMethod.Method;
         }
     }
 }

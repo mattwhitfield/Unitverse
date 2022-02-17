@@ -8,8 +8,13 @@
     using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
-    public class MsTestTestFramework : ITestFramework, IAssertionFramework
+    public class MsTestTestFramework : BaseTestFramework, ITestFramework, IAssertionFramework
     {
+        public MsTestTestFramework(IUnitTestGeneratorOptions options)
+            : base(options)
+        {
+        }
+
         public bool SupportsStaticTestClasses => false;
 
         public bool AssertThrowsAsyncIsAwaitable => true;
@@ -161,7 +166,7 @@
                     SyntaxFactory.SingletonSeparatedList(Generate.Attribute("TestInitialize"))));
         }
 
-        public MethodDeclarationSyntax CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues)
+        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues)
         {
             if (nameResolver is null)
             {
@@ -193,10 +198,10 @@
                 method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("DataRow", testValue))));
             }
 
-            return method;
+            return new SectionedMethodHandler(method);
         }
 
-        public MethodDeclarationSyntax CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic)
+        public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic)
         {
             if (nameResolver is null)
             {
@@ -210,7 +215,7 @@
 
             var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, false);
 
-            return method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("TestMethod"))));
+            return new SectionedMethodHandler(method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("TestMethod")))));
         }
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()

@@ -53,7 +53,10 @@ public class PersonTests
     [Fact]
     public void CanInitialize()
     {
+        // Act
         var instance = new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours };
+
+        // Assert
         instance.Should().NotBeNull();
     }
 
@@ -92,8 +95,11 @@ public class PersonTests
     [Fact]
     public void ImplementsIEquatable_Person()
     {
+        // Arrange
         var same = new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours };
         var different = new Person();
+
+        // Assert
         _testClass.Equals(default(object)).Should().BeFalse();
         _testClass.Equals(new object()).Should().BeFalse();
         _testClass.Equals((object)same).Should().BeTrue();

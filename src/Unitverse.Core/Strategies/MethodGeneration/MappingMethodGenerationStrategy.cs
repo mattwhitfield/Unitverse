@@ -117,7 +117,7 @@
                 {
                     var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
 
-                    generatedMethod = generatedMethod.AddBodyStatements(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                    generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
 
                     if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
                     {
@@ -156,7 +156,7 @@
                 bodyStatement = SyntaxFactory.ExpressionStatement(methodCall);
             }
 
-            generatedMethod = generatedMethod.AddBodyStatements(bodyStatement);
+            generatedMethod.Act(bodyStatement);
 
             var returnTypeInfo = model.SemanticModel.GetTypeInfo(method.Node.ReturnType).Type;
             if (returnTypeInfo == null || returnTypeInfo.SpecialType != SpecialType.None || method.Node.IsKind(SyntaxKind.IndexerDeclaration) || (returnTypeInfo.ToFullName() == typeof(Task).FullName && !(returnTypeInfo is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.IsGenericType)))
@@ -177,7 +177,7 @@
                 {
                     var returnTypeMember = returnTypeMembers.FirstOrDefault(x => string.Equals(x.Key, methodParameter.Name, StringComparison.OrdinalIgnoreCase));
                     var resultProperty = Generate.PropertyAccess(SyntaxFactory.IdentifierName("result"), returnTypeMember.Key);
-                    generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertEqual(resultProperty, SyntaxFactory.IdentifierName(methodParameter.Name), returnTypeMembers[methodParameter.Name]));
+                    generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertEqual(resultProperty, SyntaxFactory.IdentifierName(methodParameter.Name), returnTypeMembers[methodParameter.Name]));
                     continue;
                 }
 
@@ -188,12 +188,12 @@
                     {
                         var returnTypeMember = returnTypeMembers.FirstOrDefault(x => string.Equals(x.Key, matchedSourceProperty.Key, StringComparison.OrdinalIgnoreCase));
                         var resultProperty = Generate.PropertyAccess(SyntaxFactory.IdentifierName("result"), returnTypeMember.Key);
-                        generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertEqual(resultProperty,  Generate.PropertyAccess(SyntaxFactory.IdentifierName(methodParameter.Name), matchedSourceProperty.Key), matchedSourceProperty.Value));
+                        generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertEqual(resultProperty,  Generate.PropertyAccess(SyntaxFactory.IdentifierName(methodParameter.Name), matchedSourceProperty.Key), matchedSourceProperty.Value));
                     }
                 }
             }
 
-            yield return generatedMethod;
+            yield return generatedMethod.Method;
         }
     }
 }

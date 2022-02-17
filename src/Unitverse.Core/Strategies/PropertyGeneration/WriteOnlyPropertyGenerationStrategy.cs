@@ -53,10 +53,10 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSet, namingContext, false, model.IsStatic)
-                .AddBodyStatements(GetPropertyAssertionBodyStatements(property, model).ToArray());
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSet, namingContext, false, model.IsStatic);
+            method.Emit(GetPropertyAssertionBodyStatements(property, model).ToArray());
 
-            yield return method;
+            yield return method.Method;
         }
 
         private IEnumerable<StatementSyntax> GetPropertyAssertionBodyStatements(IPropertyModel property, ClassModel sourceModel)
