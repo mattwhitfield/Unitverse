@@ -92,7 +92,7 @@
                             defaultAssignmentValue = SyntaxFactory.DefaultExpression(method.Parameters[i].TypeInfo.ToTypeSyntax(_frameworkSet.Context));
                         }
 
-                        generatedMethod = generatedMethod.AddBodyStatements(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                        generatedMethod.Emit(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
 
                         paramList.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Name)).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
                     }
@@ -117,14 +117,14 @@
 
                 if (method.IsAsync)
                 {
-                    generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertThrowsAsync(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));
+                    generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrowsAsync(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));
                 }
                 else
                 {
-                    generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));
+                    generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));
                 }
 
-                yield return generatedMethod;
+                yield return generatedMethod.Method;
             }
         }
     }

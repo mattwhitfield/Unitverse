@@ -68,27 +68,26 @@
 
             var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic);
 
-            method = MockHelper.EmitStatementListWithTrivia(method, mockSetupStatements, null, testIsComplete ? string.Empty : Environment.NewLine + Environment.NewLine);
+            method.Arrange(mockSetupStatements);
+            method.BlankLine();
 
             if (!testIsComplete)
             {
                 var bodyStatement = _frameworkSet.AssertionFramework.AssertIsInstanceOf(property.Access(target), property.TypeInfo.ToTypeSyntax(_frameworkSet.Context), property.TypeInfo.Type.IsReferenceType);
-                if (mockAssertionStatements.Count > 0)
-                {
-                    bodyStatement = bodyStatement.WithTrailingTrivia(SyntaxFactory.Comment(Environment.NewLine + Environment.NewLine));
-                }
 
-                method = method.AddBodyStatements(bodyStatement);
+                method.Assert(bodyStatement);
+                method.BlankLine();
             }
 
-            method = MockHelper.EmitStatementListWithTrivia(method, mockAssertionStatements, null, testIsComplete ? string.Empty : Environment.NewLine + Environment.NewLine);
+            method.Assert(mockAssertionStatements);
+            method.BlankLine();
 
             if (!testIsComplete)
             {
-                method = method.AddBodyStatements(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
+                method.Assert(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
             }
 
-            yield return method;
+            yield return method.Method;
         }
     }
 }

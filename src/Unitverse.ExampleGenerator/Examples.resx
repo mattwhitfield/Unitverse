@@ -175,6 +175,9 @@
   <data name="PocoInitialization" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\PocoInitialization.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="PropertyInitializationChecks" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\PropertyInitializationChecks.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="RecordTypeInitProperties" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\RecordTypeInitProperties.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

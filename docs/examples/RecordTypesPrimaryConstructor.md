@@ -25,15 +25,21 @@ public class RecordTypeTests
     [Fact]
     public void CanConstruct()
     {
+        // Act
         var instance = new RecordType(_stringProperty, _intProperty);
+
+        // Assert
         instance.Should().NotBeNull();
     }
 
     [Fact]
     public void ImplementsIEquatable_RecordType()
     {
+        // Arrange
         var same = new RecordType(_stringProperty, _intProperty);
         var different = new RecordType("TestValue1002897798", 1657007234);
+
+        // Assert
         _testClass.Equals(default(object)).Should().BeFalse();
         _testClass.Equals(new object()).Should().BeFalse();
         _testClass.Equals((object)same).Should().BeTrue();

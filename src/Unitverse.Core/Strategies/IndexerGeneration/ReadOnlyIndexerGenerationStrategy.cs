@@ -55,11 +55,12 @@
 
             var paramExpressions = indexer.Parameters.Select(param => AssignmentValueHelper.GetDefaultAssignmentValue(param.TypeInfo, model.SemanticModel, _frameworkSet)).ToArray();
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic)
-                .AddBodyStatements(_frameworkSet.AssertionFramework.AssertIsInstanceOf(Generate.IndexerAccess(model.TargetInstance, paramExpressions), indexer.TypeInfo.ToTypeSyntax(_frameworkSet.Context), indexer.TypeInfo.Type.IsReferenceType))
-                .AddBodyStatements(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic);
 
-            yield return method;
+            method.Emit(_frameworkSet.AssertionFramework.AssertIsInstanceOf(Generate.IndexerAccess(model.TargetInstance, paramExpressions), indexer.TypeInfo.ToTypeSyntax(_frameworkSet.Context), indexer.TypeInfo.Type.IsReferenceType));
+            method.Emit(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
+
+            yield return method.Method;
         }
     }
 }

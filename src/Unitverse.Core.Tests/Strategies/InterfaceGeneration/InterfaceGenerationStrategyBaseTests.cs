@@ -6,6 +6,7 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
     using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.InterfaceGeneration;
@@ -24,9 +25,8 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
 
             public NameResolver PublicGeneratedMethodNamePattern => GeneratedMethodNamePattern;
 
-            protected override IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
+            protected override void AddBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel, SectionedMethodHandler method)
             {
-                yield break;
             }
 
             protected override NameResolver GeneratedMethodNamePattern { get; }

@@ -24,6 +24,9 @@
             EmitTestsForInternals = options.EmitTestsForInternals;
             AutomaticallyConfigureMocks = options.AutomaticallyConfigureMocks;
             EmitSubclassForProtectedMethods = options.EmitSubclassForProtectedMethods;
+            ArrangeComment = options.ArrangeComment;
+            ActComment = options.ActComment;
+            AssertComment = options.AssertComment;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -51,5 +54,11 @@
         public bool EmitSubclassForProtectedMethods { get; set; }
 
         public bool AutomaticallyConfigureMocks { get; set; }
+
+        public string ArrangeComment { get; set; }
+
+        public string ActComment { get; set; }
+
+        public string AssertComment { get; set; }
     }
 }

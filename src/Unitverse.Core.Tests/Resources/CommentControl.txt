@@ -1,0 +1,14 @@
+// # ArrangeComment=Set it up yo
+// # ActComment=Do that funky thang
+// # AssertComment=Check everything went exactly amazingly
+
+namespace TestNamespace.SubNameSpace
+{
+    public class TestClass
+    {
+	    public void ThisIsAMethod(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+    }
+}

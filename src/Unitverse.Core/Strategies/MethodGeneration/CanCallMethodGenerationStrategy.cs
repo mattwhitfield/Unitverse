@@ -71,7 +71,7 @@
                 {
                     var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
 
-                    generatedMethod = generatedMethod.AddBodyStatements(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                    generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
 
                     if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
                     {
@@ -84,8 +84,8 @@
                 }
             }
 
-            var leadingTrivia = paramExpressions.Any() ? Environment.NewLine : null;
-            generatedMethod = MockHelper.EmitStatementListWithTrivia(generatedMethod, mockSetupStatements, leadingTrivia, Environment.NewLine + Environment.NewLine);
+            generatedMethod.BlankLine();
+            generatedMethod.Arrange(mockSetupStatements);
 
             var methodCall = method.Invoke(model, false, _frameworkSet, paramExpressions.ToArray());
 
@@ -113,21 +113,19 @@
                 bodyStatement = SyntaxFactory.ExpressionStatement(methodCall);
             }
 
-            if (mockAssertionStatements.Count > 0)
-            {
-                bodyStatement = bodyStatement.WithTrailingTrivia(SyntaxFactory.Comment(Environment.NewLine + Environment.NewLine));
-            }
+            generatedMethod.Act(bodyStatement);
 
-            generatedMethod = generatedMethod.AddBodyStatements(bodyStatement);
+            generatedMethod.BlankLine();
 
-            generatedMethod = MockHelper.EmitStatementListWithTrivia(generatedMethod, mockAssertionStatements, null, testIsComplete ? string.Empty : Environment.NewLine + Environment.NewLine);
+            generatedMethod.Assert(mockAssertionStatements);
 
             if (!testIsComplete)
             {
-                generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
+                generatedMethod.BlankLine();
+                generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
             }
 
-            yield return generatedMethod;
+            yield return generatedMethod.Method;
         }
     }
 }

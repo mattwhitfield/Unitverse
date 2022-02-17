@@ -60,7 +60,7 @@
             {
                 var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
 
-                generatedMethod = generatedMethod.AddBodyStatements(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
 
                 paramExpressions.Add(SyntaxFactory.IdentifierName(parameter.Name));
             }
@@ -69,11 +69,11 @@
 
             var bodyStatement = Generate.ImplicitlyTypedVariableDeclaration("result", methodCall);
 
-            generatedMethod = generatedMethod.AddBodyStatements(bodyStatement);
+            generatedMethod.Act(bodyStatement);
 
-            generatedMethod = generatedMethod.AddBodyStatements(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
+            generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
 
-            yield return generatedMethod;
+            yield return generatedMethod.Method;
         }
     }
 }

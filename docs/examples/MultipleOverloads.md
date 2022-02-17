@@ -30,9 +30,14 @@ public static class FluentFactoryTests
     [Fact]
     public static void CanCallFollows()
     {
+        // Arrange
         var stage = Stage.First;
         var followedStages = new[] { Stage.First, Stage.Second, Stage.Fourth };
+
+        // Act
         var result = stage.Follows(followedStages);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -45,9 +50,14 @@ public static class FluentFactoryTests
     [Fact]
     public static void CanCallAndWithFirstConstraintAndSecondConstraint()
     {
+        // Arrange
         var firstConstraint = new Tuple<Stage, IList<Stage>>(Stage.Second, new[] { Stage.Second, Stage.Fourth, Stage.First });
         var secondConstraint = new Tuple<Stage, IList<Stage>>(Stage.Third, new[] { Stage.First, Stage.First, Stage.Second });
+
+        // Act
         var result = firstConstraint.And(secondConstraint);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -66,9 +76,14 @@ public static class FluentFactoryTests
     [Fact]
     public static void CanCallAndWithConstraintsAndAdditionalConstraint()
     {
+        // Arrange
         var constraints = Substitute.For<IDictionary<Stage, IList<Stage>>>();
         var additionalConstraint = new Tuple<Stage, IList<Stage>>(Stage.First, new[] { Stage.First, Stage.Second, Stage.Fourth });
+
+        // Act
         var result = constraints.And(additionalConstraint);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 

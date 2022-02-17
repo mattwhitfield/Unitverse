@@ -12,30 +12,6 @@
 
     public static class MockHelper
     {
-        public static MethodDeclarationSyntax EmitStatementListWithTrivia(MethodDeclarationSyntax method, List<StatementSyntax> statements, string leadingComment, string trailingComment)
-        {
-            if (statements.Any())
-            {
-                for (int i = 0; i < statements.Count; i++)
-                {
-                    var statement = statements[i];
-                    if (i == 0 && !string.IsNullOrEmpty(leadingComment))
-                    {
-                        statement = statement.WithLeadingTrivia(SyntaxFactory.Comment(leadingComment));
-                    }
-
-                    if (i == statements.Count - 1 && !string.IsNullOrEmpty(trailingComment))
-                    {
-                        statement = statement.WithTrailingTrivia(SyntaxFactory.Comment(trailingComment));
-                    }
-
-                    method = method.AddBodyStatements(statement);
-                }
-            }
-
-            return method;
-        }
-
         public static bool PrepareMockCalls(ClassModel model, CSharpSyntaxNode targetBody, ExpressionSyntax propertyAccess, IList<ISymbol> interfaceMethodsImplemented, IEnumerable<string> parameterNames, IFrameworkSet frameworkSet, out List<StatementSyntax> mockSetupStatements, out List<StatementSyntax> mockAssertionStatements)
         {
             mockSetupStatements = new List<StatementSyntax>();

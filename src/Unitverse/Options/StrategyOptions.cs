@@ -59,12 +59,12 @@ namespace Unitverse.Options
 
         [Category("Operators")]
         [DisplayName("Basic Checks")]
-        [Description("Whether to emit tests to exercise properties (CanGet/Set*)")]
+        [Description("Whether to emit tests to exercise operators (CanCallOperator*)")]
         public bool OperatorChecksAreEnabled { get; set; } = true;
 
         [Category("Operators")]
         [DisplayName("Parameter Checks")]
-        [Description("Whether to emit null and string parameter checks for initializers (CannotCallOperatorWith*)")]
+        [Description("Whether to emit null and string parameter checks for operators (CannotCallOperatorWith*)")]
         public bool OperatorParameterChecksAreEnabled { get; set; } = true;
 
         [Category("Interfaces")]

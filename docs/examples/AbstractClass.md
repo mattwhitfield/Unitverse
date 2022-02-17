@@ -50,23 +50,36 @@ public class TestClassTests
     [Fact]
     public void CanCallProtectedMethod()
     {
+        // Act
         var result = _testClass.PublicProtectedMethod();
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
     [Fact]
     public void CanCallSomeMethod()
     {
+        // Arrange
         var i = 534011718;
+
+        // Act
         var result = _testClass.SomeMethod(i);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
     [Fact]
     public void CanCallGenericMethod()
     {
+        // Arrange
         var i = 237820880;
+
+        // Act
         var result = _testClass.GenericMethod<T>(i);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 }

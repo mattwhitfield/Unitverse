@@ -66,16 +66,24 @@ public class CalculatorTests
     [Fact]
     public void CanConstruct()
     {
+        // Act
         var instance = new Calculator(_n);
+
+        // Assert
         instance.Should().NotBeNull();
     }
 
     [Fact]
     public void CanCallPlusOperator()
     {
+        // Arrange
         var Calc1 = new Calculator(237820880);
         var Calc2 = new Calculator(1002897798);
+
+        // Act
         var result = Calc1 + Calc2;
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -94,9 +102,14 @@ public class CalculatorTests
     [Fact]
     public void CanCallMinusOperator()
     {
+        // Arrange
         var Calc1 = new Calculator(929393559);
         var Calc2 = new Calculator(760389092);
+
+        // Act
         var result = Calc1 - Calc2;
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -115,8 +128,13 @@ public class CalculatorTests
     [Fact]
     public void CanCallUnaryMinusOperator()
     {
+        // Arrange
         var Calc1 = new Calculator(1379662799);
+
+        // Act
         var result = -Calc1;
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -129,9 +147,14 @@ public class CalculatorTests
     [Fact]
     public void CanCallMultiplicationOperator()
     {
+        // Arrange
         var Calc1 = new Calculator(61497087);
         var Calc2 = new Calculator(532638534);
+
+        // Act
         var result = Calc1 * Calc2;
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -150,9 +173,14 @@ public class CalculatorTests
     [Fact]
     public void CanCallDivisionOperator()
     {
+        // Arrange
         var Calc1 = new Calculator(1464848243);
         var Calc2 = new Calculator(1406361028);
+
+        // Act
         var result = Calc1 / Calc2;
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 

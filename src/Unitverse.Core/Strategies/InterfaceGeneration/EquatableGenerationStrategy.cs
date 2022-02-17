@@ -24,7 +24,7 @@
 
         protected override NameResolver GeneratedMethodNamePattern => FrameworkSet.NamingProvider.ImplementsIEquatable;
 
-        protected override IEnumerable<StatementSyntax> GetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
+        protected override void AddBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel, SectionedMethodHandler method)
         {
             if (sourceModel is null)
             {
@@ -49,30 +49,30 @@
                 sameExpression = AssignmentValueHelper.GetDefaultAssignmentValue(equatableTypeSymbol, sourceModel.SemanticModel, FrameworkSet);
             }
 
-            yield return Generate.VariableDeclaration(equatableTypeSymbol, FrameworkSet, "same", sameExpression);
-            yield return Generate.VariableDeclaration(equatableTypeSymbol, FrameworkSet, "different", differentExpression);
+            method.Arrange(Generate.VariableDeclaration(equatableTypeSymbol, FrameworkSet, "same", sameExpression));
+            method.Arrange(Generate.VariableDeclaration(equatableTypeSymbol, FrameworkSet, "different", differentExpression));
 
             var same = SyntaxFactory.IdentifierName("same");
             var different = SyntaxFactory.IdentifierName("different");
 
             var objType = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.ObjectKeyword));
 
-            yield return FrameworkSet.AssertionFramework.AssertFalse(Generate.Invocation(sourceModel.TargetInstance, "Equals", SyntaxFactory.DefaultExpression(objType)));
-            yield return FrameworkSet.AssertionFramework.AssertFalse(Generate.Invocation(sourceModel.TargetInstance, "Equals", SyntaxFactory.ObjectCreationExpression(objType).WithArgumentList(SyntaxFactory.ArgumentList())));
-            yield return FrameworkSet.AssertionFramework.AssertTrue(Generate.Invocation(sourceModel.TargetInstance, "Equals", SyntaxFactory.CastExpression(objType, same)));
-            yield return FrameworkSet.AssertionFramework.AssertFalse(Generate.Invocation(sourceModel.TargetInstance, "Equals", SyntaxFactory.CastExpression(objType, different)));
+            method.Assert(FrameworkSet.AssertionFramework.AssertFalse(Generate.Invocation(sourceModel.TargetInstance, "Equals", SyntaxFactory.DefaultExpression(objType))));
+            method.Assert(FrameworkSet.AssertionFramework.AssertFalse(Generate.Invocation(sourceModel.TargetInstance, "Equals", SyntaxFactory.ObjectCreationExpression(objType).WithArgumentList(SyntaxFactory.ArgumentList()))));
+            method.Assert(FrameworkSet.AssertionFramework.AssertTrue(Generate.Invocation(sourceModel.TargetInstance, "Equals", SyntaxFactory.CastExpression(objType, same))));
+            method.Assert(FrameworkSet.AssertionFramework.AssertFalse(Generate.Invocation(sourceModel.TargetInstance, "Equals", SyntaxFactory.CastExpression(objType, different))));
 
-            yield return FrameworkSet.AssertionFramework.AssertTrue(Generate.Invocation(sourceModel.TargetInstance, "Equals", same));
-            yield return FrameworkSet.AssertionFramework.AssertFalse(Generate.Invocation(sourceModel.TargetInstance, "Equals", different));
+            method.Assert(FrameworkSet.AssertionFramework.AssertTrue(Generate.Invocation(sourceModel.TargetInstance, "Equals", same)));
+            method.Assert(FrameworkSet.AssertionFramework.AssertFalse(Generate.Invocation(sourceModel.TargetInstance, "Equals", different)));
 
-            yield return FrameworkSet.AssertionFramework.AssertEqual(Generate.Invocation(sourceModel.TargetInstance, "GetHashCode"), Generate.Invocation(same, "GetHashCode"), false);
-            yield return FrameworkSet.AssertionFramework.AssertNotEqual(Generate.Invocation(sourceModel.TargetInstance, "GetHashCode"), Generate.Invocation(different, "GetHashCode"), false);
+            method.Assert(FrameworkSet.AssertionFramework.AssertEqual(Generate.Invocation(sourceModel.TargetInstance, "GetHashCode"), Generate.Invocation(same, "GetHashCode"), false));
+            method.Assert(FrameworkSet.AssertionFramework.AssertNotEqual(Generate.Invocation(sourceModel.TargetInstance, "GetHashCode"), Generate.Invocation(different, "GetHashCode"), false));
 
-            yield return FrameworkSet.AssertionFramework.AssertTrue(SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, sourceModel.TargetInstance, same));
-            yield return FrameworkSet.AssertionFramework.AssertFalse(SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, sourceModel.TargetInstance, different));
+            method.Assert(FrameworkSet.AssertionFramework.AssertTrue(SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, sourceModel.TargetInstance, same)));
+            method.Assert(FrameworkSet.AssertionFramework.AssertFalse(SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, sourceModel.TargetInstance, different)));
 
-            yield return FrameworkSet.AssertionFramework.AssertFalse(SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, sourceModel.TargetInstance, same));
-            yield return FrameworkSet.AssertionFramework.AssertTrue(SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, sourceModel.TargetInstance, different));
+            method.Assert(FrameworkSet.AssertionFramework.AssertFalse(SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, sourceModel.TargetInstance, same)));
+            method.Assert(FrameworkSet.AssertionFramework.AssertTrue(SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, sourceModel.TargetInstance, different)));
         }
     }
 }

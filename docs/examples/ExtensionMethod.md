@@ -25,8 +25,13 @@ public static class ExtensionMethodClassTests
     [Fact]
     public static void CanCallToOtherWithString()
     {
+        // Arrange
         var source = "TestValue534011718";
+
+        // Act
         var result = source.ToOther();
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -42,8 +47,13 @@ public static class ExtensionMethodClassTests
     [Fact]
     public static void CanCallToOtherWithListOfT()
     {
+        // Arrange
         var source = new List<T>();
+
+        // Act
         var result = source.ToOther<T>();
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 

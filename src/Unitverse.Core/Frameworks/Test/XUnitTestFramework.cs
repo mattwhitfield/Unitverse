@@ -8,8 +8,13 @@
     using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
-    public class XUnitTestFramework : ITestFramework, IAssertionFramework
+    public class XUnitTestFramework : BaseTestFramework, ITestFramework, IAssertionFramework
     {
+        public XUnitTestFramework(IUnitTestGeneratorOptions options)
+            : base(options)
+        {
+        }
+
         public bool SupportsStaticTestClasses => true;
 
         public bool AssertThrowsAsyncIsAwaitable => true;
@@ -163,7 +168,7 @@
             return SyntaxFactory.ConstructorDeclaration(SyntaxFactory.Identifier(targetTypeName)).AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
         }
 
-        public MethodDeclarationSyntax CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues)
+        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues)
         {
             if (valueType == null)
             {
@@ -195,10 +200,10 @@
                 method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("InlineData", testValue))));
             }
 
-            return method;
+            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }
 
-        public MethodDeclarationSyntax CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic)
+        public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic)
         {
             if (nameResolver is null)
             {
@@ -210,9 +215,10 @@
                 throw new ArgumentNullException(nameof(namingContext));
             }
 
-            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic);
+            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic)
+                                 .AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("Fact"))));
 
-            return method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("Fact"))));
+            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()

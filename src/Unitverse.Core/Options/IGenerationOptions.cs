@@ -27,5 +27,11 @@
         bool EmitSubclassForProtectedMethods { get; }
 
         bool AutomaticallyConfigureMocks { get; }
+
+        string ArrangeComment { get; }
+
+        string ActComment { get; }
+
+        string AssertComment { get; }
     }
 }

@@ -91,7 +91,10 @@ public class AutomaticMockGenerationExampleTests
     [Fact]
     public void CanConstruct()
     {
+        // Act
         var instance = new AutomaticMockGenerationExample(_dummyService, _dummyService2);
+
+        // Assert
         instance.Should().NotBeNull();
     }
 
@@ -110,11 +113,14 @@ public class AutomaticMockGenerationExampleTests
     [Fact]
     public async Task CanCallSampleAsyncMethod()
     {
+        // Arrange
         _dummyService.AsyncMethod().Returns("TestValue687431273");
         _dummyService2.AsyncMethod(Arg.Any<string>()).Returns("TestValue2125508764");
 
+        // Act
         await _testClass.SampleAsyncMethod();
 
+        // Assert
         await _dummyService.Received().AsyncMethod();
         await _dummyService2.Received().AsyncMethod(Arg.Any<string>());
 
@@ -124,14 +130,17 @@ public class AutomaticMockGenerationExampleTests
     [Fact]
     public void CanCallSampleNoReturn()
     {
+        // Arrange
         var srr = "TestValue1321446349";
 
         _dummyService.GenericMethod<string>(Arg.Any<string>()).Returns("TestValue1464848243");
         _dummyService2.ReturnMethod(Arg.Any<string>(), Arg.Any<string>()).Returns(1406361028);
         _dummyService2.SomeProp.Returns("TestValue607156385");
 
+        // Act
         _testClass.SampleNoReturn(srr);
 
+        // Assert
         _dummyService.Received().NoReturnMethod();
         _dummyService.Received().GenericMethod<string>(Arg.Any<string>());
         _dummyService2.Received().ReturnMethod(Arg.Any<string>(), Arg.Any<string>());

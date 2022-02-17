@@ -6,6 +6,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Frameworks.Test;
@@ -19,10 +20,10 @@ namespace Unitverse.Core.Tests.Frameworks.Test
         {
             get
             {
-                yield return new MsTestTestFramework();
-                yield return new NUnit2TestFramework();
-                yield return new NUnit3TestFramework();
-                yield return new XUnitTestFramework();
+                yield return new MsTestTestFramework(Substitute.For<IUnitTestGeneratorOptions>());
+                yield return new NUnit2TestFramework(Substitute.For<IUnitTestGeneratorOptions>());
+                yield return new NUnit3TestFramework(Substitute.For<IUnitTestGeneratorOptions>());
+                yield return new XUnitTestFramework(Substitute.For<IUnitTestGeneratorOptions>());
             }
         }
 
@@ -164,7 +165,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
             var valueType = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword));
             var testValues = new object[] { 1, 2 };
             var result = testClass.CreateTestCaseMethod(new NameResolver(name), new NamingContext("class"), isAsync, isStatic, valueType, testValues);
-            Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
+            Assert.That(result.Method.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 
         [TestCase(TestFrameworkTypes.NUnit2, "[Test]\r\npublic static void TestValue1606901338()")]
@@ -178,7 +179,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
             var isAsync = false;
             var isStatic = true;
             var result = testClass.CreateTestMethod(new NameResolver(name), new NamingContext("class"), isAsync, isStatic);
-            Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
+            Assert.That(result.Method.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 
         [TestCase(TestFrameworkTypes.NUnit2, "NUnit.Framework")]
@@ -307,13 +308,13 @@ namespace Unitverse.Core.Tests.Frameworks.Test
             switch (frameworkTypes)
             {
                 case TestFrameworkTypes.MsTest:
-                    return new MsTestTestFramework();
+                    return new MsTestTestFramework(Substitute.For<IUnitTestGeneratorOptions>());
                 case TestFrameworkTypes.NUnit2:
-                    return new NUnit2TestFramework();
+                    return new NUnit2TestFramework(Substitute.For<IUnitTestGeneratorOptions>());
                 case TestFrameworkTypes.NUnit3:
-                    return new NUnit3TestFramework();
+                    return new NUnit3TestFramework(Substitute.For<IUnitTestGeneratorOptions>());
                 case TestFrameworkTypes.XUnit:
-                    return new XUnitTestFramework();
+                    return new XUnitTestFramework(Substitute.For<IUnitTestGeneratorOptions>());
                 default:
                     throw new ArgumentOutOfRangeException(nameof(frameworkTypes));
             }

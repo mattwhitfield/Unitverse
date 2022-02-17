@@ -4,11 +4,17 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public class NUnit3TestFramework : NUnitTestFramework
     {
         private bool _requiresSystemThreading;
+
+        public NUnit3TestFramework(IUnitTestGeneratorOptions options)
+            : base(options)
+        {
+        }
 
         public override AttributeSyntax SingleThreadedApartmentAttribute
         {

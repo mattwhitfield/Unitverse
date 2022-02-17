@@ -71,5 +71,20 @@
         [DisplayName("Emit subclass for protected members")]
         [Description("Whether to emit a subclass that exposes protected methods to allow them to be tested")]
         public bool EmitSubclassForProtectedMethods { get; set; } = true;
+
+        [Category("Comments")]
+        [DisplayName("Arrange block comment")]
+        [Description("The comment to leave before any arrange statements (leave blank to suppress)")]
+        public string ArrangeComment { get; set; } = "Arrange";
+
+        [Category("Comments")]
+        [DisplayName("Act block comment")]
+        [Description("The comment to leave before any act statements (leave blank to suppress)")]
+        public string ActComment { get; set; } = "Act";
+
+        [Category("Comments")]
+        [DisplayName("Arrange block comment")]
+        [Description("The comment to leave before any assert statements (leave blank to suppress)")]
+        public string AssertComment { get; set; } = "Assert";
     }
 }

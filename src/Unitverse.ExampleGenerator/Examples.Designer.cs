@@ -584,6 +584,32 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // ! Property Initialization Checks
+        ///// $ Demonstrates how properties that have matching constructor parameters are checked that they are initialized automatically
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///	using System;
+        ///
+        ///    public class ExampleClass
+        ///    {
+        ///        public ExampleClass(int identity, string description, Guid uniqueCode)
+        ///        {
+        ///            Identity = identity;
+        ///            Description = description;
+        ///            UniqueCode = uniqueCode;
+        ///        }
+        ///
+        ///        public int Identity { get; }
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PropertyInitializationChecks {
+            get {
+                return ResourceManager.GetString("PropertyInitializationChecks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to // ! Record Types (init Properties)
         ///// $ Demonstrates the tests generated for a record type that has properties that have init accessors
         ///

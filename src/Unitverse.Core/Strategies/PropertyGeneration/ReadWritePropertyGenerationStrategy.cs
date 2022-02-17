@@ -61,26 +61,24 @@
 
             var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic);
 
-            method = MockHelper.EmitStatementListWithTrivia(method, mockSetupStatements, null, Environment.NewLine + Environment.NewLine);
+            method.Arrange(mockSetupStatements);
+            method.BlankLine();
 
             var defaultValue = AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, model.SemanticModel, _frameworkSet);
             var declareTestValue = Generate.VariableDeclaration(property.TypeInfo.Type, _frameworkSet, "testValue", defaultValue);
 
-            method = method.AddBodyStatements(declareTestValue);
+            method.Arrange(declareTestValue);
 
-            method = method.AddBodyStatements(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), SyntaxFactory.IdentifierName("testValue"))));
+            method.Act(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), SyntaxFactory.IdentifierName("testValue"))));
 
             var bodyStatement = _frameworkSet.AssertionFramework.AssertEqual(property.Access(target), SyntaxFactory.IdentifierName("testValue"), property.TypeInfo.Type.IsReferenceTypeAndNotString());
-            if (mockAssertionStatements.Count > 0)
-            {
-                bodyStatement = bodyStatement.WithTrailingTrivia(SyntaxFactory.Comment(Environment.NewLine + Environment.NewLine));
-            }
 
-            method = method.AddBodyStatements(bodyStatement);
+            method.Assert(bodyStatement);
+            method.BlankLine();
 
-            method = MockHelper.EmitStatementListWithTrivia(method, mockAssertionStatements, null, Environment.NewLine + Environment.NewLine);
+            method.Assert(mockAssertionStatements);
 
-            yield return method;
+            yield return method.Method;
         }
     }
 }

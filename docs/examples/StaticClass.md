@@ -29,9 +29,14 @@ public static class TestClassTests
     [Fact]
     public static void CanCallThisIsAMethod()
     {
+        // Arrange
         var methodName = "TestValue534011718";
         var methodValue = CultureInfo.InvariantCulture;
+
+        // Act
         TestClass.ThisIsAMethod(methodName, methodValue);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -53,22 +58,32 @@ public static class TestClassTests
     [Fact]
     public static void CanCallWillReturnAString()
     {
+        // Act
         var result = TestClass.WillReturnAString();
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
     [Fact]
     public static void CanSetAndGetThisIsAProperty()
     {
+        // Arrange
         var testValue = 1412011072;
+
+        // Act
         TestClass.ThisIsAProperty = testValue;
+
+        // Assert
         TestClass.ThisIsAProperty.Should().Be(testValue);
     }
 
     [Fact]
     public static void CanGetGetITest()
     {
+        // Assert
         TestClass.GetITest.Should().BeAssignableTo<string>();
+
         throw new NotImplementedException("Create or modify test");
     }
 }

@@ -59,7 +59,10 @@ public class TestClass_2Tests
     [Fact]
     public void CanConstruct()
     {
+        // Act
         var instance = new TestClass<T, R>(_insta, _insta2);
+
+        // Assert
         instance.Should().NotBeNull();
     }
 

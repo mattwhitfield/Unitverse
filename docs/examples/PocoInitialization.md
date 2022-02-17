@@ -40,7 +40,10 @@ public class ConsumingClassTests
     [Fact]
     public void CanConstruct()
     {
+        // Act
         var instance = new ConsumingClass(_poco);
+
+        // Assert
         instance.Should().NotBeNull();
     }
 

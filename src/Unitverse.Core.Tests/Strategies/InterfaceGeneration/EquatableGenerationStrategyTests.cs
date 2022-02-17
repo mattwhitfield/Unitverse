@@ -11,6 +11,7 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
     using Unitverse.Core.Options;
     using Unitverse.Core.Frameworks;
     using System.Linq;
+    using Microsoft.CodeAnalysis.CSharp;
 
     [TestFixture]
     public class EquatableGenerationStrategyTests
@@ -21,9 +22,9 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
             {
             }
 
-            public IEnumerable<StatementSyntax> PublicGetBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
+            public void PublicAddBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
             {
-                return base.GetBodyStatements(sourceModel, interfaceModel);
+                base.AddBodyStatements(sourceModel, interfaceModel, new Core.Helpers.SectionedMethodHandler(SyntaxFactory.MethodDeclaration(SyntaxFactory.IdentifierName("string"), "id"), "Arrange", "Act", "Assert"));
             }
 
             public NameResolver PublicGeneratedMethodNamePattern => base.GeneratedMethodNamePattern;
@@ -55,13 +56,13 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
         [Test]
         public void CannotCallGetBodyStatementsWithNullSourceModel()
         {
-            FluentActions.Invoking(() => _testClass.PublicGetBodyStatements(default(ClassModel), Substitute.For<IInterfaceModel>()).ToList()).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => _testClass.PublicAddBodyStatements(default(ClassModel), Substitute.For<IInterfaceModel>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotCallGetBodyStatementsWithNullInterfaceModel()
         {
-            FluentActions.Invoking(() => _testClass.PublicGetBodyStatements(new ClassModel(TestSemanticModelFactory.Class, TestSemanticModelFactory.Model, true), default(IInterfaceModel)).ToList()).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => _testClass.PublicAddBodyStatements(new ClassModel(TestSemanticModelFactory.Class, TestSemanticModelFactory.Model, true), default(IInterfaceModel))).Should().Throw<ArgumentNullException>();
         }
     }
 }

@@ -5,6 +5,8 @@ namespace Unitverse.Core.Tests.Frameworks.Test
     using System;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.CSharp;
+    using NSubstitute;
+    using Unitverse.Core.Options;
 
     [TestFixture]
     public class MsTestTestFrameworkTests
@@ -14,7 +16,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
         [SetUp]
         public void SetUp()
         {
-            _testClass = new MsTestTestFramework();
+            _testClass = new MsTestTestFramework(Substitute.For<IUnitTestGeneratorOptions>());
         }
 
         [Test]

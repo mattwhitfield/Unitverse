@@ -56,16 +56,22 @@ public class TestComparableGenericTests
     [Fact]
     public void CanConstruct()
     {
+        // Act
         var instance = new TestComparableGeneric(_value);
+
+        // Assert
         instance.Should().NotBeNull();
     }
 
     [Fact]
     public void ImplementsIComparable_TestComparableGeneric()
     {
+        // Arrange
         TestComparableGeneric baseValue = default(TestComparableGeneric);
         TestComparableGeneric equalToBaseValue = default(TestComparableGeneric);
         TestComparableGeneric greaterThanBaseValue = default(TestComparableGeneric);
+
+        // Assert
         baseValue.CompareTo(equalToBaseValue).Should().Be(0);
         baseValue.CompareTo(greaterThanBaseValue).Should().BeLessThan(0);
         greaterThanBaseValue.CompareTo(baseValue).Should().BeGreaterThan(0);
@@ -74,9 +80,12 @@ public class TestComparableGenericTests
     [Fact]
     public void ImplementsIComparable_Int32()
     {
+        // Arrange
         TestComparableGeneric baseValue = default(TestComparableGeneric);
         int equalToBaseValue = default(int);
         int greaterThanBaseValue = default(int);
+
+        // Assert
         baseValue.CompareTo(equalToBaseValue).Should().Be(0);
         baseValue.CompareTo(greaterThanBaseValue).Should().BeLessThan(0);
         greaterThanBaseValue.CompareTo(baseValue).Should().BeGreaterThan(0);
@@ -85,9 +94,12 @@ public class TestComparableGenericTests
     [Fact]
     public void ImplementsIComparable()
     {
+        // Arrange
         TestComparableGeneric baseValue = default(TestComparableGeneric);
         TestComparableGeneric equalToBaseValue = default(TestComparableGeneric);
         TestComparableGeneric greaterThanBaseValue = default(TestComparableGeneric);
+
+        // Assert
         baseValue.CompareTo(equalToBaseValue).Should().Be(0);
         baseValue.CompareTo(greaterThanBaseValue).Should().BeLessThan(0);
         greaterThanBaseValue.CompareTo(baseValue).Should().BeGreaterThan(0);
@@ -96,8 +108,13 @@ public class TestComparableGenericTests
     [Fact]
     public void CanCallCompareToWithTestComparableGeneric()
     {
+        // Arrange
         var obj = new TestComparableGeneric(237820880);
+
+        // Act
         var result = _testClass.CompareTo(obj);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -110,16 +127,26 @@ public class TestComparableGenericTests
     [Fact]
     public void CanCallCompareToWithValue()
     {
+        // Arrange
         var value = 1002897798;
+
+        // Act
         var result = _testClass.CompareTo(value);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 
     [Fact]
     public void CanCallCompareToWithObject()
     {
+        // Arrange
         var obj = new object();
+
+        // Act
         var result = _testClass.CompareTo(obj);
+
+        // Assert
         throw new NotImplementedException("Create or modify test");
     }
 

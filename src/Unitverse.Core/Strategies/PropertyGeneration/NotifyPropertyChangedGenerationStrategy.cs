@@ -60,10 +60,10 @@
 
             model.RequiredAssets.Add(TargetAsset.PropertyTester);
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic)
-                .AddBodyStatements(GetPropertyAssertionBodyStatements(property, model, withDefaults).ToArray());
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic);
+            method.Emit(GetPropertyAssertionBodyStatements(property, model, withDefaults).ToArray());
 
-            yield return method;
+            yield return method.Method;
         }
 
         private IEnumerable<StatementSyntax> GetPropertyAssertionBodyStatements(IPropertyModel property, ClassModel sourceModel, bool withDefaults)
