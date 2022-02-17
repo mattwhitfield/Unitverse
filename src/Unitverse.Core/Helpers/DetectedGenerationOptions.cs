@@ -42,5 +42,11 @@
         public bool AutomaticallyConfigureMocks => _baseOptions.AutomaticallyConfigureMocks;
 
         public bool EmitSubclassForProtectedMethods => _baseOptions.EmitSubclassForProtectedMethods;
+
+        public string ArrangeComment => _baseOptions.ArrangeComment;
+
+        public string ActComment => _baseOptions.ActComment;
+
+        public string AssertComment => _baseOptions.AssertComment;
     }
 }

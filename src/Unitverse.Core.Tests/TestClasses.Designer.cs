@@ -431,6 +431,28 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // # Arrange=Set it up yo
+        ///// # Act=Do that funky thang
+        ///// # Assert=Check everything went exactly amazingly
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///	    public void ThisIsAMethod(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string CommentControl {
+            get {
+                return ResourceManager.GetString("CommentControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
         ///{
         ///

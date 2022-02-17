@@ -29,5 +29,11 @@
         public bool AutomaticallyConfigureMocks => true;
 
         public bool EmitSubclassForProtectedMethods => true;
+
+        public string ArrangeComment => "Arrange";
+
+        public string ActComment => "Act";
+
+        public string AssertComment => "Assert";
     }
 }

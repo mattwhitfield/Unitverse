@@ -200,7 +200,7 @@
                 method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("InlineData", testValue))));
             }
 
-            return new SectionedMethodHandler(method);
+            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }
 
         public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic)
@@ -215,9 +215,10 @@
                 throw new ArgumentNullException(nameof(namingContext));
             }
 
-            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic);
+            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic)
+                                 .AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("Fact"))));
 
-            return new SectionedMethodHandler(method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("Fact")))));
+            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()

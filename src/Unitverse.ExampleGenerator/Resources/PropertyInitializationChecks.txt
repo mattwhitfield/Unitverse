@@ -1,0 +1,21 @@
+// ! Property Initialization Checks
+// $ Demonstrates how properties that have matching constructor parameters are checked that they are initialized automatically
+
+namespace Unitverse.Examples
+{
+	using System;
+
+    public class ExampleClass
+    {
+        public ExampleClass(int identity, string description, Guid uniqueCode)
+        {
+            Identity = identity;
+            Description = description;
+            UniqueCode = uniqueCode;
+        }
+
+        public int Identity { get; }
+        public string Description { get; }
+        public Guid UniqueCode { get; }
+    }
+}

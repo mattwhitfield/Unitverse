@@ -27,7 +27,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void CannotConstructWithNullMethod()
         {
-            FluentActions.Invoking(() => new SectionedMethodHandler(default(MethodDeclarationSyntax))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new SectionedMethodHandler(default(MethodDeclarationSyntax), "Arrange", "Act", "Assert")).Should().Throw<ArgumentNullException>();
         }
 
         [Test]

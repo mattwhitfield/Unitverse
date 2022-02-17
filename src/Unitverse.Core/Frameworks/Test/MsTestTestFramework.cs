@@ -198,7 +198,7 @@
                 method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("DataRow", testValue))));
             }
 
-            return new SectionedMethodHandler(method);
+            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }
 
         public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic)
@@ -213,9 +213,10 @@
                 throw new ArgumentNullException(nameof(namingContext));
             }
 
-            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, false);
+            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, false)
+                                 .AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("TestMethod"))));
 
-            return new SectionedMethodHandler(method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("TestMethod")))));
+            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()

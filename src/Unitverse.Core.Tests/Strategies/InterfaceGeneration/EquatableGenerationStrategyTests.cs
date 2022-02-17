@@ -24,7 +24,7 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
 
             public void PublicAddBodyStatements(ClassModel sourceModel, IInterfaceModel interfaceModel)
             {
-                base.AddBodyStatements(sourceModel, interfaceModel, new Core.Helpers.SectionedMethodHandler(SyntaxFactory.MethodDeclaration(SyntaxFactory.IdentifierName("string"), "id")));
+                base.AddBodyStatements(sourceModel, interfaceModel, new Core.Helpers.SectionedMethodHandler(SyntaxFactory.MethodDeclaration(SyntaxFactory.IdentifierName("string"), "id"), "Arrange", "Act", "Assert"));
             }
 
             public NameResolver PublicGeneratedMethodNamePattern => base.GeneratedMethodNamePattern;

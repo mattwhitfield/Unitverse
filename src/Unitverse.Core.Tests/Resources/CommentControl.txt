@@ -1,0 +1,14 @@
+// # Arrange=Set it up yo
+// # Act=Do that funky thang
+// # Assert=Check everything went exactly amazingly
+
+namespace TestNamespace.SubNameSpace
+{
+    public class TestClass
+    {
+	    public void ThisIsAMethod(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+    }
+}

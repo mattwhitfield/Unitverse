@@ -8,13 +8,6 @@
 
     public class SectionedMethodHandler
     {
-        // todo - remove
-        public SectionedMethodHandler(MethodDeclarationSyntax method)
-            : this(method, "Arrange", "Act", "Assert")
-        {
-        }
-
-
         public SectionedMethodHandler(MethodDeclarationSyntax method, string arrangeComment, string actComment, string assertComment)
         {
             Method = method ?? throw new ArgumentNullException(nameof(method));
@@ -151,10 +144,17 @@
                 _currentSection = section;
             }
 
-            if (!string.IsNullOrEmpty(comment))
+            if (!string.IsNullOrWhiteSpace(comment))
             {
-                var prefix = _anyEmitted ? Environment.NewLine : string.Empty;
-                syntax = syntax.WithLeadingTrivia(SyntaxFactory.Comment(prefix + "// " + comment.Trim() + Environment.NewLine));
+                var commentSyntax = SyntaxFactory.Comment("// " + comment.Trim() + Environment.NewLine);
+                if (_anyEmitted)
+                {
+                    syntax = syntax.WithLeadingTrivia(SyntaxFactory.Comment(Environment.NewLine), commentSyntax);
+                }
+                else
+                {
+                    syntax = syntax.WithLeadingTrivia(commentSyntax);
+                }
             }
             else if (_blankLineRequired)
             {

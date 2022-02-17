@@ -22,6 +22,7 @@ This section contains examples of the output that Unitverse outputs, refreshed e
 | [Nullable Reference Types](NullableReferenceTypes.md) | Shows how Unitverse will omit `null` tests for parameters declared to explicitly accept null |
 | [Operator Overloading](OperatorOverloading.md) | Shows how Unitverse emits tests for declared unary and binary operators |
 | [POCO Initialization](PocoInitialization.md) | Demonstrates how test values are produced to initialize POCO members when the type is consumed |
+| [Property Initialization Checks](PropertyInitializationChecks.md) | Demonstrates how properties that have matching constructor parameters are checked that they are initialized automatically |
 | [Record Types (init Properties)](RecordTypeInitProperties.md) | Demonstrates the tests generated for a record type that has properties that have init accessors |
 | [Record Types (Primary Constructor)](RecordTypesPrimaryConstructor.md) | Demonstrates the tests generated for a simple primary constructor record type |
 | [ref & out Parameters](RefAndOutParameters.md) | Demonstrates the tests that Unitverse emits when methods contain `ref` or `out` parameters |

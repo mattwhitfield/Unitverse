@@ -84,7 +84,6 @@ public static class TestClassTests
         // Assert
         TestClass.GetITest.Should().BeAssignableTo<string>();
 
-        // Arrange
         throw new NotImplementedException("Create or modify test");
     }
 }

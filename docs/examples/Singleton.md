@@ -65,7 +65,6 @@ public class TestClassTests
         // Assert
         TestClass.Instance.Should().BeAssignableTo<TestClass>();
 
-        // Arrange
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -75,7 +74,6 @@ public class TestClassTests
         // Assert
         _testClass.IsShared.As<object>().Should().BeAssignableTo<bool>();
 
-        // Arrange
         throw new NotImplementedException("Create or modify test");
     }
 }
