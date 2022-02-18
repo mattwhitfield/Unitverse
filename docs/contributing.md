@@ -44,11 +44,9 @@ The main bulk of the interesting code is in the `Strategies` folder. The `CoreGe
 
 ## Testing Ethos
 
-The general aim with the extension has not to be really specific about the output that is generated. So, for example, if a new method of deriving a default value for a type is added, it doesn't matter so much that it is done in an exact way. The most important thing is that the code compiles - Unitverse aims to 'get out of the way' of the developer so they can immediately think about how they want to go about testing the code they just wrote, instead of having to fix a bunch of broken code. Obviously, it won't generate tests that pass except for the simplest of cases, which is fine.
+The general aim with the extension is not to be really specific about the output that is generated. So, for example, if a new method of deriving a default value for a type is added, it doesn't matter so much that it is done in an exact way. The most important thing is that the code compiles - Unitverse aims to 'get out of the way' of the developer so they can immediately think about how they want to go about testing the code they just wrote, instead of having to fix a bunch of broken code. Obviously, it won't generate tests that pass except for the simplest of cases, which is fine.
 
-There are some tests that check output - in the `Unitverse.Specs` project - and they check things like 'has a mock been generated for this dependency' and 'is this basic assert emitted'. But they are not designed to break every time something minor changes.
-
-Does that make sense?
+There are some tests that do check output - in the `Unitverse.Specs` project - and they check things like 'has a mock been generated for this dependency' and 'is this basic assert emitted'. But they are not designed to break every time something minor changes.
 
 ## Build Protection
 
