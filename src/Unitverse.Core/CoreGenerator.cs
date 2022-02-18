@@ -21,6 +21,7 @@
     using Unitverse.Core.Strategies.MethodGeneration;
     using Unitverse.Core.Strategies.OperatorGeneration;
     using Unitverse.Core.Strategies.PropertyGeneration;
+    using Unitverse.Core.Strategies.ValueGeneration;
 
     public static class CoreGenerator
     {
@@ -62,6 +63,19 @@
             }
 
             return Generate(sourceModel, sourceSymbol, withRegeneration, options, targetNamespace, usingsEmitted, compilation, originalTargetNamespace, isSingleItemGeneration, messageLogger);
+        }
+
+        private static void MarkEmittedItems<T>(ModelGenerationContext generationContext, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector)
+            where T : ITestableModel
+        {
+            var namingContext = new NamingContext(generationContext.Model.ClassName);
+
+            foreach (var member in selector(generationContext.Model))
+            {
+                member.MarkedForGeneration =
+                    member.ShouldGenerate &&
+                    factory.CreateFor(member, generationContext.Model, namingContext, generationContext.FrameworkSet.Options.StrategyOptions).Any();
+            }
         }
 
         private static TypeDeclarationSyntax AddGeneratedItems<T>(ModelGenerationContext generationContext, TypeDeclarationSyntax declaration, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector, Func<T, bool> shouldGenerate, Func<NamingContext, T, NamingContext> nameDecorator)
@@ -226,6 +240,15 @@
             }
 
             return targetNamespace;
+        }
+
+        private static void MarkEmittedItems(ModelGenerationContext context)
+        {
+            MarkEmittedItems(context, new MethodGenerationStrategyFactory(context.FrameworkSet), x => x.Methods);
+            MarkEmittedItems(context, new OperatorGenerationStrategyFactory(context.FrameworkSet), x => x.Operators);
+            MarkEmittedItems(context, new PropertyGenerationStrategyFactory(context.FrameworkSet), x => x.Properties);
+            MarkEmittedItems(context, new IndexerGenerationStrategyFactory(context.FrameworkSet), x => x.Indexers);
+            ValueGenerationStrategyFactory.ResetSeed();
         }
 
         private static TypeDeclarationSyntax ApplyStrategies(TypeDeclarationSyntax targetType, ModelGenerationContext generationContext)
@@ -407,9 +430,11 @@
             {
                 targetNamespace = AddTypeParameterAliases(classModel, frameworkSet.Context, targetNamespace);
 
+                var context = new ModelGenerationContext(classModel, frameworkSet, withRegeneration, options.GenerationOptions.PartialGenerationAllowed);
+                MarkEmittedItems(context);
+
                 var targetType = GetOrCreateTargetType(targetNamespace, frameworkSet, classModel, out var originalTargetType);
 
-                var context = new ModelGenerationContext(classModel, frameworkSet, withRegeneration, options.GenerationOptions.PartialGenerationAllowed);
                 targetType = ApplyStrategies(targetType, context);
 
                 anyMethodsEmitted |= context.MethodsEmitted > 0;

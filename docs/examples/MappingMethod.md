@@ -42,7 +42,7 @@ public class MappingClassTests
     public void CanCallMap()
     {
         // Arrange
-        var inputClass = new InputClass { SomeOtherProperty = "TestValue929393559", InputOnlyProperty = "TestValue760389092" };
+        var inputClass = new InputClass { SomeOtherProperty = "TestValue534011718", InputOnlyProperty = "TestValue237820880" };
 
         // Act
         var result = _testClass.Map(inputClass);
@@ -61,7 +61,7 @@ public class MappingClassTests
     public void MapPerformsMapping()
     {
         // Arrange
-        var inputClass = new InputClass { SomeOtherProperty = "TestValue2026928803", InputOnlyProperty = "TestValue217468053" };
+        var inputClass = new InputClass { SomeOtherProperty = "TestValue1002897798", InputOnlyProperty = "TestValue1657007234" };
 
         // Act
         var result = _testClass.Map(inputClass);

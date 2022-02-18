@@ -51,8 +51,8 @@ public class TestClass_2Tests
 
     public TestClass_2Tests()
     {
-        _insta = new Test { ThisIsAProperty = 1657007234 };
-        _insta2 = new TestBoth { ThisIsAProperty = 1412011072, ThisIsAnotherProperty = 929393559 };
+        _insta = new Test { ThisIsAProperty = 534011718 };
+        _insta2 = new TestBoth { ThisIsAProperty = 237820880, ThisIsAnotherProperty = 1002897798 };
         _testClass = new TestClass<T, R>(_insta, _insta2);
     }
 
@@ -69,13 +69,13 @@ public class TestClass_2Tests
     [Fact]
     public void CannotConstructWithNullInsta()
     {
-        FluentActions.Invoking(() => new TestClass<T, R>(default(T), new TestBoth { ThisIsAProperty = 760389092, ThisIsAnotherProperty = 2026928803 })).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new TestClass<T, R>(default(T), new TestBoth { ThisIsAProperty = 1657007234, ThisIsAnotherProperty = 1412011072 })).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public void CannotConstructWithNullInsta2()
     {
-        FluentActions.Invoking(() => new TestClass<T, R>(new Test { ThisIsAProperty = 217468053 }, default(R))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new TestClass<T, R>(new Test { ThisIsAProperty = 929393559 }, default(R))).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]

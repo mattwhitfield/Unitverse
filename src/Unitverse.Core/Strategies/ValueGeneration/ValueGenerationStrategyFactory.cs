@@ -15,10 +15,21 @@
 
         internal static bool PredictableGeneration { get; private set; }
 
+        private static int _seed = 0;
+
         public static void UsePredictableGeneration(int seed)
         {
             PredictableGeneration = true;
             Random = new Random(seed);
+            _seed = seed;
+        }
+
+        public static void ResetSeed()
+        {
+            if (_seed != 0)
+            {
+                UsePredictableGeneration(_seed);
+            }
         }
 
         private static IEnumerable<IValueGenerationStrategy> Strategies =>

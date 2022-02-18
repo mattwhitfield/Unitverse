@@ -70,7 +70,7 @@ public static class TestClassTests
     public static void CanCallThisIsAMethod()
     {
         // Arrange
-        Func<string> func = () => "TestValue237820880";
+        Func<string> func = () => "TestValue534011718";
 
         // Act
         TestClass.ThisIsAMethod(func);
@@ -89,7 +89,7 @@ public static class TestClassTests
     public static void CanCallThisIsAMethod2()
     {
         // Arrange
-        Func<string, SomeClass> func = x => new SomeClass(1002897798);
+        Func<string, SomeClass> func = x => new SomeClass(237820880);
 
         // Act
         TestClass.ThisIsAMethod2(func);
@@ -108,7 +108,7 @@ public static class TestClassTests
     public static void CanCallThisIsAMethod3()
     {
         // Arrange
-        Func<int, string, SomeClass> func = (x, y) => new SomeClass(1657007234);
+        Func<int, string, SomeClass> func = (x, y) => new SomeClass(1002897798);
 
         // Act
         TestClass.ThisIsAMethod3(func);
@@ -127,7 +127,7 @@ public static class TestClassTests
     public static void CanCallThisIsAMethod4()
     {
         // Arrange
-        Func<int, int, string, SomeClass> func = (x, y, z) => new SomeClass(1412011072);
+        Func<int, int, string, SomeClass> func = (x, y, z) => new SomeClass(1657007234);
 
         // Act
         TestClass.ThisIsAMethod4(func);
@@ -146,7 +146,7 @@ public static class TestClassTests
     public static void CanCallThisIsAMethod5()
     {
         // Arrange
-        Func<int, int, int, string, SomeClass> func = (a, b, c, d) => new SomeClass(929393559);
+        Func<int, int, int, string, SomeClass> func = (a, b, c, d) => new SomeClass(1412011072);
 
         // Act
         TestClass.ThisIsAMethod5(func);

@@ -26,6 +26,8 @@
 
         public bool ShouldGenerate { get; set; } = true;
 
+        public bool MarkedForGeneration { get; set; }
+
         public void MutateName(string newName)
         {
             if (string.IsNullOrWhiteSpace(newName))
