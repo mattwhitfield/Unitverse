@@ -34,6 +34,6 @@ FluentAssertions can also be used for assertions, replacing the assertions built
 
 If Unitverse finds a test project related to the source project, it will look at the project references to determine what test and mocking frameworks to use. It will automatically use FluentAssertions if present. You can turn off framework auto-detection by going to Tools->Options->Unitverse.
 
-# Contributing ✋
+## Contributing ✋
 
 Any contributions are welcome. Code. Feedback on what you like or what could be better. Please feel free to fork the repo and make changes, the license if MIT so you're pretty much free to do whatever you like. For more information, please see the [contributing section](contributing.md).

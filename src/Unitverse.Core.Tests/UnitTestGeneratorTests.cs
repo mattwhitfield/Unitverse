@@ -142,8 +142,8 @@
             var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             Assert.IsNotNull(core);
-            Console.WriteLine(core.FileContent);
-            Assert.IsNotNull(core.FileContent);
+            Assert.That(!string.IsNullOrWhiteSpace(core.FileContent));
+            Console.WriteLine(core.FileContent.Lines().Select((x, i) => ((i + 1).ToString("D4")) + ": " + x).Aggregate((x, y) => x + Environment.NewLine + y));
 
             var generatedTree = CSharpSyntaxTree.ParseText(core.FileContent, new CSharpParseOptions(LanguageVersion.Latest));
 
@@ -167,7 +167,12 @@
             var streamLength = stream.Length;
             stream.Dispose();
 
-            Assert.IsTrue(result.Success, string.Join(",", result.Diagnostics.Select(x => x.Location.GetLineSpan().StartLinePosition.Line + ": " + x.GetMessage())));
+            if (!result.Success)
+            {
+                Assert.IsFalse(result.Diagnostics.Where(x => x.Location.SourceTree != generatedTree).Any(), "Input has errors: " + string.Join(",", result.Diagnostics.Where(x => x.Location.SourceTree != generatedTree).Select(x => x.Location.GetLineSpan().StartLinePosition.Line + ": " + x.GetMessage())));
+            }
+
+            Assert.IsTrue(result.Success, "Generated output has errors: " + string.Join(",", result.Diagnostics.Where(x => x.Location.SourceTree == generatedTree).Select(x => x.Location.GetLineSpan().StartLinePosition.Line + ": " + x.GetMessage())));
             Assert.That(streamLength, Is.GreaterThan(0));
         }
 

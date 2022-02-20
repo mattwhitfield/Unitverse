@@ -15,8 +15,44 @@ namespace Unitverse.Examples
         public int Val { get; }
     }
 
+	public delegate SomeClass HasOutParamAndReturnType(SomeClass input, out string output);
+
+	public delegate void HasOutParam(string input, out string output);
+
+	public delegate void HasAllTheThings(string input, out string output, ref string r1, in string s3);
+
+	public delegate void HasRefParam(string input, ref string output);
+
+	public delegate void HasOnlyOutParam(out string output);
+	
+	public delegate void HasOnlyRefParam(ref string output);
+
     public static class TestClass
     {
+        public static void ThisIsAMethod(HasOutParamAndReturnType action)
+	    {
+	    }
+
+        public static void ThisIsAMethod(HasAllTheThings action)
+	    {
+	    }
+
+        public static void ThisIsAMethod(HasOutParam action)
+	    {
+	    }
+
+        public static void ThisIsAMethod(HasRefParam action)
+	    {
+	    }
+
+        public static void ThisIsAMethod(HasOnlyOutParam action)
+	    {
+	    }
+
+        public static void ThisIsAMethod(HasOnlyRefParam action)
+	    {
+	    }
+
         public static void ThisIsAMethod(Func<string> func)
         {
         }
