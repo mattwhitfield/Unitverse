@@ -15,6 +15,30 @@ public class SomeClass
 
 public static class TestClass
 {
+    public static void ThisIsAMethod(HasOutParamAndReturnType action)
+    {
+    }
+
+    public static void ThisIsAMethod(HasAllTheThings action)
+    {
+    }
+
+    public static void ThisIsAMethod(HasOutParam action)
+    {
+    }
+
+    public static void ThisIsAMethod(HasRefParam action)
+    {
+    }
+
+    public static void ThisIsAMethod(HasOnlyOutParam action)
+    {
+    }
+
+    public static void ThisIsAMethod(HasOnlyRefParam action)
+    {
+    }
+
     public static void ThisIsAMethod(Func<string> func)
     {
     }
@@ -67,10 +91,124 @@ public static class TestClass
 public static class TestClassTests
 {
     [Fact]
-    public static void CanCallThisIsAMethod()
+    public static void CanCallThisIsAMethodWithHasOutParamAndReturnType()
     {
         // Arrange
-        Func<string> func = () => "TestValue534011718";
+        HasOutParamAndReturnType action = (SomeClass x, out string y) => { y = "TestValue534011718"; return new SomeClass(237820880); };
+
+        // Act
+        TestClass.ThisIsAMethod(action);
+
+        // Assert
+        throw new NotImplementedException("Create or modify test");
+    }
+
+    [Fact]
+    public static void CannotCallThisIsAMethodWithHasOutParamAndReturnTypeWithNullAction()
+    {
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOutParamAndReturnType))).Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public static void CanCallThisIsAMethodWithHasAllTheThings()
+    {
+        // Arrange
+        HasAllTheThings action = (string a, out string b, ref string c, in string d) => { b = "TestValue1002897798"; };
+
+        // Act
+        TestClass.ThisIsAMethod(action);
+
+        // Assert
+        throw new NotImplementedException("Create or modify test");
+    }
+
+    [Fact]
+    public static void CannotCallThisIsAMethodWithHasAllTheThingsWithNullAction()
+    {
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasAllTheThings))).Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public static void CanCallThisIsAMethodWithHasOutParam()
+    {
+        // Arrange
+        HasOutParam action = (string x, out string y) => { y = "TestValue1657007234"; };
+
+        // Act
+        TestClass.ThisIsAMethod(action);
+
+        // Assert
+        throw new NotImplementedException("Create or modify test");
+    }
+
+    [Fact]
+    public static void CannotCallThisIsAMethodWithHasOutParamWithNullAction()
+    {
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOutParam))).Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public static void CanCallThisIsAMethodWithHasRefParam()
+    {
+        // Arrange
+        HasRefParam action = (string x, ref string y) => { };
+
+        // Act
+        TestClass.ThisIsAMethod(action);
+
+        // Assert
+        throw new NotImplementedException("Create or modify test");
+    }
+
+    [Fact]
+    public static void CannotCallThisIsAMethodWithHasRefParamWithNullAction()
+    {
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasRefParam))).Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public static void CanCallThisIsAMethodWithHasOnlyOutParam()
+    {
+        // Arrange
+        HasOnlyOutParam action = (out string x) => { x = "TestValue1412011072"; };
+
+        // Act
+        TestClass.ThisIsAMethod(action);
+
+        // Assert
+        throw new NotImplementedException("Create or modify test");
+    }
+
+    [Fact]
+    public static void CannotCallThisIsAMethodWithHasOnlyOutParamWithNullAction()
+    {
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOnlyOutParam))).Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public static void CanCallThisIsAMethodWithHasOnlyRefParam()
+    {
+        // Arrange
+        HasOnlyRefParam action = (ref string x) => { };
+
+        // Act
+        TestClass.ThisIsAMethod(action);
+
+        // Assert
+        throw new NotImplementedException("Create or modify test");
+    }
+
+    [Fact]
+    public static void CannotCallThisIsAMethodWithHasOnlyRefParamWithNullAction()
+    {
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOnlyRefParam))).Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public static void CanCallThisIsAMethodWithFuncOfString()
+    {
+        // Arrange
+        Func<string> func = () => "TestValue929393559";
 
         // Act
         TestClass.ThisIsAMethod(func);
@@ -80,7 +218,7 @@ public static class TestClassTests
     }
 
     [Fact]
-    public static void CannotCallThisIsAMethodWithNullFunc()
+    public static void CannotCallThisIsAMethodWithFuncOfStringWithNullFunc()
     {
         FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(Func<string>))).Should().Throw<ArgumentNullException>();
     }
@@ -89,7 +227,7 @@ public static class TestClassTests
     public static void CanCallThisIsAMethod2()
     {
         // Arrange
-        Func<string, SomeClass> func = x => new SomeClass(237820880);
+        Func<string, SomeClass> func = x => new SomeClass(760389092);
 
         // Act
         TestClass.ThisIsAMethod2(func);
@@ -108,7 +246,7 @@ public static class TestClassTests
     public static void CanCallThisIsAMethod3()
     {
         // Arrange
-        Func<int, string, SomeClass> func = (x, y) => new SomeClass(1002897798);
+        Func<int, string, SomeClass> func = (x, y) => new SomeClass(2026928803);
 
         // Act
         TestClass.ThisIsAMethod3(func);
@@ -127,7 +265,7 @@ public static class TestClassTests
     public static void CanCallThisIsAMethod4()
     {
         // Arrange
-        Func<int, int, string, SomeClass> func = (x, y, z) => new SomeClass(1657007234);
+        Func<int, int, string, SomeClass> func = (x, y, z) => new SomeClass(217468053);
 
         // Act
         TestClass.ThisIsAMethod4(func);
@@ -146,7 +284,7 @@ public static class TestClassTests
     public static void CanCallThisIsAMethod5()
     {
         // Arrange
-        Func<int, int, int, string, SomeClass> func = (a, b, c, d) => new SomeClass(1412011072);
+        Func<int, int, int, string, SomeClass> func = (a, b, c, d) => new SomeClass(1379662799);
 
         // Act
         TestClass.ThisIsAMethod5(func);

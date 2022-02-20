@@ -18,7 +18,7 @@ The best way to view the documentation is to visit visit the [documentation on t
 * [Configuration](docs/configuration.md) - covering the configuration options available, as well as details on how to configure the extension through source code.
 * [Examples](docs/examples/index.md) - presents a selection of sample scenarios showing the source code and the generated tests.
 
-# Contributing ✋
+## Contributing ✋
 
 Any contributions are welcome. Code. Feedback on what you like or what could be better. Please feel free to fork the repo and make changes, the license if MIT so you're pretty much free to do whatever you like. For more information, please see the [contributing section](docs/contributing.md).
 

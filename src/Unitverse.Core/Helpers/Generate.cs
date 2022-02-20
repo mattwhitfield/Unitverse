@@ -476,7 +476,7 @@
             return SyntaxFactory.Parameter(SyntaxFactory.Identifier(KeywordSafeName(name)));
         }
 
-        public static ParameterListSyntax ParameterList(IEnumerable<string> parameters)
+        public static ParameterListSyntax ParameterList(IEnumerable<ParameterSyntax> parameters)
         {
             if (parameters == null)
             {
@@ -491,7 +491,7 @@
                     tokens.Add(SyntaxFactory.Token(SyntaxKind.CommaToken));
                 }
 
-                tokens.Add(Parameter(parameter));
+                tokens.Add(parameter);
             }
 
             return SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList<ParameterSyntax>(tokens));

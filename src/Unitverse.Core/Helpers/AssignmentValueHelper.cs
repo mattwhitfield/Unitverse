@@ -106,7 +106,21 @@
 
         private static ExpressionSyntax GetDefaultDelegateValue(SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, IMethodSymbol invokeMethod)
         {
+            if (invokeMethod.Parameters.Length > 0 && invokeMethod.Parameters.Any(p => p.RefKind != RefKind.None))
+            {
+                return GetExplicitDelegateValue(model, visitedTypes, frameworkSet, invokeMethod);
+            }
+
             var isVoid = invokeMethod.ReturnType.SpecialType == SpecialType.System_Void;
+            IEnumerable<ParameterSyntax> GetParameters(IList<IParameterSymbol> parameters)
+            {
+                var start = parameters.Count < 4 ? 'x' : 'a';
+                for (int i = 0; i < parameters.Count; i++)
+                {
+                    var name = ((char)(start + i)).ToString();
+                    yield return Generate.Parameter(name);
+                }
+            }
 
             var parameterCount = invokeMethod.Parameters.Length;
             LambdaExpressionSyntax lambda;
@@ -120,8 +134,7 @@
             }
             else
             {
-                var start = parameterCount < 4 ? 'x' : 'a';
-                var parameterList = Generate.ParameterList(Enumerable.Range(0, parameterCount).Select(x => ((char)(start + x)).ToString()));
+                var parameterList = Generate.ParameterList(GetParameters(invokeMethod.Parameters));
                 lambda = SyntaxFactory.ParenthesizedLambdaExpression().WithParameterList(parameterList);
             }
 
@@ -132,6 +145,70 @@
             else
             {
                 return lambda.WithExpressionBody(GetDefaultAssignmentValue(invokeMethod.ReturnType, model, visitedTypes, frameworkSet));
+            }
+        }
+
+        private static ExpressionSyntax GetExplicitDelegateValue(SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, IMethodSymbol invokeMethod)
+        {
+            var isVoid = invokeMethod.ReturnType.SpecialType == SpecialType.System_Void;
+            var setStatements = new List<StatementSyntax>();
+
+            ParameterSyntax GetParameter(IParameterSymbol parameter, string name)
+            {
+                var syntax = Generate.Parameter(name);
+                if (parameter.RefKind == RefKind.Out)
+                {
+                    syntax = syntax.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
+                    setStatements.Add(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(name), GetDefaultAssignmentValue(parameter.Type, model, visitedTypes, frameworkSet))));
+                }
+                else if (parameter.RefKind == RefKind.Ref)
+                {
+                    syntax = syntax.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
+                }
+                else if (parameter.RefKind == RefKind.In)
+                {
+                    syntax = syntax.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.InKeyword)));
+                }
+
+                syntax = syntax.WithType(parameter.Type.ToTypeSyntax(frameworkSet.Context));
+
+                return syntax;
+            }
+
+            IEnumerable<ParameterSyntax> GetParameters(IList<IParameterSymbol> parameters)
+            {
+                var start = parameters.Count < 4 ? 'x' : 'a';
+                for (int i = 0; i < parameters.Count; i++)
+                {
+                    var name = ((char)(start + i)).ToString();
+                    yield return GetParameter(parameters[i], name);
+                }
+            }
+
+            var parameterCount = invokeMethod.Parameters.Length;
+            LambdaExpressionSyntax lambda;
+            if (parameterCount == 0)
+            {
+                lambda = SyntaxFactory.ParenthesizedLambdaExpression();
+            }
+            else
+            {
+                var parameterList = Generate.ParameterList(GetParameters(invokeMethod.Parameters));
+                lambda = SyntaxFactory.ParenthesizedLambdaExpression().WithParameterList(parameterList);
+            }
+
+            if (!isVoid && setStatements.Count == 0)
+            {
+                return lambda.WithExpressionBody(GetDefaultAssignmentValue(invokeMethod.ReturnType, model, visitedTypes, frameworkSet));
+            }
+            else
+            {
+                if (!isVoid)
+                {
+                    setStatements.Add(SyntaxFactory.ReturnStatement(GetDefaultAssignmentValue(invokeMethod.ReturnType, model, visitedTypes, frameworkSet)));
+                }
+
+                return lambda.WithBlock(SyntaxFactory.Block(setStatements.ToArray()));
             }
         }
 
