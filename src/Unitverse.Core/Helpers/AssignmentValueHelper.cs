@@ -112,10 +112,10 @@
             }
 
             var isVoid = invokeMethod.ReturnType.SpecialType == SpecialType.System_Void;
-            IEnumerable<ParameterSyntax> GetParameters(IList<IParameterSymbol> parameters)
+            IEnumerable<ParameterSyntax> GetParameters(int count)
             {
-                var start = parameters.Count < 4 ? 'x' : 'a';
-                for (int i = 0; i < parameters.Count; i++)
+                var start = count < 4 ? 'x' : 'a';
+                for (int i = 0; i < count; i++)
                 {
                     var name = ((char)(start + i)).ToString();
                     yield return Generate.Parameter(name);
@@ -134,7 +134,7 @@
             }
             else
             {
-                var parameterList = Generate.ParameterList(GetParameters(invokeMethod.Parameters));
+                var parameterList = Generate.ParameterList(GetParameters(parameterCount));
                 lambda = SyntaxFactory.ParenthesizedLambdaExpression().WithParameterList(parameterList);
             }
 
