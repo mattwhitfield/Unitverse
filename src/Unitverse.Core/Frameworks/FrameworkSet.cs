@@ -2,6 +2,7 @@
 {
     using System;
     using Unitverse.Core.Helpers;
+    using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
     public class FrameworkSet : IFrameworkSet
@@ -35,5 +36,12 @@
         public string TestTypeNaming { get; }
 
         public IUnitTestGeneratorOptions Options { get; }
+
+        public void EvaluateTargetModel(ClassModel classModel)
+        {
+            (TestFramework as IClassModelEvaluator)?.EvaluateTargetModel(classModel);
+            (AssertionFramework as IClassModelEvaluator)?.EvaluateTargetModel(classModel);
+            (MockingFramework as IClassModelEvaluator)?.EvaluateTargetModel(classModel);
+        }
     }
 }

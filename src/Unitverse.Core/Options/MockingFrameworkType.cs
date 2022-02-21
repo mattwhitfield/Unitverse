@@ -5,5 +5,6 @@
         NSubstitute,
         Moq,
         FakeItEasy,
+        MoqAutoMock,
     }
 }

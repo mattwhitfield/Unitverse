@@ -346,6 +346,8 @@
 
             var setupMethod = frameworkSet.TestFramework.CreateSetupMethod(targetTypeName);
 
+            setupMethod = frameworkSet.MockingFramework.AddSetupMethodStatements(setupMethod);
+
             var parametersEmitted = new HashSet<ParameterModel>(new ParameterModelComparer());
 
             // generate fields for each constructor parameter

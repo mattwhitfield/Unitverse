@@ -29,6 +29,7 @@ namespace Unitverse.Core.Tests.Frameworks
         [Test]
         [TestCase(MockingFrameworkType.FakeItEasy, typeof(FakeItEasyMockingFramework))]
         [TestCase(MockingFrameworkType.Moq, typeof(MoqMockingFramework))]
+        [TestCase(MockingFrameworkType.MoqAutoMock, typeof(MoqAutoMockMockingFramework))]
         [TestCase(MockingFrameworkType.NSubstitute, typeof(NSubstituteMockingFramework))]
         public static void CanCallCreateForMockingFramework(MockingFrameworkType type, Type expectedType)
         {

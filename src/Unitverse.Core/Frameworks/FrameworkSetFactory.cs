@@ -31,6 +31,8 @@
                     return new NSubstituteMockingFramework(context);
                 case MockingFrameworkType.Moq:
                     return new MoqMockingFramework(context);
+                case MockingFrameworkType.MoqAutoMock:
+                    return new MoqAutoMockMockingFramework(context);
                 case MockingFrameworkType.FakeItEasy:
                     return new FakeItEasyMockingFramework(context);
                 default:

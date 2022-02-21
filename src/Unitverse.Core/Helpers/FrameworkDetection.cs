@@ -43,6 +43,7 @@
         {
             new Matcher<MockingFrameworkType>("FakeItEasy", null, MockingFrameworkType.FakeItEasy),
             new Matcher<MockingFrameworkType>("NSubstitute", null, MockingFrameworkType.NSubstitute),
+            new Matcher<MockingFrameworkType>("Moq.AutoMock", null, MockingFrameworkType.MoqAutoMock),
             new Matcher<MockingFrameworkType>("Moq", null, MockingFrameworkType.Moq),
         };
 

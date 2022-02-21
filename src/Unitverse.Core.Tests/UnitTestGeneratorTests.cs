@@ -21,6 +21,7 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Moq;
+    using Moq.AutoMock;
     using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Assets;
@@ -47,7 +48,7 @@
                 }
 
                 var frameworks = new[] { TestFrameworkTypes.MsTest, TestFrameworkTypes.NUnit3, TestFrameworkTypes.XUnit };
-                var mocks = new[] { MockingFrameworkType.Moq, MockingFrameworkType.NSubstitute, MockingFrameworkType.FakeItEasy };
+                var mocks = new[] { MockingFrameworkType.Moq, MockingFrameworkType.NSubstitute, MockingFrameworkType.FakeItEasy, MockingFrameworkType.MoqAutoMock };
 
                 foreach (var framework in frameworks)
                 {
@@ -169,10 +170,10 @@
 
             if (!result.Success)
             {
-                Assert.IsFalse(result.Diagnostics.Where(x => x.Location.SourceTree != generatedTree).Any(), "Input has errors: " + string.Join(",", result.Diagnostics.Where(x => x.Location.SourceTree != generatedTree).Select(x => x.Location.GetLineSpan().StartLinePosition.Line + ": " + x.GetMessage())));
+                Assert.IsFalse(result.Diagnostics.Where(x => x.Location.SourceTree != generatedTree && x.Location.IsInSource && x.WarningLevel == 0).Any(), "Input has errors: " + string.Join(",", result.Diagnostics.Where(x => x.Location.SourceTree != generatedTree && x.Location.IsInSource && x.WarningLevel == 0).Select(x => x.Location.GetLineSpan().StartLinePosition.Line + ": " + x.GetMessage())));
             }
 
-            Assert.IsTrue(result.Success, "Generated output has errors: " + string.Join(",", result.Diagnostics.Where(x => x.Location.SourceTree == generatedTree).Select(x => x.Location.GetLineSpan().StartLinePosition.Line + ": " + x.GetMessage())));
+            Assert.IsTrue(result.Success, "Generated output has errors: " + string.Join(Environment.NewLine, result.Diagnostics.Where(x => x.Location.SourceTree == generatedTree).OrderBy(x => x.Location.GetLineSpan().StartLinePosition.Line).Select(x => x.Location.GetLineSpan().StartLinePosition.Line + ": " + x.GetMessage())));
             Assert.That(streamLength, Is.GreaterThan(0));
         }
 
@@ -216,6 +217,11 @@
                     break;
 
                 case MockingFrameworkType.Moq:
+                    yield return MetadataReference.CreateFromFile(typeof(Mock).Assembly.Location);
+                    break;
+
+                case MockingFrameworkType.MoqAutoMock:
+                    yield return MetadataReference.CreateFromFile(typeof(AutoMocker).Assembly.Location);
                     yield return MetadataReference.CreateFromFile(typeof(Mock).Assembly.Location);
                     break;
 

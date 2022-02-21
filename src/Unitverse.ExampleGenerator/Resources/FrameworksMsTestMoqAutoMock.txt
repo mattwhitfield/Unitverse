@@ -1,0 +1,31 @@
+// ! Frameworks - MSTest & Moq (with Moq.AutoMock)
+// $ Demonstrates how tests are generated using MsTest for the test framework and Moq for the mocking framework, using Moq.AutoMock for object creation
+// # FrameworkType=MSTest
+// # MockingFrameworkType=MoqAutoMock
+// # UseFluentAssertions=false
+
+namespace Unitverse.Examples
+{
+    public interface IDependency
+    {
+        void Method();
+    }
+
+    public class TestClass
+    {
+        public TestClass(IDependency dependency)
+        { }
+
+        public void SomeMethod(string methodName, int methodValue)
+        {
+            System.Console.WriteLine("Testing this");
+            return System.Threading.Tasks.Task.CompletedTask;
+        }
+
+        public System.Threading.Tasks.Task<int> SomeAsyncMethod(string methodName, int methodValue)
+        {
+            System.Console.WriteLine("Testing this");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+    }
+}
