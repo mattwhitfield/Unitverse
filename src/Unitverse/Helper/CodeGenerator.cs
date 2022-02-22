@@ -176,7 +176,7 @@
             var semanticModel = await document.GetSemanticModelAsync().ConfigureAwait(true);
 
             var tree = await semanticModel.SyntaxTree.GetRootAsync().ConfigureAwait(true);
-            if (!tree.DescendantNodes().OfType<ClassDeclarationSyntax>().Any() && !tree.DescendantNodes().OfType<StructDeclarationSyntax>().Any())
+            if (!tree.DescendantNodes().Any(node => node is ClassDeclarationSyntax || node is StructDeclarationSyntax || node is RecordDeclarationSyntax))
             {
                 return;
             }

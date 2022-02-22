@@ -102,7 +102,7 @@
 
         public void SetShouldGenerateForSingleItem(SyntaxNode syntaxNode)
         {
-            ShouldGenerate = TypeSyntax == syntaxNode;
+            ShouldGenerate = Declaration == syntaxNode;
             Methods.Each(x => x.SetShouldGenerateForSingleItem(syntaxNode));
             Operators.Each(x => x.SetShouldGenerateForSingleItem(syntaxNode));
             Properties.Each(x => x.SetShouldGenerateForSingleItem(syntaxNode));
