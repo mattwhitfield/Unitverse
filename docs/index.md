@@ -28,6 +28,7 @@ FluentAssertions can also be used for assertions, replacing the assertions built
 
 * NSubstitute 
 * Moq 
+* Moq with Moq.AutoMock
 * FakeItEasy 
 
 ### Framework Auto-Detection 🔍

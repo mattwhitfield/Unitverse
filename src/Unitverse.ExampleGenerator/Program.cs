@@ -25,6 +25,7 @@ using FakeItEasy;
 using Xunit;
 using NUnit.Framework;
 using Unitverse.Core.Strategies.ValueGeneration;
+using Moq.AutoMock;
 
 namespace Unitverse.ExampleGenerator
 {
@@ -256,6 +257,11 @@ namespace Unitverse.ExampleGenerator
                     break;
 
                 case MockingFrameworkType.Moq:
+                    yield return MetadataReference.CreateFromFile(typeof(Mock).Assembly.Location);
+                    break;
+
+                case MockingFrameworkType.MoqAutoMock:
+                    yield return MetadataReference.CreateFromFile(typeof(AutoMocker).Assembly.Location);
                     yield return MetadataReference.CreateFromFile(typeof(Mock).Assembly.Location);
                     break;
 

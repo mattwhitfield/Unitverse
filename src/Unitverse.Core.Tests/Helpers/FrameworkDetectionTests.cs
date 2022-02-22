@@ -30,6 +30,7 @@ namespace Unitverse.Core.Tests.Helpers
         [TestCase("FakeItEasy", MockingFrameworkType.NSubstitute, MockingFrameworkType.FakeItEasy)]
         [TestCase("NSubstitute", MockingFrameworkType.Moq, MockingFrameworkType.NSubstitute)]
         [TestCase("Moq", MockingFrameworkType.NSubstitute, MockingFrameworkType.Moq)]
+        [TestCase("Moq.AutoMock", MockingFrameworkType.NSubstitute, MockingFrameworkType.MoqAutoMock)]
         [TestCase("fred", MockingFrameworkType.NSubstitute, MockingFrameworkType.NSubstitute)]
         [TestCase("fred", MockingFrameworkType.Moq, MockingFrameworkType.Moq)]
         public static void ResolveTargetFrameworksIdentifiesMockingFrameworks(string assemblyName, MockingFrameworkType baseType, MockingFrameworkType detectedType)

@@ -417,6 +417,8 @@
             {
                 frameworkSet.Context.TestClassesGenerated++;
 
+                frameworkSet.EvaluateTargetModel(c);
+
                 c.SetTargetInstance(frameworkSet.NamingProvider.TargetFieldName.Resolve(new NamingContext(c.ClassName)));
                 if (c.Declaration.Parent is NamespaceDeclarationSyntax namespaceDeclaration)
                 {

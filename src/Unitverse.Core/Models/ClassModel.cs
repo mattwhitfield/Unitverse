@@ -190,14 +190,23 @@
             return identifierName;
         }
 
-        public ExpressionSyntax GetObjectCreationExpression(IFrameworkSet frameworkSet)
+        public ExpressionSyntax GetObjectCreationExpression(IFrameworkSet frameworkSet, bool forSetupMethod)
         {
             if (frameworkSet == null)
             {
                 throw new ArgumentNullException(nameof(frameworkSet));
             }
 
-            var targetConstructor = Constructors.OrderByDescending(x => x.Parameters.Count).FirstOrDefault();
+            var targetConstructor = DefaultConstructor ?? Constructors.OrderByDescending(x => x.Parameters.Count).FirstOrDefault();
+
+            if (forSetupMethod)
+            {
+                var mockedCreationExpression = frameworkSet.MockingFramework.GetObjectCreationExpression(TypeSyntax);
+                if (mockedCreationExpression != null)
+                {
+                    return mockedCreationExpression;
+                }
+            }
 
             var objectCreation = SyntaxFactory.ObjectCreationExpression(TypeSyntax);
 

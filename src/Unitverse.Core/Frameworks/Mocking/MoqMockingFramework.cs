@@ -17,7 +17,7 @@
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public IEnumerable<UsingDirectiveSyntax> GetUsings()
+        public virtual IEnumerable<UsingDirectiveSyntax> GetUsings()
         {
             yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Moq"));
         }
@@ -57,17 +57,22 @@
             _context.MocksUsed = true;
             return SyntaxFactory.MemberAccessExpression(
                     SyntaxKind.SimpleMemberAccessExpression,
-                    GetFieldInitializer(type),
+                    GetMoqFieldInitializer(type),
                     SyntaxFactory.IdentifierName("Object"));
         }
 
-        public ExpressionSyntax GetFieldInitializer(TypeSyntax type)
+        public virtual ExpressionSyntax GetFieldInitializer(TypeSyntax type)
         {
             if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
 
+            return GetMoqFieldInitializer(type);
+        }
+
+        private ExpressionSyntax GetMoqFieldInitializer(TypeSyntax type)
+        {
             _context.MocksUsed = true;
             return SyntaxFactory.ObjectCreationExpression(SyntaxFactory.GenericName(SyntaxFactory.Identifier("Mock"))
                                                                        .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(type))))
@@ -127,6 +132,16 @@
         {
             var mockSetup = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(mockFieldName), SyntaxFactory.IdentifierName(actionName));
             return SyntaxFactory.InvocationExpression(mockSetup).WithArgumentList(Generate.Arguments(SyntaxFactory.SimpleLambdaExpression(Generate.Parameter("mock"), methodCall)));
+        }
+
+        public virtual BaseMethodDeclarationSyntax AddSetupMethodStatements(BaseMethodDeclarationSyntax setupMethod)
+        {
+            return setupMethod;
+        }
+
+        public virtual ExpressionSyntax GetObjectCreationExpression(TypeSyntax type)
+        {
+            return null;
         }
 
         public bool AwaitAsyncAssertions => false;

@@ -111,6 +111,16 @@
             return SyntaxFactory.InvocationExpression(aCallTo).WithArgumentList(Generate.Arguments(SyntaxFactory.ParenthesizedLambdaExpression().WithExpressionBody(methodCall)));
         }
 
+        public BaseMethodDeclarationSyntax AddSetupMethodStatements(BaseMethodDeclarationSyntax setupMethod)
+        {
+            return setupMethod;
+        }
+
+        public ExpressionSyntax GetObjectCreationExpression(TypeSyntax type)
+        {
+            return null;
+        }
+
         public bool AwaitAsyncAssertions => false;
     }
 }

@@ -87,14 +87,14 @@ namespace Unitverse.Core.Tests.Models
         public void CanCallGetObjectCreationExpression()
         {
             var frameworkSet = Substitute.For<IFrameworkSet>();
-            var result = _testClass.GetObjectCreationExpression(frameworkSet);
+            var result = _testClass.GetObjectCreationExpression(frameworkSet, false);
             Assert.That(result.NormalizeWhitespace().ToFullString().StartsWith("new ModelSource(\"TestValue", StringComparison.InvariantCultureIgnoreCase));
         }
 
         [Test]
         public void CannotCallGetObjectCreationExpressionWithNullFrameworkSet()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.GetObjectCreationExpression(default(IFrameworkSet)));
+            Assert.Throws<ArgumentNullException>(() => _testClass.GetObjectCreationExpression(default(IFrameworkSet), false));
         }
 
         [Test]

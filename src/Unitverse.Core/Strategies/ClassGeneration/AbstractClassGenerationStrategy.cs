@@ -75,7 +75,7 @@
             var identifierNameSyntax = SyntaxFactory.IdentifierName("Test" + model.ClassName);
             model.TypeSyntax = identifierNameSyntax;
 
-            var creationExpression = model.GetObjectCreationExpression(_frameworkSet);
+            var creationExpression = model.GetObjectCreationExpression(_frameworkSet, true);
 
             var assignment = SyntaxFactory.AssignmentExpression(
                 SyntaxKind.SimpleAssignmentExpression,

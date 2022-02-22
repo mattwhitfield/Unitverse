@@ -42,7 +42,7 @@
             ExpressionSyntax sameExpression;
             if (equatableTypeSymbol == sourceModel.TypeSymbol)
             {
-                sameExpression = sourceModel.GetObjectCreationExpression(FrameworkSet);
+                sameExpression = sourceModel.GetObjectCreationExpression(FrameworkSet, false);
             }
             else
             {

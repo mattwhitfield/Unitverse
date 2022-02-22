@@ -65,7 +65,7 @@
 
             var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanConstruct, namingContext, false, false);
 
-            generatedMethod.Act(Generate.ImplicitlyTypedVariableDeclaration("instance", model.GetObjectCreationExpression(_frameworkSet)));
+            generatedMethod.Act(Generate.ImplicitlyTypedVariableDeclaration("instance", model.GetObjectCreationExpression(_frameworkSet, false)));
 
             generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));
 

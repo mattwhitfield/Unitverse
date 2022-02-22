@@ -184,13 +184,9 @@ namespace Unitverse.ExampleGenerator {
         ///        public int Val { get; }
         ///    }
         ///
-        ///    public static class TestClass
-        ///    {
-        ///        public static void ThisIsAMethod(Func&lt;string&gt; func)
-        ///        {
-        ///        }
+        ///	public delegate SomeClass HasOutParamAndReturnType(SomeClass input, out string output);
         ///
-        ///        public static voi [rest of string was truncated]&quot;;.
+        ///	public delegate void HasOutParam(string input, out string o [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DelegateGeneration {
             get {
@@ -278,6 +274,33 @@ namespace Unitverse.ExampleGenerator {
         internal static string FrameworksMsTestMoq {
             get {
                 return ResourceManager.GetString("FrameworksMsTestMoq", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // ! Frameworks - MSTest &amp; Moq (with Moq.AutoMock)
+        ///// $ Demonstrates how tests are generated using MsTest for the test framework and Moq for the mocking framework, using Moq.AutoMock for object creation
+        ///// # FrameworkType=MSTest
+        ///// # MockingFrameworkType=MoqAutoMock
+        ///// # UseFluentAssertions=false
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///    public interface IDependency
+        ///    {
+        ///        void Method();
+        ///    }
+        ///
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(IDependency dependency)
+        ///        { }
+        ///
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FrameworksMsTestMoqAutoMock {
+            get {
+                return ResourceManager.GetString("FrameworksMsTestMoqAutoMock", resourceCulture);
             }
         }
         
