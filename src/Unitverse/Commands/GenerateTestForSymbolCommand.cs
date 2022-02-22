@@ -156,6 +156,7 @@
                         syntaxToken.AncestorsAndSelf().OfType<PropertyDeclarationSyntax>().FirstOrDefault() ??
                         syntaxToken.AncestorsAndSelf().OfType<ConstructorDeclarationSyntax>().FirstOrDefault() ??
                         syntaxToken.AncestorsAndSelf().OfType<IndexerDeclarationSyntax>().FirstOrDefault() ??
+                        syntaxToken as RecordDeclarationSyntax ??
                         syntaxToken as StructDeclarationSyntax ??
                         syntaxToken as ClassDeclarationSyntax as SyntaxNode;
 
