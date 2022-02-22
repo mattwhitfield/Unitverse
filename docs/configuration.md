@@ -75,7 +75,7 @@ When generating for a method with overloads, the names are decorated with 'WithP
 
 You can set settings per-solution if you need to (for example if you work with some code that uses MSTest and some that uses NUnit). In order to do this, you can create a `.unitTestGeneratorConfig` file, which is formatted similarly to .editorConfig files, just ignoring the file type heading.
 
-You can set any member of the [IGenerationOptions](https://github.com/mattwhitfield/unittestgenerator/blob/master/src/Unitverse.Core/Options/IGenerationOptions.cs) or the [INamingOptions](https://github.com/mattwhitfield/unittestgenerator/blob/master/src/Unitverse.Core/Options/INamingOptions.cs) interfaces using this method. For example, the following content in a `.unitTestGeneratorConfig` would set the test framework to MSTest, the mocking framework to NSubstitute and the test project naming convention to `<project_name>.UnitTests`:
+You can set any member of the [IGenerationOptions](https://github.com/mattwhitfield/Unitverse/blob/master/src/Unitverse.Core/Options/IGenerationOptions.cs), [IStrategyOptions](https://github.com/mattwhitfield/Unitverse/blob/master/src/Unitverse.Core/Options/IStrategyOptions.cs) or the [INamingOptions](https://github.com/mattwhitfield/Unitverse/blob/master/src/Unitverse.Core/Options/INamingOptions.cs) interfaces using this method. For example, the following content in a `.unitTestGeneratorConfig` would set the test framework to MSTest, the mocking framework to NSubstitute and the test project naming convention to `<project_name>.UnitTests`:
 
 ```
 test_project_naming={0}.UnitTests

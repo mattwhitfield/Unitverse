@@ -8,11 +8,11 @@ For more in-depth documentation, visit the [documentation on the readthedocs.io]
 
 Using the code editor context menu:
 
-![Code editor context menu](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/docs/assets/CodeEditorContextMenu.png)
+![Code editor context menu](https://raw.githubusercontent.com/mattwhitfield/Unitverse/master/docs/assets/CodeEditorContextMenu.png)
 
 Using the solution explorer context menu:
 
-![Solution Explorer context menu](https://raw.githubusercontent.com/mattwhitfield/unittestgenerator/master/docs/assets/SolutionContextMenu.png)
+![Solution Explorer context menu](https://raw.githubusercontent.com/mattwhitfield/Unitverse/master/docs/assets/SolutionContextMenu.png)
 
 # Visual Studio Versions 🆚
 Due to the transition to 64-bit, Visual Studio 2022 introduces some architectural differences that necessitate a separate VSIX package. If you're working with Visual Studio 2019, you will need [Unitverse for Visual Studio 2019](https://marketplace.visualstudio.com/items?itemName=MattWhitfield.Unitverse) and if you're working with Visual Studio 2022, you will need [Unitverse for Visual Studio 2022](https://marketplace.visualstudio.com/items?itemName=MattWhitfield.UnitverseVS2022).
