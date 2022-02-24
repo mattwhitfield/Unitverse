@@ -142,7 +142,7 @@
                     // find all the usings that are in targetNamespace, but not declared in either the originalTargetNamespace or the compilation
                     var usings = targetNamespace.Usings.Where(x => !existingUsings.Contains(x.NormalizeWhitespace().ToFullString())).ToList();
 
-                    MoveUsingsToCompilation(ref compilation, ref targetNamespace, usings);
+                    MoveUsingsToCompilation(ref compilation, ref targetNamespace, compilation.Usings.Concat(usings).ToList());
                 }
             }
 
