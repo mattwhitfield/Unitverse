@@ -43,7 +43,8 @@
                 models.Each(x => x.SetShouldGenerateForSingleItem(sourceSymbol));
             }
 
-            return models;
+            // only emit classes that are directly selected for generation, or have a member that is selected
+            return models.Where(x => x.ShouldGenerateOrContainsItemThatShouldGenerate());
         }
 
         private static IList<Func<SyntaxTokenList, bool>> GetAllowedModifiers(TypeDeclarationSyntax syntax, IUnitTestGeneratorOptions options)

@@ -110,6 +110,16 @@
             Indexers.Each(x => x.SetShouldGenerateForSingleItem(syntaxNode));
         }
 
+        public bool ShouldGenerateOrContainsItemThatShouldGenerate()
+        {
+            return ShouldGenerate ||
+                Methods.Any(x => x.ShouldGenerate) ||
+                Operators.Any(x => x.ShouldGenerate) ||
+                Properties.Any(x => x.ShouldGenerate) ||
+                Constructors.Any(x => x.ShouldGenerate) ||
+                Indexers.Any(x => x.ShouldGenerate);
+        }
+
         public string GetConstructorParameterFieldName(ParameterModel model, INamingProvider namingProvider)
         {
             if (model is null)

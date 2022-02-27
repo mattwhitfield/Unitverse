@@ -3,6 +3,7 @@ namespace Unitverse.Core.Tests.Helpers
     using System;
     using System.Linq;
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
     using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Helpers;
@@ -50,6 +51,14 @@ namespace Unitverse.Core.Tests.Helpers
             Assert.That(result.Methods.Count, Is.EqualTo(2));
             Assert.That(result.Indexers.Count, Is.EqualTo(1));
             Assert.That(result.Properties.Count, Is.EqualTo(1));
+            Assert.That(result.ShouldGenerateOrContainsItemThatShouldGenerate(), Is.True);
+        }
+
+        [Test]
+        public void CanCallExtractWithUnrelatedSymbol()
+        {
+            var result = _testClass.Extract(SyntaxFactory.MethodDeclaration(SyntaxFactory.IdentifierName("string"), "fred"), Substitute.For<IUnitTestGeneratorOptions>()).FirstOrDefault();
+            Assert.That(result, Is.Null);
         }
 
         [Test]
@@ -60,6 +69,7 @@ namespace Unitverse.Core.Tests.Helpers
             Assert.That(result.Methods.Count(x => x.ShouldGenerate), Is.EqualTo(1));
             Assert.That(result.Indexers.Count(x => x.ShouldGenerate), Is.EqualTo(0));
             Assert.That(result.Properties.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.ShouldGenerateOrContainsItemThatShouldGenerate(), Is.True);
         }
 
         [Test]
@@ -74,6 +84,7 @@ namespace Unitverse.Core.Tests.Helpers
             Assert.That(result.Methods.Count(x => x.ShouldGenerate), Is.EqualTo(0));
             Assert.That(result.Indexers.Count(x => x.ShouldGenerate), Is.EqualTo(0));
             Assert.That(result.Properties.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.ShouldGenerateOrContainsItemThatShouldGenerate(), Is.True);
         }
 
         [Test]
@@ -88,6 +99,7 @@ namespace Unitverse.Core.Tests.Helpers
             Assert.That(result.Methods.Count(x => x.ShouldGenerate), Is.EqualTo(0));
             Assert.That(result.Indexers.Count(x => x.ShouldGenerate), Is.EqualTo(0));
             Assert.That(result.Properties.Count(x => x.ShouldGenerate), Is.EqualTo(1));
+            Assert.That(result.ShouldGenerateOrContainsItemThatShouldGenerate(), Is.True);
         }
 
         [Test]
@@ -102,6 +114,7 @@ namespace Unitverse.Core.Tests.Helpers
             Assert.That(result.Methods.Count(x => x.ShouldGenerate), Is.EqualTo(0));
             Assert.That(result.Indexers.Count(x => x.ShouldGenerate), Is.EqualTo(1));
             Assert.That(result.Properties.Count(x => x.ShouldGenerate), Is.EqualTo(0));
+            Assert.That(result.ShouldGenerateOrContainsItemThatShouldGenerate(), Is.True);
         }
 
         [Test]
@@ -116,6 +129,7 @@ namespace Unitverse.Core.Tests.Helpers
             Assert.That(result.Methods.Count(x => x.ShouldGenerate), Is.EqualTo(2));
             Assert.That(result.Indexers.Count(x => x.ShouldGenerate), Is.EqualTo(1));
             Assert.That(result.Properties.Count(x => x.ShouldGenerate), Is.EqualTo(1));
+            Assert.That(result.ShouldGenerateOrContainsItemThatShouldGenerate(), Is.True);
         }
 
         [Test]
