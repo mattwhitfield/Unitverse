@@ -75,7 +75,7 @@
             get
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
-                return SolutionUtilities.GetSelectedFiles(_dte, true, _package.Options.GenerationOptions).Any(ProjectItemModel.IsSupported);
+                return SolutionUtilities.GetSupportedFiles(_dte, true).Any();
             }
         }
 
@@ -109,7 +109,6 @@
         private void Execute(bool withRegeneration)
         {
             var generationItems = new List<GenerationItem>();
-            var projectMappings = new Dictionary<Project, ProjectMapping>();
 
             var messageLogger = new AggregateLogger();
             messageLogger.Initialize();
@@ -122,42 +121,33 @@
                 ThreadHelper.ThrowIfNotOnUIThread();
 #pragma warning disable VSTHRD010
 
-                if (!IsAvailable)
+                var sources = SolutionUtilities.GetSupportedFiles(_dte, true).ToList();
+                if (sources.Count == 0)
                 {
                     throw new InvalidOperationException("Cannot generate unit tests for this item because no supported files were found");
                 }
 
-                var options = _package.Options;
-                var sources = SolutionUtilities.GetSelectedFiles(_dte, true, options.GenerationOptions).Where(ProjectItemModel.IsSupported).ToList();
+                var baseOptions = _package.Options;
                 isSingleCreation = sources.Count == 1;
 
-                foreach (var source in sources)
+                var sourceProjects = sources.Select(x => x.Project).Distinct().ToList();
+                if (sourceProjects.Count > 1)
                 {
-                    if (projectMappings.ContainsKey(source.Project))
-                    {
-                        continue;
-                    }
+                    throw new InvalidOperationException("Cannot generate unit tests for multiple projects at the same time, please select a single project");
+                }
 
-                    var targetProject = source.TargetProject;
+                var mapping = ProjectMappingFactory.CreateMappingFor(sourceProjects.Single(), baseOptions);
 
-                    if (targetProject == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
-                    {
-                        throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
-                    }
-
-                    if (targetProject != null)
-                    {
-                        var generationOptions = OptionsResolver.DetectFrameworks(targetProject, options.GenerationOptions);
-
-                        projectMappings[source.Project] = new ProjectMapping(source.Project, targetProject, new UnitTestGeneratorOptions(generationOptions, options.NamingOptions, options.StrategyOptions, options.StatisticsCollectionEnabled));
-                    }
+                if (mapping.TargetProject == null && !mapping.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
+                {
+                    throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(sources.First().FilePath) + "' because there is no project '" + mapping.TargetProjectName + "'");
                 }
 
                 foreach (var source in sources)
                 {
                     var projectItem = source.Item;
 
-                    if (!withRegeneration && !options.GenerationOptions.PartialGenerationAllowed && TargetFinder.FindExistingTargetItem(source, options.GenerationOptions, out _) == FindTargetStatus.Found)
+                    if (!withRegeneration && !mapping.Options.GenerationOptions.PartialGenerationAllowed && TargetFinder.FindExistingTargetItem(source, mapping, out _) == FindTargetStatus.Found)
                     {
                         if (isSingleCreation)
                         {
@@ -170,52 +160,26 @@
                         continue;
                     }
 
-                    var nameParts = VsProjectHelper.GetNameParts(projectItem);
+                    generationItems.Add(new GenerationItem(source, mapping));
+                }
 
-                    projectMappings.TryGetValue(source.Project, out var mapping);
-                    var targetProject = mapping?.TargetProject;
-                    var targetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out var targetPath);
+                if (generationItems.Any())
+                {
+                    _ = _package.JoinableTaskFactory.RunAsync(() => Attempt.ActionAsync(() => CodeGenerator.GenerateCodeAsync(generationItems, withRegeneration, _package, messageLogger), _package));
+                }
+                else
+                {
+                    var message = "No tests could be created because tests already exist for all selected source items. If you want to re-generate tests, hold down the left Shift key while opening the context menu and select the 'Regenerate tests' option. If you want to add new tests for any new code, enable the 'Partial Generation' option.";
 
-                    if (targetProjectItems == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
+                    if (!isSingleCreation)
                     {
-                        // we asked to create targetProjectItems - so if it's null we effectively had a problem getting to the target project
-                        throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'.");
+                        VsMessageBox.Show(message, true, _package);
                     }
 
-                    var sourceNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.Project);
-                    HashSet<TargetAsset> requiredAssets = mapping?.TargetAssets ?? new HashSet<TargetAsset>();
-
-                    Func<string, string> namespaceTransform;
-                    if (source.TargetProject != null)
-                    {
-                        var targetNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.TargetProject);
-                        namespaceTransform = NamespaceTransform.Create(sourceNameSpaceRoot, targetNameSpaceRoot);
-                    }
-                    else
-                    {
-                        namespaceTransform = x => x + ".Tests";
-                    }
-
-                    generationItems.Add(new GenerationItem(source, null, targetProjectItems, targetPath, requiredAssets, namespaceTransform, mapping?.Options ?? options));
+                    messageLogger.LogMessage(message);
                 }
 #pragma warning restore VSTHRD010
             }, _package);
-
-            if (generationItems.Any())
-            {
-                _ = _package.JoinableTaskFactory.RunAsync(() => Attempt.ActionAsync(() => CodeGenerator.GenerateCodeAsync(generationItems, withRegeneration, _package, projectMappings.Values, messageLogger), _package));
-            }
-            else
-            {
-                var message = "No tests could be created because tests already exist for all selected source items. If you want to re-generate tests, hold down the left Shift key while opening the context menu and select the 'Regenerate tests' option. If you want to add new tests for any new code, enable the 'Partial Generation' option.";
-
-                if (!isSingleCreation)
-                {
-                    VsMessageBox.Show(message, true, _package);
-                }
-
-                messageLogger.LogMessage(message);
-            }
         }
     }
 }

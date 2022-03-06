@@ -190,7 +190,6 @@
 
         private void Execute(bool withRegeneration)
         {
-            GenerationItem generationItem;
             Attempt.Action(
                 () =>
             {
@@ -208,37 +207,10 @@
                 var messageLogger = new AggregateLogger();
                 messageLogger.Initialize();
 
-                var item = VsProjectHelper.GetProjectItem(document.FilePath);
+                var source = new ProjectItemModel(VsProjectHelper.GetProjectItem(document.FilePath));
+                var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options);
 
-                var options = _package.Options;
-                var source = new ProjectItemModel(item, options.GenerationOptions);
-
-                var projectItem = source.Item;
-
-                var nameParts = VsProjectHelper.GetNameParts(projectItem);
-
-                var targetProject = source.TargetProject;
-                if (targetProject == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
-                {
-                    throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
-                }
-
-                var generationOptions = OptionsResolver.DetectFrameworks(targetProject, options.GenerationOptions);
-                var resolvedOptions = new UnitTestGeneratorOptions(generationOptions, options.NamingOptions, options.StrategyOptions, options.StatisticsCollectionEnabled);
-
-                var projectMappings = new List<ProjectMapping>();
-                var set = new HashSet<TargetAsset>();
-                if (targetProject != null)
-                {
-                    projectMappings.Add(new ProjectMapping(source.Project, targetProject, resolvedOptions));
-                }
-
-                var targetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out var targetPath);
-                if (targetProjectItems == null && !options.GenerationOptions.AllowGenerationWithoutTargetProject)
-                {
-                    // we asked to create targetProjectItems - so if it's null we effectively had a problem getting to the target project
-                    throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + source.TargetProjectName + "'");
-                }
+                var generationItem = new GenerationItem(source, mapping);
 
                 _ = _package.JoinableTaskFactory.RunAsync(
                     () => Attempt.ActionAsync(
@@ -248,22 +220,9 @@
 
                         if (methodSymbol != null)
                         {
-                            var sourceNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.Project);
+                            generationItem.SourceSymbol = methodSymbol.Item1;
 
-                            Func<string, string> namespaceTransform;
-                            if (source.TargetProject != null)
-                            {
-                                var targetNameSpaceRoot = VsProjectHelper.GetProjectRootNamespace(source.TargetProject);
-                                namespaceTransform = NamespaceTransform.Create(sourceNameSpaceRoot, targetNameSpaceRoot);
-                            }
-                            else
-                            {
-                                namespaceTransform = x => x + ".Tests";
-                            }
-
-                            generationItem = new GenerationItem(source, methodSymbol.Item1, targetProjectItems, targetPath, set, namespaceTransform, resolvedOptions);
-
-                            await CodeGenerator.GenerateCodeAsync(new[] { generationItem }, withRegeneration, _package, projectMappings, messageLogger).ConfigureAwait(true);
+                            await CodeGenerator.GenerateCodeAsync(new[] { generationItem }, withRegeneration, _package, messageLogger).ConfigureAwait(true);
                         }
                     }, _package));
             }, _package);

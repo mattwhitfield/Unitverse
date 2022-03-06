@@ -10,7 +10,7 @@
 
     public static class SolutionUtilities
     {
-        public static IEnumerable<ProjectItemModel> GetSelectedFiles(DTE2 dte, bool recursive, IGenerationOptions options)
+        public static IEnumerable<ProjectItemModel> GetSupportedFiles(DTE2 dte, bool recursive)
         {
             if (dte == null)
             {
@@ -26,13 +26,13 @@
                 var items = selectedItemObjects.OfType<ProjectItem>().Concat(selectedItemObjects.OfType<Project>().Select(x => x.ProjectItems).SelectMany(x => x.OfType<ProjectItem>()));
 #pragma warning restore VSTHRD010
 
-                return GetSelectedFiles(items, recursive, options);
+                return GetSupportedFiles(items, recursive);
             }
 
             return Enumerable.Empty<ProjectItemModel>();
         }
 
-        private static IEnumerable<ProjectItemModel> GetSelectedFiles(IEnumerable<ProjectItem> items, bool recursive, IGenerationOptions options)
+        private static IEnumerable<ProjectItemModel> GetSupportedFiles(IEnumerable<ProjectItem> items, bool recursive)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -42,7 +42,7 @@
                 {
                     if (recursive)
                     {
-                        foreach (var projectItemSummary in GetSelectedFiles(item.ProjectItems.OfType<ProjectItem>(), true, options))
+                        foreach (var projectItemSummary in GetSupportedFiles(item.ProjectItems.OfType<ProjectItem>(), true))
                         {
                             yield return projectItemSummary;
                         }
@@ -50,7 +50,11 @@
                 }
                 else
                 {
-                    yield return new ProjectItemModel(item, options);
+                    var model = new ProjectItemModel(item);
+                    if (model.IsSupported)
+                    {
+                        yield return model;
+                    }
                 }
             }
         }

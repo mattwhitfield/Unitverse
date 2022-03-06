@@ -83,6 +83,7 @@
     <Compile Include="Helper\OutputWindowMessageLogger.cs" />
     <Compile Include="Helper\ProjectMapping.cs" />
     <Compile Include="Helper\ProjectItemModel.cs" />
+    <Compile Include="Helper\ProjectMappingFactory.cs" />
     <Compile Include="Helper\SolutionUtilities.cs" />
     <Compile Include="Helper\StatisticsTracker.cs" />
     <Compile Include="Helper\StatusBarMessageLogger.cs" />
