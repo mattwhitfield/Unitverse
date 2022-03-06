@@ -5,6 +5,7 @@
     using System.IO;
     using EnvDTE;
     using Microsoft.CodeAnalysis;
+    using Microsoft.VisualStudio.Shell;
     using Unitverse.Core.Assets;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
@@ -14,24 +15,34 @@
     {
         private readonly string _targetPath;
 
-        public GenerationItem(ProjectItemModel source, SyntaxNode sourceSymbol, ProjectItems targetProjectItems, string targetPath, HashSet<TargetAsset> requiredAssets, Func<string, string> namespaceTransform, IUnitTestGeneratorOptions options)
+        public GenerationItem(ProjectItemModel source, ProjectMapping mapping)
         {
-            Options = options ?? throw new ArgumentNullException(nameof(options));
             Source = source ?? throw new ArgumentNullException(nameof(source));
-            SourceSymbol = sourceSymbol;
-            TargetProjectItems = targetProjectItems;
-            _targetPath = targetPath;
-            RequiredAssets = requiredAssets ?? throw new ArgumentNullException(nameof(requiredAssets));
-            NamespaceTransform = namespaceTransform ?? throw new ArgumentNullException(nameof(namespaceTransform));
+            Mapping = mapping ?? throw new ArgumentNullException(nameof(mapping));
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            var nameParts = VsProjectHelper.GetNameParts(source.Item);
+
+            var targetProject = mapping.TargetProject;
+            TargetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out _targetPath);
+
+            if (TargetProjectItems == null && !mapping.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
+            {
+                // we asked to create targetProjectItems - so if it's null we effectively had a problem getting to the target project
+                throw new InvalidOperationException("Cannot create tests for '" + Path.GetFileName(source.FilePath) + "' because there is no project '" + mapping.TargetProjectName + "'.");
+            }
+
+            NamespaceTransform = mapping.CreateNamespaceTransform();
         }
 
         public Func<string, string> NamespaceTransform { get; }
 
-        public HashSet<TargetAsset> RequiredAssets { get; }
+        public HashSet<TargetAsset> RequiredAssets => Mapping.TargetAssets;
 
         public ProjectItemModel Source { get; }
-
-        public SyntaxNode SourceSymbol { get; }
+        public ProjectMapping Mapping { get; }
+        public SyntaxNode SourceSymbol { get; set; }
 
         public string TargetContent { get; set; }
 
@@ -39,7 +50,7 @@
         {
             get
             {
-                var targetFileName = Options.GenerationOptions.GetTargetFileName(Path.GetFileNameWithoutExtension(Source.FilePath)) + Path.GetExtension(Source.FilePath);
+                var targetFileName = Mapping.Options.GenerationOptions.GetTargetFileName(Path.GetFileNameWithoutExtension(Source.FilePath)) + Path.GetExtension(Source.FilePath);
                 if (string.IsNullOrEmpty(_targetPath))
                 {
                     return targetFileName;
@@ -51,7 +62,7 @@
 
         public ProjectItems TargetProjectItems { get; }
 
-        public IUnitTestGeneratorOptions Options { get; }
+        public IUnitTestGeneratorOptions Options => Mapping.Options;
 
         public bool AnyMethodsEmitted { get; set; }
     }

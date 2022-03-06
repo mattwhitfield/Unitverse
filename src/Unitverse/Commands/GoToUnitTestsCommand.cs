@@ -52,7 +52,7 @@
             menuItem.BeforeQueryStatus += (s, e) =>
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
-                menuItem.Visible = SolutionUtilities.GetSelectedFiles(_dte, false, _package.Options.GenerationOptions).Any(ProjectItemModel.IsSupported);
+                menuItem.Visible = SolutionUtilities.GetSupportedFiles(_dte, false).Any();
             };
 
             commandService.AddCommand(menuItem);
@@ -85,21 +85,22 @@
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
 
-                var options = _package.Options;
-                var source = SolutionUtilities.GetSelectedFiles(_dte, false, options.GenerationOptions).FirstOrDefault(ProjectItemModel.IsSupported);
+                var source = SolutionUtilities.GetSupportedFiles(_dte, false).FirstOrDefault();
                 if (source == null)
                 {
                     throw new InvalidOperationException("Cannot go to tests for this item because no supported files were found");
                 }
 
-                var status = TargetFinder.FindExistingTargetItem(source, options.GenerationOptions, out var targetItem);
+                var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options);
+
+                var status = TargetFinder.FindExistingTargetItem(source, mapping, out var targetItem);
                 switch (status)
                 {
                     case FindTargetStatus.FileNotFound:
                     case FindTargetStatus.FolderNotFound:
                         throw new InvalidOperationException("No unit tests were found for the selected file.");
                     case FindTargetStatus.ProjectNotFound:
-                        throw new InvalidOperationException("Cannot go to tests for this item because there is no project '" + source.TargetProjectName + "'");
+                        throw new InvalidOperationException("Cannot go to tests for this item because there is no project '" + mapping.TargetProjectName + "'");
                 }
 
                 VsProjectHelper.ActivateItem(targetItem);

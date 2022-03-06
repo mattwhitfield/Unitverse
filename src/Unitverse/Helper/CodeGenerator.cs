@@ -23,14 +23,14 @@
 
     internal static class CodeGenerator
     {
-        public static async Task GenerateCodeAsync(IReadOnlyCollection<GenerationItem> generationItems, bool withRegeneration, IUnitTestGeneratorPackage package, IEnumerable<ProjectMapping> projectMappings, IMessageLogger messageLogger)
+        public static async Task GenerateCodeAsync(IReadOnlyCollection<GenerationItem> generationItems, bool withRegeneration, IUnitTestGeneratorPackage package, IMessageLogger messageLogger)
         {
             var solution = package.Workspace.CurrentSolution;
 
             var isSingleItemGeneration = generationItems.Count == 1;
             foreach (var generationItem in generationItems)
             {
-                await GenerateItemAsync(withRegeneration, generationItem.Options, solution, generationItem, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
+                await GenerateItemAsync(withRegeneration, solution, generationItem, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
             }
 
             await package.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -49,7 +49,8 @@
                 }
 
                 messageLogger.LogMessage("Adding required assets to target project...");
-                foreach (var mapping in projectMappings)
+                var mapping = generationItems.FirstOrDefault()?.Mapping;
+                if (mapping != null)
                 {
                     AddTargetAssets(mapping.Options, mapping.TargetProject, mapping.TargetAssets);
                 }
@@ -65,7 +66,7 @@
                 {
                     if (generationItem.TargetProjectItems != null)
                     {
-                        AddTargetItem(generationItems, generationItem.Options, generationItem);
+                        AddTargetItem(generationItem, generationItems.Count == 1);
                     }
                     else
                     {
@@ -83,7 +84,7 @@
             var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(generationItem.TargetFileName));
             try
             {
-                File.WriteAllText(tempFile, Strings.DisconnectedFileHeader.Replace("$$TARGETNAME$$", generationItem.Source.TargetProjectName) + generationItem.TargetContent);
+                File.WriteAllText(tempFile, Strings.DisconnectedFileHeader.Replace("$$TARGETNAME$$", generationItem.Mapping.TargetProjectName) + generationItem.TargetContent);
                 var dte = (DTE2)package.GetService(typeof(DTE));
                 if (dte != null)
                 {
@@ -103,10 +104,10 @@
             }
         }
 
-        private static void AddTargetItem(IReadOnlyCollection<GenerationItem> generationItems, IUnitTestGeneratorOptions options, GenerationItem generationItem)
+        private static void AddTargetItem(GenerationItem generationItem, bool withActivation)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (TargetFinder.FindExistingTargetItem(generationItem.Source, options.GenerationOptions, out var targetItem) != FindTargetStatus.Found)
+            if (TargetFinder.FindExistingTargetItem(generationItem.Source, generationItem.Mapping, out var targetItem) != FindTargetStatus.Found)
             {
                 File.WriteAllText(generationItem.TargetFileName, generationItem.TargetContent);
                 targetItem = generationItem.TargetProjectItems.AddFromFile(generationItem.TargetFileName);
@@ -126,7 +127,7 @@
                 }
             }
 
-            if (generationItems.Count == 1)
+            if (withActivation)
             {
                 VsProjectHelper.ActivateItem(targetItem);
             }
@@ -161,7 +162,7 @@
             }
         }
 
-        private static async Task GenerateItemAsync(bool withRegeneration, IUnitTestGeneratorOptions options, Solution solution, GenerationItem generationItem, bool isSingleItemGeneration, IMessageLogger messageLogger)
+        private static async Task GenerateItemAsync(bool withRegeneration, Solution solution, GenerationItem generationItem, bool isSingleItemGeneration, IMessageLogger messageLogger)
         {
             var targetProject = solution.Projects.FirstOrDefault(x => string.Equals(x.Name, generationItem.Source.SourceProjectName, StringComparison.Ordinal));
             var documents = solution.GetDocumentIdsWithFilePath(generationItem.Source.FilePath);
@@ -181,9 +182,9 @@
                 return;
             }
 
-            var result = await GenerateAsync(withRegeneration, options, solution, generationItem, semanticModel, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
+            var result = await GenerateAsync(withRegeneration, solution, generationItem, semanticModel, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
 
-            if (options.StatisticsCollectionEnabled)
+            if (generationItem.Options.StatisticsCollectionEnabled)
             {
                 StatisticsTracker.Track(result);
             }
@@ -197,7 +198,7 @@
             }
         }
 
-        private static async Task<GenerationResult> GenerateAsync(bool withRegeneration, IUnitTestGeneratorOptions options, Solution solution, GenerationItem generationItem, SemanticModel semanticModel, bool isSingleItemGeneration, IMessageLogger messageLogger)
+        private static async Task<GenerationResult> GenerateAsync(bool withRegeneration, Solution solution, GenerationItem generationItem, SemanticModel semanticModel, bool isSingleItemGeneration, IMessageLogger messageLogger)
         {
             if (File.Exists(generationItem.TargetFileName))
             {
@@ -208,11 +209,11 @@
 
                     var targetSemanticModel = await targetDocument.GetSemanticModelAsync().ConfigureAwait(true);
 
-                    return await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, targetSemanticModel, withRegeneration, options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
+                    return await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, targetSemanticModel, withRegeneration, generationItem.Options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
                 }
             }
 
-            return await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, null, withRegeneration, options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
+            return await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, null, withRegeneration, generationItem.Options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
         }
     }
 }

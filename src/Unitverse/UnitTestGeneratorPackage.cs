@@ -1,7 +1,6 @@
 ﻿namespace Unitverse
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
     using System.Threading;
     using Microsoft.VisualStudio.ComponentModelHost;
@@ -16,7 +15,6 @@
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [Guid(Constants.ExtensionGuid)]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(GenerationOptions), "Unitverse", "Generation Options", 0, 0, true)]
     [ProvideOptionPage(typeof(NamingOptions), "Unitverse", "Naming Options", 0, 0, true)]
@@ -35,9 +33,8 @@
         {
             get
             {
-                var solutionFilePath = Workspace?.CurrentSolution?.FilePath;
                 var statisticsOptions = (StatisticsOptions)GetDialogPage(typeof(StatisticsOptions));
-                return UnitTestGeneratorOptionsFactory.Create(solutionFilePath, GenerationOptions, NamingOptions, StrategyOptions, statisticsOptions.Enabled);
+                return new UnitTestGeneratorOptions(GenerationOptions, NamingOptions, StrategyOptions, statisticsOptions.Enabled);
             }
         }
 

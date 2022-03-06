@@ -11,7 +11,7 @@
 
     internal static class TargetFinder
     {
-        public static FindTargetStatus FindExistingTargetItem(ProjectItemModel source, IGenerationOptions options, out ProjectItem targetItem)
+        public static FindTargetStatus FindExistingTargetItem(ProjectItemModel source, ProjectMapping mapping, out ProjectItem targetItem)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -19,7 +19,7 @@
             var nameParts = VsProjectHelper.GetNameParts(source.Item);
             targetItem = null;
 
-            var targetProject = source.TargetProject;
+            var targetProject = mapping.TargetProject;
             if (targetProject == null)
             {
                 return FindTargetStatus.ProjectNotFound;
@@ -34,7 +34,7 @@
             var extension = Path.GetExtension(source.FilePath);
             var baseName = Path.GetFileNameWithoutExtension(source.FilePath);
 
-            var testFileName = options.GetTargetFileName(baseName);
+            var testFileName = mapping.Options.GenerationOptions.GetTargetFileName(baseName);
             targetItem = targetProjectItems.OfType<ProjectItem>().FirstOrDefault(x => string.Equals(x.Name, testFileName + extension, StringComparison.OrdinalIgnoreCase));
             return targetItem == null ? FindTargetStatus.FileNotFound : FindTargetStatus.Found;
 #pragma warning restore VSTHRD010
