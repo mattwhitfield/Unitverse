@@ -103,7 +103,7 @@
                 var item = VsProjectHelper.GetProjectItem(document.FilePath);
 
                 var source = new ProjectItemModel(item);
-                var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options);
+                var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options, false);
 
                 var status = TargetFinder.FindExistingTargetItem(source, mapping, out var targetItem);
                 switch (status)

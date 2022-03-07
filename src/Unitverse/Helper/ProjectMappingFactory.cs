@@ -2,12 +2,14 @@
 {
     using EnvDTE;
     using Microsoft.VisualStudio.Shell;
+    using System.Windows.Interop;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
+    using Unitverse.Views;
 
     internal class ProjectMappingFactory
     {
-        public static ProjectMapping CreateMappingFor(Project sourceProject, IUnitTestGeneratorOptions baseOptions)
+        public static ProjectMapping CreateMappingFor(Project sourceProject, IUnitTestGeneratorOptions baseOptions, bool interactive)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -16,7 +18,20 @@
 
             // derive the target project name
             var targetProjectName = projectOptions.GenerationOptions.GetTargetProjectName(sourceProject.Name);
-            
+
+            if (interactive)
+            {
+                var window = new GenerationDialog(sourceProject, projectOptions);
+                var helper = new WindowInteropHelper(window);
+                helper.Owner = sourceProject.DTE.MainWindow.HWnd;
+
+                var result = window.ShowDialog();
+                if (result.HasValue && !result.Value)
+                {
+                    return null;
+                }
+            }
+
             // find the target project
             var targetProject = VsProjectHelper.FindProject(sourceProject.DTE.Solution, targetProjectName);
 

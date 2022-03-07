@@ -91,7 +91,7 @@
                     throw new InvalidOperationException("Cannot go to tests for this item because no supported files were found");
                 }
 
-                var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options);
+                var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options, false);
 
                 var status = TargetFinder.FindExistingTargetItem(source, mapping, out var targetItem);
                 switch (status)
