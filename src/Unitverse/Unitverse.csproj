@@ -172,7 +172,8 @@
     <When Condition="'$(VsTargetVersion)' == 'VS2022'">
       <PropertyGroup>
         <AssemblyName>UnitverseVS2022</AssemblyName>
-      </PropertyGroup>
+		<DefineConstants>$(DefineConstants);VS2022</DefineConstants>
+      </PropertyGroup>	  
       <ItemGroup>
         <None Include="Manifests\VS2022\source.extension.vsixmanifest">
           <SubType>Designer</SubType>
@@ -193,6 +194,7 @@
     <Otherwise>
       <PropertyGroup>
         <AssemblyName>UnitverseVS2019</AssemblyName>
+		<DefineConstants>$(DefineConstants);VS2019</DefineConstants>
       </PropertyGroup>
       <ItemGroup>
         <None Include="Manifests\VS2019\source.extension.vsixmanifest">

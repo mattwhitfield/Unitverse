@@ -47,7 +47,11 @@
                 {
                     var window = new GenerationDialog(sourceProject, projectOptions);
                     var helper = new WindowInteropHelper(window);
+#if VS2022
                     helper.Owner = sourceProject.DTE.MainWindow.HWnd;
+#elif VS2019
+                    helper.Owner = new System.IntPtr(sourceProject.DTE.MainWindow.HWnd);
+#endif
 
                     var result = window.ShowDialog();
                     if (result.HasValue && !result.Value)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.Shell;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace Unitverse.Helper
     {
         public static void FindTestsFor(ProjectItemModel source, IUnitTestGeneratorPackage package)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, package.Options, false, false);
 
             var status = TargetFinder.FindExistingTargetItem(source, mapping, out var targetItem);
