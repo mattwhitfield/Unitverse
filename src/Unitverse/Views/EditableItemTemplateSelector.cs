@@ -8,24 +8,19 @@ namespace Unitverse.Views
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is StringEditableItem)
+            if (item is DisplayItem displayItem)
             {
-                return StringItemTemplate;
-            }
-
-            if (item is BooleanEditableItem)
-            {
-                return BooleanItemTemplate;
-            }
-
-            if (item is HeaderEditableItem)
-            {
-                return HeaderItemTemplate;
-            }
-
-            if (item is EnumEditableItem)
-            {
-                return EnumItemTemplate;
+                switch (displayItem.ItemType)
+                {
+                    case EditableItemType.Header:
+                        return HeaderItemTemplate;
+                    case EditableItemType.String:
+                        return StringItemTemplate;
+                    case EditableItemType.Boolean:
+                        return BooleanItemTemplate;
+                    case EditableItemType.Enum:
+                        return EnumItemTemplate;
+                }    
             }
 
             return null;

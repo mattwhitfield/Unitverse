@@ -1,28 +1,29 @@
 ﻿namespace Unitverse.Core.Options.Editing
 {
+    using System;
     using System.ComponentModel;
 
-    public abstract class EditableItem : INotifyPropertyChanged
+    public abstract class EditableItem : DisplayItem
     {
         public EditableItem(string text, string description, string fieldName)
+            : base(text)
         {
-            Text = text;
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                throw new ArgumentNullException(nameof(description));
+            }
+
+            if (string.IsNullOrWhiteSpace(fieldName))
+            {
+                throw new ArgumentNullException(nameof(fieldName));
+            }
+
             Description = description;
             FieldName = fieldName;
         }
 
-        public abstract EditableItemType ItemType { get; }
-
-        public string Text { get; }
-
         public string Description { get; }
+
         public string FieldName { get; }
-
-        protected void RaisePropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

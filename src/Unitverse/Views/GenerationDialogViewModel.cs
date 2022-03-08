@@ -1,6 +1,5 @@
 ﻿using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,6 +8,8 @@ using Unitverse.Core.Options.Editing;
 using Unitverse.Helper;
 using Unitverse.Options;
 using Unitverse.Core.Helpers;
+using System.Windows.Data;
+using System;
 
 namespace Unitverse.Views
 {
@@ -38,15 +39,20 @@ namespace Unitverse.Views
             NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions).ToList();
 
 #pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
-            foreach (var project in VsProjectHelper.FindProjects(sourceProject.DTE.Solution).OrderBy(x => x.Name))
+            foreach (var project in VsProjectHelper.FindProjects(sourceProject.DTE.Solution).Where(x => x.UniqueName != sourceProject.UniqueName).OrderBy(x => x.Name))
 #pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
             {
                 Projects.Add(new ObjectItem(project.Name, project)); 
             }
 
-            var targetName = projectOptions.GenerationOptions.GetTargetProjectName(sourceProject.Name);
-            _selectedProject = Projects.FirstOrDefault(x => string.Equals(x.Text, targetName, System.StringComparison.OrdinalIgnoreCase));
+            var targetProjectName = projectOptions.GenerationOptions.GetTargetProjectName(sourceProject.Name);
+            var sessionSelectedProject = TargetSelectionRegister.Instance.GetTargetFor(sourceProject.UniqueName);
+            var resolvedTarget = string.IsNullOrWhiteSpace(sessionSelectedProject) ? targetProjectName : sessionSelectedProject;
+
+            _selectedProject = Projects.FirstOrDefault(x => string.Equals(x.Text, resolvedTarget, System.StringComparison.OrdinalIgnoreCase));
             var selectedProject = _selectedProject?.Value as Project;
+
+            _rememberProjectSelection = projectOptions.GenerationOptions.RememberManuallySelectedTargetProjectByDefault;
 
             ResultingMapping = new ProjectMapping(sourceProject, selectedProject, selectedProject?.Name, new UnitTestGeneratorOptions(_generationOptions, namingOptions, strategyOptions, projectOptions.StatisticsCollectionEnabled));
 
@@ -56,6 +62,62 @@ namespace Unitverse.Views
         public ProjectMapping ResultingMapping { get; }
 
         public string Title { get; }
+
+        private bool _filterEmpty = true;
+
+        public bool FilterEmpty
+        {
+            get
+            {
+                return _filterEmpty;
+            }
+            set
+            {
+                if (_filterEmpty != value)
+                {
+                    _filterEmpty = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterEmpty)));
+                }
+            }
+        }
+
+        private string _filterText = string.Empty;
+
+        public string FilterText
+        {
+            get
+            {
+                return _filterText;
+            }
+
+            set
+            {
+                if (_filterText != value)
+                {
+                    _filterText = value;
+                    var source = CollectionViewSource.GetDefaultView(Projects);
+                    if (source.Filter == null)
+                    {
+                        source.Filter = Filter;
+                    }
+
+                    FilterEmpty = string.IsNullOrWhiteSpace(_filterText);
+
+                    source.Refresh();
+                }
+            }
+        }
+
+        public bool Filter(object obj)
+        {
+            var model = obj as ObjectItem;
+            if (model == null || string.IsNullOrWhiteSpace(_filterText))
+            {
+                return true;
+            }
+
+            return model.Text.IndexOf(_filterText, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
 
         private TabItem _selectedTab;
 
@@ -73,12 +135,26 @@ namespace Unitverse.Views
             }
         }
 
+        private bool _rememberProjectSelection;
 
-        public IList<EditableItem> GenerationOptionsItems { get; }
+        public bool RememberProjectSelection
+        {
+            get { return _rememberProjectSelection; }
+            set
+            {
+                if (_rememberProjectSelection != value)
+                {
+                    _rememberProjectSelection = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RememberProjectSelection)));
+                }
+            }
+        }
 
-        public IList<EditableItem> StrategyOptionsItems { get; }
+        public IList<DisplayItem> GenerationOptionsItems { get; }
 
-        public IList<EditableItem> NamingOptionsItems { get; }
+        public IList<DisplayItem> StrategyOptionsItems { get; }
+
+        public IList<DisplayItem> NamingOptionsItems { get; }
 
         public List<TabItem> Tabs { get; } = new List<TabItem>();
 
@@ -96,7 +172,7 @@ namespace Unitverse.Views
                 if (_selectedProject != value)
                 {
                     _selectedProject = value;
-                    ResultingMapping.TargetProject = value.Value as Project;
+                    ResultingMapping.TargetProject = value?.Value as Project;
                     ResultingMapping.TargetProjectName = ResultingMapping.TargetProject?.Name;
 
                     ApplyTargetProjectFramework();
@@ -108,6 +184,8 @@ namespace Unitverse.Views
 
         private void ApplyTargetProjectFramework()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             if (ResultingMapping.TargetProject != null)
             {
                 var resolvedOptions = OptionsResolver.DetectFrameworks(ResultingMapping.TargetProject, ResultingMapping.Options.GenerationOptions);

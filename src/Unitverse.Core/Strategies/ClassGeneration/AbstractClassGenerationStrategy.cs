@@ -10,7 +10,6 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
-    using Unitverse.Core.Resources;
 
     public class AbstractClassGenerationStrategy : IClassGenerationStrategy
     {

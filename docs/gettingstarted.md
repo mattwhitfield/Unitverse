@@ -1,11 +1,11 @@
-# Getting Started
+# Getting Started 🚗
 
 After installation, you can access the functionality of the extension through:
 
 * The solution explorer context menu
 * The code editor context menu
 
-## Extension Functions
+## Extension Functions ⌨️
 
 The following functions are available:
 
@@ -25,7 +25,7 @@ Using the solution explorer context menu:
 
 **Regenerate tests** and **Go to tests** are not available at higher levels in the solution explorer (for example when you have a folder or project selected). **Regenerate tests** is not shown by default, to prevent accidental overwriting of test code. Hold SHIFT while you open the context menu to use this option.
 
-## Use Case
+## Use Case 💬
 
 Consider this simple class:
 

@@ -6,7 +6,6 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
-    using Unitverse.Core.Resources;
 
     public class MsTestTestFramework : BaseTestFramework, ITestFramework, IAssertionFramework
     {

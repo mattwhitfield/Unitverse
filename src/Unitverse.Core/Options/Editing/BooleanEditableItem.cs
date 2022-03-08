@@ -1,16 +1,14 @@
 ﻿namespace Unitverse.Core.Options.Editing
 {
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
 
     public class BooleanEditableItem : EditableItem
     {
         public BooleanEditableItem(string text, string description, string fieldName, bool value, Action<bool> setValue)
-            : base(text + ":", description, fieldName)
+            : base(text, description, fieldName)
         {
             _value = value;
-            _setValue = setValue;
+            _setValue = setValue ?? throw new ArgumentNullException(nameof(setValue));
         }
 
         public override EditableItemType ItemType => EditableItemType.Boolean;

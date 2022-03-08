@@ -33,5 +33,9 @@
         string ActComment { get; }
 
         string AssertComment { get; }
+
+        UserInterfaceModes UserInterfaceMode { get; }
+
+        bool RememberManuallySelectedTargetProjectByDefault { get; }
     }
 }

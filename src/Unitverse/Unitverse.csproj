@@ -79,6 +79,7 @@
     <Compile Include="Helper\EnvDteConstants.cs" />
     <Compile Include="Helper\FindTargetStatus.cs" />
     <Compile Include="Helper\AggregateLogger.cs" />
+    <Compile Include="Helper\GoToTestsHelper.cs" />
     <Compile Include="Helper\OptionsResolver.cs" />
     <Compile Include="Helper\OutputWindowMessageLogger.cs" />
     <Compile Include="Helper\ProjectMapping.cs" />

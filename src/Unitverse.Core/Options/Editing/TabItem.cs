@@ -1,11 +1,17 @@
 ﻿namespace Unitverse.Core.Options.Editing
 {
+    using System;
     using System.ComponentModel;
 
     public class TabItem : INotifyPropertyChanged
     {
         public TabItem(string text, bool isChecked, TabItemType itemType)
         {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                throw new ArgumentNullException(nameof(text));
+            }
+
             Text = text;
             _isChecked = isChecked;
             ItemType = itemType;

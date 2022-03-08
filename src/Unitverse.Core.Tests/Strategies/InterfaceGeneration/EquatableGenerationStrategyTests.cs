@@ -6,11 +6,8 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
     using FluentAssertions;
     using NSubstitute;
     using Unitverse.Core.Models;
-    using System.Collections.Generic;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Options;
     using Unitverse.Core.Frameworks;
-    using System.Linq;
     using Microsoft.CodeAnalysis.CSharp;
 
     [TestFixture]

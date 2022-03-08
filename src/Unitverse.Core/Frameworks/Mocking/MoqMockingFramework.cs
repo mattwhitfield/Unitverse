@@ -6,7 +6,6 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
-    using Unitverse.Core.Resources;
 
     public class MoqMockingFramework : IMockingFramework
     {

@@ -1,8 +1,6 @@
 namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
 {
     using System;
-    using System.Collections.Generic;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Frameworks;

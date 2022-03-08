@@ -12,7 +12,6 @@
     using NUnit.Framework;
     using Unitverse.Core;
     using Unitverse.Core.Frameworks;
-    using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.ClassGeneration;
     using TechTalk.SpecFlow;
 

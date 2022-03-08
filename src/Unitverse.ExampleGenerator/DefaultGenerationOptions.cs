@@ -35,5 +35,9 @@
         public string ActComment => "Act";
 
         public string AssertComment => "Assert";
+
+        public UserInterfaceModes UserInterfaceMode => UserInterfaceModes.OnlyWhenControlPressed;
+
+        public bool RememberManuallySelectedTargetProjectByDefault => true;
     }
 }

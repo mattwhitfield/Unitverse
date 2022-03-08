@@ -8,7 +8,6 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
-    using Unitverse.Core.Resources;
 
     public class MoqAutoMockMockingFramework : MoqMockingFramework, IClassModelEvaluator
     {

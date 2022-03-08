@@ -7,7 +7,6 @@
     using EnvDTE;
     using Microsoft.VisualStudio.Shell;
     using Unitverse.Core.Helpers;
-    using Unitverse.Core.Options;
 
     internal static class TargetFinder
     {

@@ -103,19 +103,7 @@
                 var item = VsProjectHelper.GetProjectItem(document.FilePath);
 
                 var source = new ProjectItemModel(item);
-                var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options, false);
-
-                var status = TargetFinder.FindExistingTargetItem(source, mapping, out var targetItem);
-                switch (status)
-                {
-                    case FindTargetStatus.FileNotFound:
-                    case FindTargetStatus.FolderNotFound:
-                        throw new InvalidOperationException("No unit tests were found for the selected file.");
-                    case FindTargetStatus.ProjectNotFound:
-                        throw new InvalidOperationException("Cannot go to tests for this item because there is no project '" + mapping.TargetProjectName + "'");
-                }
-
-                VsProjectHelper.ActivateItem(targetItem);
+                GoToTestsHelper.FindTestsFor(source, _package);
             }, _package);
         }
 

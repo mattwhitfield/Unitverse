@@ -1,13 +1,16 @@
 ﻿namespace Unitverse.Core.Options.Editing
 {
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
 
     public class ObjectItem
     {
         public ObjectItem(string text, object value)
         {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                throw new ArgumentNullException(nameof(text));
+            }
+
             Text = text;
             Value = value;
         }

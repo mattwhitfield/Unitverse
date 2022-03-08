@@ -8,11 +8,16 @@
 
     public static class EditableItemExtractor
     {
-        public static IEnumerable<EditableItem> ExtractFrom(object source, object modifiableInstance)
+        public static IEnumerable<DisplayItem> ExtractFrom(object source, object modifiableInstance)
         {
             if (source is null)
             {
                 throw new ArgumentNullException(nameof(source));
+            }
+
+            if (modifiableInstance is null)
+            {
+                throw new ArgumentNullException(nameof(modifiableInstance));
             }
 
             var type = source.GetType();
@@ -22,12 +27,10 @@
             {
                 var propertyType = property.PropertyType;
 
-                if (!modifiableProperties.TryGetValue(property.Name, out var modifiableProperty) || propertyType != modifiableProperty.PropertyType)
-                {
-                    continue;
-                }
-
-                if (GetAttribute<ExcludedFromUserInterfaceAttribute>(property) != null)
+                // skip if it's not in the modifiable instance, the type is not the same or it has [ExcludedFromUserInterface]
+                if (!modifiableProperties.TryGetValue(property.Name, out var modifiableProperty) ||
+                    propertyType != modifiableProperty.PropertyType ||
+                    GetAttribute<ExcludedFromUserInterfaceAttribute>(property) != null)
                 {
                     continue;
                 }
@@ -62,12 +65,16 @@
                         Action<object> setValue = o => modifiableProperty.SetValue(modifiableInstance, o, null);
                         list.Add(new EnumEditableItem(text, description, modifiableProperty.Name, value, setValue, propertyType));
                     }
+                    else
+                    {
+                        throw new NotSupportedException("Property type " + propertyType.Name + " is not supported");
+                    }
                 }
             }
 
             foreach (var category in categories.OrderBy(x => x.Key))
             {
-                yield return new HeaderEditableItem(category.Key);
+                yield return new HeaderDisplayItem(category.Key);
 
                 foreach (var item in category.Value.OrderBy(x => x.Text))
                 {

@@ -7,7 +7,7 @@
     public class EnumEditableItem : EditableItem
     {
         public EnumEditableItem(string text, string description, string fieldName, object value, Action<object> setValue, Type enumerationType)
-            : base(text + ":", description, fieldName)
+            : base(text, description, fieldName)
         {
             var selectedValueName = value.ToString();
 
@@ -25,7 +25,7 @@
                 }
             }
 
-            _setValue = setValue;
+            _setValue = setValue ?? throw new ArgumentNullException(nameof(setValue));
         }
 
         public override EditableItemType ItemType => EditableItemType.Enum;
