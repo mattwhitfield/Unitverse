@@ -98,7 +98,18 @@
                     tokenList.Add(SyntaxFactory.Token(SyntaxKind.CommaToken));
                 }
 
-                tokenList.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Node.Identifier)));
+                var argument = SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Node.Identifier));
+
+                if (parameter.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.OutKeyword)))
+                {
+                    argument = argument.WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.OutKeyword));
+                }
+                else if (parameter.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.RefKeyword)))
+                {
+                    argument = argument.WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.RefKeyword));
+                }
+
+                tokenList.Add(argument);
             }
 
             return tokenList;
@@ -211,12 +222,23 @@
 
                 if (methodSymbol != null)
                 {
+                    var statements = new List<StatementSyntax>();
+                    var parameters = new List<ParameterSyntax>();
+
+                    foreach (var param in methodSymbol.Parameters)
+                    {
+                        parameters.Add(GetParameter(param, model.SemanticModel, statements));
+                    }
+
+                    statements.Clear();
+                    statements.Add(methodStatement);
+
                     var newMethod = Generate.Method(method.Name, method.IsAsync, false)
-                        .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList(methodSymbol.Parameters.Select(x => Generate.Parameter(x.Name).WithType(x.Type.ToTypeSyntax(_frameworkSet.Context))))))
+                        .WithParameterList(Generate.ParameterList(parameters))
                         .WithIdentifier(SyntaxFactory.Identifier("Public" + method.Name))
                         .WithModifiers(modifiers)
                         .WithReturnType(methodSymbol.ReturnType.ToTypeSyntax(_frameworkSet.Context))
-                        .WithBody(SyntaxFactory.Block(SyntaxFactory.SingletonList(methodStatement)));
+                        .WithBody(SyntaxFactory.Block(statements.ToArray()));
 
                     if (method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)))
                     {
@@ -341,8 +363,16 @@
 
             foreach (var method in methodCatalog.Values)
             {
+                var statements = new List<StatementSyntax>();
+                var parameters = new List<ParameterSyntax>();
+
+                foreach (var param in method.Parameters)
+                {
+                    parameters.Add(GetParameter(param, model.SemanticModel, statements));
+                }
+
                 var methodOverride = Generate.Method(method.Name, method.IsAsync, false)
-                    .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList(method.Parameters.Select(x => Generate.Parameter(x.Name).WithType(x.Type.ToTypeSyntax(_frameworkSet.Context))))))
+                    .WithParameterList(Generate.ParameterList(parameters))
                     .WithModifiers(GetOverrideTokens(method.DeclaredAccessibility))
                     .WithIdentifier(SyntaxFactory.Identifier(method.Name))
                     .WithReturnType(method.ReturnType.ToTypeSyntax(_frameworkSet.Context));
@@ -354,14 +384,10 @@
 
                 if (!string.Equals(method.ReturnType.ToFullName(), "void", StringComparison.OrdinalIgnoreCase))
                 {
-                    var methodStatement = SyntaxFactory.ReturnStatement(SyntaxFactory.DefaultExpression(method.ReturnType.ToTypeSyntax(_frameworkSet.Context)));
-                    methodOverride = methodOverride.WithBody(SyntaxFactory.Block(methodStatement));
-                }
-                else
-                {
-                    methodOverride = methodOverride.WithBody(SyntaxFactory.Block());
+                    statements.Add(SyntaxFactory.ReturnStatement(SyntaxFactory.DefaultExpression(method.ReturnType.ToTypeSyntax(_frameworkSet.Context))));
                 }
 
+                methodOverride = methodOverride.WithBody(SyntaxFactory.Block(statements.ToArray()));
                 classDeclaration = classDeclaration.AddMembers(methodOverride);
             }
 
@@ -389,6 +415,28 @@
             }
 
             return classDeclaration;
+        }
+
+        private ParameterSyntax GetParameter(IParameterSymbol parameter, SemanticModel model, IList<StatementSyntax> statements)
+        {
+            var syntax = Generate.Parameter(parameter.Name);
+            if (parameter.RefKind == RefKind.Out)
+            {
+                syntax = syntax.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
+                statements.Add(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(parameter.Name), AssignmentValueHelper.GetDefaultAssignmentValue(parameter.Type, model, _frameworkSet))));
+            }
+            else if (parameter.RefKind == RefKind.Ref)
+            {
+                syntax = syntax.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
+            }
+            else if (parameter.RefKind == RefKind.In)
+            {
+                syntax = syntax.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.InKeyword)));
+            }
+
+            syntax = syntax.WithType(parameter.Type.ToTypeSyntax(_frameworkSet.Context));
+
+            return syntax;
         }
 
         private ClassDeclarationSyntax InheritProperties(ClassModel model, ClassDeclarationSyntax classDeclaration)

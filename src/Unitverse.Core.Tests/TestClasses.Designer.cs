@@ -151,6 +151,34 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to using System.IO;
+        ///using System.Windows;
+        ///
+        ///namespace TestNamespace {
+        ///	public abstract class TestClass
+        ///	{
+        ///		protected TestClass(int intProperty, string value, Stream targetStream)
+        ///		{
+        ///
+        ///		}
+        /// 
+        ///		public abstract int PublicOut(out string s);
+        ///
+        ///		public abstract int PublicRef(ref string s);
+        ///
+        ///		protected abstract int ProtectedOut(out string s);
+        ///
+        ///		protected abstract int ProtectedRef(ref string s);
+        ///	}
+        ///}.
+        /// </summary>
+        public static string AbstractOutAndRefParams {
+            get {
+                return ResourceManager.GetString("AbstractOutAndRefParams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to namespace Unitverse.Web.Services.Workflow.BackgroundTaskExecutors.AzureFunctions
         ///{
         ///    using System;
@@ -431,9 +459,9 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // # Arrange=Set it up yo
-        ///// # Act=Do that funky thang
-        ///// # Assert=Check everything went exactly amazingly
+        ///   Looks up a localized string similar to // # ArrangeComment=Set it up yo
+        ///// # ActComment=Do that funky thang
+        ///// # AssertComment=Check everything went exactly amazingly
         ///
         ///namespace TestNamespace.SubNameSpace
         ///{
@@ -634,21 +662,13 @@ namespace Unitverse.Core.Tests {
         ///		public int Val { get; }
         ///	}
         ///
-        ///    public static class TestClass
-        ///    {
-        ///        public static void ThisIsAMethod(Func&lt;string&gt; func)
-        ///	    {
-        ///	    }
+        ///	public delegate SomeClass HasOutParamAndReturnType(SomeClass input, out string output);
         ///
-        ///        public static void ThisIsAMethod2(Func&lt;string, SomeClass&gt; func)
-        ///	    {
-        ///	    }
+        ///	public delegate void HasOutParam(string input, out string output);
         ///
-        ///        public static void ThisIsAMethod3(Func&lt;int, string, SomeClass&gt; func)
-        ///	    {
-        ///	    }
+        ///	public delegate void HasAllTheThings(string input, out string output, ref string r1, in string s3);
         ///
-        ///        public static void  [rest of string was truncated]&quot;;.
+        ///	public delegate void HasRefParam(string input, ref string output);        /// [rest of string was truncated]&quot;;.
         /// </summary>
         public static string DelegateTests {
             get {
