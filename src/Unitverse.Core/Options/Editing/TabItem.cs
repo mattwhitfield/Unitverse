@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
-
-namespace Unitverse.Views
+﻿namespace Unitverse.Core.Options.Editing
 {
+    using System.ComponentModel;
+
     public class TabItem : INotifyPropertyChanged
     {
         public TabItem(string text, bool isChecked, TabItemType itemType)
@@ -17,9 +17,13 @@ namespace Unitverse.Views
 
         public TabItemType ItemType { get; }
 
-        public bool IsChecked 
-        { 
-            get { return _isChecked; }
+        public bool IsChecked
+        {
+            get
+            {
+                return _isChecked;
+            }
+
             set
             {
                 if (_isChecked != value)

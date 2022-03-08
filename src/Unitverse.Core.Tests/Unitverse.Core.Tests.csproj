@@ -40,6 +40,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Options\Editing\GenerationOptions.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="TestClasses.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

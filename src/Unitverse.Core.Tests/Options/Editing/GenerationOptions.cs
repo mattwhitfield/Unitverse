@@ -1,17 +1,14 @@
-﻿namespace Unitverse.Options
+﻿namespace Unitverse.Core.Tests.Options.Editing
 {
     using System.ComponentModel;
-    using Microsoft.VisualStudio.Shell;
     using Unitverse.Core.Options;
-    using Unitverse.Core.Options.Editing;
 
-    public class GenerationOptions : DialogPage, IGenerationOptions
+    public class GenerationOptions : IGenerationOptions
     {
 
         [Category("Generation")]
         [DisplayName("Auto-Detect Frameworks")]
         [Description("Whether to detect the test, mocking and assertion frameworks based on the packages currently installed in the target project")]
-        [ExcludedFromUserInterface]
         public bool AutoDetectFrameworkTypes { get; set; } = true;
 
         [Category("Generation")]
@@ -27,13 +24,11 @@
         [Category("Test project")]
         [DisplayName("Allow generation without target project")]
         [Description("Tests will be generated as a file outside of the scope of a project if a target project is not available")]
-        [ExcludedFromUserInterface]
         public bool AllowGenerationWithoutTargetProject { get; set; } = true;
 
         [Category("Naming")]
         [DisplayName("Project naming convention")]
         [Description("Format string that converts the source project name to the unit test project name")]
-        [ExcludedFromUserInterface]
         public string TestProjectNaming { get; set; } = "{0}.Tests";
 
         [Category("Naming")]
@@ -87,7 +82,7 @@
         public string ActComment { get; set; } = "Act";
 
         [Category("Comments")]
-        [DisplayName("Assert block comment")]
+        [DisplayName("Arrange block comment")]
         [Description("The comment to leave before any assert statements (leave blank to suppress)")]
         public string AssertComment { get; set; } = "Assert";
     }

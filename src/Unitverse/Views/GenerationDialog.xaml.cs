@@ -1,6 +1,7 @@
 ﻿using EnvDTE;
 using System.Windows;
 using Unitverse.Core.Options;
+using Unitverse.Helper;
 
 namespace Unitverse.Views
 {
@@ -17,6 +18,8 @@ namespace Unitverse.Views
 
         private GenerationDialogViewModel _viewModel;
 
+        public ProjectMapping ResultingMapping => _viewModel.ResultingMapping;
+
         private void OnCancel(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
@@ -24,7 +27,12 @@ namespace Unitverse.Views
 
         private void OnOK(object sender, RoutedEventArgs e)
         {
-            // TODO - any validation?
+            if (ResultingMapping.TargetProject == null)
+            {
+                MessageBox.Show("You must select a target project in which the test should be generated.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             DialogResult = true;
         }
     }

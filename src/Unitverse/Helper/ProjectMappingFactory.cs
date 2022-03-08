@@ -30,6 +30,11 @@
                 {
                     return null;
                 }
+
+                if (result.HasValue)
+                {
+                    return window.ResultingMapping;
+                }
             }
 
             // find the target project

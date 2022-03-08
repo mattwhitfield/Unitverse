@@ -1,0 +1,57 @@
+﻿namespace Unitverse.Core.Options.Editing
+{
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+
+    public class EnumEditableItem : EditableItem
+    {
+        public EnumEditableItem(string text, string description, string fieldName, object value, Action<object> setValue, Type enumerationType)
+            : base(text + ":", description, fieldName)
+        {
+            var selectedValueName = value.ToString();
+
+            foreach (var enumValue in Enum.GetValues(enumerationType))
+            {
+                var enumValueName = enumValue.ToString();
+                var field = enumerationType.GetField(enumValueName);
+                var enumValueText = Attribute.IsDefined(field, typeof(DescriptionAttribute)) ? (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute).Description : enumValueName;
+
+                var item = new ObjectItem(enumValueText, enumValue);
+                Items.Add(item);
+                if (selectedValueName == enumValueName)
+                {
+                    _selectedItem = item;
+                }
+            }
+
+            _setValue = setValue;
+        }
+
+        public override EditableItemType ItemType => EditableItemType.Enum;
+
+        public List<ObjectItem> Items { get; } = new List<ObjectItem>();
+
+        private ObjectItem _selectedItem;
+
+        public ObjectItem SelectedItem
+        {
+            get
+            {
+                return _selectedItem;
+            }
+
+            set
+            {
+                if (value != _selectedItem)
+                {
+                    _selectedItem = value;
+                    _setValue(value.Value);
+                    RaisePropertyChanged(nameof(SelectedItem));
+                }
+            }
+        }
+
+        private Action<object> _setValue;
+    }
+}

@@ -125,13 +125,11 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="UnitTestGeneratorPackage.cs" />
+    <Compile Include="Views\EditableItemTemplateSelector.cs" />
     <Compile Include="Views\GenerationDialog.xaml.cs">
       <DependentUpon>GenerationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GenerationDialogViewModel.cs" />
-    <Compile Include="Views\TabItem.cs" />
-    <Compile Include="Views\TabItemTemplateSelector.cs" />
-    <Compile Include="Views\TabItemType.cs" />
     <Compile Include="Views\TabItemTypeVisibilityConverter.cs" />
   </ItemGroup>
   <ItemGroup>

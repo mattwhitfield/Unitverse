@@ -39,18 +39,27 @@ namespace Unitverse.Helper
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            return FindProject(projectName, solution.Projects.OfType<Project>());
+#pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
+            return FindProjects(solution.Projects.OfType<Project>()).FirstOrDefault(x => string.Equals(x.Name, projectName, StringComparison.OrdinalIgnoreCase));
+#pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
         }
 
-        private static Project FindProject(string projectName, IEnumerable<Project> currentProjects)
+        public static IEnumerable<Project> FindProjects(Solution solution)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            return FindProjects(solution.Projects.OfType<Project>());
+        }
+
+        private static IEnumerable<Project> FindProjects(IEnumerable<Project> currentProjects)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             foreach (var project in currentProjects)
             {
-                if (string.Equals(project.Name, projectName, StringComparison.OrdinalIgnoreCase))
+                if (project.FileName.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase))
                 {
-                    return project;
+                    yield return project;
                 }
 
                 if (Guid.TryParse(project.Kind, out var projectKindGuid) && projectKindGuid == FolderProject)
@@ -64,15 +73,12 @@ namespace Unitverse.Helper
                         }
                     }
 
-                    var foundProject = FindProject(projectName, subProjects);
-                    if (foundProject != null)
+                    foreach (var subProject in FindProjects(subProjects))
                     {
-                        return foundProject;
+                        yield return subProject;
                     }
                 }
             }
-
-            return null;
         }
 
         public static List<string> GetNameParts(ProjectItem projectItem)
