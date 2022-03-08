@@ -20,8 +20,8 @@ namespace Unitverse.Helper
         }
 
         public Project SourceProject { get; }
-        public Project TargetProject { get; }
-        public string TargetProjectName { get; }
+        public Project TargetProject { get; set; }
+        public string TargetProjectName { get; set; }
         public IUnitTestGeneratorOptions Options { get; }
         public HashSet<TargetAsset> TargetAssets { get; }
 

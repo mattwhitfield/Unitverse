@@ -79,6 +79,7 @@
     <Compile Include="Helper\EnvDteConstants.cs" />
     <Compile Include="Helper\FindTargetStatus.cs" />
     <Compile Include="Helper\AggregateLogger.cs" />
+    <Compile Include="Helper\GoToTestsHelper.cs" />
     <Compile Include="Helper\OptionsResolver.cs" />
     <Compile Include="Helper\OutputWindowMessageLogger.cs" />
     <Compile Include="Helper\ProjectMapping.cs" />
@@ -125,6 +126,12 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="UnitTestGeneratorPackage.cs" />
+    <Compile Include="Views\EditableItemTemplateSelector.cs" />
+    <Compile Include="Views\GenerationDialog.xaml.cs">
+      <DependentUpon>GenerationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GenerationDialogViewModel.cs" />
+    <Compile Include="Views\TabItemTypeVisibilityConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig">
@@ -151,18 +158,22 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VsTargetVersion)' == 'VS2022'">
       <PropertyGroup>
         <AssemblyName>UnitverseVS2022</AssemblyName>
-      </PropertyGroup>
+		<DefineConstants>$(DefineConstants);VS2022</DefineConstants>
+      </PropertyGroup>	  
       <ItemGroup>
         <None Include="Manifests\VS2022\source.extension.vsixmanifest">
           <SubType>Designer</SubType>
@@ -183,6 +194,7 @@
     <Otherwise>
       <PropertyGroup>
         <AssemblyName>UnitverseVS2019</AssemblyName>
+		<DefineConstants>$(DefineConstants);VS2019</DefineConstants>
       </PropertyGroup>
       <ItemGroup>
         <None Include="Manifests\VS2019\source.extension.vsixmanifest">
@@ -226,7 +238,12 @@
       <Name>Unitverse.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Views\GenerationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <Target Name="AfterBuild">

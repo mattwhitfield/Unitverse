@@ -48,5 +48,9 @@
         public string ActComment => _baseOptions.ActComment;
 
         public string AssertComment => _baseOptions.AssertComment;
+
+        public UserInterfaceModes UserInterfaceMode => _baseOptions.UserInterfaceMode;
+
+        public bool RememberManuallySelectedTargetProjectByDefault => _baseOptions.RememberManuallySelectedTargetProjectByDefault;
     }
 }

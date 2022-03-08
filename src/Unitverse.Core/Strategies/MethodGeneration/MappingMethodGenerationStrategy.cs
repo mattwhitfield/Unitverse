@@ -11,7 +11,6 @@
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
-    using Unitverse.Core.Resources;
 
     public class MappingMethodGenerationStrategy : IGenerationStrategy<IMethodModel>
     {

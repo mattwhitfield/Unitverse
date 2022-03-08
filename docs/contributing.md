@@ -1,10 +1,10 @@
-# Contributing
+# Contributing ✋
 
 Unitverse isn't affiliated with any company, so the development is completely open source. As such, the development isn't guaranteed to be on any particular schedule. Any input from the community is hugely valuable, even if it's just raising an issue or suggesting a feature.
 
 If you want to go further, and contribute some code to the project, then this guide aims to give an indication of how the Unitverse extension is engineered and explain some of the decisions.
 
-## Solution Layout
+## Solution Layout 🗃
 
 The code base on Unitverse is split into a few projects:
 
@@ -16,7 +16,7 @@ The code base on Unitverse is split into a few projects:
 | Unitverse.Specs | This project contains SpecFlow tests that ensure that the core generation functions of Unitverse operate correctly and produce the expected basic output |
 | Unitverse.ExampleGenerator | This project contains a small application that, for a set of example classes, produces the markdown output that forms the examples section in the documentation. This also forms the basis of the build protection - see the 'Build Protection' section below |
 
-## Unitverse.Core
+## Unitverse.Core 🍏
 
 This project bears some more explanation as to it's layout - the main folders are:
 
@@ -42,19 +42,19 @@ This project bears some more explanation as to it's layout - the main folders ar
 
 The main bulk of the interesting code is in the `Strategies` folder. The `CoreGenerator` class is the main class from which generation happens.
 
-## Testing Ethos
+## Testing Ethos 🚨
 
 The general aim with the extension is not to be really specific about the output that is generated. So, for example, if a new method of deriving a default value for a type is added, it doesn't matter so much that it is done in an exact way. The most important thing is that the code compiles - Unitverse aims to 'get out of the way' of the developer so they can immediately think about how they want to go about testing the code they just wrote, instead of having to fix a bunch of broken code. Obviously, it won't generate tests that pass except for the simplest of cases, which is fine.
 
 There are some tests that do check output - in the `Unitverse.Specs` project - and they check things like 'has a mock been generated for this dependency' and 'is this basic assert emitted'. But they are not designed to break every time something minor changes.
 
-## Build Protection
+## Build Protection 💥
 
 The example generator generates test classes for a bunch of known samples, and then emits markdown that form the 'examples' section in the documentation. It runs every build (when the example generator has built, it is called by the msbuild script in the post build actions). So then, if you have changed the output, you see the changes in the example documentation.
 
 When the build runs in GitHub Actions, it checks that the examples generated are the same as what has been checked in. It does this by checking that there are no uncommitted changes in the docs folder, and breaks the build if there are. So if you do make changes the generated tests, you have to 'accept' that by committing the newly generated markdown docs. Equally, when reviewing a PR, we can pay careful attention to the examples folder.
 
-## Areas for tidy up
+## Areas for tidy up 🧹
 
 There are several things that could be better:
 

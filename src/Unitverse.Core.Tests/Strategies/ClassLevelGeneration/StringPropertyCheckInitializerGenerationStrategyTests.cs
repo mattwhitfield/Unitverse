@@ -7,8 +7,6 @@ namespace Unitverse.Core.Tests.Strategies.ClassLevelGeneration
     using NSubstitute;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis;
     using Unitverse.Core.Options;
     using System.Linq;
 

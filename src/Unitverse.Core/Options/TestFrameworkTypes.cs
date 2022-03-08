@@ -10,7 +10,7 @@
         NUnit2 = 1,
         [Description("NUnit v3")]
         NUnit3 = 2,
-        [Description("MSTest v2")]
+        [Description("MSTest")]
         MsTest = 4,
         [Description("xUnit")]
         XUnit = 8,

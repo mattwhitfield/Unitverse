@@ -1,10 +1,8 @@
 ﻿namespace Unitverse.Commands
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.Design;
     using System.Globalization;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Input;
@@ -17,9 +15,6 @@
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Text.Editor;
     using Microsoft.VisualStudio.TextManager.Interop;
-    using Unitverse.Core.Assets;
-    using Unitverse.Core.Helpers;
-    using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.InterfaceGeneration;
     using Unitverse.Helper;
     using Task = System.Threading.Tasks.Task;
@@ -208,7 +203,11 @@
                 messageLogger.Initialize();
 
                 var source = new ProjectItemModel(VsProjectHelper.GetProjectItem(document.FilePath));
-                var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options);
+                var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options, true, false);
+                if (mapping == null)
+                {
+                    return;
+                }
 
                 var generationItem = new GenerationItem(source, mapping);
 

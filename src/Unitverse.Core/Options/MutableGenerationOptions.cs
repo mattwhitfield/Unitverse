@@ -27,6 +27,8 @@
             ArrangeComment = options.ArrangeComment;
             ActComment = options.ActComment;
             AssertComment = options.AssertComment;
+            UserInterfaceMode = options.UserInterfaceMode;
+            RememberManuallySelectedTargetProjectByDefault = options.RememberManuallySelectedTargetProjectByDefault;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -60,5 +62,9 @@
         public string ActComment { get; set; }
 
         public string AssertComment { get; set; }
+
+        public UserInterfaceModes UserInterfaceMode { get; set; }
+
+        public bool RememberManuallySelectedTargetProjectByDefault { get; set; }
     }
 }

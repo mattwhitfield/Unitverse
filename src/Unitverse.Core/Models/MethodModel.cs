@@ -8,7 +8,6 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
-    using Unitverse.Core.Resources;
 
     public class MethodModel : TestableModel<MethodDeclarationSyntax>, IMethodModel
     {

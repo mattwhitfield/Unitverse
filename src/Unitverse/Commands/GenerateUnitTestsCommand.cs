@@ -9,11 +9,7 @@
     using EnvDTE;
     using EnvDTE80;
     using Microsoft.VisualStudio.Shell;
-    using Unitverse.Core.Assets;
-    using Unitverse.Core.Helpers;
-    using Unitverse.Core.Options;
     using Unitverse.Helper;
-    using Project = EnvDTE.Project;
     using Task = System.Threading.Tasks.Task;
 
     /// <summary>
@@ -136,7 +132,11 @@
                     throw new InvalidOperationException("Cannot generate unit tests for multiple projects at the same time, please select a single project");
                 }
 
-                var mapping = ProjectMappingFactory.CreateMappingFor(sourceProjects.Single(), baseOptions);
+                var mapping = ProjectMappingFactory.CreateMappingFor(sourceProjects.Single(), baseOptions, true, false);
+                if (mapping == null)
+                {
+                    return;
+                }
 
                 if (mapping.TargetProject == null && !mapping.Options.GenerationOptions.AllowGenerationWithoutTargetProject)
                 {

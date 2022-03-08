@@ -6,7 +6,6 @@
     using EnvDTE;
     using EnvDTE80;
     using Microsoft.VisualStudio.Shell;
-    using Unitverse.Core.Options;
 
     public static class SolutionUtilities
     {
