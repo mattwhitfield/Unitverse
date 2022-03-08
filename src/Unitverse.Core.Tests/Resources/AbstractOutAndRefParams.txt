@@ -1,0 +1,40 @@
+using System.IO;
+using System.Windows;
+
+namespace TestNamespace {
+	public abstract class TestClass
+	{
+		protected TestClass(int intProperty, string value, Stream targetStream)
+		{
+
+		}
+ 
+		public abstract int PublicAbstractIn(in string s);
+
+		public abstract int PublicAbstractOut(out string s);
+
+		public abstract int PublicAbstractRef(ref string s);
+
+		protected abstract int ProtectedAbstractIn(in string s);
+
+		protected abstract int ProtectedAbstractOut(out string s);
+
+		protected abstract int ProtectedAbstractRef(ref string s);
+
+		protected int ProtectedIn(in string s)
+		{
+			return 1;
+		}
+
+		protected int ProtectedOut(out string s)
+		{
+			s = "";
+			return 1;
+		}
+
+		protected int ProtectedRef(ref string s)
+		{
+			return 1;
+		}
+	}
+}
