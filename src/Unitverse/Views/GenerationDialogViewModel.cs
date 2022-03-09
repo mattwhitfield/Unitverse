@@ -30,11 +30,13 @@ namespace Unitverse.Views
 
             _selectedTab = Tabs.First();
 
-            _generationOptions = new MutableGenerationOptions(projectOptions.GenerationOptions);
+            var generationOptions = new MutableGenerationOptions(projectOptions.GenerationOptions);
             var strategyOptions = new MutableStrategyOptions(projectOptions.StrategyOptions);
             var namingOptions = new MutableNamingOptions(projectOptions.NamingOptions);
 
-            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), _generationOptions).ToList();
+            _generationOptions = new MutableGenerationOptions(generationOptions);
+
+            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), generationOptions).ToList();
             StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions).ToList();
             NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions).ToList();
 
@@ -54,7 +56,7 @@ namespace Unitverse.Views
 
             _rememberProjectSelection = projectOptions.GenerationOptions.RememberManuallySelectedTargetProjectByDefault;
 
-            ResultingMapping = new ProjectMapping(sourceProject, selectedProject, selectedProject?.Name, new UnitTestGeneratorOptions(_generationOptions, namingOptions, strategyOptions, projectOptions.StatisticsCollectionEnabled));
+            ResultingMapping = new ProjectMapping(sourceProject, selectedProject, selectedProject?.Name, new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, projectOptions.StatisticsCollectionEnabled));
 
             ApplyTargetProjectFramework();
         }
@@ -188,7 +190,7 @@ namespace Unitverse.Views
 
             if (ResultingMapping.TargetProject != null)
             {
-                var resolvedOptions = OptionsResolver.DetectFrameworks(ResultingMapping.TargetProject, ResultingMapping.Options.GenerationOptions);
+                var resolvedOptions = OptionsResolver.DetectFrameworks(ResultingMapping.TargetProject, _generationOptions);
                 var testFrameworkItem = GenerationOptionsItems.OfType<EnumEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.FrameworkType), System.StringComparison.OrdinalIgnoreCase));
                 if (testFrameworkItem != null)
                 {
