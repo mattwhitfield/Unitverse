@@ -8,7 +8,7 @@
 
     public static class EditableItemExtractor
     {
-        public static IEnumerable<DisplayItem> ExtractFrom(object source, object modifiableInstance)
+        public static IEnumerable<DisplayItem> ExtractFrom(object source, object modifiableInstance, bool skipExcluded)
         {
             if (source is null)
             {
@@ -30,7 +30,7 @@
                 // skip if it's not in the modifiable instance, the type is not the same or it has [ExcludedFromUserInterface]
                 if (!modifiableProperties.TryGetValue(property.Name, out var modifiableProperty) ||
                     propertyType != modifiableProperty.PropertyType ||
-                    GetAttribute<ExcludedFromUserInterfaceAttribute>(property) != null)
+                    (skipExcluded && GetAttribute<ExcludedFromUserInterfaceAttribute>(property) != null))
                 {
                     continue;
                 }

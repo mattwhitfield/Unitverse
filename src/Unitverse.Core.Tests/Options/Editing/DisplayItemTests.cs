@@ -79,5 +79,13 @@ namespace Unitverse.Core.Tests.Options.Editing
         {
             _testClass.Text.Should().Be(_text);
         }
+
+        [Test]
+        public void DoubleAmpersandInTextIsReplaced()
+        {
+            _text = "Something && Something Else";
+            _testClass = new TestDisplayItem(_text);
+            _testClass.Text.Should().Be("Something & Something Else");
+        }
     }
 }

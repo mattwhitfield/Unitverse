@@ -6,6 +6,12 @@ You can configure Unitverse in three ways:
 * By settings the options in a `.unitTestGeneratorConfig` file which works just like a `.editorConfig` file.
 * By using the per-generation user interface in order to control the process.
 
+It is worth noting that these options apply in slightly different scopes.
+
+* Options configured in the Visual Studio Options dialog apply to all solutions
+* Options configured in a `.unitTestGeneratorConfig` file apply to all solutions at the same level or a child level on disk
+* Options configured in the per-generation UI only apply to that individual generation (with the exception of the selection of target project, which persists until you close Visual Studio).
+
 You can create a `.unitTestGeneratorConfig` file which contains the options you currently have configured in Visual Studio by going to the 'Export' options page. For more information on this, see the 'Setting options per-project' section below.
 
 The per-generation user interace is, by default, set to show only when a target project can not be automatically matched. You can change this by going to Tools->Options->Unitverse or by setting the relevant option in a `.unitTestGeneratorConfig` file, or by holding the Control key while selecting any 'Generate tests...' menu item. This user interface also allows you to override the target project selection, if you want to generate tests in a different project or because your naming format isn't consistent. To see what the user interface looks like, please see the 'Per-generation user interface' section below.
@@ -89,6 +95,8 @@ MockingFrameworkType=NSubstitute
 To generate a `.unitTestGeneratorConfig` file that contains all the options as they are set in the Visual Studio Options dialogue, you can go to the 'Options Export' configuration page which contains the functionality allowing you to export the current configuration.
 
 Note that the formatting for the member names is case insensitive, and underscores and hyphens are ignored. Hence `frameworkType`, `framework-type`, `FRAMEWORK_TYPE` and `FRAME-WORK-TYPE` all resolve to the `FrameworkType` member of `IGenerationOptions`. The rules for file finding & resolution work exactly the same as they do for `.editorConfig` files - in short, all folders from the project file to the root are searched for a `.unitTestGeneratorConfig` file, and files 'closer' to the project file take precedence if the same option is set in more than one file.
+
+You can also use a UI to modify a `.unitTestGeneratorConfig` file by double-clicking on the file in the solution explorer. When loading a file, it may not contain all the configurable elements. However, after saving it will contain all the configuration options, similar to when you export the configuration from the Visual Studio Options dialog.
 
 ## Per-generation user interface 🖥
 

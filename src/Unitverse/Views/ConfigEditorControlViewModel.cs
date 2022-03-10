@@ -25,9 +25,9 @@ namespace Unitverse.Views
             var strategyOptions = new MutableStrategyOptions(projectOptions.StrategyOptions);
             var namingOptions = new MutableNamingOptions(projectOptions.NamingOptions);
 
-            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), generationOptions).ToList();
-            StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions).ToList();
-            NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions).ToList();
+            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), generationOptions, false).ToList();
+            StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions, false).ToList();
+            NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions, false).ToList();
 
             Options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false);
 

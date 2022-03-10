@@ -12,7 +12,7 @@
                 throw new ArgumentNullException(nameof(text));
             }
 
-            Text = text;
+            Text = text.Replace("&&", "&");
         }
 
         public abstract EditableItemType ItemType { get; }

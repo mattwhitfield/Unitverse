@@ -38,4 +38,4 @@ If Unitverse finds a test project related to the source project, it will look at
 
 ## Contributing ✋
 
-Any contributions are welcome. Code. Feedback on what you like or what could be better. Please feel free to fork the repo and make changes, the license if MIT so you're pretty much free to do whatever you like. For more information, please see the [contributing section](contributing.md).
+Any contributions are welcome. Code. Feedback on what you like or what could be better. Please feel free to fork the repo and make changes, the license if MIT so you're pretty much free to do whatever you like. For more information, please see the [contributing section](contributing.md). You can get started by visiting the [Unitverse GitHub repo](https://github.com/mattwhitfield/Unitverse).

@@ -4,10 +4,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 
-using Constants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using VSConstants = Microsoft.VisualStudio.VSConstants;
 using ErrorHandler = Microsoft.VisualStudio.ErrorHandler;
-using IOleDataObject = Microsoft.VisualStudio.OLE.Interop.IDataObject;
 using Unitverse.Views;
 using Unitverse.Core;
 
@@ -16,32 +14,25 @@ namespace Unitverse.Editor
     public sealed class ConfigEditorPane : WindowPane, IVsPersistDocData, IPersistFileFormat
 
     {
-        private const uint fileFormat = 0;
-        private const string fileExtension = CoreConstants.ConfigFileName;
-        private const char endLine = (char)10;
-        private string fileName;
-        private bool isDirty;
-        private bool noScribbleMode;
-        private ConfigEditorControl editorControl;
+        private const uint _fileFormat = 0;
+        private const string _fileExtension = CoreConstants.ConfigFileName;
+        private const char _endLine = (char)10;
+        private string _fileName;
+        private bool _isDirty;
+        private bool _isSaving;
+        private ConfigEditorControl _editorControl;
 
         public ConfigEditorPane(IUnitTestGeneratorPackage package, string filename)
             : base(null)
         {
-            noScribbleMode = false;
-
-            Content = editorControl = new ConfigEditorControl(package, filename, OnModified);
+            Content = _editorControl = new ConfigEditorControl(package, filename, OnModified);
         }
 
         private void OnModified()
         {
-            isDirty = true;
+            ThreadHelper.ThrowIfNotOnUIThread();
+            _isDirty = true;
             NotifyDocChanged();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            GC.SuppressFinalize(this);
-            base.Dispose(disposing);
         }
 
         int IPersist.GetClassID(out Guid pClassID)
@@ -58,32 +49,32 @@ namespace Unitverse.Editor
 
         int IPersistFileFormat.GetCurFile(out string ppszFilename, out uint pnFormatIndex)
         {
-            pnFormatIndex = fileFormat;
-            ppszFilename = fileName;
+            pnFormatIndex = _fileFormat;
+            ppszFilename = _fileName;
             return VSConstants.S_OK;
         }
 
         int IPersistFileFormat.GetFormatList(out string ppszFormatList)
         {
-            string formatList = string.Format(CultureInfo.CurrentCulture, "Unitverse config file (*{0}){1}*{0}{1}{1}", fileExtension, endLine);
+            string formatList = string.Format(CultureInfo.CurrentCulture, "Unitverse config file (*{0}){1}*{0}{1}{1}", _fileExtension, _endLine);
             ppszFormatList = formatList;
             return VSConstants.S_OK;
         }
 
         int IPersistFileFormat.SaveCompleted(string pszFilename)
         {
-            return noScribbleMode ? VSConstants.S_FALSE : VSConstants.S_OK;
+            return _isSaving ? VSConstants.S_FALSE : VSConstants.S_OK;
         }
 
         int IPersistFileFormat.InitNew(uint nFormatIndex)
         {
-            isDirty = false;
+            _isDirty = false;
             return VSConstants.S_OK;
         }
 
         int IPersistFileFormat.IsDirty(out int pfIsDirty)
         {
-            pfIsDirty = isDirty ? 1 : 0;
+            pfIsDirty = _isDirty ? 1 : 0;
             return VSConstants.S_OK;
         }
 
@@ -94,31 +85,19 @@ namespace Unitverse.Editor
 
         int IPersistFileFormat.Save(string pszFilename, int fRemember, uint nFormatIndex)
         {
-            noScribbleMode = true;
+            _isSaving = true;
             try
             {
-                if (pszFilename == null || pszFilename == fileName)
+                if (pszFilename != null)
                 {
-                    editorControl.SaveFile(fileName);
-                    isDirty = false;
+                    _fileName = pszFilename;
                 }
-                else
-                {
-                    if (fRemember != 0)
-                    {
-                        fileName = pszFilename;
-                        editorControl.SaveFile(fileName);
-                        isDirty = false;
-                    }
-                    else
-                    {
-                        editorControl.SaveFile(pszFilename);
-                    }
-                }
+                _editorControl.SaveFile(_fileName);
+                _isDirty = false;
             }
             finally
             {
-                noScribbleMode = false;
+                _isSaving = false;
             }
             return VSConstants.S_OK;
         }
@@ -148,7 +127,7 @@ namespace Unitverse.Editor
 
         int IVsPersistDocData.LoadDocData(string pszMkDocument)
         {
-            fileName = pszMkDocument;
+            _fileName = pszMkDocument;
             return VSConstants.S_OK;
         }
 
@@ -175,66 +154,47 @@ namespace Unitverse.Editor
             pfSaveCanceled = 0;
             int hr;
 
-            switch (dwSave)
+            if (dwSave == VSSAVEFLAGS.VSSAVE_Save || dwSave == VSSAVEFLAGS.VSSAVE_SilentSave)
             {
-                case VSSAVEFLAGS.VSSAVE_Save:
-                case VSSAVEFLAGS.VSSAVE_SilentSave:
+                IVsQueryEditQuerySave2 queryEditQuerySave = (IVsQueryEditQuerySave2)GetService(typeof(SVsQueryEditQuerySave));
+                hr = queryEditQuerySave.QuerySaveFile(_fileName, 0, null, out var result);
+                var taggedResult = (tagVSQuerySaveResult)result;
+
+                if (ErrorHandler.Failed(hr))
+                {
+                    return hr;
+                }
+
+                if (taggedResult == tagVSQuerySaveResult.QSR_NoSave_Cancel)
+                {
+                    pfSaveCanceled = ~0;
+                }
+                else if (taggedResult == tagVSQuerySaveResult.QSR_SaveOK || taggedResult == tagVSQuerySaveResult.QSR_ForceSaveAs)
+                {
+                    var flags = (tagVSQuerySaveResult)result == tagVSQuerySaveResult.QSR_SaveOK ? dwSave : VSSAVEFLAGS.VSSAVE_SaveAs;
+
+                    IVsUIShell uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
+                    hr = uiShell.SaveDocDataToFile(flags, this, _fileName, out pbstrMkDocumentNew, out pfSaveCanceled);
+                    if (ErrorHandler.Failed(hr))
                     {
-                        IVsQueryEditQuerySave2 queryEditQuerySave = (IVsQueryEditQuerySave2)GetService(typeof(SVsQueryEditQuerySave));
-
-                        hr = queryEditQuerySave.QuerySaveFile(fileName, 0, null, out var result);
-
-                        if (ErrorHandler.Failed(hr))
-                        {
-                            return hr;
-                        }
-
-                        // Process according to result from QuerySave
-                        switch ((tagVSQuerySaveResult)result)
-                        {
-                            case tagVSQuerySaveResult.QSR_NoSave_Cancel:
-                                pfSaveCanceled = ~0;
-                                break;
-
-                            case tagVSQuerySaveResult.QSR_SaveOK:
-                            case tagVSQuerySaveResult.QSR_ForceSaveAs:
-                                {
-                                    var flags = (tagVSQuerySaveResult)result == tagVSQuerySaveResult.QSR_SaveOK ?
-                                        dwSave : VSSAVEFLAGS.VSSAVE_SaveAs;
-                                    // Call the shell to do the save for us
-                                    IVsUIShell uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
-                                    hr = uiShell.SaveDocDataToFile(flags, this, fileName, out pbstrMkDocumentNew, out pfSaveCanceled);
-                                    if (ErrorHandler.Failed(hr))
-                                    {
-                                        return hr;
-                                    }
-                                }
-                                break;
-
-                            case tagVSQuerySaveResult.QSR_NoSave_Continue:
-                                // In this case there is nothing to do.
-                                break;
-                        }
-                        break;
+                        return hr;
                     }
-                case VSSAVEFLAGS.VSSAVE_SaveAs:
-                case VSSAVEFLAGS.VSSAVE_SaveCopyAs:
-                    {
-                        // Make sure the file name as the right extension
-                        if (string.Compare(fileExtension, System.IO.Path.GetExtension(fileName), true, CultureInfo.CurrentCulture) != 0)
-                        {
-                            fileName += fileExtension;
-                        }
-                        // Call the shell to do the save for us
-                        IVsUIShell uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
-                        hr = uiShell.SaveDocDataToFile(dwSave, this, fileName, out pbstrMkDocumentNew, out pfSaveCanceled);
-                        if (ErrorHandler.Failed(hr))
-                        {
-                            return hr;
-                        }
-                        break;
-                    }
-            };
+                }
+            }
+            else if (dwSave == VSSAVEFLAGS.VSSAVE_SaveAs || dwSave == VSSAVEFLAGS.VSSAVE_SaveCopyAs)
+            {
+                if (string.Compare(_fileExtension, System.IO.Path.GetExtension(_fileName), true, CultureInfo.CurrentCulture) != 0)
+                {
+                    _fileName += _fileExtension;
+                }
+
+                IVsUIShell uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
+                hr = uiShell.SaveDocDataToFile(dwSave, this, _fileName, out pbstrMkDocumentNew, out pfSaveCanceled);
+                if (ErrorHandler.Failed(hr))
+                {
+                    return hr;
+                }
+            }
 
             return VSConstants.S_OK;
         }
@@ -242,20 +202,20 @@ namespace Unitverse.Editor
         int IVsPersistDocData.SetUntitledDocPath(string pszDocDataPath)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            return ((IPersistFileFormat)this).InitNew(fileFormat);
+            return ((IPersistFileFormat)this).InitNew(_fileFormat);
         }
 
         private void NotifyDocChanged()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (string.IsNullOrWhiteSpace(_fileName))
             {
                 return;
             }
 
             IVsRunningDocumentTable runningDocTable = (IVsRunningDocumentTable)GetService(typeof(SVsRunningDocumentTable));
-            runningDocTable.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_ReadLock, fileName, out _, out _, out _, out var docCookie);
+            runningDocTable.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_ReadLock, _fileName, out _, out _, out _, out var docCookie);
             runningDocTable.NotifyDocumentChanged(docCookie, (uint)__VSRDTATTRIB.RDTA_DocDataReloaded);
             runningDocTable.UnlockDocument((uint)_VSRDTFLAGS.RDT_ReadLock, docCookie);
         }
