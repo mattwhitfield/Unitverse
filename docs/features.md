@@ -20,7 +20,7 @@ Unitverse emits tests for abstract classes or classes with protected methods by 
 
 ### 🔵 Per-generation control
 
-Unitverse can be configured to show a user interface before each generation, or show it selectively by holding the Control key while clicking on a menu item. This allows you to change the configuration and selected the target project for an individual generation, if required.
+Unitverse can be configured to show a user interface before each generation, or show it selectively by holding the Control key while clicking on a menu item. This allows you to change the configuration and select the target project for an individual generation, if required.
 
 ### 🟣 Support for nullable reference types
 
@@ -49,3 +49,8 @@ When a class has a property that has the same name as a constructor parameter (i
 ### 🟣 Default value generation
 
 Unitverse will create values for a wide variety of types when needed for method parameters, property values, constructor parameters etc. Unitverse tries to smartly choose values for the type in question in a recursive way - so if construction of the type in question requires a value of another type, then it emits code that works.
+
+### 🔴 Per-member generation
+
+Unitverse can generate tests for single members, meaning that you can generate tests for only the items that you want to test, or add tests for new members when your classes already have tests defined.
+

@@ -36,9 +36,9 @@ namespace Unitverse.Views
 
             _generationOptions = new MutableGenerationOptions(generationOptions);
 
-            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), generationOptions).ToList();
-            StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions).ToList();
-            NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions).ToList();
+            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), generationOptions, true).ToList();
+            StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions, true).ToList();
+            NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions, true).ToList();
 
 #pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
             foreach (var project in VsProjectHelper.FindProjects(sourceProject.DTE.Solution).Where(x => x.UniqueName != sourceProject.UniqueName).OrderBy(x => x.Name))

@@ -3,15 +3,19 @@
     using System;
     using System.Runtime.InteropServices;
     using System.Threading;
+    using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.ComponentModelHost;
     using Microsoft.VisualStudio.LanguageServices;
     using Microsoft.VisualStudio.Shell;
+    using Microsoft.VisualStudio.Shell.Interop;
     using Unitverse.Commands;
+    using Unitverse.Core;
     using Unitverse.Core.Options;
+    using Unitverse.Editor;
     using Unitverse.Options;
     using Task = System.Threading.Tasks.Task;
 
-    [ProvideAutoLoad(Microsoft.VisualStudio.Shell.Interop.UIContextGuids.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideAutoLoad(UIContextGuids.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [Guid(Constants.ExtensionGuid)]
@@ -21,6 +25,8 @@
     [ProvideOptionPage(typeof(StrategyOptions), "Unitverse", "Strategy Options", 0, 0, true)]
     [ProvideOptionPage(typeof(ExportOptions), "Unitverse", "Options Export", 0, 0, true)]
     [ProvideOptionPage(typeof(StatisticsOptions), "Unitverse", "Statistics", 0, 0, true)]
+    [ProvideEditorExtension(typeof(ConfigEditorFactory), CoreConstants.ConfigFileName, 50, NameResourceID = 110)]
+    [ProvideEditorLogicalView(typeof(ConfigEditorFactory), VSConstants.LOGVIEWID.TextView_string, IsTrusted = true)]
     public sealed class UnitTestGeneratorPackage : AsyncPackage, IUnitTestGeneratorPackage
     {
         public IGenerationOptions GenerationOptions => (GenerationOptions)GetDialogPage(typeof(GenerationOptions));
@@ -63,6 +69,8 @@
             }
 
             Workspace = componentModel.GetService<VisualStudioWorkspace>();
+
+            RegisterEditorFactory(new ConfigEditorFactory(this));
 
             await GoToUnitTestsCommand.InitializeAsync(this).ConfigureAwait(true);
             await GenerateUnitTestsCommand.InitializeAsync(this).ConfigureAwait(true);

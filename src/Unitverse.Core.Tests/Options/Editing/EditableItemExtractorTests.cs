@@ -10,8 +10,9 @@ namespace Unitverse.Core.Tests.Options.Editing
     [TestFixture]
     public class EditableItemExtractorTests
     {
-        [Test]
-        public void CanCallExtractFrom()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void CanCallExtractFrom(bool withSkipping)
         {
             // Arrange
             var source = new GenerationOptions();
@@ -19,21 +20,24 @@ namespace Unitverse.Core.Tests.Options.Editing
             var modifiableSource = new MutableGenerationOptions(source);
 
             // Act
-            var result = EditableItemExtractor.ExtractFrom(source, modifiableSource).ToList();
+            var result = EditableItemExtractor.ExtractFrom(source, modifiableSource, withSkipping).ToList();
 
             // Assert
             result.Should().Contain(x => x.ItemType == EditableItemType.String && x.Text == "Act block comment" && x is StringEditableItem && ((StringEditableItem)x).Description == "The comment to leave before any act statements (leave blank to suppress)" && ((StringEditableItem)x).Value == "freddo");
 
             foreach (var property in typeof(IGenerationOptions).GetProperties())
             {
-                if (property.Name == nameof(IGenerationOptions.AllowGenerationWithoutTargetProject) ||
-                    property.Name == nameof(IGenerationOptions.AutoDetectFrameworkTypes) ||
-                    property.Name == nameof(IGenerationOptions.TestProjectNaming) ||
-                    property.Name == nameof(IGenerationOptions.RememberManuallySelectedTargetProjectByDefault) ||
-                    property.Name == nameof(IGenerationOptions.UserInterfaceMode))
+                if (withSkipping)
                 {
-                    // ignore properties that are excluded from the UI
-                    continue;
+                    if (property.Name == nameof(IGenerationOptions.AllowGenerationWithoutTargetProject) ||
+                        property.Name == nameof(IGenerationOptions.AutoDetectFrameworkTypes) ||
+                        property.Name == nameof(IGenerationOptions.TestProjectNaming) ||
+                        property.Name == nameof(IGenerationOptions.RememberManuallySelectedTargetProjectByDefault) ||
+                        property.Name == nameof(IGenerationOptions.UserInterfaceMode))
+                    {
+                        // ignore properties that are excluded from the UI
+                        continue;
+                    }
                 }
 
                 var propertyName = property.Name;
@@ -50,19 +54,22 @@ namespace Unitverse.Core.Tests.Options.Editing
                     result.Should().Contain(x => x.ItemType == EditableItemType.Enum && x is EditableItem && ((EditableItem)x).FieldName == propertyName, propertyName);
                 }
 
-                result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.AllowGenerationWithoutTargetProject));
-                result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.AutoDetectFrameworkTypes));
-                result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.RememberManuallySelectedTargetProjectByDefault));
-                result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.UserInterfaceMode));
-                result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.TestProjectNaming));
+                if (withSkipping)
+                {
+                    result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.AllowGenerationWithoutTargetProject));
+                    result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.AutoDetectFrameworkTypes));
+                    result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.RememberManuallySelectedTargetProjectByDefault));
+                    result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.UserInterfaceMode));
+                    result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.TestProjectNaming));
+                }
             }
         }
 
         [Test]
         public void CannotCallExtractFromWithNullSource()
         {
-            FluentActions.Invoking(() => EditableItemExtractor.ExtractFrom(default(object), new object()).ToList()).Should().Throw<ArgumentNullException>();
-            FluentActions.Invoking(() => EditableItemExtractor.ExtractFrom(new object(), default(object)).ToList()).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => EditableItemExtractor.ExtractFrom(default(object), new object(), false).ToList()).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => EditableItemExtractor.ExtractFrom(new object(), default(object), false).ToList()).Should().Throw<ArgumentNullException>();
         }
     }
 }
