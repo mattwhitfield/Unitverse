@@ -11,14 +11,15 @@ namespace Unitverse.Helper
         {
             try
             {
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(Key);
-
-                IncrementValue(key, "TypesConstructed", statistics.TypesConstructed);
-                IncrementValue(key, "ValuesGenerated", statistics.ValuesGenerated);
-                IncrementValue(key, "InterfacesMocked", statistics.InterfacesMocked);
-                IncrementValue(key, "TestClassesGenerated", statistics.TestClassesGenerated);
-                IncrementValue(key, "TestMethodsGenerated", statistics.TestMethodsGenerated);
-                IncrementValue(key, "TestMethodsRegenerated", statistics.TestMethodsRegenerated);
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(Key))
+                {
+                    IncrementValue(key, "TypesConstructed", statistics.TypesConstructed);
+                    IncrementValue(key, "ValuesGenerated", statistics.ValuesGenerated);
+                    IncrementValue(key, "InterfacesMocked", statistics.InterfacesMocked);
+                    IncrementValue(key, "TestClassesGenerated", statistics.TestClassesGenerated);
+                    IncrementValue(key, "TestMethodsGenerated", statistics.TestMethodsGenerated);
+                    IncrementValue(key, "TestMethodsRegenerated", statistics.TestMethodsRegenerated);
+                }
             }
             catch
             {
@@ -30,16 +31,18 @@ namespace Unitverse.Helper
         {
             try
             {
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(Key);
-                return new GenerationStatistics
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(Key))
                 {
-                    TestMethodsRegenerated = GetValue(key, "TestMethodsRegenerated"),
-                    TestMethodsGenerated = GetValue(key, "TestMethodsGenerated"),
-                    InterfacesMocked = GetValue(key, "InterfacesMocked"),
-                    TestClassesGenerated = GetValue(key, "TestClassesGenerated"),
-                    TypesConstructed = GetValue(key, "TypesConstructed"),
-                    ValuesGenerated = GetValue(key, "ValuesGenerated")
-                };
+                    return new GenerationStatistics
+                    {
+                        TestMethodsRegenerated = GetValue(key, "TestMethodsRegenerated"),
+                        TestMethodsGenerated = GetValue(key, "TestMethodsGenerated"),
+                        InterfacesMocked = GetValue(key, "InterfacesMocked"),
+                        TestClassesGenerated = GetValue(key, "TestClassesGenerated"),
+                        TypesConstructed = GetValue(key, "TypesConstructed"),
+                        ValuesGenerated = GetValue(key, "ValuesGenerated")
+                    };
+                }
             }
             catch
             {
