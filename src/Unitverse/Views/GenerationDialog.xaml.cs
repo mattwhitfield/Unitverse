@@ -24,6 +24,9 @@ namespace Unitverse.Views
 
             PreviewMouseWheel += GenerationDialog_PreviewMouseWheel;
             TextOptions.SetTextFormattingMode(this, TextFormattingMode.Ideal);
+
+            _scale = ZoomTracker.Get();
+            RootScale.ScaleY = RootScale.ScaleX = 1 + (_scale / 100.0);
         }
 
         private void GenerationDialog_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
@@ -35,6 +38,7 @@ namespace Unitverse.Views
                 _scale = Math.Min(100, _scale);
 
                 RootScale.ScaleY = RootScale.ScaleX = 1 + (_scale / 100.0);
+                ZoomTracker.Save(_scale);
             }
         }
 
