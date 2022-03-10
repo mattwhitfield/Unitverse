@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Media;
 using Unitverse.Core.Options;
 using Unitverse.Helper;
 using Unitverse.Options;
@@ -14,6 +16,8 @@ namespace Unitverse.Views
     public partial class ConfigEditorControl : UserControl
     {
         private ConfigEditorControlViewModel _viewModel;
+
+        int _scale;
 
         public ConfigEditorControl(IUnitTestGeneratorPackage package, string filename, Action onModified)
         {
@@ -32,6 +36,21 @@ namespace Unitverse.Views
             }
 
             DataContext = _viewModel = new ConfigEditorControlViewModel(package, filename, onModified);
+
+            PreviewMouseWheel += ConfigEditorControl_PreviewMouseWheel;
+            TextOptions.SetTextFormattingMode(this, TextFormattingMode.Ideal);
+        }
+
+        private void ConfigEditorControl_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                _scale += e.Delta / 12;
+                _scale = Math.Max(0, _scale);
+                _scale = Math.Min(100, _scale);
+
+                RootScale.ScaleY = RootScale.ScaleX = 1 + (_scale / 100.0);
+            }
         }
 
         internal void SaveFile(string fileName)

@@ -85,7 +85,7 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="0,2"
-                FontSize="10"
+                FontSize="11"
                 Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
                 Opacity="0.6"
                 Text="{Binding Description}"
@@ -98,32 +98,29 @@
         <Grid Margin="6,4" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Names" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
             <TextBlock
-                Grid.Row="0"
                 Grid.Column="0"
                 Margin="0,0,6,0"
                 HorizontalAlignment="Right"
+                VerticalAlignment="Top"
                 Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}">
                 <Run Text="{Binding Text, Mode=OneTime}" /><Run Text=":" />
             </TextBlock>
 
             <CheckBox
-                Grid.Row="0"
                 Grid.Column="1"
+                Margin="0,1"
                 IsChecked="{Binding Value}"
+                VerticalAlignment="Top"
                 Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogCheckBoxStyleKey}}" />
 
             <TextBlock
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="0,2"
-                FontSize="10"
+                Grid.Column="2"
+                Margin="6,2"
+                FontSize="11"
                 Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
                 Opacity="0.6"
                 Text="{Binding Description}"
@@ -168,7 +165,7 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="0,2"
-                FontSize="10"
+                FontSize="11"
                 Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
                 Opacity="0.6"
                 Text="{Binding Description}"
