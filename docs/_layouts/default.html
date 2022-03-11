@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    {% include head-custom.html %}
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="{{ "/" | absolute_url }}"><img src="/assets/UnitverseLogo.png" alt="Logo" /></a></h1>
+
+        <p>{{ site.description | default: site.github.project_tagline }}</p>
+
+        <p class="view">
+		<ul>
+		<li><a href="/index.html">Home</a></li>
+		<li><a href="/gettingstarted.html">Getting started</a></li>
+        <li><a href="/configuration.html">Configuration</a></li>
+        <li><a href="/features.html">Features</a></li>
+        <li><a href="/examples/index.html">Examples</a></li>
+        <li><a href="/contributing.html">Contributing</a></li>
+		</ul>
+		</p>
+
+        <p class="view">
+		Get the extension from the Visual Studio Marketplace:
+		<ul>
+		<li><a href="https://marketplace.visualstudio.com/items?itemName=MattWhitfield.Unitverse">For Visual Studio 2019</a></li>
+		<li><a href="https://marketplace.visualstudio.com/items?itemName=MattWhitfield.UnitverseVS2022">For Visual Studio 2022</a></li>
+		</ul>
+		</p>
+
+        <p class="view">
+		Alternatively see the releases on GitHub:
+		<ul>
+		<li><a href="https://github.com/mattwhitfield/Unitverse/releases">GitHub Releases</a></li>
+		</ul>
+		</p>
+
+
+
+      </header>
+      <section>
+
+      {{ content }}
+
+      </section>
+      <footer>
+        {% if site.github.is_project_page %}
+        <p class="view"><a href="{{ site.github.repository_url }}">View the Project on GitHub <small>{{ site.github.repository_nwo }}</small></a></p>
+        {% endif %}
+
+        {% if site.github.is_project_page %}
+        <p>Unitverse is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
+        {% endif %}
+      </footer>
+    </div>
+    <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
+  </body>
+</html>
