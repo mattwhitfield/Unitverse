@@ -8,7 +8,7 @@ Unitverse is an extension for [Visual Studio 2019](https://marketplace.visualstu
 
 # Documentation 📖
 
-The best way to view the documentation is to visit visit the [documentation on the readthedocs.io](https://unitverse.readthedocs.io/). Alternatively, you can view the documentation right here on GitHub using the links to sections below.
+The best way to view the documentation is to visit visit the [documentation on GitHub pages](https://mattwhitfield.github.io/Unitverse/). Alternatively, you can view the documentation direct from the repository using the links to sections below.
 
 ## Documentation Sections
 
