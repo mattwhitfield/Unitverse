@@ -2,7 +2,7 @@
 # Introduction 👀
 The Unitverse extension generates tests for classes written in C#. The extension covers basic tests automatically (for example, checking for correct property initialization), and creates placeholder tests for methods. Unitverse aims to produce tests that compile, so that you can generate tests as you code, but still focus on what you are doing rather than divert your attention to fixing broken generated code. Unitverse also allows incremental test generation - as you add new members to your types you can add tests for those new members quickly through the editor. Also, if you refactor methods or constructor signatures, you can regenerate those tests quickly and easily.
 
-For more in-depth documentation, visit the [documentation on the readthedocs.io](https://unitverse.readthedocs.io/).
+For more in-depth documentation, visit the [documentation on GitHub Pages](https://mattwhitfield.github.io/Unitverse/).
 
 # Using the Extension 🔧
 
