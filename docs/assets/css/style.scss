@@ -2,7 +2,31 @@
 ---
 
 @import "{{ site.theme }}";
-section { width: 800px; float: right; padding-bottom: 50px; }
-.wrapper {width: 1160px; margin: 0 auto;}
+
+@media only screen and (max-width: 999px) {
+  section { width: 100%; padding-bottom: 50px; float: none; position: static; }
+  header { float: none; width: 100%; margin: 0; position: static; }
+  .wrapper { margin: 0 auto; }
+  .extra { display: none; }
+  body { padding: 8px; }
+}
+
+@media only screen and (min-width: 1000px) and (max-width: 1219px) {
+  section { width: 730px; float: right; padding-bottom: 50px; position: static; }
+  header { width: 200px; margin: 0; position: static; }
+  footer { width: 200px; }
+  .wrapper { width: 930px; margin: 0 auto; }
+  .thinNav { display: none; }
+  body { padding: 16px; }
+}
+
+@media only screen and (min-width: 1210px) {
+  section { width: 850px; float: right; padding-bottom: 50px; }
+  header { width: 260px; margin: 0; position: static; }
+  footer { width: 260px; }
+  .wrapper { width: 1160px; margin: 0 auto; }
+  .thinNav { display: none; }
+}
+
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; }
 a:hover, a:focus { color: #002040; font-weight: 400; }
