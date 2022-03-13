@@ -1,3 +1,6 @@
+---
+title: Home
+---
 ![Latest release](https://img.shields.io/github/v/release/mattwhitfield/Unitverse?color=00A000) ![Last commit](https://img.shields.io/github/last-commit/mattwhitfield/Unitverse?color=00A000) ![Build status](https://img.shields.io/github/workflow/status/mattwhitfield/Unitverse/Extension%20build) ![Open issue count](https://img.shields.io/github/issues/mattwhitfield/Unitverse)
 
 # Introduction 👀
@@ -5,11 +8,11 @@ The Unitverse Visual Studio extension generates tests for classes written in C#.
 
 ### Documentation Sections 📖
 
-* [Getting started](gettingstarted.md) - covering basic usage and how to start generating tests.
+* [Getting started](gettingstarted.md) - covers basic usage and how to start generating tests.
 * [Features](features.md) - covers the features offered by Unitverse along with in-depth descriptions.
-* [Configuration](configuration.md) - covering the configuration options available, as well as details on how to configure the extension through source code.
-* [Contributing](contributing.md) - covering useful information for anyone who wants to contribute to the project.
-* [Examples](examples/index.md) - presents a selection of sample scenarios showing the source code and the generated tests.
+* [Configuration](configuration.md) - covers the configuration options available, as well as details on how to configure the extension through source code.
+* [Contributing](contributing.md) - covers useful information for anyone who wants to contribute to the project.
+* [Examples](examples/index.md) - contains a selection of sample scenarios showing the source code and the generated tests.
 
 ## Supported Environments 🌳
 
@@ -38,4 +41,4 @@ If Unitverse finds a test project related to the source project, it will look at
 
 ## Contributing ✋
 
-Any contributions are welcome. Code. Feedback on what you like or what could be better. Please feel free to fork the repo and make changes, the license if MIT so you're pretty much free to do whatever you like. For more information, please see the [contributing section](contributing.md). You can get started by visiting the [Unitverse GitHub repo](https://github.com/mattwhitfield/Unitverse).
+Any contributions are welcome. Code. Feedback on what you like or what could be better. Please feel free to fork the repo and make changes, the license is MIT so you're pretty much free to do whatever you like. For more information, please see the [contributing section](contributing.md). You can get started by visiting the [Unitverse GitHub repo](https://github.com/mattwhitfield/Unitverse).
