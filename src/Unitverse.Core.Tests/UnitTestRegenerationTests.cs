@@ -9,6 +9,7 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Forms;
@@ -32,7 +33,7 @@
     using Expression = System.Linq.Expressions.Expression;
 
     [TestFixture]
-    public class UnitTestGeneratorTests
+    public class UnitTestRegenerationTests
     {
         // ReSharper disable once MemberCanBePrivate.Global - is the test case source
         public static IEnumerable<object[]> TestClassResourceNames
@@ -40,7 +41,7 @@
             // ReSharper disable once UnusedMember.Global - is the test case source
             get
             {
-                var set = TestClasses.ResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
+                var set = RegenerationTestClasses.ResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
                 var entryKeys = new List<string>();
                 foreach (DictionaryEntry entry in set)
                 {
@@ -67,37 +68,82 @@
         [TestCaseSource(nameof(TestClassResourceNames))]
         public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions)
         {
-            var classAsText = TestClasses.ResourceManager.GetString(resourceName, TestClasses.Culture);
+            // Get the source and split it
+            var source = RegenerationTestClasses.ResourceManager.GetString(resourceName, TestClasses.Culture);
+            StringBuilder first = new StringBuilder(), second = new StringBuilder();
+            var current = first;
 
-            var options = ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, classAsText, false);
+            foreach (var line in source.Lines())
+            {
+                if (line.Trim().All(x => x == '-') && line.Trim().Length > 0)
+                {
+                    current = second;
+                }
+                else
+                {
+                    current.AppendLine(line);
+                }
+            }
 
-            Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
+            var classAsText = first.ToString();
+            var updatedClassAsText = second.ToString();
 
+            // Extract the options from the first part
+            var options = UnitTestGeneratorTests.ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, classAsText, true);
+
+            // Compile the first
+            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
             var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             Assert.IsNotNull(core);
             Assert.That(!string.IsNullOrWhiteSpace(core.FileContent));
             Console.WriteLine(core.FileContent.Lines().Select((x, i) => ((i + 1).ToString("D4")) + ": " + x).Aggregate((x, y) => x + Environment.NewLine + y));
 
+            // Check the first generated tree
             var generatedTree = CSharpSyntaxTree.ParseText(core.FileContent, new CSharpParseOptions(LanguageVersion.Latest));
-
             var syntaxTrees = new List<SyntaxTree> { tree, externalInitTree, generatedTree };
-
+            var propertyTesterEmitted = false;
             if (core.RequiredAssets.Any(x => x == TargetAsset.PropertyTester))
+            {
+                var testerAsset = AssetFactory.Create(TargetAsset.PropertyTester);
+                var propertyTester = testerAsset.Content("Tests", testFrameworkTypes);
+                syntaxTrees.Add(CSharpSyntaxTree.ParseText(propertyTester, new CSharpParseOptions(LanguageVersion.Latest)));
+                propertyTesterEmitted = true;
+            }
+            var targetCompilation = CSharpCompilation.Create(
+                "MyTest",
+                syntaxTrees: syntaxTrees,
+                references: references,
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+            // Compile the second, using the output from the first compile
+            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, updatedClassAsText, out var updatedTree, out _, out _, out var updatedModel);
+            var core2 = await CoreGenerator.Generate(updatedModel, null, targetCompilation.GetSemanticModel(generatedTree), false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
+
+
+            // Check the second generated tree
+            Assert.IsNotNull(core2);
+            Assert.That(!string.IsNullOrWhiteSpace(core2.FileContent));
+            Console.WriteLine(core2.FileContent.Lines().Select((x, i) => ((i + 1).ToString("D4")) + ": " + x).Aggregate((x, y) => x + Environment.NewLine + y));
+
+            var generatedTree2 = CSharpSyntaxTree.ParseText(core2.FileContent, new CSharpParseOptions(LanguageVersion.Latest));
+
+            if (core2.RequiredAssets.Any(x => x == TargetAsset.PropertyTester) && !propertyTesterEmitted)
             {
                 var testerAsset = AssetFactory.Create(TargetAsset.PropertyTester);
                 var propertyTester = testerAsset.Content("Tests", testFrameworkTypes);
                 syntaxTrees.Add(CSharpSyntaxTree.ParseText(propertyTester, new CSharpParseOptions(LanguageVersion.Latest)));
             }
 
-            var validateCompilation = CSharpCompilation.Create(
+            var validateCompilation2 = CSharpCompilation.Create(
                 "MyTest",
                 syntaxTrees: syntaxTrees,
                 references: references,
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
+            // emit the final output and check it
             var stream = new MemoryStream();
-            var result = validateCompilation.Emit(stream);
+            var result = validateCompilation2.Emit(stream);
             var streamLength = stream.Length;
             stream.Dispose();
 
@@ -108,83 +154,6 @@
 
             Assert.IsTrue(result.Success, "Generated output has errors: " + string.Join(Environment.NewLine, result.Diagnostics.Where(x => x.Location.SourceTree == generatedTree).OrderBy(x => x.Location.GetLineSpan().StartLinePosition.Line).Select(x => x.Location.GetLineSpan().StartLinePosition.Line + ": " + x.GetMessage())));
             Assert.That(streamLength, Is.GreaterThan(0));
-        }
-
-        public static void Compile(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, string classAsText, out SyntaxTree tree, out List<MetadataReference> references, out SyntaxTree externalInitTree, out SemanticModel semanticModel)
-        {
-            tree = CSharpSyntaxTree.ParseText(classAsText, new CSharpParseOptions(LanguageVersion.Latest));
-            var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
-            references = new List<MetadataReference>
-            {
-                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(INotifyPropertyChanged).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(Expression).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(Brush).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(Stream).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(Form).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(SqlConnection).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(Window).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(UIElement).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(DependencyObject).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(ValueTask<>).Assembly.Location),
-                MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Core.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Runtime.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Threading.Tasks.dll")),
-            };
-            references.AddRange(GetReferences(mockingFrameworkType));
-            references.AddRange(GetReferences(testFrameworkTypes));
-
-            if (useFluentAssertions)
-            {
-                references.Add(MetadataReference.CreateFromFile(typeof(FluentActions).Assembly.Location));
-                references.Add(MetadataReference.CreateFromFile(typeof(XDocument).Assembly.Location));
-                references.Add(MetadataReference.CreateFromFile(typeof(XmlNode).Assembly.Location));
-                references.Add(MetadataReference.CreateFromFile(typeof(IQueryAmbient).Assembly.Location));
-            }
-
-            externalInitTree = CSharpSyntaxTree.ParseText("namespace System.Runtime.CompilerServices { internal static class IsExternalInit { } }", new CSharpParseOptions(LanguageVersion.Latest));
-            var compilation = CSharpCompilation.Create(
-                "MyTest",
-                syntaxTrees: new[] { tree, externalInitTree },
-                references: references);
-
-            semanticModel = compilation.GetSemanticModel(tree);
-        }
-
-        public static UnitTestGeneratorOptions ExtractOptions(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, string classAsText, bool withPartialGeneration)
-        {
-            var generationOptions = new MutableGenerationOptions(new DefaultGenerationOptions());
-            var namingOptions = new MutableNamingOptions(new DefaultNamingOptions());
-            var strategyOptions = new MutableStrategyOptions(new DefaultStrategyOptions());
-
-            generationOptions.PartialGenerationAllowed = withPartialGeneration;
-
-            generationOptions.FrameworkType = testFrameworkTypes;
-            generationOptions.MockingFrameworkType = mockingFrameworkType;
-            generationOptions.UseFluentAssertions = useFluentAssertions;
-
-            var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false);
-
-            var lines = classAsText.Lines().Where(x => x.StartsWith("// #", StringComparison.Ordinal)).Select(x => x.Substring(4).Trim()).ToList();
-            if (lines.Any())
-            {
-                var properties = new Dictionary<string, string>();
-                foreach (var line in lines)
-                {
-                    var pair = line.Split('=');
-                    if (pair.Count() == 2)
-                    {
-                        properties[pair[0].Trim()] = pair[1].Trim();
-                    }
-                }
-
-                properties.ApplyTo(generationOptions);
-                properties.ApplyTo(namingOptions);
-                properties.ApplyTo(strategyOptions);
-            }
-
-            return options;
         }
 
         [Test]

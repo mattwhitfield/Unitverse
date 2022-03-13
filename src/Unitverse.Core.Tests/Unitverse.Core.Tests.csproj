@@ -43,6 +43,11 @@
     <Compile Update="Options\Editing\GenerationOptions.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="RegenerationTestClasses.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RegenerationTestClasses.resx</DependentUpon>
+    </Compile>
     <Compile Update="TestClasses.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -51,6 +56,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="RegenerationTestClasses.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RegenerationTestClasses.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="TestClasses.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TestClasses.Designer.cs</LastGenOutput>
