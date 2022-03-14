@@ -13,25 +13,25 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1><a href="{{ "/" | absolute_url }}"><img src="/Unitverse/assets/UnitVerseLogo.png" alt="Logo" /></a></h1>
+        <h1><a href="{{ "/" | absolute_url }}"><img src="{{ "/assets/UnitVerseLogo.png" | relative_url }}" alt="Logo" /></a></h1>
 
         <p>{{ site.description | default: site.github.project_tagline }}</p>
 
 		<div class="thinNav">
-        <a href="/Unitverse/index.html">Home</a> | <a href="/Unitverse/gettingstarted.html">Getting started</a> | <a href="/Unitverse/configuration.html">Configuration</a> | 
-		<a href="/Unitverse/features.html">Features</a> | <a href="/Unitverse/examples/index.html">Examples</a> | <a href="/Unitverse/contributing.html">Contributing</a>
+        <a href="{{ "/index.html" | relative_url }}">Home</a> | <a href="{{ "/gettingstarted.html" | relative_url }}">Getting started</a> | <a href="{{ "/configuration.html" | relative_url }}">Configuration</a> | 
+		<a href="{{ "/features.html" | relative_url }}">Features</a> | <a href="{{ "/examples/index.html" | relative_url }}">Examples</a> | <a href="{{ "/contributing.html" | relative_url }}">Contributing</a>
 		</div>
 
 		<div class="extra">
 
         <p class="view">
 		<ul>
-		<li><a href="/Unitverse/index.html">Home</a></li>
-		<li><a href="/Unitverse/gettingstarted.html">Getting started</a></li>
-        <li><a href="/Unitverse/configuration.html">Configuration</a></li>
-        <li><a href="/Unitverse/features.html">Features</a></li>
-        <li><a href="/Unitverse/examples/index.html">Examples</a></li>
-        <li><a href="/Unitverse/contributing.html">Contributing</a></li>
+		<li><a href="{{ "/index.html" | relative_url }}">Home</a></li>
+		<li><a href="{{ "/gettingstarted.html" | relative_url }}">Getting started</a></li>
+        <li><a href="{{ "/configuration.html" | relative_url }}">Configuration</a></li>
+        <li><a href="{{ "/features.html" | relative_url }}">Features</a></li>
+        <li><a href="{{ "/examples/index.html" | relative_url }}">Examples</a></li>
+        <li><a href="{{ "/contributing.html" | relative_url }}">Contributing</a></li>
 		</ul>
 		</p>
 

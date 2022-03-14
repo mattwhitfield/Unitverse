@@ -3,19 +3,30 @@
 
 @import "{{ site.theme }}";
 
-@media only screen and (max-width: 999px) {
-  section { width: 100%; padding-bottom: 50px; float: none; position: static; }
+@media only screen and (max-width: 960px) {
+  section { width: 100% !important; padding-bottom: 0px; padding-top: 20px; float: none; position: static; border: 0; }
   header { float: none; width: 100%; margin: 0; position: static; }
-  .wrapper { margin: 0 auto; }
+  header img { max-width: 200px; }
+  footer { float: none; width: 100%; margin: 0; position: static; }
+  .wrapper { margin: 0 auto; margin-right: 0; margin-left: 0; }
   .extra { display: none; }
   body { padding: 8px; }
 }
 
-@media only screen and (min-width: 1000px) and (max-width: 1219px) {
-  section { width: 730px; float: right; padding-bottom: 50px; position: static; }
-  header { width: 200px; margin: 0; position: static; }
-  footer { width: 200px; }
-  .wrapper { width: 930px; margin: 0 auto; }
+@media only screen and (min-width: 961px) and (max-width: 1059px) {
+  section { width: 720px; float: right; padding-bottom: 50px; position: static; }
+  header { width: 190px; margin: 0; margin-right: 10px; position: static; }
+  footer { width: 190px; }
+  .wrapper { width: 920px; margin: 0 auto; }
+  .thinNav { display: none; }
+  body { padding: 16px; }
+}
+
+@media only screen and (min-width: 1060px) and (max-width: 1209px) {
+  section { width: 780px; float: right; padding-bottom: 50px; position: static; }
+  header { width: 220px; margin: 0; margin-right: 20px; position: static; }
+  footer { width: 220px; }
+  .wrapper { width: 1020px; margin: 0 auto; }
   .thinNav { display: none; }
   body { padding: 16px; }
 }
@@ -26,6 +37,7 @@
   footer { width: 260px; }
   .wrapper { width: 1160px; margin: 0 auto; }
   .thinNav { display: none; }
+  body { padding: 24px; }
 }
 
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; }
