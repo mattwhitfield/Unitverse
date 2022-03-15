@@ -5,6 +5,20 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;SA0001</NoWarn>
+    <VsTargetVersion Condition="'$(VsTargetVersion)' == '' and '$(VisualStudioVersion)' == '17.0' ">VS2022</VsTargetVersion>
+    <VsTargetVersion Condition="'$(VsTargetVersion)' == '' and '$(VisualStudioVersion)' == '16.0' ">VS2019</VsTargetVersion>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(VsTargetVersion)' == 'VS2022'">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(VsTargetVersion)' == 'VS2019'">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.11.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>
@@ -12,7 +26,6 @@
     </PackageReference>
     <PackageReference Include="FakeItEasy" Version="7.2.0" />
     <PackageReference Include="FluentAssertions" Version="6.2.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.11.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="Moq.AutoMock" Version="3.2.0" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
