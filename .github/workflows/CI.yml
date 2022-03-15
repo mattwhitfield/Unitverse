@@ -41,7 +41,7 @@ jobs:
         version: '${{env.AutoVersion_AssemblySemVer}}'
         vsix-manifest-file: 'src\Unitverse\Manifests\${{ matrix.VsTargetVersion }}\source.extension.vsixmanifest'
     - name: Build extension
-      run: msbuild $env:SolutionPath /t:Rebuild -v:m 
+      run: msbuild $env:SolutionPath /t:Rebuild -v:m /p:AssemblyVersion=${{env.AutoVersion_AssemblySemVer}} /p:Version=${{env.AutoVersion_SemVer}}
       env: 
         DeployExtension: False
     - run: |
