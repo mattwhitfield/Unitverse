@@ -57,6 +57,7 @@ namespace Unitverse.Helper
             try
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
+
                 projectFileName = project.FileName;
             }
             catch
