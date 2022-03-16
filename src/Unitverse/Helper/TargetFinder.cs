@@ -49,14 +49,8 @@
                 return null;
             }
 
-            string fileName;
-            try
-            {
-                fileName = targetProject.FileName;
-            }
-#pragma warning disable CA1031 // Do not catch general exception types
-            catch (Exception)
-#pragma warning restore CA1031 // Do not catch general exception types
+            var fileName = targetProject.SafeFileName();
+            if (string.IsNullOrEmpty(fileName))
             {
                 targetPath = null;
                 return null;

@@ -51,13 +51,30 @@ namespace Unitverse.Helper
             return FindProjects(solution.Projects.OfType<Project>());
         }
 
+        public static string SafeFileName(this Project project)
+        {
+            string projectFileName;
+            try
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+
+                projectFileName = project.FileName;
+            }
+            catch
+            {
+                projectFileName = string.Empty;
+            }
+
+            return projectFileName;
+        }
+
         private static IEnumerable<Project> FindProjects(IEnumerable<Project> currentProjects)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             foreach (var project in currentProjects)
             {
-                if (project.FileName.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase))
+                if (project.SafeFileName().EndsWith(".csproj", StringComparison.OrdinalIgnoreCase))
                 {
                     yield return project;
                 }

@@ -141,7 +141,13 @@
                 var asset = AssetFactory.Create(targetAsset);
                 if (asset != null)
                 {
-                    var targetProjectFileName = project.FileName;
+                    var targetProjectFileName = project.SafeFileName();
+
+                    if (string.IsNullOrWhiteSpace(targetProjectFileName))
+                    {
+                        continue;
+                    }
+
                     var targetProjectPath = Path.GetDirectoryName(targetProjectFileName);
 
                     if (string.IsNullOrWhiteSpace(targetProjectPath))
