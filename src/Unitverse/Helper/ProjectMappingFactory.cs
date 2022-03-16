@@ -16,7 +16,7 @@
             ThreadHelper.ThrowIfNotOnUIThread();
 
             // resolve the options for this project
-            var projectOptions = UnitTestGeneratorOptionsFactory.Create(sourceProject.FileName, baseOptions.GenerationOptions, baseOptions.NamingOptions, baseOptions.StrategyOptions, baseOptions.StatisticsCollectionEnabled);
+            var projectOptions = UnitTestGeneratorOptionsFactory.Create(sourceProject.SafeFileName(), baseOptions.GenerationOptions, baseOptions.NamingOptions, baseOptions.StrategyOptions, baseOptions.StatisticsCollectionEnabled);
 
             // derive the target project name
             var targetProjectName = projectOptions.GenerationOptions.GetTargetProjectName(sourceProject.Name);
