@@ -162,15 +162,17 @@ namespace Unitverse.Core.Tests {
         ///
         ///		}
         /// 
-        ///		public abstract int PublicOut(out string s);
+        ///		public abstract int PublicAbstractIn(in string s);
         ///
-        ///		public abstract int PublicRef(ref string s);
+        ///		public abstract int PublicAbstractOut(out string s);
         ///
-        ///		protected abstract int ProtectedOut(out string s);
+        ///		public abstract int PublicAbstractRef(ref string s);
         ///
-        ///		protected abstract int ProtectedRef(ref string s);
-        ///	}
-        ///}.
+        ///		protected abstract int ProtectedAbstractIn(in string s);
+        ///
+        ///		protected abstract int ProtectedAbstractOut(out string s);
+        ///
+        ///		protected abst [rest of string was truncated]&quot;;.
         /// </summary>
         public static string AbstractOutAndRefParams {
             get {
@@ -1118,6 +1120,26 @@ namespace Unitverse.Core.Tests {
         public static string MappingMethod {
             get {
                 return ResourceManager.GetString("MappingMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace TestApp1
+        ///{
+        ///    using System.Collections.Generic;
+        ///
+        ///    public class C3
+        ///    {
+        ///        public List&lt;string&gt; Map(List&lt;string&gt; input)
+        ///        {
+        ///            return null;
+        ///        }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string MappingMethodList {
+            get {
+                return ResourceManager.GetString("MappingMethodList", resourceCulture);
             }
         }
         

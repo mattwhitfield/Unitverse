@@ -1,0 +1,17 @@
+namespace TestApp1
+{
+    using System.Collections.Generic;
+
+    public class R
+    {
+        public string Name {get;set;}
+    }
+
+    public class C3
+    {
+        public List<R> Map(List<string> input)
+        {
+            return null;
+        }
+    }
+}
