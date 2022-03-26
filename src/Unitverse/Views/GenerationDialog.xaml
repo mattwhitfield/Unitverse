@@ -165,7 +165,8 @@
                         Grid.Row="2"
                         Margin="4"
                         IsChecked="{Binding RememberProjectSelection}"
-                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogCheckBoxStyleKey}}">
+                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogCheckBoxStyleKey}}"
+                        Visibility="{Binding CanRememberSelectedProject, Converter={StaticResource VisibilityConverter}}">
                         <TextBlock
                             Margin="0,-1,0,4"
                             VerticalAlignment="Center"

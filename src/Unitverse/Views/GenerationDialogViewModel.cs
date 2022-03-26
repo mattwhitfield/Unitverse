@@ -186,9 +186,12 @@ namespace Unitverse.Views
                     ApplyTargetProjectFramework();
 
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedProject)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRememberSelectedProject)));
                 }
             }
         }
+
+        public bool CanRememberSelectedProject => _selectedProject == null || _selectedProject.Value != null;
 
         private void ApplyTargetProjectFramework()
         {
