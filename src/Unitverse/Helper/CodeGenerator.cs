@@ -84,7 +84,11 @@
             var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(generationItem.TargetFileName));
             try
             {
-                File.WriteAllText(tempFile, Strings.DisconnectedFileHeader.Replace("$$TARGETNAME$$", generationItem.Mapping.TargetProjectName) + generationItem.TargetContent);
+                var header = string.IsNullOrWhiteSpace(generationItem.Mapping.TargetProjectName) ?
+                     Strings.ElectiveDisconnectedFileHeader :
+                     Strings.DisconnectedFileHeader.Replace("$$TARGETNAME$$", generationItem.Mapping.TargetProjectName);
+
+                File.WriteAllText(tempFile, header + generationItem.TargetContent);
                 var dte = (DTE2)package.GetService(typeof(DTE));
                 if (dte != null)
                 {

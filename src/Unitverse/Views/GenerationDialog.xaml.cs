@@ -57,11 +57,13 @@ namespace Unitverse.Views
 
             if (ResultingMapping.TargetProject == null)
             {
-                MessageBox.Show("You must select a target project in which the test should be generated.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                if (_viewModel.SelectedProject == null)
+                {
+                    MessageBox.Show("You must select a target in which the test(s) should be generated.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
             }
-
-            if (_viewModel.RememberProjectSelection)
+            else if (_viewModel.RememberProjectSelection)
             {
                 TargetSelectionRegister.Instance.SetTargetFor(ResultingMapping.SourceProject.UniqueName, ResultingMapping.TargetProjectName);
             }

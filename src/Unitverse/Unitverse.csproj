@@ -138,6 +138,7 @@
     </Compile>
     <Compile Include="Views\ConfigEditorControlViewModel.cs" />
     <Compile Include="Views\GenerationDialogViewModel.cs" />
+    <Compile Include="Views\ObjectItemTemplateSelector.cs" />
     <Compile Include="Views\TabItemTypeVisibilityConverter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +151,7 @@
   <ItemGroup>
     <Content Include="Resources\CommandImages.png" />
     <None Include="Resources\DisconnectedFileHeader.txt" />
+    <None Include="Resources\ElectiveDisconnectedFileHeader.txt" />
     <Content Include="Resources\UnitTestGeneratorPackage.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

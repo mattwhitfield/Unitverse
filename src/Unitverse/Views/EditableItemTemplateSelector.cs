@@ -33,6 +33,5 @@ namespace Unitverse.Views
         public DataTemplate HeaderItemTemplate { get; set; }
 
         public DataTemplate StringItemTemplate { get; set; }
-
     }
 }
