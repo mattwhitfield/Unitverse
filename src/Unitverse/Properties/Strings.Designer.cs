@@ -79,6 +79,22 @@ namespace Unitverse.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to //   _   _      _ _                       
+        /////  | | | |_ _ (_) |___ _____ _ _ ___ ___ 
+        /////  | |_| | &apos; \| |  _\ V / -_) &apos;_(_-&lt;/ -_)
+        /////   \___/|_||_|_|\__|\_/\___|_| /__/\___|
+        ///                                     
+        ///// This file was generated with Unitverse
+        ///// It has not been added to a test project because generation of a detached file was selected in the user interface.
+        ///.
+        /// </summary>
+        internal static string ElectiveDisconnectedFileHeader {
+            get {
+                return ResourceManager.GetString("ElectiveDisconnectedFileHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot not derive target project name, please check the test project naming setting..
         /// </summary>
         internal static string ProjectItemModel_ProjectItemModel_Cannot_not_derive_target_project_name__please_check_the_test_project_naming_setting_ {

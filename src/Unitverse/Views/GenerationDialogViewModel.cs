@@ -15,7 +15,9 @@ namespace Unitverse.Views
 {
     public class GenerationDialogViewModel : INotifyPropertyChanged
     {
+        private MutableGenerationOptions _originalGenerationOptions;
         private MutableGenerationOptions _generationOptions;
+        private bool _allowDetachedGeneration;
 
         public GenerationDialogViewModel(Project sourceProject, IUnitTestGeneratorOptions projectOptions)
         {
@@ -30,16 +32,18 @@ namespace Unitverse.Views
 
             _selectedTab = Tabs.First();
 
-            var generationOptions = new MutableGenerationOptions(projectOptions.GenerationOptions);
+            _generationOptions = new MutableGenerationOptions(projectOptions.GenerationOptions);
             var strategyOptions = new MutableStrategyOptions(projectOptions.StrategyOptions);
             var namingOptions = new MutableNamingOptions(projectOptions.NamingOptions);
 
-            _generationOptions = new MutableGenerationOptions(generationOptions);
+            _originalGenerationOptions = new MutableGenerationOptions(_generationOptions);
+            _allowDetachedGeneration = _originalGenerationOptions.AllowGenerationWithoutTargetProject;
 
-            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), generationOptions, true).ToList();
+            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), _generationOptions, true).ToList();
             StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions, true).ToList();
             NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions, true).ToList();
 
+            Projects.Add(new ObjectItem("Generate detached test class(es)", null));
 #pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
             foreach (var project in VsProjectHelper.FindProjects(sourceProject.DTE.Solution).Where(x => x.UniqueName != sourceProject.UniqueName).OrderBy(x => x.Name))
 #pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
@@ -51,12 +55,12 @@ namespace Unitverse.Views
             var sessionSelectedProject = TargetSelectionRegister.Instance.GetTargetFor(sourceProject.UniqueName);
             var resolvedTarget = string.IsNullOrWhiteSpace(sessionSelectedProject) ? targetProjectName : sessionSelectedProject;
 
-            _selectedProject = Projects.FirstOrDefault(x => string.Equals(x.Text, resolvedTarget, System.StringComparison.OrdinalIgnoreCase));
+            _selectedProject = Projects.FirstOrDefault(x => string.Equals(x.Text, resolvedTarget, StringComparison.OrdinalIgnoreCase));
             var selectedProject = _selectedProject?.Value as Project;
 
             _rememberProjectSelection = projectOptions.GenerationOptions.RememberManuallySelectedTargetProjectByDefault;
 
-            ResultingMapping = new ProjectMapping(sourceProject, selectedProject, selectedProject?.Name, new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, projectOptions.StatisticsCollectionEnabled));
+            ResultingMapping = new ProjectMapping(sourceProject, selectedProject, selectedProject?.Name, new UnitTestGeneratorOptions(_generationOptions, namingOptions, strategyOptions, projectOptions.StatisticsCollectionEnabled));
 
             ApplyTargetProjectFramework();
         }
@@ -177,12 +181,17 @@ namespace Unitverse.Views
                     ResultingMapping.TargetProject = value?.Value as Project;
                     ResultingMapping.TargetProjectName = ResultingMapping.TargetProject?.Name;
 
+                    _generationOptions.AllowGenerationWithoutTargetProject = (ResultingMapping.TargetProject == null && _selectedProject != null) ? true : _allowDetachedGeneration;
+
                     ApplyTargetProjectFramework();
 
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedProject)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRememberSelectedProject)));
                 }
             }
         }
+
+        public bool CanRememberSelectedProject => _selectedProject == null || _selectedProject.Value != null;
 
         private void ApplyTargetProjectFramework()
         {
@@ -190,18 +199,18 @@ namespace Unitverse.Views
 
             if (ResultingMapping.TargetProject != null)
             {
-                var resolvedOptions = OptionsResolver.DetectFrameworks(ResultingMapping.TargetProject, _generationOptions);
-                var testFrameworkItem = GenerationOptionsItems.OfType<EnumEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.FrameworkType), System.StringComparison.OrdinalIgnoreCase));
+                var resolvedOptions = OptionsResolver.DetectFrameworks(ResultingMapping.TargetProject, _originalGenerationOptions);
+                var testFrameworkItem = GenerationOptionsItems.OfType<EnumEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.FrameworkType), StringComparison.OrdinalIgnoreCase));
                 if (testFrameworkItem != null)
                 {
                     testFrameworkItem.SelectedItem = testFrameworkItem.Items.FirstOrDefault(x => x.Value.ToString() == resolvedOptions.FrameworkType.ToString());
                 }
-                var mockingFrameworkItem = GenerationOptionsItems.OfType<EnumEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.MockingFrameworkType), System.StringComparison.OrdinalIgnoreCase));
+                var mockingFrameworkItem = GenerationOptionsItems.OfType<EnumEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.MockingFrameworkType), StringComparison.OrdinalIgnoreCase));
                 if (mockingFrameworkItem != null)
                 {
                     mockingFrameworkItem.SelectedItem = mockingFrameworkItem.Items.FirstOrDefault(x => x.Value.ToString() == resolvedOptions.MockingFrameworkType.ToString());
                 }
-                var fluentAssertionsItem = GenerationOptionsItems.OfType<BooleanEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.UseFluentAssertions), System.StringComparison.OrdinalIgnoreCase));
+                var fluentAssertionsItem = GenerationOptionsItems.OfType<BooleanEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.UseFluentAssertions), StringComparison.OrdinalIgnoreCase));
                 if (fluentAssertionsItem != null)
                 {
                     fluentAssertionsItem.Value = resolvedOptions.UseFluentAssertions;
