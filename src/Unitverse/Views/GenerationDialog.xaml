@@ -148,6 +148,7 @@
                             Visibility="{Binding FilterEmpty, Converter={StaticResource VisibilityConverter}}" />
                     </Grid>
                     <ScrollViewer
+                        x:Name="TargetProjectListBoxScroller"
                         Grid.Row="1"
                         Margin="0"
                         BorderThickness="0"
@@ -158,6 +159,7 @@
                             BorderThickness="0"
                             ItemTemplateSelector="{StaticResource ProjectItemTemplateSelector}"
                             ItemsSource="{Binding Projects}"
+                            PreviewMouseWheel="ListBox_PreviewMouseWheel"
                             SelectedItem="{Binding SelectedProject}"
                             Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogListBoxStyleKey}}" />
                     </ScrollViewer>

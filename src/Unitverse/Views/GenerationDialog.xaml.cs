@@ -70,5 +70,21 @@ namespace Unitverse.Views
 
             DialogResult = true;
         }
+
+        private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta < 0)
+            {
+                TargetProjectListBoxScroller.LineDown();
+                TargetProjectListBoxScroller.LineDown();
+                TargetProjectListBoxScroller.LineDown();
+            }
+            else
+            {
+                TargetProjectListBoxScroller.LineUp();
+                TargetProjectListBoxScroller.LineUp();
+                TargetProjectListBoxScroller.LineUp();
+            }
+        }
     }
 }
