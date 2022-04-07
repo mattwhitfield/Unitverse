@@ -12,7 +12,7 @@
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
 
-    public class ClassModel
+    public class ClassModel : ITypeSymbolProvider
     {
         public ClassModel(TypeDeclarationSyntax declaration, SemanticModel semanticModel, bool isSingleItem)
         {

@@ -52,5 +52,7 @@
         public UserInterfaceModes UserInterfaceMode => _baseOptions.UserInterfaceMode;
 
         public bool RememberManuallySelectedTargetProjectByDefault => _baseOptions.RememberManuallySelectedTargetProjectByDefault;
+
+        public FallbackTargetFindingMethod FallbackTargetFinding => _baseOptions.FallbackTargetFinding;
     }
 }

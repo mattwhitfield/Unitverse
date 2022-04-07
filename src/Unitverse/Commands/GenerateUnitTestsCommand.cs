@@ -147,7 +147,7 @@
                 {
                     var projectItem = source.Item;
 
-                    if (!withRegeneration && !mapping.Options.GenerationOptions.PartialGenerationAllowed && TargetFinder.FindExistingTargetItem(source, mapping, out _) == FindTargetStatus.Found)
+                    if (!withRegeneration && !mapping.Options.GenerationOptions.PartialGenerationAllowed && TargetFinder.FindExistingTargetItem(null, source, mapping, _package, messageLogger, out _) == FindTargetStatus.Found)
                     {
                         if (isSingleCreation)
                         {

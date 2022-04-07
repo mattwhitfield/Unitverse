@@ -4,13 +4,18 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
     using EnvDTE;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.VisualStudio.Shell;
     using Unitverse.Core.Helpers;
+    using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     internal static class TargetFinder
     {
-        public static FindTargetStatus FindExistingTargetItem(ProjectItemModel source, ProjectMapping mapping, out ProjectItem targetItem)
+        public static FindTargetStatus FindExistingTargetItem(ISymbol symbol, ProjectItemModel source, ProjectMapping mapping, IUnitTestGeneratorPackage package, IMessageLogger messageLogger, out ProjectItem targetItem)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -27,19 +32,119 @@
             var targetProjectItems = FindTargetFolder(targetProject, nameParts, false, out _);
             if (targetProjectItems == null)
             {
-                return FindTargetStatus.FolderNotFound;
+                if (mapping.Options.GenerationOptions.FallbackTargetFinding == FallbackTargetFindingMethod.None)
+                {
+                    return FindTargetStatus.FolderNotFound;
+                }
             }
 
-            var extension = Path.GetExtension(source.FilePath);
-            var baseName = Path.GetFileNameWithoutExtension(source.FilePath);
+            if (targetProjectItems != null)
+            {
+                var extension = Path.GetExtension(source.FilePath);
+                var baseName = Path.GetFileNameWithoutExtension(source.FilePath);
 
-            var testFileName = mapping.Options.GenerationOptions.GetTargetFileName(baseName);
-            targetItem = targetProjectItems.OfType<ProjectItem>().FirstOrDefault(x => string.Equals(x.Name, testFileName + extension, StringComparison.OrdinalIgnoreCase));
-            return targetItem == null ? FindTargetStatus.FileNotFound : FindTargetStatus.Found;
+                var testFileName = mapping.Options.GenerationOptions.GetTargetFileName(baseName);
+                targetItem = targetProjectItems.OfType<ProjectItem>().FirstOrDefault(x => string.Equals(x.Name, testFileName + extension, StringComparison.OrdinalIgnoreCase));
+
+                if (targetItem != null)
+                {
+                    return FindTargetStatus.Found;
+                }
+                else if (mapping.Options.GenerationOptions.FallbackTargetFinding == FallbackTargetFindingMethod.None)
+                {
+                    return FindTargetStatus.FileNotFound;
+                }
+            }
+
+            try
+            {
+                var namespaceTransform = mapping.CreateNamespaceTransform();
+                var targetProjectName = targetProject.Name;
+                var findTargetByTypeTask = package.JoinableTaskFactory.RunAsync(async () => await FindTargetByTypeAsync(symbol, source, mapping, package, targetProjectName, namespaceTransform).ConfigureAwait(true));
+                var targetFileName = findTargetByTypeTask.Join();
+
+                if (!string.IsNullOrWhiteSpace(targetFileName))
+                {
+                    targetItem = VsProjectHelper.GetProjectItem(targetFileName);
+                    if (targetItem != null)
+                    {
+                        return FindTargetStatus.Found;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // we'd like the info logged out, but errors here will revert to previous behaviour
+                messageLogger.LogMessage("Error while finding type by name: " + ex.Message + "\r\n" + ex.StackTrace);
+                targetItem = null;
+            }
+
+            return FindTargetStatus.FileNotFound;
 #pragma warning restore VSTHRD010
         }
 
-        public static ProjectItems FindTargetFolder(Project targetProject, List<string> nameParts, bool createMissingFolders, out string targetPath)
+        private static async Task<string> FindTargetByTypeAsync(ISymbol symbol, ProjectItemModel source, ProjectMapping mapping, IUnitTestGeneratorPackage package, string targetProjectName, Func<string, string> namespaceTransform)
+        {
+            if (symbol == null)
+            {
+                var semanticModel = await CodeGenerator.GetSemanticModelAsync(package.Workspace.CurrentSolution, source).ConfigureAwait(true);
+
+                var tree = await semanticModel.SyntaxTree.GetRootAsync().ConfigureAwait(true);
+
+                var firstType = tree.DescendantNodes().FirstOrDefault(node => node is ClassDeclarationSyntax || node is StructDeclarationSyntax || node is RecordDeclarationSyntax);
+
+                if (firstType != null)
+                {
+                    symbol = semanticModel.GetDeclaredSymbol(firstType);
+                }
+            }
+
+            if (symbol == null)
+            {
+                return null;
+            }
+
+            string fileName = null;
+
+            var project = package.Workspace.CurrentSolution.Projects.FirstOrDefault(x => x.Name == targetProjectName);
+            if (project != null)
+            {
+                // navigate up to a named type
+                while (symbol != null && !(symbol is INamedTypeSymbol))
+                {
+                    symbol = symbol.ContainingSymbol;
+                }
+
+                if (symbol is INamedTypeSymbol typeSymbol)
+                {
+                    var compilation = await project.GetCompilationAsync().ConfigureAwait(true);
+
+                    var typeSymbolProvider = new TypeSymbolProvider(typeSymbol);
+                    ISymbol targetSymbol = null;
+                    if (mapping.Options.GenerationOptions.FallbackTargetFinding == FallbackTargetFindingMethod.TypeInAnyNamespace)
+                    {
+                        var definedSymbol = compilation.GetSymbolsWithName(x => x != null && x.EndsWith(mapping.Options.GenerationOptions.GetTargetTypeName(typeSymbolProvider), StringComparison.OrdinalIgnoreCase), SymbolFilter.Type);
+
+                        targetSymbol = definedSymbol?.FirstOrDefault();
+                    }
+                    else if (mapping.Options.GenerationOptions.FallbackTargetFinding == FallbackTargetFindingMethod.TypeInCorrectNamespace)
+                    {
+                        // derive typeName using namespace transform - code generator must already do this
+                        var typeName = mapping.Options.GenerationOptions.GetFullyQualifiedTargetTypeName(typeSymbolProvider, namespaceTransform);
+                        targetSymbol = compilation.GetTypeByMetadataName(typeName);
+                    }
+
+                    if (targetSymbol != null)
+                    {
+                        fileName = targetSymbol.Locations.Where(x => x.IsInSource).Select(x => x.SourceTree?.FilePath).FirstOrDefault(f => !string.IsNullOrWhiteSpace(f));
+                    }
+                }
+            }
+
+            return fileName;
+        }
+
+        public static ProjectItems FindTargetFolder(EnvDTE.Project targetProject, List<string> nameParts, bool createMissingFolders, out string targetPath)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 

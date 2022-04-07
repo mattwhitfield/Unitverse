@@ -16,7 +16,5 @@
         INamingProvider NamingProvider { get; }
 
         IGenerationContext Context { get; }
-
-        string TestTypeNaming { get; }
     }
 }

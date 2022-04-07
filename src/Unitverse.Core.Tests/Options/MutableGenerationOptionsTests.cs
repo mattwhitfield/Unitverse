@@ -31,6 +31,16 @@ namespace Unitverse.Core.Tests.Options
             _options.UseFluentAssertions.Returns(true);
             _options.EmitUsingsOutsideNamespace.Returns(true);
             _options.AutoDetectFrameworkTypes.Returns(false);
+            _options.PartialGenerationAllowed.Returns(true);
+            _options.EmitTestsForInternals.Returns(true);
+            _options.EmitSubclassForProtectedMethods.Returns(true);
+            _options.AutomaticallyConfigureMocks.Returns(true);
+            _options.ArrangeComment.Returns("Arr");
+            _options.ActComment.Returns("Act");
+            _options.AssertComment.Returns("Assert");
+            _options.UserInterfaceMode.Returns(UserInterfaceModes.Always);
+            _options.RememberManuallySelectedTargetProjectByDefault.Returns(true);
+            _options.FallbackTargetFinding.Returns(FallbackTargetFindingMethod.TypeInAnyNamespace);
 
             _testClass = new MutableGenerationOptions(_options);
             Assert.That(_testClass.FrameworkType, Is.EqualTo(_options.FrameworkType));
@@ -42,6 +52,16 @@ namespace Unitverse.Core.Tests.Options
             Assert.That(_testClass.UseFluentAssertions, Is.EqualTo(_options.UseFluentAssertions));
             Assert.That(_testClass.EmitUsingsOutsideNamespace, Is.EqualTo(_options.EmitUsingsOutsideNamespace));
             Assert.That(_testClass.AutoDetectFrameworkTypes, Is.EqualTo(_options.AutoDetectFrameworkTypes));
+            Assert.That(_testClass.PartialGenerationAllowed, Is.EqualTo(_options.PartialGenerationAllowed));
+            Assert.That(_testClass.EmitTestsForInternals, Is.EqualTo(_options.EmitTestsForInternals));
+            Assert.That(_testClass.EmitSubclassForProtectedMethods, Is.EqualTo(_options.EmitSubclassForProtectedMethods));
+            Assert.That(_testClass.AutomaticallyConfigureMocks, Is.EqualTo(_options.AutomaticallyConfigureMocks));
+            Assert.That(_testClass.ArrangeComment, Is.EqualTo(_options.ArrangeComment));
+            Assert.That(_testClass.ActComment, Is.EqualTo(_options.ActComment));
+            Assert.That(_testClass.AssertComment, Is.EqualTo(_options.AssertComment));
+            Assert.That(_testClass.UserInterfaceMode, Is.EqualTo(_options.UserInterfaceMode));
+            Assert.That(_testClass.RememberManuallySelectedTargetProjectByDefault, Is.EqualTo(_options.RememberManuallySelectedTargetProjectByDefault));
+            Assert.That(_testClass.FallbackTargetFinding, Is.EqualTo(_options.FallbackTargetFinding));
         }
 
         [Test]

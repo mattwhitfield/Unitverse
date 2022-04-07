@@ -311,7 +311,7 @@
 
         private static TypeDeclarationSyntax EnsureAllConstructorParametersHaveFields(IFrameworkSet frameworkSet, ClassModel classModel, TypeDeclarationSyntax targetType)
         {
-            var setupMethod = frameworkSet.TestFramework.CreateSetupMethod(frameworkSet.GetTargetTypeName(classModel, true));
+            var setupMethod = frameworkSet.TestFramework.CreateSetupMethod(frameworkSet.GetTargetTypeName(classModel));
 
             BaseMethodDeclarationSyntax foundMethod = null, updatedMethod = null;
             if (setupMethod is MethodDeclarationSyntax methodSyntax)
@@ -480,14 +480,8 @@
             {
                 var types = TestableItemExtractor.GetTypeDeclarations(targetNamespace);
 
-                var targetClassName = frameworkSet.GetTargetTypeName(classModel, true);
+                var targetClassName = frameworkSet.GetTargetTypeName(classModel);
                 originalTargetType = targetType = types.FirstOrDefault(x => string.Equals(x.GetClassName(), targetClassName, StringComparison.OrdinalIgnoreCase));
-
-                if (originalTargetType == null)
-                {
-                    targetClassName = frameworkSet.GetTargetTypeName(classModel, false);
-                    originalTargetType = targetType = types.FirstOrDefault(x => string.Equals(x.GetClassName(), targetClassName, StringComparison.OrdinalIgnoreCase));
-                }
             }
 
             if (targetType == null)

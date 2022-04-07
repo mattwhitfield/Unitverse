@@ -7,19 +7,13 @@
 
     public class FrameworkSet : IFrameworkSet
     {
-        public FrameworkSet(ITestFramework testFramework, IMockingFramework mockingFramework, IAssertionFramework assertionFramework, INamingProvider namingProvider, IGenerationContext context, string testTypeNaming, IUnitTestGeneratorOptions options)
+        public FrameworkSet(ITestFramework testFramework, IMockingFramework mockingFramework, IAssertionFramework assertionFramework, INamingProvider namingProvider, IGenerationContext context, IUnitTestGeneratorOptions options)
         {
-            if (string.IsNullOrWhiteSpace(testTypeNaming))
-            {
-                throw new ArgumentNullException(nameof(testTypeNaming));
-            }
-
             TestFramework = testFramework ?? throw new ArgumentNullException(nameof(testFramework));
             MockingFramework = mockingFramework ?? throw new ArgumentNullException(nameof(mockingFramework));
             AssertionFramework = assertionFramework ?? throw new ArgumentNullException(nameof(assertionFramework));
             NamingProvider = namingProvider ?? throw new ArgumentNullException(nameof(namingProvider));
             Context = context ?? throw new ArgumentNullException(nameof(context));
-            TestTypeNaming = testTypeNaming;
             Options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
@@ -32,8 +26,6 @@
         public INamingProvider NamingProvider { get; }
 
         public IGenerationContext Context { get; private set; }
-
-        public string TestTypeNaming { get; }
 
         public IUnitTestGeneratorOptions Options { get; }
 

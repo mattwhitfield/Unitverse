@@ -36,7 +36,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var classDeclaration = SyntaxFactory.ClassDeclaration(_frameworkSet.GetTargetTypeName(model, true));
+            var classDeclaration = SyntaxFactory.ClassDeclaration(_frameworkSet.GetTargetTypeName(model));
 
             model.TargetInstance = model.TypeSyntax;
 
