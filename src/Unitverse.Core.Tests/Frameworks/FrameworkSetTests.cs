@@ -81,12 +81,6 @@ namespace Unitverse.Core.Tests.Frameworks
         }
 
         [Test]
-        public void CannotCallEvaluateTargetModelWithNullClassModel()
-        {
-            FluentActions.Invoking(() => _testClass.EvaluateTargetModel(default(ClassModel))).Should().Throw<ArgumentNullException>();
-        }
-
-        [Test]
         public void TestFrameworkIsInitializedCorrectly()
         {
             _testClass.TestFramework.Should().BeSameAs(_testFramework);

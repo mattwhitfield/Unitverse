@@ -55,6 +55,11 @@
 
         public static string GetTargetTypeName(this IFrameworkSet frameworkSet, ITypeSymbolProvider classModel)
         {
+            if (frameworkSet is null)
+            {
+                throw new ArgumentNullException(nameof(frameworkSet));
+            }
+
             return frameworkSet.Options.GenerationOptions.GetTargetTypeName(classModel);
         }
 

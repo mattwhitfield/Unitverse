@@ -124,9 +124,9 @@ namespace Unitverse.Core.Tests.Helpers
         public void CanGetPartialGenerationAllowed()
         {
             var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
-            _baseOptions.EmitTestsForInternals.Returns(true);
+            _baseOptions.PartialGenerationAllowed.Returns(true);
             Assert.That(instance.PartialGenerationAllowed, Is.EqualTo(true));
-            _baseOptions.EmitTestsForInternals.Returns(false);
+            _baseOptions.PartialGenerationAllowed.Returns(false);
             Assert.That(instance.PartialGenerationAllowed, Is.EqualTo(false));
         }
 
