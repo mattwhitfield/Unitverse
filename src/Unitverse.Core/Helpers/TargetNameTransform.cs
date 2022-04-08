@@ -53,11 +53,21 @@
             }
         }
 
-        public static string GetTargetTypeName(this IFrameworkSet frameworkSet, ClassModel classModel, bool withGenericDisambiguation)
+        public static string GetTargetTypeName(this IFrameworkSet frameworkSet, ITypeSymbolProvider classModel)
         {
-            if (frameworkSet == null)
+            if (frameworkSet is null)
             {
                 throw new ArgumentNullException(nameof(frameworkSet));
+            }
+
+            return frameworkSet.Options.GenerationOptions.GetTargetTypeName(classModel);
+        }
+
+        public static string GetTargetTypeName(this IGenerationOptions options, ITypeSymbolProvider classModel)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
             }
 
             if (classModel == null)
@@ -68,17 +78,26 @@
             try
             {
                 var sourceName = classModel.ClassName;
-                if (withGenericDisambiguation && classModel.TypeSymbol?.TypeParameters.Length > 0)
+                if (classModel.TypeSymbol?.TypeParameters.Length > 0)
                 {
                     sourceName += "_" + classModel.TypeSymbol.TypeParameters.Length;
                 }
 
-                return string.Format(CultureInfo.CurrentCulture, frameworkSet.TestTypeNaming, sourceName);
+                return string.Format(CultureInfo.CurrentCulture, options.TestTypeNaming, sourceName);
             }
             catch (FormatException)
             {
                 throw new InvalidOperationException(Strings.TargetNameTransform_GetTargetTypeName_Cannot_not_derive_target_type_name__please_check_the_test_type_naming_setting_);
             }
+        }
+
+        public static string GetFullyQualifiedTargetTypeName(this IGenerationOptions options, ITypeSymbolProvider classModel, Func<string, string> transform)
+        {
+            var symbol = options.GetTargetTypeName(classModel);
+
+            var transformed = transform(classModel.TypeSymbol.ContainingNamespace.ToFullName());
+
+            return transformed + "." + symbol;
         }
     }
 }

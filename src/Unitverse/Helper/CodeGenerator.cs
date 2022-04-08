@@ -66,7 +66,7 @@
                 {
                     if (generationItem.TargetProjectItems != null)
                     {
-                        AddTargetItem(generationItem, generationItems.Count == 1);
+                        AddTargetItem(package, generationItem, generationItems.Count == 1, messageLogger);
                     }
                     else
                     {
@@ -108,10 +108,10 @@
             }
         }
 
-        private static void AddTargetItem(GenerationItem generationItem, bool withActivation)
+        private static void AddTargetItem(IUnitTestGeneratorPackage package, GenerationItem generationItem, bool withActivation, IMessageLogger logger)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (TargetFinder.FindExistingTargetItem(generationItem.Source, generationItem.Mapping, out var targetItem) != FindTargetStatus.Found)
+            if (TargetFinder.FindExistingTargetItem(generationItem.SourceSymbol, generationItem.Source, generationItem.Mapping, package, logger, out var targetItem) != FindTargetStatus.Found)
             {
                 File.WriteAllText(generationItem.TargetFileName, generationItem.TargetContent);
                 targetItem = generationItem.TargetProjectItems.AddFromFile(generationItem.TargetFileName);
@@ -172,19 +172,24 @@
             }
         }
 
-        private static async Task GenerateItemAsync(bool withRegeneration, Solution solution, GenerationItem generationItem, bool isSingleItemGeneration, IMessageLogger messageLogger)
+        public static Task<SemanticModel> GetSemanticModelAsync(Solution solution, ProjectItemModel source)
         {
-            var targetProject = solution.Projects.FirstOrDefault(x => string.Equals(x.Name, generationItem.Source.SourceProjectName, StringComparison.Ordinal));
-            var documents = solution.GetDocumentIdsWithFilePath(generationItem.Source.FilePath);
-            var documentId = documents.FirstOrDefault(x => x.ProjectId == targetProject?.Id) ?? documents.FirstOrDefault();
+            var sourceProject = solution.Projects.FirstOrDefault(x => string.Equals(x.Name, source.SourceProjectName, StringComparison.Ordinal));
+            var documents = solution.GetDocumentIdsWithFilePath(source.FilePath);
+            var documentId = documents.FirstOrDefault(x => x.ProjectId == sourceProject?.Id) ?? documents.FirstOrDefault();
             if (documentId == null)
             {
-                throw new InvalidOperationException("Could not find document in solution with file path '" + generationItem.Source.FilePath + "'");
+                throw new InvalidOperationException("Could not find document in solution with file path '" + source.FilePath + "'");
             }
 
             var document = solution.GetDocument(documentId);
 
-            var semanticModel = await document.GetSemanticModelAsync().ConfigureAwait(true);
+            return document.GetSemanticModelAsync();
+        }
+
+        private static async Task GenerateItemAsync(bool withRegeneration, Solution solution, GenerationItem generationItem, bool isSingleItemGeneration, IMessageLogger messageLogger)
+        {
+            var semanticModel = await GetSemanticModelAsync(solution, generationItem.Source).ConfigureAwait(true);
 
             var tree = await semanticModel.SyntaxTree.GetRootAsync().ConfigureAwait(true);
             if (!tree.DescendantNodes().Any(node => node is ClassDeclarationSyntax || node is StructDeclarationSyntax || node is RecordDeclarationSyntax))
@@ -219,11 +224,11 @@
 
                     var targetSemanticModel = await targetDocument.GetSemanticModelAsync().ConfigureAwait(true);
 
-                    return await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, targetSemanticModel, withRegeneration, generationItem.Options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
+                    return await CoreGenerator.Generate(semanticModel, generationItem.SourceNode, targetSemanticModel, withRegeneration, generationItem.Options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
                 }
             }
 
-            return await CoreGenerator.Generate(semanticModel, generationItem.SourceSymbol, null, withRegeneration, generationItem.Options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
+            return await CoreGenerator.Generate(semanticModel, generationItem.SourceNode, null, withRegeneration, generationItem.Options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
         }
     }
 }

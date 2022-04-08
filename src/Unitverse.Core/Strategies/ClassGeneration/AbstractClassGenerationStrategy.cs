@@ -49,7 +49,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var targetTypeName = _frameworkSet.GetTargetTypeName(model, true);
+            var targetTypeName = _frameworkSet.GetTargetTypeName(model);
             var classDeclaration = SyntaxFactory.ClassDeclaration(targetTypeName);
 
             classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));

@@ -26,7 +26,9 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
 
             var options = Substitute.For<INamingOptions>();
             options.ImplementsIComparableNamingPattern.Returns("ImplementsIComparable{0}");
-            _frameworkSet = new FrameworkSet(new NUnit3TestFramework(Substitute.For<IUnitTestGeneratorOptions>()), new NSubstituteMockingFramework(generationContext), new NUnit3TestFramework(Substitute.For<IUnitTestGeneratorOptions>()), new NamingProvider(options), generationContext, "{0}Tests", Substitute.For<IUnitTestGeneratorOptions>());
+            var fullOptions = Substitute.For<IUnitTestGeneratorOptions>();
+            fullOptions.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
+            _frameworkSet = new FrameworkSet(new NUnit3TestFramework(Substitute.For<IUnitTestGeneratorOptions>()), new NSubstituteMockingFramework(generationContext), new NUnit3TestFramework(Substitute.For<IUnitTestGeneratorOptions>()), new NamingProvider(options), generationContext, fullOptions);
             _testClass = new ComparableGenerationStrategy(_frameworkSet);
         }
 

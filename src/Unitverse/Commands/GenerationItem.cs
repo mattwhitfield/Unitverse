@@ -42,7 +42,8 @@
 
         public ProjectItemModel Source { get; }
         public ProjectMapping Mapping { get; }
-        public SyntaxNode SourceSymbol { get; set; }
+        public ISymbol SourceSymbol { get; set; }
+        public SyntaxNode SourceNode { get; set; }
 
         public string TargetContent { get; set; }
 

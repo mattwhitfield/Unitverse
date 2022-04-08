@@ -29,6 +29,7 @@
             AssertComment = options.AssertComment;
             UserInterfaceMode = options.UserInterfaceMode;
             RememberManuallySelectedTargetProjectByDefault = options.RememberManuallySelectedTargetProjectByDefault;
+            FallbackTargetFinding = options.FallbackTargetFinding;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -66,5 +67,7 @@
         public UserInterfaceModes UserInterfaceMode { get; set; }
 
         public bool RememberManuallySelectedTargetProjectByDefault { get; set; }
+
+        public FallbackTargetFindingMethod FallbackTargetFinding { get; set; }
     }
 }

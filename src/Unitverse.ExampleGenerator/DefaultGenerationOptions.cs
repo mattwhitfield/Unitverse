@@ -39,5 +39,7 @@
         public UserInterfaceModes UserInterfaceMode => UserInterfaceModes.OnlyWhenControlPressed;
 
         public bool RememberManuallySelectedTargetProjectByDefault => true;
+
+        public FallbackTargetFindingMethod FallbackTargetFinding => FallbackTargetFindingMethod.None;
     }
 }

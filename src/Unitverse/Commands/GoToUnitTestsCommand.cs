@@ -91,7 +91,10 @@
                         throw new InvalidOperationException("Cannot go to tests for this item because no supported files were found");
                     }
 
-                    GoToTestsHelper.FindTestsFor(source, _package);
+                    var logger = new AggregateLogger();
+                    logger.Initialize();
+
+                    GoToTestsHelper.FindTestsFor(null, source, _package, logger);
                 }, _package);
         }
     }

@@ -1,27 +1,24 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.VisualStudio.Shell;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Unitverse.Helper
 {
     public static class GoToTestsHelper
     {
-        public static void FindTestsFor(ProjectItemModel source, IUnitTestGeneratorPackage package)
+        public static void FindTestsFor(ISymbol symbol, ProjectItemModel source, IUnitTestGeneratorPackage package, AggregateLogger logger)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, package.Options, false, false);
 
-            var status = TargetFinder.FindExistingTargetItem(source, mapping, out var targetItem);
+            var status = TargetFinder.FindExistingTargetItem(symbol, source, mapping, package, logger, out var targetItem);
 
             // retry the find without taking into account manually selected mappings if we didn't find it
             if (status != FindTargetStatus.Found)
             {
                 mapping = ProjectMappingFactory.CreateMappingFor(source.Project, package.Options, false, true);
-                status = TargetFinder.FindExistingTargetItem(source, mapping, out targetItem);
+                status = TargetFinder.FindExistingTargetItem(symbol, source, mapping, package, logger, out targetItem);
             }
 
             switch (status)

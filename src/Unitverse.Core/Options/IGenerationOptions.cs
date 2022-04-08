@@ -37,5 +37,7 @@
         UserInterfaceModes UserInterfaceMode { get; }
 
         bool RememberManuallySelectedTargetProjectByDefault { get; }
+
+        FallbackTargetFindingMethod FallbackTargetFinding { get; }
     }
 }

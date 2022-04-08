@@ -99,5 +99,105 @@ namespace Unitverse.Core.Tests.Helpers
             _baseOptions.TestTypeNaming.Returns("5252532");
             Assert.That(instance.TestTypeNaming, Is.EqualTo("5252532"));
         }
+
+        [Test]
+        public void CanGetEmitUsingsOutsideNamespace()
+        {
+            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
+            _baseOptions.EmitUsingsOutsideNamespace.Returns(true);
+            Assert.That(instance.EmitUsingsOutsideNamespace, Is.EqualTo(true));
+            _baseOptions.EmitUsingsOutsideNamespace.Returns(false);
+            Assert.That(instance.EmitUsingsOutsideNamespace, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void CanGetEmitTestsForInternals()
+        {
+            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
+            _baseOptions.EmitTestsForInternals.Returns(true);
+            Assert.That(instance.EmitTestsForInternals, Is.EqualTo(true));
+            _baseOptions.EmitTestsForInternals.Returns(false);
+            Assert.That(instance.EmitTestsForInternals, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void CanGetPartialGenerationAllowed()
+        {
+            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
+            _baseOptions.PartialGenerationAllowed.Returns(true);
+            Assert.That(instance.PartialGenerationAllowed, Is.EqualTo(true));
+            _baseOptions.PartialGenerationAllowed.Returns(false);
+            Assert.That(instance.PartialGenerationAllowed, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void CanGetEmitSubclassForProtectedMethods()
+        {
+            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
+            _baseOptions.EmitSubclassForProtectedMethods.Returns(true);
+            Assert.That(instance.EmitSubclassForProtectedMethods, Is.EqualTo(true));
+            _baseOptions.EmitSubclassForProtectedMethods.Returns(false);
+            Assert.That(instance.EmitSubclassForProtectedMethods, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void CanGetAutomaticallyConfigureMocks()
+        {
+            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
+            _baseOptions.AutomaticallyConfigureMocks.Returns(true);
+            Assert.That(instance.AutomaticallyConfigureMocks, Is.EqualTo(true));
+            _baseOptions.AutomaticallyConfigureMocks.Returns(false);
+            Assert.That(instance.AutomaticallyConfigureMocks, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void CanGetArrangeComment()
+        {
+            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
+            _baseOptions.ArrangeComment.Returns("ArrangeYo");
+            Assert.That(instance.ArrangeComment, Is.EqualTo("ArrangeYo"));
+        }
+
+        [Test]
+        public void CanGetActComment()
+        {
+            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
+            _baseOptions.ActComment.Returns("ActYo");
+            Assert.That(instance.ActComment, Is.EqualTo("ActYo"));
+        }
+
+        [Test]
+        public void CanGetAssertComment()
+        {
+            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
+            _baseOptions.AssertComment.Returns("AssertYo");
+            Assert.That(instance.AssertComment, Is.EqualTo("AssertYo"));
+        }
+
+        [Test]
+        public void CanGetUserInterfaceMode()
+        {
+            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
+            _baseOptions.UserInterfaceMode.Returns(UserInterfaceModes.OnlyWhenControlPressed);
+            Assert.That(instance.UserInterfaceMode, Is.EqualTo(UserInterfaceModes.OnlyWhenControlPressed));
+        }
+
+        [Test]
+        public void CanGetRememberManuallySelectedTargetProjectByDefault()
+        {
+            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
+            _baseOptions.RememberManuallySelectedTargetProjectByDefault.Returns(true);
+            Assert.That(instance.RememberManuallySelectedTargetProjectByDefault, Is.EqualTo(true));
+            _baseOptions.RememberManuallySelectedTargetProjectByDefault.Returns(false);
+            Assert.That(instance.RememberManuallySelectedTargetProjectByDefault, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void CanGetFallbackTargetFinding()
+        {
+            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null);
+            _baseOptions.FallbackTargetFinding.Returns(FallbackTargetFindingMethod.TypeInAnyNamespace);
+            Assert.That(instance.FallbackTargetFinding, Is.EqualTo(FallbackTargetFindingMethod.TypeInAnyNamespace));
+        }
     }
 }

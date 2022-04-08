@@ -53,9 +53,9 @@
             menuItem.BeforeQueryStatus += (s, e) =>
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
-                var textView = GetTextView();
+                var textView = TextViewHelper.GetTextView(ServiceProvider);
 
-                var methodTask = package.JoinableTaskFactory.RunAsync(async () => await GenerateTestForSymbolCommand.GetTargetSymbolAsync(textView).ConfigureAwait(true));
+                var methodTask = package.JoinableTaskFactory.RunAsync(async () => await TextViewHelper.GetTargetSymbolAsync(textView).ConfigureAwait(true));
                 var tuple = methodTask.Join();
                 var symbol = tuple?.Item3;
                 menuItem.Visible = symbol != null;
@@ -91,7 +91,7 @@
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
 
-                var textView = GetTextView();
+                var textView = TextViewHelper.GetTextView(ServiceProvider);
                 if (textView == null)
                 {
                     throw new InvalidOperationException("Could not find the text view");
@@ -103,24 +103,15 @@
                 var item = VsProjectHelper.GetProjectItem(document.FilePath);
 
                 var source = new ProjectItemModel(item);
-                GoToTestsHelper.FindTestsFor(source, _package);
+
+                var methodTask = _package.JoinableTaskFactory.RunAsync(async () => await TextViewHelper.GetTargetSymbolAsync(textView).ConfigureAwait(true));
+                var tuple = methodTask.Join();
+
+                var logger = new AggregateLogger();
+                logger.Initialize();
+
+                GoToTestsHelper.FindTestsFor(tuple.Item2, source, _package, logger);
             }, _package);
-        }
-
-        private IWpfTextView GetTextView()
-        {
-            var textManager = (IVsTextManager)ServiceProvider.GetService(typeof(SVsTextManager));
-            if (textManager != null)
-            {
-                textManager.GetActiveView(1, null, out var textView);
-
-                var componentModel = (IComponentModel)ServiceProvider.GetService(typeof(SComponentModel));
-                var adapterService = componentModel?.GetService<Microsoft.VisualStudio.Editor.IVsEditorAdaptersFactoryService>();
-
-                return adapterService?.GetWpfTextView(textView);
-            }
-
-            return null;
         }
     }
 }

@@ -68,9 +68,9 @@
             menuItem.BeforeQueryStatus += (s, e) =>
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
-                var textView = GetTextView();
+                var textView = TextViewHelper.GetTextView(ServiceProvider);
 
-                var methodTask = package.JoinableTaskFactory.RunAsync(async () => await GetTargetSymbolAsync(textView).ConfigureAwait(true));
+                var methodTask = package.JoinableTaskFactory.RunAsync(async () => await TextViewHelper.GetTargetSymbolAsync(textView).ConfigureAwait(true));
                 var tuple = methodTask.Join();
                 var symbol = tuple?.Item2;
                 var baseType = tuple?.Item3;
@@ -132,44 +132,7 @@
             _instance = new GenerateTestForSymbolCommand(package, commandService);
         }
 
-        internal static async Task<Tuple<SyntaxNode, ISymbol, TypeInfo>> GetTargetSymbolAsync(ITextView textView)
-        {
-            var caretPosition = textView.Caret.Position.BufferPosition;
-
-            var document = caretPosition.Snapshot.GetOpenDocumentInCurrentContextWithChanges();
-            if (document != null)
-            {
-                var syntaxNode = await document.GetSyntaxRootAsync().ConfigureAwait(true);
-                var semanticModel = await document.GetSemanticModelAsync().ConfigureAwait(true);
-
-                var syntaxToken = syntaxNode.FindToken(caretPosition).Parent;
-
-                if (syntaxToken != null)
-                {
-                    var declaration =
-                        syntaxToken.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().FirstOrDefault() ??
-                        syntaxToken.AncestorsAndSelf().OfType<PropertyDeclarationSyntax>().FirstOrDefault() ??
-                        syntaxToken.AncestorsAndSelf().OfType<ConstructorDeclarationSyntax>().FirstOrDefault() ??
-                        syntaxToken.AncestorsAndSelf().OfType<IndexerDeclarationSyntax>().FirstOrDefault() ??
-                        syntaxToken as RecordDeclarationSyntax ??
-                        syntaxToken as StructDeclarationSyntax ??
-                        syntaxToken as ClassDeclarationSyntax as SyntaxNode;
-
-                    if (declaration != null)
-                    {
-                        return Tuple.Create(declaration, semanticModel.GetDeclaredSymbol(declaration), default(TypeInfo));
-                    }
-
-                    if (syntaxToken.Parent is BaseTypeSyntax)
-                    {
-                        var symbol = semanticModel.GetTypeInfo(syntaxToken);
-                        return Tuple.Create(syntaxToken, default(ISymbol), symbol);
-                    }
-                }
-            }
-
-            return null;
-        }
+        
 
 #pragma warning disable VSTHRD010 // checks are present in called member
         private void Execute(object sender, EventArgs e)
@@ -190,7 +153,7 @@
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
 
-                var textView = GetTextView();
+                var textView = TextViewHelper.GetTextView(ServiceProvider);
                 if (textView == null)
                 {
                     throw new InvalidOperationException("Could not find the text view");
@@ -215,32 +178,17 @@
                     () => Attempt.ActionAsync(
                         async () =>
                     {
-                        var methodSymbol = await GetTargetSymbolAsync(textView).ConfigureAwait(true);
+                        var methodSymbol = await TextViewHelper.GetTargetSymbolAsync(textView).ConfigureAwait(true);
 
                         if (methodSymbol != null)
                         {
-                            generationItem.SourceSymbol = methodSymbol.Item1;
+                            generationItem.SourceNode = methodSymbol.Item1;
+                            generationItem.SourceSymbol = methodSymbol.Item2;
 
                             await CodeGenerator.GenerateCodeAsync(new[] { generationItem }, withRegeneration, _package, messageLogger).ConfigureAwait(true);
                         }
                     }, _package));
             }, _package);
-        }
-
-        private IWpfTextView GetTextView()
-        {
-            var textManager = (IVsTextManager)ServiceProvider.GetService(typeof(SVsTextManager));
-            if (textManager != null)
-            {
-                textManager.GetActiveView(1, null, out var textView);
-
-                var componentModel = (IComponentModel)ServiceProvider.GetService(typeof(SComponentModel));
-                var adapterService = componentModel?.GetService<Microsoft.VisualStudio.Editor.IVsEditorAdaptersFactoryService>();
-
-                return adapterService?.GetWpfTextView(textView);
-            }
-
-            return null;
         }
     }
 }

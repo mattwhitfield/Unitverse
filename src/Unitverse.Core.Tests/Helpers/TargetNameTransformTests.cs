@@ -79,9 +79,9 @@ namespace Unitverse.Core.Tests.Helpers
         public static void CanCallGetTargetTypeName()
         {
             var frameworkSet = Substitute.For<IFrameworkSet>();
-            frameworkSet.TestTypeNaming.Returns("{0}Tests");
+            frameworkSet.Options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
             var classModel = ClassModelProvider.Instance;
-            var result = frameworkSet.GetTargetTypeName(classModel, false);
+            var result = frameworkSet.GetTargetTypeName(classModel);
             Assert.That(result, Is.EqualTo(ClassModelProvider.Instance.ClassName + "Tests"));
         }
 
@@ -89,22 +89,22 @@ namespace Unitverse.Core.Tests.Helpers
         public static void CanCallGetTargetTypeNameWithGenericDisambiguation()
         {
             var frameworkSet = Substitute.For<IFrameworkSet>();
-            frameworkSet.TestTypeNaming.Returns("{0}Tests");
+            frameworkSet.Options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
             var classModel = ClassModelProvider.GenericInstance;
-            var result = frameworkSet.GetTargetTypeName(classModel, true);
+            var result = frameworkSet.GetTargetTypeName(classModel);
             Assert.That(result, Is.EqualTo(ClassModelProvider.GenericInstance.ClassName + "_1Tests"));
         }
 
         [Test]
         public static void CannotCallGetTargetTypeNameWithNullFrameworkSet()
         {
-            Assert.Throws<ArgumentNullException>(() => default(IFrameworkSet).GetTargetTypeName(ClassModelProvider.Instance, false));
+            Assert.Throws<ArgumentNullException>(() => default(IFrameworkSet).GetTargetTypeName(ClassModelProvider.Instance));
         }
 
         [Test]
         public static void CannotCallGetTargetTypeNameWithNullClassModel()
         {
-            Assert.Throws<ArgumentNullException>(() => Substitute.For<IFrameworkSet>().GetTargetTypeName(default(ClassModel), false));
+            Assert.Throws<ArgumentNullException>(() => Substitute.For<IFrameworkSet>().GetTargetTypeName(default(ClassModel)));
         }
     }
 }

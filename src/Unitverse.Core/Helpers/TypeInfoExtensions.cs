@@ -19,7 +19,7 @@
             return GetLastNamePart(name);
         }
 
-        public static string ToFullName(this ITypeSymbol symbol)
+        public static string ToFullName(this ISymbol symbol)
         {
             if (symbol == null)
             {
