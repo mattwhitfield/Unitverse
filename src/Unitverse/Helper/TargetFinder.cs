@@ -15,13 +15,14 @@
 
     internal static class TargetFinder
     {
-        public static FindTargetStatus FindExistingTargetItem(ISymbol symbol, ProjectItemModel source, ProjectMapping mapping, IUnitTestGeneratorPackage package, IMessageLogger messageLogger, out ProjectItem targetItem)
+        public static FindTargetStatus FindExistingTargetItem(ISymbol symbol, ProjectItemModel source, ProjectMapping mapping, IUnitTestGeneratorPackage package, IMessageLogger messageLogger, out ProjectItem targetItem, out bool wasRedirection)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
 #pragma warning disable VSTHRD010
             var nameParts = VsProjectHelper.GetNameParts(source.Item);
             targetItem = null;
+            wasRedirection = false;
 
             var targetProject = mapping.TargetProject;
             if (targetProject == null)
@@ -68,6 +69,7 @@
                     targetItem = VsProjectHelper.GetProjectItem(targetFileName);
                     if (targetItem != null)
                     {
+                        wasRedirection = true;
                         return FindTargetStatus.Found;
                     }
                 }

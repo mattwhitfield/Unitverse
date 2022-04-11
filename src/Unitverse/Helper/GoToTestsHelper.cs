@@ -12,13 +12,13 @@ namespace Unitverse.Helper
 
             var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, package.Options, false, false, null);
 
-            var status = TargetFinder.FindExistingTargetItem(symbol, source, mapping, package, logger, out var targetItem);
+            var status = TargetFinder.FindExistingTargetItem(symbol, source, mapping, package, logger, out var targetItem, out _);
 
             // retry the find without taking into account manually selected mappings if we didn't find it
             if (status != FindTargetStatus.Found)
             {
                 mapping = ProjectMappingFactory.CreateMappingFor(source.Project, package.Options, false, true, null);
-                status = TargetFinder.FindExistingTargetItem(symbol, source, mapping, package, logger, out targetItem);
+                status = TargetFinder.FindExistingTargetItem(symbol, source, mapping, package, logger, out targetItem, out _);
             }
 
             switch (status)

@@ -147,7 +147,8 @@
                 {
                     var projectItem = source.Item;
 
-                    if (!withRegeneration && !mapping.Options.GenerationOptions.PartialGenerationAllowed && TargetFinder.FindExistingTargetItem(null, source, mapping, _package, messageLogger, out _) == FindTargetStatus.Found)
+                    var targetItemStatus = TargetFinder.FindExistingTargetItem(null, source, mapping, _package, messageLogger, out var foundTarget, out var wasRedirection);
+                    if (!withRegeneration && !mapping.Options.GenerationOptions.PartialGenerationAllowed && targetItemStatus == FindTargetStatus.Found)
                     {
                         if (isSingleCreation)
                         {
@@ -160,7 +161,13 @@
                         continue;
                     }
 
-                    generationItems.Add(new GenerationItem(source, mapping));
+                    var item = new GenerationItem(source, mapping);
+                    if (foundTarget != null && wasRedirection)
+                    {
+                        item.OverrideTargetFileName = Path.GetFileName(foundTarget.Name);
+                    }
+
+                    generationItems.Add(item);
                 }
 
                 if (generationItems.Any())
