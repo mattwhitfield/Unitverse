@@ -29,7 +29,7 @@ namespace Unitverse.Views
             StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions, false).ToList();
             NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions, false).ToList();
 
-            Options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false);
+            Options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false, new Dictionary<string, string>());
 
             foreach (var item in GenerationOptionsItems.Concat(StrategyOptionsItems).Concat(NamingOptionsItems))
             {

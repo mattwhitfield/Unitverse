@@ -50,7 +50,7 @@ namespace Unitverse.Core.Tests.Helpers
             generationOptions.FrameworkType.Returns(TestFrameworkTypes.NUnit3);
             generationOptions.MockingFrameworkType.Returns(MockingFrameworkType.NSubstitute);
             generationOptions.TestTypeNaming.Returns("{0}Tests");
-            var options = new UnitTestGeneratorOptions(generationOptions, Substitute.For<INamingOptions>(), new DefaultStrategyOptions(), false);
+            var options = new UnitTestGeneratorOptions(generationOptions, Substitute.For<INamingOptions>(), new DefaultStrategyOptions(), false, new Dictionary<string, string>());
             var frameworkSet = FrameworkSetFactory.Create(options);
 
             var visitedTypes = new HashSet<string>();

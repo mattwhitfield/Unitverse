@@ -8,7 +8,7 @@
 
     public static class EditableItemExtractor
     {
-        public static IEnumerable<DisplayItem> ExtractFrom(object source, object modifiableInstance, bool skipExcluded)
+        public static IEnumerable<DisplayItem> ExtractFrom(object source, object modifiableInstance, bool skipExcluded, Func<string, string> sourceFileExtractor = null)
         {
             if (source is null)
             {
@@ -47,23 +47,26 @@
                     var text = GetAttribute<DisplayNameAttribute>(property)?.DisplayName ?? property.Name;
                     var description = GetAttribute<DescriptionAttribute>(property)?.Description ?? property.Name;
 
+                    var shouldShowSource = sourceFileExtractor != null;
+                    var sourceFile = sourceFileExtractor?.Invoke(property.Name);
+
                     if (propertyType == typeof(string))
                     {
                         var value = (string)modifiableProperty.GetValue(modifiableInstance, null);
                         Action<string> setValue = s => modifiableProperty.SetValue(modifiableInstance, s, null);
-                        list.Add(new StringEditableItem(text, description, modifiableProperty.Name, value, setValue));
+                        list.Add(new StringEditableItem(text, description, modifiableProperty.Name, value, setValue, shouldShowSource, sourceFile));
                     }
                     else if (propertyType == typeof(bool))
                     {
                         var value = (bool)modifiableProperty.GetValue(modifiableInstance, null);
                         Action<bool> setValue = b => modifiableProperty.SetValue(modifiableInstance, b, null);
-                        list.Add(new BooleanEditableItem(text, description, modifiableProperty.Name, value, setValue));
+                        list.Add(new BooleanEditableItem(text, description, modifiableProperty.Name, value, setValue, shouldShowSource, sourceFile));
                     }
                     else if (propertyType.IsEnum)
                     {
                         var value = modifiableProperty.GetValue(modifiableInstance, null);
                         Action<object> setValue = o => modifiableProperty.SetValue(modifiableInstance, o, null);
-                        list.Add(new EnumEditableItem(text, description, modifiableProperty.Name, value, setValue, propertyType));
+                        list.Add(new EnumEditableItem(text, description, modifiableProperty.Name, value, setValue, propertyType, shouldShowSource, sourceFile));
                     }
                     else
                     {

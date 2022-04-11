@@ -3,7 +3,7 @@
     public class HeaderDisplayItem : DisplayItem
     {
         public HeaderDisplayItem(string text)
-            : base(text)
+            : base(text, false, null)
         {
         }
 

@@ -108,7 +108,8 @@ namespace Unitverse.ExampleGenerator
             var namingOptions = new MutableNamingOptions(new DefaultNamingOptions());
             var strategyOptions = new MutableStrategyOptions(new DefaultStrategyOptions());
 
-            var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false);
+            var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false, new Dictionary<string, string>());
+
 
             var lines = classAsText.Lines().Where(x => x.StartsWith("// #", StringComparison.Ordinal)).Select(x => x.Substring(4).Trim()).ToList();
             if (lines.Any())

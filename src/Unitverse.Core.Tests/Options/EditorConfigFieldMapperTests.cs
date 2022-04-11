@@ -5,6 +5,9 @@ namespace Unitverse.Core.Tests.Options
     using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Options;
+    using FluentAssertions;
+    using System.Reflection;
+    using System.Linq;
 
     [TestFixture]
     public static class EditorConfigFieldMapperTests
@@ -29,6 +32,22 @@ namespace Unitverse.Core.Tests.Options
         public static void CannotCallApplyToWithNullTarget()
         {
             Assert.Throws<ArgumentNullException>(() => new Dictionary<string, string>().ApplyTo(default(MutableGenerationOptions)));
+        }
+
+        [Test]
+        public static void CanCallCreateMutatorSet()
+        {
+            // Act
+            var result = EditorConfigFieldMapper.CreateMutatorSet<MutableGenerationOptions>();
+            var second = EditorConfigFieldMapper.CreateMutatorSet<MutableGenerationOptions>();
+
+            // Assert
+            foreach (var member in typeof(MutableGenerationOptions).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite))
+            {
+                result.Should().ContainKey(member.Name);
+            }
+
+            second.Should().BeSameAs(result);
         }
     }
 }

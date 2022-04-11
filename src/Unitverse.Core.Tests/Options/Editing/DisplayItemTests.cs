@@ -10,7 +10,7 @@ namespace Unitverse.Core.Tests.Options.Editing
     {
         private class TestDisplayItem : DisplayItem
         {
-            public TestDisplayItem(string text) : base(text)
+            public TestDisplayItem(string text, bool showSourceIcon, string sourceFileName) : base(text, showSourceIcon, sourceFileName)
             {
             }
 
@@ -29,14 +29,14 @@ namespace Unitverse.Core.Tests.Options.Editing
         public void SetUp()
         {
             _text = "TestValue1727859796";
-            _testClass = new TestDisplayItem(_text);
+            _testClass = new TestDisplayItem(_text, false, null);
         }
 
         [Test]
         public void CanConstruct()
         {
             // Act
-            var instance = new TestDisplayItem(_text);
+            var instance = new TestDisplayItem(_text, false, null);
             
             // Assert
             instance.Should().NotBeNull();
@@ -47,7 +47,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [TestCase("   ")]
         public void CannotConstructWithInvalidText(string value)
         {
-            FluentActions.Invoking(() => new TestDisplayItem(value)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new TestDisplayItem(value, false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
@@ -81,10 +81,30 @@ namespace Unitverse.Core.Tests.Options.Editing
         }
 
         [Test]
+        public void ShowVsConfigSourceIsInitializedCorrectly()
+        {
+            _testClass.ShowVsConfigSource.Should().Be(false);
+            _testClass = new TestDisplayItem(_text, true, null);
+            _testClass.ShowVsConfigSource.Should().Be(true);
+            _testClass = new TestDisplayItem(_text, true, "someFile.Dat");
+            _testClass.ShowVsConfigSource.Should().Be(false);
+        }
+
+        [Test]
+        public void ShowFileConfigSourceeIsInitializedCorrectly()
+        {
+            _testClass.ShowFileConfigSource.Should().Be(false);
+            _testClass = new TestDisplayItem(_text, true, null);
+            _testClass.ShowFileConfigSource.Should().Be(false);
+            _testClass = new TestDisplayItem(_text, true, "someFile.Dat");
+            _testClass.ShowFileConfigSource.Should().Be(true);
+        }
+
+        [Test]
         public void DoubleAmpersandInTextIsReplaced()
         {
             _text = "Something && Something Else";
-            _testClass = new TestDisplayItem(_text);
+            _testClass = new TestDisplayItem(_text, false, null);
             _testClass.Text.Should().Be("Something & Something Else");
         }
     }

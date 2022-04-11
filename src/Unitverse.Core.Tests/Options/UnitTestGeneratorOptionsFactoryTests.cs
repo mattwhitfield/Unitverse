@@ -72,6 +72,9 @@ namespace Unitverse.Core.Tests.Options
                 var result = UnitTestGeneratorOptionsFactory.Create(solutionFilePath, generationOptions, namingOptions, strategyOptions, false);
                 Assert.That(result.GenerationOptions.FrameworkType, Is.EqualTo(TestFrameworkTypes.NUnit2));
                 Assert.That(result.GenerationOptions.MockingFrameworkType, Is.EqualTo(MockingFrameworkType.NSubstitute));
+
+                Assert.That(result.GetFieldSourceFileName(nameof(IGenerationOptions.FrameworkType)), Is.EqualTo(Path.Combine(pathC, CoreConstants.ConfigFileName)));
+                Assert.That(result.GetFieldSourceFileName(nameof(IGenerationOptions.MockingFrameworkType)), Is.Null);
             }
             finally
             {

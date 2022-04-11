@@ -5,7 +5,7 @@
 
     public abstract class DisplayItem : INotifyPropertyChanged
     {
-        public DisplayItem(string text)
+        protected DisplayItem(string text, bool showSourceIcon, string sourceFileName)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -13,7 +13,34 @@
             }
 
             Text = text.Replace("&&", "&");
+            SourceFileName = sourceFileName;
+            if (showSourceIcon)
+            {
+                ShowVsConfigSource = string.IsNullOrWhiteSpace(sourceFileName);
+                ShowFileConfigSource = !ShowVsConfigSource;
+            }
         }
+
+        public void SetSourceState(bool showAutoDetectionSource, bool showVsConfigSource)
+        {
+            if (ShowVsConfigSource || ShowFileConfigSource || ShowAutoDetectionSource)
+            {
+                ShowAutoDetectionSource = showAutoDetectionSource;
+                ShowVsConfigSource = showVsConfigSource && !showAutoDetectionSource;
+                ShowFileConfigSource = !showVsConfigSource && !showAutoDetectionSource;
+                RaisePropertyChanged(nameof(ShowAutoDetectionSource));
+                RaisePropertyChanged(nameof(ShowVsConfigSource));
+                RaisePropertyChanged(nameof(ShowFileConfigSource));
+            }
+        }
+
+        public bool ShowVsConfigSource { get; private set; }
+
+        public bool ShowFileConfigSource { get; private set; }
+
+        public bool ShowAutoDetectionSource { get; private set; }
+
+        public string SourceFileName { get; }
 
         public abstract EditableItemType ItemType { get; }
 

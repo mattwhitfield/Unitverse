@@ -1,15 +1,15 @@
 ﻿using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
+using Unitverse.Core.Helpers;
 using Unitverse.Core.Options;
 using Unitverse.Core.Options.Editing;
 using Unitverse.Helper;
 using Unitverse.Options;
-using Unitverse.Core.Helpers;
-using System.Windows.Data;
-using System;
 
 namespace Unitverse.Views
 {
@@ -18,6 +18,7 @@ namespace Unitverse.Views
         private MutableGenerationOptions _originalGenerationOptions;
         private MutableGenerationOptions _generationOptions;
         private bool _allowDetachedGeneration;
+        private readonly IUnitTestGeneratorOptions _projectOptions;
 
         public GenerationDialogViewModel(Project sourceProject, IUnitTestGeneratorOptions projectOptions)
         {
@@ -31,6 +32,7 @@ namespace Unitverse.Views
             Tabs.Add(new TabItem("Naming Options", false, TabItemType.NamingOptions));
 
             _selectedTab = Tabs.First();
+            _projectOptions = projectOptions;
 
             _generationOptions = new MutableGenerationOptions(projectOptions.GenerationOptions);
             var strategyOptions = new MutableStrategyOptions(projectOptions.StrategyOptions);
@@ -39,16 +41,16 @@ namespace Unitverse.Views
             _originalGenerationOptions = new MutableGenerationOptions(_generationOptions);
             _allowDetachedGeneration = _originalGenerationOptions.AllowGenerationWithoutTargetProject;
 
-            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), _generationOptions, true).ToList();
-            StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions, true).ToList();
-            NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions, true).ToList();
+            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), _generationOptions, true, projectOptions.GetFieldSourceFileName).ToList();
+            StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions, true, projectOptions.GetFieldSourceFileName).ToList();
+            NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions, true, projectOptions.GetFieldSourceFileName).ToList();
 
             Projects.Add(new ObjectItem("Generate detached test class(es)", null));
 #pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
             foreach (var project in VsProjectHelper.FindProjects(sourceProject.DTE.Solution).Where(x => x.UniqueName != sourceProject.UniqueName).OrderBy(x => x.Name))
 #pragma warning restore VSTHRD010 // Invoke single-threaded types on Main thread
             {
-                Projects.Add(new ObjectItem(project.Name, project)); 
+                Projects.Add(new ObjectItem(project.Name, project));
             }
 
             var targetProjectName = projectOptions.GenerationOptions.GetTargetProjectName(sourceProject.Name);
@@ -60,7 +62,7 @@ namespace Unitverse.Views
 
             _rememberProjectSelection = projectOptions.GenerationOptions.RememberManuallySelectedTargetProjectByDefault;
 
-            ResultingMapping = new ProjectMapping(sourceProject, selectedProject, selectedProject?.Name, new UnitTestGeneratorOptions(_generationOptions, namingOptions, strategyOptions, projectOptions.StatisticsCollectionEnabled));
+            ResultingMapping = new ProjectMapping(sourceProject, selectedProject, selectedProject?.Name, new UnitTestGeneratorOptions(_generationOptions, namingOptions, strategyOptions, projectOptions.StatisticsCollectionEnabled, new Dictionary<string, string>()));
 
             ApplyTargetProjectFramework();
         }
@@ -130,7 +132,7 @@ namespace Unitverse.Views
         public TabItem SelectedTab
         {
             get { return _selectedTab; }
-            set 
+            set
             {
                 if (_selectedTab != value)
                 {
@@ -197,24 +199,36 @@ namespace Unitverse.Views
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
+            IGenerationOptions resolvedOptions
             if (ResultingMapping.TargetProject != null)
             {
-                var resolvedOptions = OptionsResolver.DetectFrameworks(ResultingMapping.TargetProject, _originalGenerationOptions);
-                var testFrameworkItem = GenerationOptionsItems.OfType<EnumEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.FrameworkType), StringComparison.OrdinalIgnoreCase));
-                if (testFrameworkItem != null)
-                {
-                    testFrameworkItem.SelectedItem = testFrameworkItem.Items.FirstOrDefault(x => x.Value.ToString() == resolvedOptions.FrameworkType.ToString());
-                }
-                var mockingFrameworkItem = GenerationOptionsItems.OfType<EnumEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.MockingFrameworkType), StringComparison.OrdinalIgnoreCase));
-                if (mockingFrameworkItem != null)
-                {
-                    mockingFrameworkItem.SelectedItem = mockingFrameworkItem.Items.FirstOrDefault(x => x.Value.ToString() == resolvedOptions.MockingFrameworkType.ToString());
-                }
-                var fluentAssertionsItem = GenerationOptionsItems.OfType<BooleanEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.UseFluentAssertions), StringComparison.OrdinalIgnoreCase));
-                if (fluentAssertionsItem != null)
-                {
-                    fluentAssertionsItem.Value = resolvedOptions.UseFluentAssertions;
-                }
+                resolvedOptions = OptionsResolver.DetectFrameworks(ResultingMapping.TargetProject, _originalGenerationOptions);
+            }
+            else
+            {
+                resolvedOptions = _originalGenerationOptions;
+            }
+
+            var testFrameworkItem = GenerationOptionsItems.OfType<EnumEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.FrameworkType), StringComparison.OrdinalIgnoreCase));
+            if (testFrameworkItem != null)
+            {
+                var isFromVs = string.IsNullOrWhiteSpace(_projectOptions.GetFieldSourceFileName(nameof(IGenerationOptions.FrameworkType)));
+                testFrameworkItem.SelectedItem = testFrameworkItem.Items.FirstOrDefault(x => x.Value.ToString() == resolvedOptions.FrameworkType.ToString());
+                testFrameworkItem.SetSourceState(resolvedOptions.FrameworkType != _originalGenerationOptions.FrameworkType, isFromVs);
+            }
+            var mockingFrameworkItem = GenerationOptionsItems.OfType<EnumEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.MockingFrameworkType), StringComparison.OrdinalIgnoreCase));
+            if (mockingFrameworkItem != null)
+            {
+                var isFromVs = string.IsNullOrWhiteSpace(_projectOptions.GetFieldSourceFileName(nameof(IGenerationOptions.MockingFrameworkType)));
+                mockingFrameworkItem.SelectedItem = mockingFrameworkItem.Items.FirstOrDefault(x => x.Value.ToString() == resolvedOptions.MockingFrameworkType.ToString());
+                mockingFrameworkItem.SetSourceState(resolvedOptions.MockingFrameworkType != _originalGenerationOptions.MockingFrameworkType, isFromVs);
+            }
+            var fluentAssertionsItem = GenerationOptionsItems.OfType<BooleanEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.UseFluentAssertions), StringComparison.OrdinalIgnoreCase));
+            if (fluentAssertionsItem != null)
+            {
+                var isFromVs = string.IsNullOrWhiteSpace(_projectOptions.GetFieldSourceFileName(nameof(IGenerationOptions.UseFluentAssertions)));
+                fluentAssertionsItem.Value = resolvedOptions.UseFluentAssertions;
+                fluentAssertionsItem.SetSourceState(resolvedOptions.UseFluentAssertions != _originalGenerationOptions.UseFluentAssertions, isFromVs);
             }
         }
 

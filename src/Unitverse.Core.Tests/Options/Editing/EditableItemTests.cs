@@ -10,7 +10,7 @@ namespace Unitverse.Core.Tests.Options.Editing
     {
         private class TestEditableItem : EditableItem
         {
-            public TestEditableItem(string text, string description, string fieldName) : base(text, description, fieldName)
+            public TestEditableItem(string text, string description, string fieldName) : base(text, description, fieldName, false, null)
             {
             }
 

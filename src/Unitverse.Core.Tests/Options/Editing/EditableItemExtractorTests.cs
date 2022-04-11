@@ -20,7 +20,7 @@ namespace Unitverse.Core.Tests.Options.Editing
             var modifiableSource = new MutableGenerationOptions(source);
 
             // Act
-            var result = EditableItemExtractor.ExtractFrom(source, modifiableSource, withSkipping).ToList();
+            var result = EditableItemExtractor.ExtractFrom(source, modifiableSource, withSkipping, str => str == nameof(IGenerationOptions.ArrangeComment) ? "file" : null).ToList();
 
             // Assert
             result.Should().Contain(x => x.ItemType == EditableItemType.String && x.Text == "Act block comment" && x is StringEditableItem && ((StringEditableItem)x).Description == "The comment to leave before any act statements (leave blank to suppress)" && ((StringEditableItem)x).Value == "freddo");
@@ -44,6 +44,14 @@ namespace Unitverse.Core.Tests.Options.Editing
                 if (property.PropertyType == typeof(string))
                 {
                     result.Should().Contain(x => x.ItemType == EditableItemType.String && x is EditableItem && ((EditableItem)x).FieldName == propertyName, propertyName);
+                    if (propertyName == nameof(IGenerationOptions.ArrangeComment))
+                    {
+                        result.OfType<StringEditableItem>().First(x => x.FieldName == propertyName).SourceFileName.Should().Be("file");
+                    }
+                    else
+                    {
+                        result.OfType<StringEditableItem>().First(x => x.FieldName == propertyName).SourceFileName.Should().BeNull();
+                    }
                 }
                 else if (property.PropertyType == typeof(bool))
                 {
