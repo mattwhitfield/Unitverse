@@ -39,9 +39,9 @@ namespace Unitverse.Core.Tests.Options
         }
 
         [Test]
-        public void CanCallSetWithNullMember()
+        public void CannotCallSetWithNullMember()
         {
-            Assert.DoesNotThrow(() => TypeMemberMutator.Set(new object(), null, "TestValue325869245"));
+            Assert.Throws<ArgumentNullException>(() => TypeMemberMutator.Set(new object(), null, "TestValue325869245"));
         }
 
         [TestCase(null)]

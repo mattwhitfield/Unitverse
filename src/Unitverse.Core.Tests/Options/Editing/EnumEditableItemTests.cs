@@ -50,7 +50,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [Test]
         public void CannotConstructWithNullSetValue()
         {
-            FluentActions.Invoking(() => new EnumEditableItem("TestValue910415667", "TestValue1550196320", "TestValue1171641232", new object(), default(Action<object>), typeof(string), false, null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new EnumEditableItem("TestValue910415667", "TestValue1550196320", "TestValue1171641232", new object(), default(Action<object>), typeof(TestEnum), false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [TestCase("   ")]
         public void CannotConstructWithInvalidText(string value)
         {
-            FluentActions.Invoking(() => new EnumEditableItem(value, "TestValue349423377", "TestValue628294131", new object(), x => { }, typeof(string), false, null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new EnumEditableItem(value, "TestValue349423377", "TestValue628294131", new object(), x => { }, typeof(TestEnum), false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(null)]
@@ -72,7 +72,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [TestCase("   ")]
         public void CannotConstructWithInvalidDescription(string value)
         {
-            FluentActions.Invoking(() => new EnumEditableItem("TestValue764192942", value, "TestValue743926900", new object(), x => { }, typeof(string), false, null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new EnumEditableItem("TestValue764192942", value, "TestValue743926900", new object(), x => { }, typeof(TestEnum), false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(null)]
@@ -80,7 +80,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [TestCase("   ")]
         public void CannotConstructWithInvalidFieldName(string value)
         {
-            FluentActions.Invoking(() => new EnumEditableItem("TestValue1822449456", "TestValue386046142", value, new object(), x => { }, typeof(string), false, null)).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new EnumEditableItem("TestValue1822449456", "TestValue386046142", value, new object(), x => { }, typeof(TestEnum), false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
