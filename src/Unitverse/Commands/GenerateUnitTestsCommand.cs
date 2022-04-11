@@ -132,7 +132,7 @@
                     throw new InvalidOperationException("Cannot generate unit tests for multiple projects at the same time, please select a single project");
                 }
 
-                var mapping = ProjectMappingFactory.CreateMappingFor(sourceProjects.Single(), baseOptions, true, false);
+                var mapping = ProjectMappingFactory.CreateMappingFor(sourceProjects.Single(), baseOptions, true, false, messageLogger);
                 if (mapping == null)
                 {
                     return;
@@ -147,7 +147,8 @@
                 {
                     var projectItem = source.Item;
 
-                    if (!withRegeneration && !mapping.Options.GenerationOptions.PartialGenerationAllowed && TargetFinder.FindExistingTargetItem(null, source, mapping, _package, messageLogger, out _) == FindTargetStatus.Found)
+                    var targetItemStatus = TargetFinder.FindExistingTargetItem(null, source, mapping, _package, messageLogger, out var foundTarget, out var wasRedirection);
+                    if (!withRegeneration && !mapping.Options.GenerationOptions.PartialGenerationAllowed && targetItemStatus == FindTargetStatus.Found)
                     {
                         if (isSingleCreation)
                         {
@@ -160,7 +161,13 @@
                         continue;
                     }
 
-                    generationItems.Add(new GenerationItem(source, mapping));
+                    var item = new GenerationItem(source, mapping);
+                    if (foundTarget != null && wasRedirection)
+                    {
+                        item.OverrideTargetFileName = Path.GetFileName(foundTarget.Name);
+                    }
+
+                    generationItems.Add(item);
                 }
 
                 if (generationItems.Any())

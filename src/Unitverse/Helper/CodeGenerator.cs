@@ -111,7 +111,7 @@
         private static void AddTargetItem(IUnitTestGeneratorPackage package, GenerationItem generationItem, bool withActivation, IMessageLogger logger)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (TargetFinder.FindExistingTargetItem(generationItem.SourceSymbol, generationItem.Source, generationItem.Mapping, package, logger, out var targetItem) != FindTargetStatus.Found)
+            if (TargetFinder.FindExistingTargetItem(generationItem.SourceSymbol, generationItem.Source, generationItem.Mapping, package, logger, out var targetItem, out _) != FindTargetStatus.Found)
             {
                 File.WriteAllText(generationItem.TargetFileName, generationItem.TargetContent);
                 targetItem = generationItem.TargetProjectItems.AddFromFile(generationItem.TargetFileName);

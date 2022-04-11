@@ -47,11 +47,13 @@
 
         public string TargetContent { get; set; }
 
+        public string OverrideTargetFileName { get; set; }
+
         public string TargetFileName
         {
             get
             {
-                var targetFileName = Mapping.Options.GenerationOptions.GetTargetFileName(Path.GetFileNameWithoutExtension(Source.FilePath)) + Path.GetExtension(Source.FilePath);
+                var targetFileName = OverrideTargetFileName ?? Mapping.Options.GenerationOptions.GetTargetFileName(Path.GetFileNameWithoutExtension(Source.FilePath)) + Path.GetExtension(Source.FilePath);
                 if (string.IsNullOrEmpty(_targetPath))
                 {
                     return targetFileName;

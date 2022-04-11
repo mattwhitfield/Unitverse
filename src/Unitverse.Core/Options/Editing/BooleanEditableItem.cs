@@ -4,8 +4,8 @@
 
     public class BooleanEditableItem : EditableItem
     {
-        public BooleanEditableItem(string text, string description, string fieldName, bool value, Action<bool> setValue)
-            : base(text, description, fieldName)
+        public BooleanEditableItem(string text, string description, string fieldName, bool value, Action<bool> setValue, bool showSourceIcon, string sourceFileName)
+            : base(text, description, fieldName, showSourceIcon, sourceFileName)
         {
             _value = value;
             _setValue = setValue ?? throw new ArgumentNullException(nameof(setValue));

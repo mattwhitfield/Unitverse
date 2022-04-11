@@ -6,48 +6,37 @@
     using System.Linq;
     using System.Reflection;
 
-    public class TypeMemberMutator
+    public delegate bool TypeMemberSetter(object instance, string fieldValue);
+
+    public static class TypeMemberMutator
     {
-        private readonly Type _targetType;
-
-        public TypeMemberMutator(Type targetType)
-        {
-            if (targetType == null)
-            {
-                throw new ArgumentNullException(nameof(targetType));
-            }
-
-            _targetType = targetType;
-        }
-
-        public void Set(object instance, string fieldName, string fieldValue)
+        public static bool Set(object instance, PropertyInfo member, string fieldValue)
         {
             if (instance == null)
             {
                 throw new ArgumentNullException(nameof(instance));
             }
 
-            if (string.IsNullOrWhiteSpace(fieldName) || string.IsNullOrWhiteSpace(fieldValue))
+            if (member is null)
             {
-                return;
+                throw new ArgumentNullException(nameof(member));
             }
 
-            var cleanFieldName = fieldName.Replace("_", string.Empty).Replace("-", string.Empty);
-            foreach (var member in _targetType.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanWrite))
+            if (string.IsNullOrWhiteSpace(fieldValue))
             {
-                if (string.Equals(member.Name, cleanFieldName, StringComparison.OrdinalIgnoreCase))
-                {
-                    try
-                    {
-                        member.SetValue(instance, Coerce(fieldValue, member.PropertyType));
-                    }
-                    catch (Exception e) when (e is TargetException || e is MethodAccessException || e is TargetInvocationException || e is InvalidCastException)
-                    {
-                    }
-
-                    break;
-                }
+                return false;
             }
+
+            try
+            {
+                member.SetValue(instance, Coerce(fieldValue, member.PropertyType));
+                return true;
+            }
+            catch (Exception e) when (e is TargetException || e is MethodAccessException || e is TargetInvocationException || e is InvalidCastException)
+            {
+            }
+
+            return false;
         }
 
         private static object Coerce(object convertibleValue, Type targetType)

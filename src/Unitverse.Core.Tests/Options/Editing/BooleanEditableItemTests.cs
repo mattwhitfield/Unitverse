@@ -23,14 +23,14 @@ namespace Unitverse.Core.Tests.Options.Editing
             _fieldName = "TestValue1029729535";
             _value = false;
             _setValue = x => { };
-            _testClass = new BooleanEditableItem(_text, _description, _fieldName, _value, _setValue);
+            _testClass = new BooleanEditableItem(_text, _description, _fieldName, _value, _setValue, false, null);
         }
 
         [Test]
         public void CanConstruct()
         {
             // Act
-            var instance = new BooleanEditableItem(_text, _description, _fieldName, _value, _setValue);
+            var instance = new BooleanEditableItem(_text, _description, _fieldName, _value, _setValue, false, null);
             
             // Assert
             instance.Should().NotBeNull();
@@ -39,7 +39,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [Test]
         public void CannotConstructWithNullSetValue()
         {
-            FluentActions.Invoking(() => new BooleanEditableItem("TestValue26046281", "TestValue994223939", "TestValue1320835479", false, default(Action<bool>))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new BooleanEditableItem("TestValue26046281", "TestValue994223939", "TestValue1320835479", false, default(Action<bool>), false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(null)]
@@ -47,7 +47,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [TestCase("   ")]
         public void CannotConstructWithInvalidText(string value)
         {
-            FluentActions.Invoking(() => new BooleanEditableItem(value, "TestValue972041960", "TestValue1741199683", false, x => { })).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new BooleanEditableItem(value, "TestValue972041960", "TestValue1741199683", false, x => { }, false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(null)]
@@ -55,7 +55,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [TestCase("   ")]
         public void CannotConstructWithInvalidDescription(string value)
         {
-            FluentActions.Invoking(() => new BooleanEditableItem("TestValue331535449", value, "TestValue1221071621", true, x => { })).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new BooleanEditableItem("TestValue331535449", value, "TestValue1221071621", true, x => { }, false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(null)]
@@ -63,7 +63,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [TestCase("   ")]
         public void CannotConstructWithInvalidFieldName(string value)
         {
-            FluentActions.Invoking(() => new BooleanEditableItem("TestValue770458689", "TestValue2127094014", value, false, x => { })).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new BooleanEditableItem("TestValue770458689", "TestValue2127094014", value, false, x => { }, false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [Test]

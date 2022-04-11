@@ -34,14 +34,14 @@ namespace Unitverse.Core.Tests.Options.Editing
             _value = new object();
             _setValue = x => { };
             _enumerationType = typeof(TestEnum);
-            _testClass = new EnumEditableItem(_text, _description, _fieldName, _value, _setValue, _enumerationType);
+            _testClass = new EnumEditableItem(_text, _description, _fieldName, _value, _setValue, _enumerationType, false, null);
         }
 
         [Test]
         public void CanConstruct()
         {
             // Act
-            var instance = new EnumEditableItem(_text, _description, _fieldName, _value, _setValue, _enumerationType);
+            var instance = new EnumEditableItem(_text, _description, _fieldName, _value, _setValue, _enumerationType, false, null);
             
             // Assert
             instance.Should().NotBeNull();
@@ -50,13 +50,13 @@ namespace Unitverse.Core.Tests.Options.Editing
         [Test]
         public void CannotConstructWithNullSetValue()
         {
-            FluentActions.Invoking(() => new EnumEditableItem("TestValue910415667", "TestValue1550196320", "TestValue1171641232", new object(), default(Action<object>), Type.GetType("TestValue1525999670"))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new EnumEditableItem("TestValue910415667", "TestValue1550196320", "TestValue1171641232", new object(), default(Action<object>), typeof(TestEnum), false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullEnumerationType()
         {
-            FluentActions.Invoking(() => new EnumEditableItem("TestValue168000583", "TestValue397121609", "TestValue1525245590", new object(), x => { }, default(Type))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new EnumEditableItem("TestValue168000583", "TestValue397121609", "TestValue1525245590", new object(), x => { }, default(Type), false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(null)]
@@ -64,7 +64,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [TestCase("   ")]
         public void CannotConstructWithInvalidText(string value)
         {
-            FluentActions.Invoking(() => new EnumEditableItem(value, "TestValue349423377", "TestValue628294131", new object(), x => { }, Type.GetType("TestValue253676871"))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new EnumEditableItem(value, "TestValue349423377", "TestValue628294131", new object(), x => { }, typeof(TestEnum), false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(null)]
@@ -72,7 +72,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [TestCase("   ")]
         public void CannotConstructWithInvalidDescription(string value)
         {
-            FluentActions.Invoking(() => new EnumEditableItem("TestValue764192942", value, "TestValue743926900", new object(), x => { }, Type.GetType("TestValue82070851"))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new EnumEditableItem("TestValue764192942", value, "TestValue743926900", new object(), x => { }, typeof(TestEnum), false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(null)]
@@ -80,7 +80,7 @@ namespace Unitverse.Core.Tests.Options.Editing
         [TestCase("   ")]
         public void CannotConstructWithInvalidFieldName(string value)
         {
-            FluentActions.Invoking(() => new EnumEditableItem("TestValue1822449456", "TestValue386046142", value, new object(), x => { }, Type.GetType("TestValue731434616"))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new EnumEditableItem("TestValue1822449456", "TestValue386046142", value, new object(), x => { }, typeof(TestEnum), false, null)).Should().Throw<ArgumentNullException>();
         }
 
         [Test]

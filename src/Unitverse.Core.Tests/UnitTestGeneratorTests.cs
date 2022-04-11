@@ -164,7 +164,7 @@
             generationOptions.MockingFrameworkType = mockingFrameworkType;
             generationOptions.UseFluentAssertions = useFluentAssertions;
 
-            var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false);
+            var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false, new Dictionary<string, string>());
 
             var lines = classAsText.Lines().Where(x => x.StartsWith("// #", StringComparison.Ordinal)).Select(x => x.Substring(4).Trim()).ToList();
             if (lines.Any())

@@ -1,6 +1,7 @@
 ﻿namespace Unitverse
 {
     using System;
+    using System.Collections.Generic;
     using System.Runtime.InteropServices;
     using System.Threading;
     using Microsoft.VisualStudio;
@@ -40,7 +41,7 @@
             get
             {
                 var statisticsOptions = (StatisticsOptions)GetDialogPage(typeof(StatisticsOptions));
-                return new UnitTestGeneratorOptions(GenerationOptions, NamingOptions, StrategyOptions, statisticsOptions.Enabled);
+                return new UnitTestGeneratorOptions(GenerationOptions, NamingOptions, StrategyOptions, statisticsOptions.Enabled, new Dictionary<string, string>());
             }
         }
 

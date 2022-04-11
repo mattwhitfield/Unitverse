@@ -1,5 +1,6 @@
 ﻿namespace Unitverse.Specs
 {
+    using System.Collections.Generic;
     using Unitverse.Core.Options;
 
     // ENHANCE - add fluent assertions to specs
@@ -13,7 +14,7 @@
 
         public static IUnitTestGeneratorOptions Get(TestFrameworkTypes testFramework, MockingFrameworkType mockFramework)
         {
-            return new UnitTestGeneratorOptions(new GenerationOptions(testFramework, mockFramework), new DefaultNamingOptions(), new DefaultStrategyOptions(), false);
+            return new UnitTestGeneratorOptions(new GenerationOptions(testFramework, mockFramework), new DefaultNamingOptions(), new DefaultStrategyOptions(), false, new Dictionary<string, string>());
         }
 
         public TestFrameworkTypes FrameworkType { get; }

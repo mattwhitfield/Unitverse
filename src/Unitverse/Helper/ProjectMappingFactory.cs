@@ -2,6 +2,7 @@
 {
     using EnvDTE;
     using Microsoft.VisualStudio.Shell;
+    using System.Collections.Generic;
     using System.Windows.Input;
     using System.Windows.Interop;
     using Unitverse.Core.Helpers;
@@ -11,7 +12,7 @@
 
     internal class ProjectMappingFactory
     {
-        public static ProjectMapping CreateMappingFor(Project sourceProject, IUnitTestGeneratorOptions baseOptions, bool interactive, bool skipManuallySelectedTargetResolution)
+        public static ProjectMapping CreateMappingFor(Project sourceProject, IUnitTestGeneratorOptions baseOptions, bool interactive, bool skipManuallySelectedTargetResolution, IMessageLogger logger)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -20,6 +21,14 @@
 
             // derive the target project name
             var targetProjectName = projectOptions.GenerationOptions.GetTargetProjectName(sourceProject.Name);
+
+            if (logger != null)
+            {
+                foreach (var source in projectOptions.SourceCounts)
+                {
+                    logger.LogMessage(source.Value + " option(s) loaded from " + source.Key);
+                }
+            }
 
             // resolve the target from a session selected project, if any
             var sessionSelectedProject = TargetSelectionRegister.Instance.GetTargetFor(sourceProject.UniqueName);
@@ -70,7 +79,7 @@
             var generationOptions = OptionsResolver.DetectFrameworks(targetProject, projectOptions.GenerationOptions);
 
             // now create the final options, including resolved frameworks
-            var finalOptions = new UnitTestGeneratorOptions(generationOptions, projectOptions.NamingOptions, projectOptions.StrategyOptions, projectOptions.StatisticsCollectionEnabled);
+            var finalOptions = new UnitTestGeneratorOptions(generationOptions, projectOptions.NamingOptions, projectOptions.StrategyOptions, projectOptions.StatisticsCollectionEnabled, new Dictionary<string, string>());
 
             // now return the mapping from source to target, along with the per-project options
             return new ProjectMapping(sourceProject, targetProject, targetProjectName, finalOptions);

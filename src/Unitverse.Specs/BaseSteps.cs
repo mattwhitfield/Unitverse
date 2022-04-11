@@ -6,6 +6,7 @@
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
     using TechTalk.SpecFlow;
+    using System.Collections.Generic;
 
     [Binding]
     public class BaseSteps
@@ -26,7 +27,7 @@
             _context.SemanticModel = model;
 
             var extractor = new TestableItemExtractor(syntaxTree, model);
-            _context.ClassModel = extractor.Extract(syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().First(), new UnitTestGeneratorOptions(new GenerationOptions(TestFrameworkTypes.NUnit3, MockingFrameworkType.NSubstitute), new DefaultNamingOptions(), new DefaultStrategyOptions(), false)).First();
+            _context.ClassModel = extractor.Extract(syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().First(), new UnitTestGeneratorOptions(new GenerationOptions(TestFrameworkTypes.NUnit3, MockingFrameworkType.NSubstitute), new DefaultNamingOptions(), new DefaultStrategyOptions(), false, new Dictionary<string, string>())).First();
         }
 
         [Given(@"I set my test framework to '(.*)'")]
