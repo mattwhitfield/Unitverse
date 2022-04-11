@@ -199,7 +199,7 @@ namespace Unitverse.Views
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            IGenerationOptions resolvedOptions
+            IGenerationOptions resolvedOptions;
             if (ResultingMapping.TargetProject != null)
             {
                 resolvedOptions = OptionsResolver.DetectFrameworks(ResultingMapping.TargetProject, _originalGenerationOptions);
