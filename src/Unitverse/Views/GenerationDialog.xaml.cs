@@ -17,10 +17,10 @@ namespace Unitverse.Views
     {
         int _scale;
 
-        public GenerationDialog(Project sourceProject, IUnitTestGeneratorOptions projectOptions)
+        public GenerationDialog(Project sourceProject, IUnitTestGeneratorOptions projectOptions, string resolvedTargetProjectName)
         {
             InitializeComponent();
-            DataContext = _viewModel = new GenerationDialogViewModel(sourceProject, projectOptions);
+            DataContext = _viewModel = new GenerationDialogViewModel(sourceProject, projectOptions, resolvedTargetProjectName);
 
             PreviewMouseWheel += GenerationDialog_PreviewMouseWheel;
             TextOptions.SetTextFormattingMode(this, TextFormattingMode.Ideal);
