@@ -1,0 +1,16 @@
+// # EmitSubclassForProtectedMethods=true
+namespace TestNamespace
+{
+    public class TestClass
+    {
+	    protected T ParseTheThing<T>(string input)
+	    {
+		    return default(T);
+	    }
+
+	    protected static T ParseTheThingStatic<T>(string input)
+	    {
+		    return default(T);
+	    }
+    }
+}
