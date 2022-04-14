@@ -178,10 +178,17 @@
 
                 var tokenList = ExtractTokenList(method.Parameters);
 
+                SimpleNameSyntax identifier = SyntaxFactory.IdentifierName(method.Name);
+
+                if (method.Symbol != null && method.Symbol.TypeParameters.Length > 0)
+                {
+                    identifier = SyntaxFactory.GenericName(SyntaxFactory.Identifier(method.Name)).WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SeparatedList<TypeSyntax>(method.Symbol.TypeParameters.Select(x => SyntaxFactory.IdentifierName(x.Name)))));
+                }
+
                 InvocationExpressionSyntax baseInvocation;
                 if (method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.StaticKeyword)))
                 {
-                    baseInvocation = SyntaxFactory.InvocationExpression(SyntaxFactory.IdentifierName(method.Name))
+                    baseInvocation = SyntaxFactory.InvocationExpression(identifier)
                         .WithArgumentList(
                             SyntaxFactory.ArgumentList(
                                 SyntaxFactory.SeparatedList<ArgumentSyntax>(tokenList)));
@@ -192,7 +199,7 @@
                             SyntaxFactory.MemberAccessExpression(
                                 SyntaxKind.SimpleMemberAccessExpression,
                                 SyntaxFactory.BaseExpression(),
-                                SyntaxFactory.IdentifierName(method.Name)))
+                                identifier))
                         .WithArgumentList(
                             SyntaxFactory.ArgumentList(
                                 SyntaxFactory.SeparatedList<ArgumentSyntax>(tokenList)));
@@ -239,6 +246,11 @@
                         .WithModifiers(modifiers)
                         .WithReturnType(methodSymbol.ReturnType.ToTypeSyntax(_frameworkSet.Context))
                         .WithBody(SyntaxFactory.Block(statements.ToArray()));
+
+                    if (methodSymbol.TypeParameters.Length > 0)
+                    {
+                        newMethod = newMethod.WithTypeParameterList(SyntaxFactory.TypeParameterList(SyntaxFactory.SeparatedList(methodSymbol.TypeParameters.Select(x => SyntaxFactory.TypeParameter(x.Name)))));
+                    }
 
                     if (method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)))
                     {

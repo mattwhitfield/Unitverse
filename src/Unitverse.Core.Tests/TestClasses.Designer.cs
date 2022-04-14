@@ -1128,9 +1128,14 @@ namespace Unitverse.Core.Tests {
         ///{
         ///    using System.Collections.Generic;
         ///
+        ///    public class R
+        ///    {
+        ///        public string Name {get;set;}
+        ///    }
+        ///
         ///    public class C3
         ///    {
-        ///        public List&lt;string&gt; Map(List&lt;string&gt; input)
+        ///        public List&lt;R&gt; Map(List&lt;string&gt; input)
         ///        {
         ///            return null;
         ///        }
@@ -1470,6 +1475,25 @@ namespace Unitverse.Core.Tests {
         public static string ProtectedClassNoInternalProtected {
             get {
                 return ResourceManager.GetString("ProtectedClassNoInternalProtected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # EmitSubclassForProtectedMethods=true
+        ///namespace TestNamespace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///	    protected T ParseTheThing&lt;T&gt;(string input)
+        ///	    {
+        ///		    return default(T);
+        ///	    }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string ProtectedGenericMethod {
+            get {
+                return ResourceManager.GetString("ProtectedGenericMethod", resourceCulture);
             }
         }
         
