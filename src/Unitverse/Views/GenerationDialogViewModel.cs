@@ -20,7 +20,7 @@ namespace Unitverse.Views
         private bool _allowDetachedGeneration;
         private readonly IUnitTestGeneratorOptions _projectOptions;
 
-        public GenerationDialogViewModel(Project sourceProject, IUnitTestGeneratorOptions projectOptions)
+        public GenerationDialogViewModel(Project sourceProject, IUnitTestGeneratorOptions projectOptions, string resolvedTargetProjectName)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -53,11 +53,7 @@ namespace Unitverse.Views
                 Projects.Add(new ObjectItem(project.Name, project));
             }
 
-            var targetProjectName = projectOptions.GenerationOptions.GetTargetProjectName(sourceProject.Name);
-            var sessionSelectedProject = TargetSelectionRegister.Instance.GetTargetFor(sourceProject.UniqueName);
-            var resolvedTarget = string.IsNullOrWhiteSpace(sessionSelectedProject) ? targetProjectName : sessionSelectedProject;
-
-            _selectedProject = Projects.FirstOrDefault(x => string.Equals(x.Text, resolvedTarget, StringComparison.OrdinalIgnoreCase));
+            _selectedProject = Projects.FirstOrDefault(x => string.Equals(x.Text, resolvedTargetProjectName, StringComparison.OrdinalIgnoreCase));
             var selectedProject = _selectedProject?.Value as Project;
 
             _rememberProjectSelection = projectOptions.GenerationOptions.RememberManuallySelectedTargetProjectByDefault;

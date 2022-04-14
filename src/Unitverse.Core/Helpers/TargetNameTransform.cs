@@ -1,6 +1,7 @@
 ﻿namespace Unitverse.Core.Helpers
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
@@ -9,7 +10,7 @@
 
     public static class TargetNameTransform
     {
-        public static string GetTargetProjectName(this IGenerationOptions options, string sourceProjectName)
+        public static IEnumerable<string> GetTargetProjectNames(this IGenerationOptions options, string sourceProjectName)
         {
             if (options == null)
             {
@@ -21,13 +22,24 @@
                 throw new ArgumentNullException(nameof(sourceProjectName));
             }
 
-            try
+            foreach (var format in options.TestProjectNaming.Split(';'))
             {
-                return string.Format(CultureInfo.CurrentCulture, options.TestProjectNaming, sourceProjectName);
-            }
-            catch (FormatException)
-            {
-                throw new InvalidOperationException(Strings.TargetNameTransform_GetTargetProjectName_Cannot_not_derive_target_project_name__please_check_the_test_project_naming_setting_);
+                if (string.IsNullOrWhiteSpace(format))
+                {
+                    continue;
+                }
+
+                string targetProject;
+                try
+                {
+                    targetProject = string.Format(CultureInfo.CurrentCulture, format.Trim(), sourceProjectName);
+                }
+                catch (FormatException)
+                {
+                    throw new InvalidOperationException(Strings.TargetNameTransform_GetTargetProjectName_Cannot_not_derive_target_project_name__please_check_the_test_project_naming_setting_);
+                }
+
+                yield return targetProject;
             }
         }
 

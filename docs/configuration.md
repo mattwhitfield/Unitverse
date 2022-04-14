@@ -20,15 +20,22 @@ The per-generation user interace is, by default, set to show only when a target 
 
 * Select the test and mocking frameworks to be used
 * Control the naming conventions for: test projects, classes, and files
+* Control whether to search for test types by filename only or use type name as a fallback
 * Control preferences around using placement, generation without projects & partial generation
 * Control whether mock configuration calls are automatically emitted
 * Control whether tests for internal members are emitted
 * Control whether to emit a derived test class to expose protected members
 * Control whether Arrange / Act / Assert comments are emitted and what they say
 
-### Default Project/Class/File Naming
+### Default Project Naming
 
-The default for project naming is `{0}.Tests`. For example, a project named `MyProject` would be associated with a test project called `MyProject.Tests`. The default for the class and file naming is `{0}Tests`. For example, a class called `MyClass` would be associated with a test class called `MyClassTests` and a file called a class called `MyClass.cs` would be associated with a test class called `MyClassTests.cs`.
+The default for project naming is `{0}.Tests`. For example, a project named `MyProject` would be associated with a test project called `MyProject.Tests`.
+
+You can specify multiple patterns in the 'Project naming convention' option by separating them with a semicolon. So for example, if the naming pattern was set to `{0}.Tests;{0}.UnitTests;{0}.Cheese` then it would first look for `MyProject.Tests`, then `MyProject.UnitTests` and finally `MyProject.Cheese`.
+
+### Default Class/File Naming
+
+The default for the class and file naming is `{0}Tests`. For example, a class called `MyClass` would be associated with a test class called `MyClassTests` and a file called a class called `MyClass.cs` would be associated with a test class called `MyClassTests.cs`. Note that Unitverse can be configured to find test types that match the correct type name even if they are in an incorrectly named file. By default it will do this only for a class in the correct namespace. However, you can configure this to match any class in the target project, or disable the fallback finding mechanism by going to Tools -> Options -> Unitverse -> Generation Options -> Fallback type finding method.
 
 ## Strategy Options 🗺
 
