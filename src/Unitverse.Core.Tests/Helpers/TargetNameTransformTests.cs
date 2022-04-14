@@ -22,7 +22,7 @@ namespace Unitverse.Core.Tests.Helpers
             var result = options.GetTargetProjectNames(sourceProjectName).First();
             Assert.That(result, Is.EqualTo("TestValue1494137907.Tests"));
             options.TestProjectNaming.Returns("{0");
-            Assert.Throws<InvalidOperationException>(() => options.GetTargetProjectNames(sourceProjectName));
+            Assert.Throws<InvalidOperationException>(() => options.GetTargetProjectNames(sourceProjectName).ToList());
         }
 
         [Test]
@@ -38,13 +38,13 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public static void CannotCallGetTargetProjectNameWithNullOptions()
         {
-            Assert.Throws<ArgumentNullException>(() => default(IGenerationOptions).GetTargetProjectNames("TestValue1037312724"));
+            Assert.Throws<ArgumentNullException>(() => default(IGenerationOptions).GetTargetProjectNames("TestValue1037312724").ToList());
         }
 
         [Test]
         public static void CannotCallGetTargetProjectNameWithNullSourceProjectName()
         {
-            Assert.Throws<ArgumentNullException>(() => Substitute.For<IGenerationOptions>().GetTargetProjectNames(default(string)));
+            Assert.Throws<ArgumentNullException>(() => Substitute.For<IGenerationOptions>().GetTargetProjectNames(default(string)).ToList());
         }
 
         [TestCase(null)]
@@ -52,7 +52,7 @@ namespace Unitverse.Core.Tests.Helpers
         [TestCase("   ")]
         public static void CannotCallGetTargetProjectNameWithInvalidSourceProjectName(string value)
         {
-            Assert.Throws<ArgumentNullException>(() => Substitute.For<IGenerationOptions>().GetTargetProjectNames(value));
+            Assert.Throws<ArgumentNullException>(() => Substitute.For<IGenerationOptions>().GetTargetProjectNames(value).ToList());
         }
 
         [Test]
