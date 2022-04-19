@@ -1,0 +1,9 @@
+namespace RecordTypeMapping
+{
+  internal static class FooFactory
+  {
+      public static Foo Create(Bar bar) => new();
+  }
+  record Foo;
+  record Bar;
+}

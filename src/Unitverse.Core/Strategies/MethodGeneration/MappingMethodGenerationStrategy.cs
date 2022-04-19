@@ -79,7 +79,7 @@
 
         private static Dictionary<string, bool> GetProperties(ITypeSymbol returnTypeInfo)
         {
-            var properties = returnTypeInfo.GetMembers().Where(x => x.Kind == SymbolKind.Property).OfType<IPropertySymbol>().Where(x => !x.IsWriteOnly && !x.IsIndexer && x.ExplicitInterfaceImplementations.Length == 0);
+            var properties = returnTypeInfo.GetMembers().Where(x => x.Kind == SymbolKind.Property && x.DeclaredAccessibility == Accessibility.Public).OfType<IPropertySymbol>().Where(x => !x.IsWriteOnly && !x.IsIndexer && x.ExplicitInterfaceImplementations.Length == 0);
 
             var dictionary = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
             foreach (var property in properties)
