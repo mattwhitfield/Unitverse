@@ -1488,6 +1488,11 @@ namespace Unitverse.Core.Tests {
         ///	    {
         ///		    return default(T);
         ///	    }
+        ///
+        ///	    protected static T ParseTheThingStatic&lt;T&gt;(string input)
+        ///	    {
+        ///		    return default(T);
+        ///	    }
         ///    }
         ///}.
         /// </summary>
@@ -1506,6 +1511,23 @@ namespace Unitverse.Core.Tests {
         public static string RecordType {
             get {
                 return ResourceManager.GetString("RecordType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace RecordTypeMapping
+        ///{
+        ///  internal static class FooFactory
+        ///  {
+        ///      public static Foo Create(Bar bar) =&gt; new();
+        ///  }
+        ///  record Foo;
+        ///  record Bar;
+        ///}.
+        /// </summary>
+        public static string RecordTypeMapping {
+            get {
+                return ResourceManager.GetString("RecordTypeMapping", resourceCulture);
             }
         }
         
