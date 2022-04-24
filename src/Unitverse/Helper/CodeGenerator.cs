@@ -201,7 +201,11 @@
 
             if (generationItem.Options.StatisticsCollectionEnabled)
             {
-                StatisticsTracker.Track(result);
+                if (StatisticsTracker.Track(result))
+                {
+                    var message = CelebrationGenerator.GetMessage(StatisticsTracker.Get());
+                    messageLogger.LogMessage("\r\n" + message + "\r\n");
+                }
             }
 
             generationItem.TargetContent = result.FileContent;

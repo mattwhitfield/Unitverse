@@ -31,7 +31,7 @@
 
             var generatorOutputWindowPaneId = new Guid("D6002C1E-2DB8-4C9D-996D-A29364FB8DAC");
 
-            ErrorHandler.ThrowOnFailure(_outputWindow.CreatePane(ref generatorOutputWindowPaneId, "Unit Test Generator", 0, 1));
+            ErrorHandler.ThrowOnFailure(_outputWindow.CreatePane(ref generatorOutputWindowPaneId, "Unitverse", 0, 1));
             ErrorHandler.ThrowOnFailure(_outputWindow.GetPane(ref generatorOutputWindowPaneId, out _testingOutputPane));
 
             if (_testingOutputPane != null)
