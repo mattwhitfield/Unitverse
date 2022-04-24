@@ -50,6 +50,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AssetResources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Helpers\Animals.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Animals.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Strings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -61,6 +66,10 @@
     <EmbeddedResource Update="Assets\AssetResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AssetResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Helpers\Animals.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Animals.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>

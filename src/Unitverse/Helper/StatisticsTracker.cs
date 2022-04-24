@@ -7,7 +7,7 @@ namespace Unitverse.Helper
     {
         const string Key = @"SOFTWARE\Unitverse\Statistics";
 
-        internal static void Track(IGenerationStatistics statistics)
+        internal static bool Track(IGenerationStatistics statistics)
         {
             try
             {
@@ -17,13 +17,16 @@ namespace Unitverse.Helper
                     IncrementValue(key, "ValuesGenerated", statistics.ValuesGenerated);
                     IncrementValue(key, "InterfacesMocked", statistics.InterfacesMocked);
                     IncrementValue(key, "TestClassesGenerated", statistics.TestClassesGenerated);
-                    IncrementValue(key, "TestMethodsGenerated", statistics.TestMethodsGenerated);
+                    IncrementValue(key, "TestMethodsGenerated", statistics.TestMethodsGenerated, out var existingTestsGenerated, out var newTestsGenerated);
                     IncrementValue(key, "TestMethodsRegenerated", statistics.TestMethodsRegenerated);
+
+                    return newTestsGenerated / 1000 > existingTestsGenerated / 1000;
                 }
             }
             catch
             {
                 // don't care about errors recording stats
+                return false;
             }
         }
 
@@ -60,11 +63,16 @@ namespace Unitverse.Helper
             return 0;
         }
 
-
         private static void IncrementValue(RegistryKey key, string name, long value)
         {
-            var existingValue = GetValue(key, name);
-            key.SetValue(name, existingValue + value, RegistryValueKind.QWord);
+            IncrementValue(key, name, value, out _, out _);
+        }
+
+        private static void IncrementValue(RegistryKey key, string name, long value, out long existingValue, out long newValue)
+        {
+            existingValue = GetValue(key, name);
+            newValue = existingValue + value;
+            key.SetValue(name, newValue, RegistryValueKind.QWord);
         }
 
         internal static void Reset()
