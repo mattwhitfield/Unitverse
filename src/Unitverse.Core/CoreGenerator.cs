@@ -419,7 +419,7 @@
 
                 frameworkSet.EvaluateTargetModel(c);
 
-                c.SetTargetInstance(frameworkSet.NamingProvider.TargetFieldName.Resolve(new NamingContext(c.ClassName)));
+                c.SetTargetInstance(frameworkSet.NamingProvider.TargetFieldName.Resolve(new NamingContext(c.ClassName)), frameworkSet);
                 if (c.Declaration.Parent is NamespaceDeclarationSyntax namespaceDeclaration)
                 {
                     targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(namespaceDeclaration.Name.ToString())));

@@ -30,6 +30,8 @@
             UserInterfaceMode = options.UserInterfaceMode;
             RememberManuallySelectedTargetProjectByDefault = options.RememberManuallySelectedTargetProjectByDefault;
             FallbackTargetFinding = options.FallbackTargetFinding;
+            PrefixFieldReferencesWithThis = options.PrefixFieldReferencesWithThis;
+            EmitXmlDocumentation = options.EmitXmlDocumentation;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -69,5 +71,9 @@
         public bool RememberManuallySelectedTargetProjectByDefault { get; set; }
 
         public FallbackTargetFindingMethod FallbackTargetFinding { get; set; }
+
+        public bool PrefixFieldReferencesWithThis { get; set; }
+
+        public bool EmitXmlDocumentation { get; set; }
     }
 }

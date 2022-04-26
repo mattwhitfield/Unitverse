@@ -407,7 +407,7 @@
             setupMethod = setupMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(
                 SyntaxFactory.AssignmentExpression(
                     SyntaxKind.SimpleAssignmentExpression,
-                    SyntaxFactory.IdentifierName(fieldName),
+                    frameworkSet.Options.GenerationOptions.QualifyFieldReference(SyntaxFactory.IdentifierName(fieldName)),
                     defaultExpression)));
         }
 

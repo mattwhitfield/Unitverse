@@ -14,7 +14,7 @@
                 throw new ArgumentNullException(nameof(sourceStatistics));
             }
 
-            FileContent = fileContent;
+            FileContent = ContentCleaner.Clean(fileContent);
             AnyMethodsEmitted = anyMethodsEmitted;
             InterfacesMocked = sourceStatistics.InterfacesMocked;
             TypesConstructed = sourceStatistics.TypesConstructed;

@@ -1,4 +1,6 @@
+// # PrefixFieldReferencesWithThis=true
 using System;
+using System.Collections.Generic;
 
 namespace AssemblyCore
 {
@@ -7,16 +9,23 @@ namespace AssemblyCore
         public InnerPublicClass innerPubClass { get; }
         public InnerPublicClass InnerPubliClassOne { get; }
         public InnerPublicClass InnerPublicClassTwo { get; }
+        public IList<string> List { get; }
 
         public NestedClass()
         {
 
         }
 
+        public NestedClass(IList<string> list)
+        {
+            List = list;
+        }
+
         public NestedClass(InnerPublicClass innerPublicClass)
         {
             innerPubClass = innerPublicClass;
         }
+
         public NestedClass(InnerPublicClass innerPubliClassOne, InnerPublicClass innerPublicClassTwo)
         {
             InnerPubliClassOne = innerPubliClassOne;

@@ -41,5 +41,9 @@
         public bool RememberManuallySelectedTargetProjectByDefault => true;
 
         public FallbackTargetFindingMethod FallbackTargetFinding => FallbackTargetFindingMethod.None;
+
+        public bool PrefixFieldReferencesWithThis => false;
+
+        public bool EmitXmlDocumentation => false;
     }
 }
