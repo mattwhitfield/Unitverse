@@ -65,7 +65,7 @@
             var interfaceMethodsImplemented = model.GetImplementedInterfaceSymbolsFor(property.Symbol);
             var testIsComplete = MockHelper.PrepareMockCalls(model, property.Node, property.Access(target), interfaceMethodsImplemented, Enumerable.Empty<string>(), _frameworkSet, out var mockSetupStatements, out var mockAssertionStatements);
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic);
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic, "Checks that the " + property.Name + " property can be read from.");
 
             method.Arrange(mockSetupStatements);
             method.BlankLine();

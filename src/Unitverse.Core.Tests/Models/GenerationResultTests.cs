@@ -43,7 +43,7 @@ namespace Unitverse.Core.Tests.Models
         [Test]
         public void FileContentIsInitializedCorrectly()
         {
-            _testClass.FileContent.Should().BeSameAs(_fileContent);
+            _testClass.FileContent.Should().Be(_fileContent);
         }
 
         [Test]

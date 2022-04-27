@@ -375,6 +375,16 @@
                 }
             }
 
+            if (frameworkSet.Options.GenerationOptions.EmitXmlDocumentation)
+            {
+                var documentation = XmlCommentHelper.DocumentationComment(
+                    XmlCommentHelper.Summary(
+                        XmlCommentHelper.TextLiteral("Sets up the dependencies required for the tests for "),
+                        XmlCommentHelper.See(model.ClassName),
+                        XmlCommentHelper.TextLiteral(".")));
+                setupMethod = setupMethod.WithXmlDocumentation(documentation);
+            }
+
             return setupMethod;
         }
 
@@ -407,7 +417,7 @@
             setupMethod = setupMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(
                 SyntaxFactory.AssignmentExpression(
                     SyntaxKind.SimpleAssignmentExpression,
-                    SyntaxFactory.IdentifierName(fieldName),
+                    frameworkSet.Options.GenerationOptions.QualifyFieldReference(SyntaxFactory.IdentifierName(fieldName)),
                     defaultExpression)));
         }
 

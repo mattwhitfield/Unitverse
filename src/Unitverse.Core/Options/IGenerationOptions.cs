@@ -39,5 +39,9 @@
         bool RememberManuallySelectedTargetProjectByDefault { get; }
 
         FallbackTargetFindingMethod FallbackTargetFinding { get; }
+
+        bool PrefixFieldReferencesWithThis { get; }
+
+        bool EmitXmlDocumentation { get; }
     }
 }

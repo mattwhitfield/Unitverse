@@ -1,8 +1,10 @@
+// # EmitXmlDocumentation=true
 namespace Unitverse.Web.Services.Flow
 {
 	using System;
     using System.Collections.Generic;
     using System.Linq;	
+    using System.Threading.Tasks;
 	
 	public enum FlowStage
     {
@@ -18,12 +20,12 @@ namespace Unitverse.Web.Services.Flow
             return null;
         }
 
-        public static IDictionary<FlowStage, IList<FlowStage>> And(this Tuple<FlowStage, IList<FlowStage>> firstConstraint, Tuple<FlowStage, IList<FlowStage>> secondConstraint)
+        public static async Task<IDictionary<FlowStage, IList<FlowStage>>> And(this Tuple<FlowStage, IList<FlowStage>> firstConstraint, Tuple<FlowStage, IList<FlowStage>> secondConstraint)
         {
             return null;
         }
 
-        public static IDictionary<FlowStage, IList<FlowStage>> And(this IDictionary<FlowStage, IList<FlowStage>> constraints, Tuple<FlowStage, IList<FlowStage>> additionalConstraint)
+        public static IDictionary<FlowStage, IList<FlowStage>> And(this IDictionary<FlowStage, IList<FlowStage>> constraints, string additionalConstraint)
         {
             return null;
         }
@@ -41,7 +43,6 @@ namespace Unitverse.Web.Services.Flow
 
 	public class FlowConstraintProvider
     {
-
         public FlowConstraintProvider(IDictionary<FlowStage, IList<FlowStage>> constraints)
         {
         }

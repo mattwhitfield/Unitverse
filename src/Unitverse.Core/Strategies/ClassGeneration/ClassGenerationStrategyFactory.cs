@@ -5,21 +5,23 @@
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
 
     public class ClassGenerationStrategyFactory
     {
         private readonly IList<IClassGenerationStrategy> _strategies;
+        private readonly IFrameworkSet _frameworkSet;
 
         public ClassGenerationStrategyFactory(IFrameworkSet frameworkSet)
         {
-            var frameworkSet1 = frameworkSet ?? throw new ArgumentNullException(nameof(frameworkSet));
+            _frameworkSet = frameworkSet ?? throw new ArgumentNullException(nameof(frameworkSet));
 
             _strategies = new List<IClassGenerationStrategy>
             {
-                new StandardClassGenerationStrategy(frameworkSet1),
-                new AbstractClassGenerationStrategy(frameworkSet1),
-                new StaticClassGenerationStrategy(frameworkSet1),
+                new StandardClassGenerationStrategy(_frameworkSet),
+                new AbstractClassGenerationStrategy(_frameworkSet),
+                new StaticClassGenerationStrategy(_frameworkSet),
             };
         }
 
@@ -36,7 +38,19 @@
                 throw new InvalidOperationException("Cannot find a strategy for generation for the type " + model.ClassName);
             }
 
-            return strategy.Create(model);
+            var classSyntax = strategy.Create(model);
+
+            if (_frameworkSet.Options.GenerationOptions.EmitXmlDocumentation)
+            {
+                var documentation = XmlCommentHelper.DocumentationComment(
+                    XmlCommentHelper.Summary(
+                        XmlCommentHelper.TextLiteral("Unit tests for the type "),
+                        XmlCommentHelper.See(model.ClassName),
+                        XmlCommentHelper.TextLiteral(".")));
+                classSyntax = classSyntax.WithXmlDocumentation(documentation);
+            }
+
+            return classSyntax;
         }
     }
 }

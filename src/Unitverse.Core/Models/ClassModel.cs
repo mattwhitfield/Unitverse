@@ -192,12 +192,15 @@
         private ExpressionSyntax GetConstructorFieldReference(string name, TypeInfo typeInfo, IFrameworkSet frameworkSet)
         {
             var identifierName = SyntaxFactory.IdentifierName(GetConstructorParameterFieldName(name, typeInfo, frameworkSet.NamingProvider));
+
+            var fieldSyntax = frameworkSet.Options.GenerationOptions.QualifyFieldReference(identifierName);
+
             if (typeInfo.Type.TypeKind == TypeKind.Interface)
             {
-                return frameworkSet.MockingFramework.GetFieldReference(identifierName);
+                return frameworkSet.MockingFramework.GetFieldReference(fieldSyntax);
             }
 
-            return identifierName;
+            return fieldSyntax;
         }
 
         public ExpressionSyntax GetObjectCreationExpression(IFrameworkSet frameworkSet, bool forSetupMethod)
@@ -301,10 +304,12 @@
             return string.Format(CultureInfo.InvariantCulture, "{0}With{1}", model.OriginalName, model.Parameters.Any() ? model.Parameters.Select(x => x.TypeInfo.Type.ToIdentifierName().ToPascalCase()).Aggregate((x, y) => x + "And" + y) : "NoParameters");
         }
 
-        internal void SetTargetInstance(string fieldName)
+        internal void SetTargetInstance(string fieldName, IFrameworkSet frameworkSet)
         {
             TargetFieldName = fieldName;
-            TargetInstance = SyntaxFactory.IdentifierName(TargetFieldName);
+            var nameSyntax = SyntaxFactory.IdentifierName(TargetFieldName);
+
+            TargetInstance = frameworkSet.Options.GenerationOptions.QualifyFieldReference(nameSyntax);
         }
     }
 }

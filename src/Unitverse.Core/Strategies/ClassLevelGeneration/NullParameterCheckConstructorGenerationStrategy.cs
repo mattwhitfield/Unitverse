@@ -72,7 +72,7 @@
 
                 namingContext = namingContext.WithParameterName(nullableParameter.ToPascalCase());
 
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotConstructWithNull, namingContext, false, false);
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotConstructWithNull, namingContext, false, false, "Checks that instance construction throws when the " + nullableParameter + " parameter is null.");
 
                 foreach (var constructorModel in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))))
                 {

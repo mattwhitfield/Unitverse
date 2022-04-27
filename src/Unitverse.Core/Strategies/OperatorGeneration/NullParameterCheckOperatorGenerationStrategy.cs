@@ -63,7 +63,7 @@
                 var paramList = new List<CSharpSyntaxNode>();
 
                 namingContext = namingContext.WithParameterName(method.Parameters[i].Name.ToPascalCase());
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotCallOperatorWithNull, namingContext, false, model.IsStatic);
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotCallOperatorWithNull, namingContext, false, model.IsStatic, "Checks that the " + method.Name + " operator handles null values for the " + method.Parameters[i].Name + " parameter.");
 
                 for (var index = 0; index < method.Parameters.Count; index++)
                 {

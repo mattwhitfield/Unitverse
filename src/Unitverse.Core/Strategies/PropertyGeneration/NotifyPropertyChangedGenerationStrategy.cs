@@ -60,7 +60,7 @@
 
             model.RequiredAssets.Add(TargetAsset.PropertyTester);
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic);
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic, "Checks that setting the " + property.Name + " property correctly raises PropertyChanged events.");
             method.Emit(GetPropertyAssertionBodyStatements(property, model, withDefaults).ToArray());
 
             yield return method.Method;
