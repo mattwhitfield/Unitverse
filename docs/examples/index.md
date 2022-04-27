@@ -30,3 +30,4 @@ This section contains examples of the output that Unitverse outputs, refreshed e
 | [Simple POCO](SimplePoco.md) | Demonstrates how tests are generated for a simple POCO type |
 | [Singletons](Singleton.md) | Demonstrates how Unitverse attempts to use a static property to get a type instance when the constructor is private |
 | [Static Classes](StaticClass.md) | Demonstrates how Unitverse generates tests when the source class is static |
+| [StyleCop Compatbility](StyleCopCompatibility.md) | Demonstrates how tests can be generated with XML documentation and `this.` prefixed to test class fields |

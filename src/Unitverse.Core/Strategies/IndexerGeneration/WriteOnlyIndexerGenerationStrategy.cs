@@ -53,7 +53,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSet, namingContext, false, model.IsStatic);
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSet, namingContext, false, model.IsStatic, "Checks that the indexer functions correctly.");
             method.Emit(GetPropertyAssertionBodyStatements(indexer, model).ToArray());
 
             yield return method.Method;

@@ -1179,27 +1179,26 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace Unitverse.Web.Services.Workflow
+        ///   Looks up a localized string similar to namespace Unitverse.Web.Services.Flow
         ///{
         ///	using System;
         ///    using System.Collections.Generic;
         ///    using System.Linq;	
         ///	
-        ///	public enum WorkflowStage
+        ///	public enum FlowStage
         ///    {
-        ///        Snapshot = 0,
-        ///        SnapshotFinalization = 125,
-        ///        LineageGeneration = 250,
-        ///        DocumentGeneration = 500,
-        ///        DocumentFinalization = 1000,
-        ///        LineageFinalization = 1250,
-        ///        CleanupItemsData = 2000,
-        ///        CleanupSolutionData = 20100,
+        ///        First = 0,
+        ///        Second = 1,
+        ///        Third = 2
         ///    }
         ///
-        ///	public static class WorkflowConstraintProviderFactory
+        ///	public static class FlowConstraintProviderFactory
         ///    {
-        /// [rest of string was truncated]&quot;;.
+        ///        public static Tuple&lt;FlowStage, IList&lt;FlowStage&gt;&gt; Follows(this FlowStage stage, params FlowStage[] followedStages)
+        ///        {
+        ///            if (followedStages == null)
+        ///            {
+        ///                throw new ArgumentNull [rest of string was truncated]&quot;;.
         /// </summary>
         public static string MultipleOverloads {
             get {
@@ -1208,7 +1207,9 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using System;
+        ///   Looks up a localized string similar to // # PrefixFieldReferencesWithThis=true
+        ///using System;
+        ///using System.Collections.Generic;
         ///
         ///namespace AssemblyCore
         ///{
@@ -1217,17 +1218,16 @@ namespace Unitverse.Core.Tests {
         ///        public InnerPublicClass innerPubClass { get; }
         ///        public InnerPublicClass InnerPubliClassOne { get; }
         ///        public InnerPublicClass InnerPublicClassTwo { get; }
+        ///        public IList&lt;string&gt; List { get; }
         ///
         ///        public NestedClass()
         ///        {
         ///
         ///        }
         ///
-        ///        public NestedClass(InnerPublicClass innerPublicClass)
+        ///        public NestedClass(IList&lt;string&gt; list)
         ///        {
-        ///            innerPubClass = innerPublicClass;
-        ///        }
-        ///        public NestedClass(InnerPublicClass innerPubliClassOne [rest of string was truncated]&quot;;.
+        ///            Lis [rest of string was truncated]&quot;;.
         /// </summary>
         public static string NestedClassTestFile {
             get {
@@ -1810,6 +1810,35 @@ namespace Unitverse.Core.Tests {
         public static string WinformTestFile {
             get {
                 return ResourceManager.GetString("WinformTestFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # EmitXmlDocumentation=true
+        ///namespace Unitverse.Web.Services.Flow
+        ///{
+        ///	using System;
+        ///    using System.Collections.Generic;
+        ///    using System.Linq;	
+        ///	
+        ///	public enum FlowStage
+        ///    {
+        ///        First = 0,
+        ///        Second = 1,
+        ///        Third = 2
+        ///    }
+        ///
+        ///	public static class FlowConstraintProviderFactory
+        ///    {
+        ///        public static Tuple&lt;FlowStage, IList&lt;FlowStage&gt;&gt; Follows(this FlowStage stage, params FlowStage[] followedStages)
+        ///        {
+        ///            if (followedStages == null)
+        ///            {
+        ///       [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string XmlComments {
+            get {
+                return ResourceManager.GetString("XmlComments", resourceCulture);
             }
         }
     }

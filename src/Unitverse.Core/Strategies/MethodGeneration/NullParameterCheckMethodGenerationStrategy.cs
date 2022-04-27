@@ -78,7 +78,7 @@
                 var paramList = new List<CSharpSyntaxNode>();
 
                 namingContext = namingContext.WithParameterName(method.Parameters[i].Name.ToPascalCase());
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotCallWithNull, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic);
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotCallWithNull, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, "Checks that the " + method.Name + " method throws when the " + method.Parameters[i].Name + " parameter is null.");
 
                 for (var index = 0; index < method.Parameters.Count; index++)
                 {

@@ -69,7 +69,7 @@
 
                 namingContext = namingContext.WithMemberName(property.Name, property.Name);
 
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotInitializeWithNull, namingContext, false, false);
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotInitializeWithNull, namingContext, false, false, "Checks that the " + property.Name + " property cannot be initialized with null.");
 
                 ExpressionSyntax GetAssignedValue(IPropertyModel propertyModel)
                 {

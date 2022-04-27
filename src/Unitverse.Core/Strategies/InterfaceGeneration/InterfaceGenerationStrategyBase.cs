@@ -65,7 +65,7 @@
                 var typeParameters = interfaceModel.GenericTypes.Select(x => x.Name).Aggregate(string.Empty, (current, next) => current + $"_{next}");
                 namingContext = namingContext.WithInterfaceName(interfaceModel.InterfaceName).WithTypeParameters(typeParameters);
 
-                var method = FrameworkSet.TestFramework.CreateTestMethod(GeneratedMethodNamePattern, namingContext, false, model != null && model.IsStatic);
+                var method = FrameworkSet.TestFramework.CreateTestMethod(GeneratedMethodNamePattern, namingContext, false, model != null && model.IsStatic, "Checks that the " + SupportedInterfaceName + " interface is implemented correctly.");
                 AddBodyStatements(classModel, interfaceModel, method);
                 yield return method.Method;
             }

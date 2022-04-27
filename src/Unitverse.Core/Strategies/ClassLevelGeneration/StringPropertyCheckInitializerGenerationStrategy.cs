@@ -66,7 +66,7 @@
                 namingContext = namingContext.WithMemberName(property.Name, property.Name);
 
                 object[] testValues = isNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotInitializeWithInvalid, namingContext, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues);
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotInitializeWithInvalid, namingContext, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues, "Checks that the property " + property.Name + " cannot be initialized with null, empty or white space.");
 
                 ExpressionSyntax GetAssignedValue(IPropertyModel propertyModel)
                 {

@@ -780,5 +780,33 @@ namespace Unitverse.ExampleGenerator {
                 return ResourceManager.GetString("StaticClass", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // ! StyleCop Compatbility
+        ///// $ Demonstrates how tests can be generated with XML documentation and this. prefixed to test class fields
+        ///// # PrefixFieldReferencesWithThis=true
+        ///// # EmitXmlDocumentation=true
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///    public interface IDependency
+        ///    {
+        ///        void Method();
+        ///    }
+        ///
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(IDependency dependency)
+        ///        { }
+        ///
+        ///        public void SomeMethod(string methodName, int methodValue)
+        ///        {
+        ///            Sy [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string StyleCopCompatibility {
+            get {
+                return ResourceManager.GetString("StyleCopCompatibility", resourceCulture);
+            }
+        }
     }
 }

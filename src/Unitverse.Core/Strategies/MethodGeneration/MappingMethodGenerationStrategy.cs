@@ -102,7 +102,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.PerformsMapping, namingContext, method.IsAsync, model.IsStatic);
+            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.PerformsMapping, namingContext, method.IsAsync, model.IsStatic, "Checks that the " + method.Name + " maps values from the input to the returned instance.");
 
             var paramExpressions = new List<CSharpSyntaxNode>();
 

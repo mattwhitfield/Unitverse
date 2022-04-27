@@ -109,11 +109,11 @@
         [Category("StyleCop compatibility")]
         [DisplayName("Prefix field references with this")]
         [Description("True if field references should be prefixed with 'this.' because that StyleCop rule is set")]
-        public bool PrefixFieldReferencesWithThis => throw new System.NotImplementedException();
+        public bool PrefixFieldReferencesWithThis { get; set; } = false;
 
         [Category("StyleCop compatibility")]
         [DisplayName("Emit XML documentation")]
         [Description("True if XML documentation should be generated for test methods")]
-        public bool EmitXmlDocumentation => throw new System.NotImplementedException();
+        public bool EmitXmlDocumentation { get; set; } = false;
     }
 }

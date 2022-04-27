@@ -165,7 +165,7 @@
                     SyntaxFactory.SingletonSeparatedList(Generate.Attribute("TestInitialize"))));
         }
 
-        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues)
+        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues, string description)
         {
             if (nameResolver is null)
             {
@@ -197,10 +197,12 @@
                 method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("DataRow", testValue))));
             }
 
+            method = AddXmlCommentsIfConfigured(method, description, "value", "The parameter that receives the test case values.");
+
             return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }
 
-        public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic)
+        public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, string description)
         {
             if (nameResolver is null)
             {
@@ -214,6 +216,8 @@
 
             var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, false)
                                  .AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("TestMethod"))));
+
+            method = AddXmlCommentsIfConfigured(method, description);
 
             return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }

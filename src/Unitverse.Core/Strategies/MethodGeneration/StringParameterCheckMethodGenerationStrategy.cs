@@ -72,7 +72,7 @@
                 var isNonNullable = method.Parameters[i].Node.Type is NullableTypeSyntax;
                 object[] testValues = isNonNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
 
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotCallWithInvalid, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues);
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotCallWithInvalid, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues, "Checks that the " + method.Name + " method throws when the " + method.Parameters[i].Name + " parameter is null, empty or white space.");
 
                 for (var index = 0; index < method.Parameters.Count; index++)
                 {

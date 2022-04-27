@@ -17,13 +17,30 @@ namespace Unitverse.Core.Tests.Helpers
         {
             // Arrange
             var options = Substitute.For<IGenerationOptions>();
+            options.PrefixFieldReferencesWithThis.Returns(true);
             var nameSyntax = SyntaxFactory.IdentifierName("fred");
-            
+
             // Act
             var result = options.QualifyFieldReference(nameSyntax);
-            
+
             // Assert
-            Assert.Fail("Create or modify test");
+            result.ToFullString().Should().Be("this.fred");
+            result.Should().NotBeNull();
+        }
+
+        [Test]
+        public static void QualifyFieldReferenceDoesNotQualifyWhenNotConfigured()
+        {
+            // Arrange
+            var options = Substitute.For<IGenerationOptions>();
+            options.PrefixFieldReferencesWithThis.Returns(false);
+            var nameSyntax = SyntaxFactory.IdentifierName("fred");
+
+            // Act
+            var result = options.QualifyFieldReference(nameSyntax);
+
+            // Assert
+            result.ToFullString().Should().Be("fred");
             result.Should().NotBeNull();
         }
 

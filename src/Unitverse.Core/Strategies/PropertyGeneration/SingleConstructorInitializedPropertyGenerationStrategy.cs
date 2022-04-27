@@ -64,7 +64,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.IsInitializedCorrectly, namingContext, false, model.IsStatic);
+            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.IsInitializedCorrectly, namingContext, false, model.IsStatic, "Checks that the " + property.Name + " property is initialized correctly by the constructor.");
             method.Emit(GetPropertyAssertionBodyStatements(property, model).ToArray());
 
             yield return method.Method;

@@ -65,7 +65,7 @@
                 namingContext = namingContext.WithParameterName(nullableParameter.ToPascalCase());
                 var isNonNullable = model.Constructors.SelectMany(x => x.Parameters.Where(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))).All(x => x.Node.Type is NullableTypeSyntax);
                 object[] testValues = isNonNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotConstructWithInvalid, namingContext, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues);
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotConstructWithInvalid, namingContext, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues, "Checks that the constructor throws when the " + nullableParameter + " parameter is null, empty or white space.");
 
                 foreach (var constructorModel in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))))
                 {

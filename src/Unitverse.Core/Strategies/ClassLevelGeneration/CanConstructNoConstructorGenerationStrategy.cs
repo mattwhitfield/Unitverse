@@ -52,7 +52,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanConstruct, namingContext, false, false);
+            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanConstruct, namingContext, false, false, "Checks that instance construction works.");
 
             generatedMethod.Act(Generate.ImplicitlyTypedVariableDeclaration("instance", Generate.ObjectCreation(model.TypeSyntax)));
 

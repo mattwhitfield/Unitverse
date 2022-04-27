@@ -53,7 +53,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanConstruct, namingContext, false, false);
+            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanConstruct, namingContext, false, false, "Checks that instance construction works.");
 
             bool isFirst = true;
             foreach (var constructor in model.Constructors)
