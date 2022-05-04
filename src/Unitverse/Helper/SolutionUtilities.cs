@@ -9,6 +9,26 @@
 
     public static class SolutionUtilities
     {
+        public static Project GetSupportedProject(DTE2 dte)
+        {
+            if (dte == null)
+            {
+                throw new ArgumentNullException(nameof(dte));
+            }
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (dte.ToolWindows.SolutionExplorer.SelectedItems is Array selectedItems)
+            {
+#pragma warning disable VSTHRD010
+                var selectedItemObjects = selectedItems.Cast<UIHierarchyItem>().Select(x => x.Object).ToList();
+                return selectedItemObjects.OfType<Project>().FirstOrDefault(x => x.FileName.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase));
+#pragma warning restore VSTHRD010
+            }
+
+            return null;
+        }
+
         public static IEnumerable<ProjectItemModel> GetSupportedFiles(DTE2 dte, bool recursive)
         {
             if (dte == null)

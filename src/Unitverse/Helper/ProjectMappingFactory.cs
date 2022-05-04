@@ -21,7 +21,7 @@
             logger = logger ?? new InertLogger();
 
             // resolve the options for this project
-            var projectOptions = UnitTestGeneratorOptionsFactory.Create(sourceProject.SafeFileName(), baseOptions.GenerationOptions, baseOptions.NamingOptions, baseOptions.StrategyOptions, baseOptions.StatisticsCollectionEnabled);
+            var projectOptions = UnitTestGeneratorOptionsFactory.Create(sourceProject.SafeFileName(), baseOptions);
 
             logger.LogMessage("Creating unit test project mapping for '" + sourceProject.Name + "'.");
             foreach (var source in projectOptions.SourceCounts)
@@ -73,7 +73,7 @@
 #if VS2022
                 helper.Owner = sourceProject.DTE.MainWindow.HWnd;
 #elif VS2019
-                    helper.Owner = new System.IntPtr(sourceProject.DTE.MainWindow.HWnd);
+                helper.Owner = new System.IntPtr(sourceProject.DTE.MainWindow.HWnd);
 #endif
 
                 var result = window.ShowDialog();

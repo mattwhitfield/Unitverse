@@ -9,6 +9,7 @@
     using Microsoft.VisualStudio.LanguageServices;
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
+    using NuGet.VisualStudio;
     using Unitverse.Commands;
     using Unitverse.Core;
     using Unitverse.Core.Options;
@@ -35,6 +36,12 @@
         public INamingOptions NamingOptions => (NamingOptions)GetDialogPage(typeof(NamingOptions));
 
         public IStrategyOptions StrategyOptions => (StrategyOptions)GetDialogPage(typeof(StrategyOptions));
+
+        public IVsFrameworkParser FrameworkParser { get; private set; }
+
+        public IVsPackageInstaller PackageInstaller { get; private set; }
+
+        public IVsPackageInstallerServices PackageInstallerServices { get; private set; }
 
         public IUnitTestGeneratorOptions Options
         {
@@ -69,6 +76,9 @@
                 throw new InvalidOperationException();
             }
 
+            PackageInstallerServices = componentModel.GetService<IVsPackageInstallerServices>();
+            PackageInstaller = componentModel.GetService<IVsPackageInstaller>();
+            FrameworkParser = componentModel.GetService<IVsFrameworkParser>();
             Workspace = componentModel.GetService<VisualStudioWorkspace>();
 
             RegisterEditorFactory(new ConfigEditorFactory(this));
@@ -77,6 +87,7 @@
             await GenerateUnitTestsCommand.InitializeAsync(this).ConfigureAwait(true);
             await GenerateTestForSymbolCommand.InitializeAsync(this).ConfigureAwait(true);
             await GoToUnitTestsForSymbolCommand.InitializeAsync(this).ConfigureAwait(true);
+            await CreateTestProjectCommand.InitializeAsync(this).ConfigureAwait(true);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Unitverse.Views
         public ConfigEditorControlViewModel(IUnitTestGeneratorPackage package, string fileName, Action onModified)
         {
             var baseOptions = package.Options;
-            var projectOptions = UnitTestGeneratorOptionsFactory.Create(fileName, baseOptions.GenerationOptions, baseOptions.NamingOptions, baseOptions.StrategyOptions, baseOptions.StatisticsCollectionEnabled);
+            var projectOptions = UnitTestGeneratorOptionsFactory.Create(fileName, baseOptions);
 
             Tabs.Add(new TabItem("Generation Options", false, TabItemType.GenerationOptions));
             Tabs.Add(new TabItem("Strategy Options", false, TabItemType.StrategyOptions));

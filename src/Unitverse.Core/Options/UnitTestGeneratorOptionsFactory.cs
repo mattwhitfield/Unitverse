@@ -8,6 +8,11 @@
 
     public static class UnitTestGeneratorOptionsFactory
     {
+        public static IUnitTestGeneratorOptions Create(string projectFilePath, IUnitTestGeneratorOptions options)
+        {
+            return Create(projectFilePath, options.GenerationOptions, options.NamingOptions, options.StrategyOptions, options.StatisticsCollectionEnabled);
+        }
+
         public static IUnitTestGeneratorOptions Create(string projectFilePath, IGenerationOptions generationOptions, INamingOptions namingOptions, IStrategyOptions strategyOptions, bool statisticsGenerationEnabled)
         {
             var mutableGenerationOptions = new MutableGenerationOptions(generationOptions);
