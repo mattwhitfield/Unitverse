@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using Unitverse.Core.Models;
@@ -52,19 +53,34 @@ namespace Unitverse.Views
             DialogResult = false;
         }
 
+        private void OnFolderSelect(object sender, RoutedEventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                fbd.SelectedPath = _viewModel.Location;
+
+                var result = fbd.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    _viewModel.Location = fbd.SelectedPath;
+                }
+            }
+        }
+
         private void OnOK(object sender, RoutedEventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             if (string.IsNullOrWhiteSpace(_viewModel.Name))
             {
-                MessageBox.Show("You must enter a name for the target project.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("You must enter a name for the target project.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(_viewModel.Location))
             {
-                MessageBox.Show("You must enter a location for the target project.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("You must enter a location for the target project.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 

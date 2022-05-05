@@ -1,6 +1,7 @@
 ﻿namespace Unitverse.Commands
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.Design;
     using System.IO;
     using System.Linq;
@@ -11,9 +12,11 @@
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
     using NuGet.VisualStudio;
+    using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
     using Unitverse.Helper;
+    using Unitverse.Options;
     using Unitverse.Views;
     using Task = System.Threading.Tasks.Task;
 
@@ -123,12 +126,17 @@
                         {
                             try
                             {
-                                var frameworkName = _package.FrameworkParser.ParseFrameworkName(moniker.Value?.ToString());
+                                var frameworkName = _package.FrameworkParser.ParseFrameworkName(moniker);
                                 shortFrameworkName = _package.FrameworkParser.GetShortFrameworkName(frameworkName);
                             }
                             catch (ArgumentException)
                             {
                             }
+                        }
+
+                        if (shortFrameworkName.StartsWith("netstandard", StringComparison.OrdinalIgnoreCase))
+                        {
+                            shortFrameworkName = "netcoreapp3.1";
                         }
 
                         var manifest = window.Manifest;
@@ -145,10 +153,9 @@
                         // add the project
                         var newProject = _dte.Solution.AddFromFile(projectFileName);
 
-                        // TODO - add references for test framework, mocking framework and fluent assertions
-                        ReferencesHelper.AddNugetPackagesAndProjectReferences(_package, project, new[] { new NugetPackageReference("coverlet.collector", null) }, new[] { project });
-
-                        VsMessageBox.Show("Create test project for " + project.Name + " - " + project.Properties.Item("TargetFrameworkMoniker").Value, false, _package);
+                        // wait for project load and add references
+                        var packages = FrameworkPackageProvider.Get(manifest.GenerationOptions).ToList();
+                        ReferencesHelper.AddNugetPackagesAndProjectReferences(_package, newProject, packages, new[] { project });
                     }
                 }, _package);
         }

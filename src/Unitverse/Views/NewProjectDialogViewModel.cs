@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Data;
 using Unitverse.Core.Helpers;
@@ -30,6 +31,9 @@ namespace Unitverse.Views
             _generationOptions = new MutableGenerationOptions(projectOptions.GenerationOptions);
             var strategyOptions = new MutableStrategyOptions(projectOptions.StrategyOptions);
             var namingOptions = new MutableNamingOptions(projectOptions.NamingOptions);
+
+            _name = projectOptions.GenerationOptions.GetTargetProjectNames(sourceProject.Name).FirstOrDefault();
+            _location = new FileInfo(sourceProject.FileName).Directory.Parent.FullName;
 
             _originalGenerationOptions = new MutableGenerationOptions(_generationOptions);
             _allowDetachedGeneration = _originalGenerationOptions.AllowGenerationWithoutTargetProject;
@@ -79,7 +83,7 @@ namespace Unitverse.Views
                 if (_location != value)
                 {
                     _location = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Location)));
                 }
             }
         }

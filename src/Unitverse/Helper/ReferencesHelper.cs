@@ -5,6 +5,8 @@
     using System.Globalization;
     using System.Linq;
     using EnvDTE;
+    using Microsoft;
+    using Microsoft.VisualStudio.OperationProgress;
     using Microsoft.VisualStudio.Shell;
     using Unitverse.Core.Models;
     using VSLangProj;
@@ -21,6 +23,12 @@
             WaitableActionHelper.RunWaitableAction(package, logger, "Creating test project", logMessage =>
             {
                 ThreadHelper.ThrowIfNotOnUIThread();
+
+                var operationProgressStatusService = package.GetService(typeof(SVsOperationProgressStatusService)) as IVsOperationProgressStatusService;
+                Assumes.Present(operationProgressStatusService);
+                var stageStatus = operationProgressStatusService.GetStageStatus(CommonOperationProgressStageIds.Intellisense);
+
+                package.JoinableTaskFactory.Run(() => stageStatus.WaitForCompletionAsync());
 
                 var installedPackages = package.PackageInstallerServices.GetInstalledPackages(source).ToList();
                 var installablePackages = packagesToInstall.Where(x => !installedPackages.Any(installedPackage => string.Equals(installedPackage.Id, x.Name, StringComparison.OrdinalIgnoreCase))).ToList();
