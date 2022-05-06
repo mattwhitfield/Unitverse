@@ -1,5 +1,6 @@
 ﻿namespace Unitverse.Core.Frameworks
 {
+    using System;
     using System.Collections.Generic;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
@@ -8,6 +9,11 @@
     {
         public static IEnumerable<INugetPackageReference> Get(IGenerationOptions generationOptions)
         {
+            if (generationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(generationOptions));
+            }
+
             yield return new NugetPackageReference("coverlet.collector", null);
 
             if (generationOptions.UseFluentAssertions)

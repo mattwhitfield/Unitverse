@@ -17,46 +17,50 @@
         public static void AddNugetPackagesAndProjectReferences(IUnitTestGeneratorPackage package, Project source, IList<INugetPackageReference> packagesToInstall, IList<Project> projectsToReference)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-
             var logger = new AggregateLogger();
 
-            WaitableActionHelper.RunWaitableAction(package, logger, "Creating test project", logMessage =>
+            package.JoinableTaskFactory.Run(async () =>
             {
-                ThreadHelper.ThrowIfNotOnUIThread();
-
-                var operationProgressStatusService = package.GetService(typeof(SVsOperationProgressStatusService)) as IVsOperationProgressStatusService;
-                Assumes.Present(operationProgressStatusService);
-                var stageStatus = operationProgressStatusService.GetStageStatus(CommonOperationProgressStageIds.Intellisense);
-
-                package.JoinableTaskFactory.Run(() => stageStatus.WaitForCompletionAsync());
-
-                var installedPackages = package.PackageInstallerServices.GetInstalledPackages(source).ToList();
-                var installablePackages = packagesToInstall.Where(x => !installedPackages.Any(installedPackage => string.Equals(installedPackage.Id, x.Name, StringComparison.OrdinalIgnoreCase))).ToList();
-
-                foreach (var installablePackage in installablePackages)
+                await WaitableActionHelper.RunWaitableActionAsync(package, logger, "Creating test project", async logMessage =>
                 {
-                    var message = string.Format(CultureInfo.CurrentCulture, "Installing package '{0}'...", installablePackage.Name);
-                    logMessage(message);
+                    logMessage("Waiting for project initialization...");
 
-                    InstallPackage(source, package, installablePackage);
-                    
-                }
+                    var operationProgressStatusService = package.GetService(typeof(SVsOperationProgressStatusService)) as IVsOperationProgressStatusService;
+                    Assumes.Present(operationProgressStatusService);
+                    var stageStatus = operationProgressStatusService.GetStageStatus(CommonOperationProgressStageIds.Intellisense);
 
+                    await stageStatus.WaitForCompletionAsync();
 
-                var vsLangProj = source.Object as VSProject;
-                var existingReferences = new HashSet<string>(vsLangProj.References.OfType<Reference3>().Select(x => x.SourceProject?.Name).Where(x => !string.IsNullOrWhiteSpace(x)), StringComparer.OrdinalIgnoreCase);
+                    await package.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                foreach (var project in projectsToReference)
-                {
-                    if (!existingReferences.Contains(project.Name))
+                    var installedPackages = package.PackageInstallerServices.GetInstalledPackages(source).ToList();
+                    var installablePackages = packagesToInstall.Where(x => !installedPackages.Any(installedPackage => string.Equals(installedPackage.Id, x.Name, StringComparison.OrdinalIgnoreCase))).ToList();
+
+                    foreach (var installablePackage in installablePackages)
                     {
-                        var message = string.Format(CultureInfo.CurrentCulture, "Referencing project '{0}'...", project.Name);
+                        var message = string.Format(CultureInfo.CurrentCulture, "Installing package '{0}'...", installablePackage.Name);
                         logMessage(message);
 
-                        vsLangProj.References.AddProject(project);
+                        InstallPackage(source, package, installablePackage);
                     }
-                }
+
+                    var vsLangProj = source.Object as VSProject;
+                    var existingReferences = new HashSet<string>(vsLangProj.References.OfType<Reference3>().Select(x => x.SourceProject?.Name).Where(x => !string.IsNullOrWhiteSpace(x)), StringComparer.OrdinalIgnoreCase);
+
+                    foreach (var project in projectsToReference)
+                    {
+                        if (!existingReferences.Contains(project.Name))
+                        {
+                            var message = string.Format(CultureInfo.CurrentCulture, "Referencing project '{0}'...", project.Name);
+                            logMessage(message);
+
+                            vsLangProj.References.AddProject(project);
+                        }
+                    }
+                });
             });
+
+
         }
 
         private static void InstallPackage(Project currentProject, IUnitTestGeneratorPackage generatorPackage, INugetPackageReference package)

@@ -135,32 +135,47 @@
                                 Opacity="0.4"
                                 Stretch="Uniform" />
 
-                            <Grid Grid.Row="0" Grid.Column="2">
+                            <Grid
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Margin="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <TextBox
                                     x:Name="LocationTextBox"
+                                    Margin="0"
                                     Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTextBoxStyleKey}}"
                                     Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" />
 
-                                <Button
-                                    Grid.Column="1"
-                                    Width="30"
-                                    MinWidth="30"
-                                    Margin="6,0,0,0"
-                                    Click="OnFolderSelect"
-                                    Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}">
-                                    …
-                                </Button>
+                                <Grid Grid.Column="1" Margin="4,0,0,0">
+
+                                    <Button
+                                        Width="30"
+                                        Height="18"
+                                        MinWidth="30"
+                                        MinHeight="18"
+                                        Click="OnFolderSelect"
+                                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}" />
+
+                                    <Path
+                                        Width="14"
+                                        Height="8"
+                                        HorizontalAlignment="Center"
+                                        Data="M16,12A2,2 0 0,1 18,10A2,2 0 0,1 20,12A2,2 0 0,1 18,14A2,2 0 0,1 16,12M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12M4,12A2,2 0 0,1 6,10A2,2 0 0,1 8,12A2,2 0 0,1 6,14A2,2 0 0,1 4,12Z"
+                                        Fill="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                        IsHitTestVisible="False"
+                                        Opacity="0.4"
+                                        Stretch="Uniform" />
+                                </Grid>
 
                             </Grid>
 
                             <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="2"
-                                Margin="0,2"
+                                Margin="0,1,0,2"
                                 FontSize="11"
                                 Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
                                 Opacity="0.6"

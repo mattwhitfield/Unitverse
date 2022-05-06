@@ -74,6 +74,23 @@ namespace Unitverse.Core.Tests.Options.Editing
         }
 
         [Test]
+        public void CanCallExtractFromWithSelection()
+        {
+            // Arrange
+            var source = new GenerationOptions();
+            source.ActComment = "freddo";
+            var modifiableSource = new MutableGenerationOptions(source);
+
+            // Act
+            var result = EditableItemExtractor.ExtractFrom(source, modifiableSource, false, str => str == nameof(IGenerationOptions.ArrangeComment) ? "file" : null, x => x == nameof(IGenerationOptions.AllowGenerationWithoutTargetProject)).ToList();
+
+            // Assert
+            result.Should().Contain(x => x.ItemType == EditableItemType.Boolean && x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.AllowGenerationWithoutTargetProject), nameof(IGenerationOptions.AllowGenerationWithoutTargetProject));
+            result.Should().Contain(x => x.ItemType == EditableItemType.Header);
+            result.Should().HaveCount(2);
+        }
+
+        [Test]
         public void CannotCallExtractFromWithNullSource()
         {
             FluentActions.Invoking(() => EditableItemExtractor.ExtractFrom(default(object), new object(), false).ToList()).Should().Throw<ArgumentNullException>();

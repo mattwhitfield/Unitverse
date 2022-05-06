@@ -114,9 +114,6 @@
                     helper.Owner = new System.IntPtr(project.DTE.MainWindow.HWnd);
 #endif
 
-                    var x = project.Properties.Item("fartchunks");
-
-
                     var result = window.ShowDialog();
                     if (result.HasValue && result.Value)
                     {

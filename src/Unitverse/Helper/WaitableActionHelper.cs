@@ -7,9 +7,9 @@
 
     internal static class WaitableActionHelper
     {
-        public static void RunWaitableAction(IUnitTestGeneratorPackage package, IMessageLogger messageLogger, string title, Action<Action<string>> function)
+        public static async System.Threading.Tasks.Task RunWaitableActionAsync(IUnitTestGeneratorPackage package, IMessageLogger messageLogger, string title, Func<Action<string>, System.Threading.Tasks.Task> function)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
+            await package.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             if (package.GetService(typeof(SVsThreadedWaitDialogFactory)) is IVsThreadedWaitDialogFactory dialogFactory)
             {
@@ -27,7 +27,7 @@
 
                     try
                     {
-                        function(LogMessageAction);
+                        await function(LogMessageAction);
                     }
                     finally
                     {
@@ -37,7 +37,7 @@
                 }
             }
 
-            function(messageLogger.LogMessage);
+            await function(messageLogger.LogMessage);
         }
     }
 }
