@@ -1,0 +1,15 @@
+namespace Unitverse.Web.Services.Flow
+{
+    public interface P
+    { }
+
+    public class R : P
+    { }
+
+    public class Crash<TRequest> where TRequest : notnull, P
+    {
+        public Crash(TRequest foo)
+        {
+        }
+    }
+}

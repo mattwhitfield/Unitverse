@@ -175,8 +175,15 @@
                 if (constraint != null)
                 {
                     var typeConstraints = constraint.Constraints.OfType<TypeConstraintSyntax>().Select(x => x.Type).Select(x => classModel.SemanticModel.GetTypeInfo(x));
-                    derivedType = TypeHelper.FindDerivedNonAbstractType(typeConstraints.Select(x => x.Type).Where(x => x != null).ToArray());
-                    nameSyntax = SyntaxFactory.IdentifierName(derivedType.ToFullName());
+                    var constrainableTypes = typeConstraints.Select(x => x.Type).Where(x => x != null && !(x is IErrorTypeSymbol)).ToArray();
+                    if (constrainableTypes.Any())
+                    {
+                        derivedType = TypeHelper.FindDerivedNonAbstractType(constrainableTypes);
+                        if (derivedType != null)
+                        {
+                            nameSyntax = SyntaxFactory.IdentifierName(derivedType.ToFullName());
+                        }
+                    }
                 }
 
                 var aliasedName = parameter.Identifier.ToString();
