@@ -61,6 +61,27 @@ namespace Unitverse.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+        ///
+        ///  &lt;PropertyGroup&gt;
+        ///    &lt;TargetFramework&gt;$$TARGETFRAMEWORK$$&lt;/TargetFramework&gt;
+        ///    &lt;IsPackable&gt;false&lt;/IsPackable&gt;
+        ///  &lt;/PropertyGroup&gt;
+        ///
+        ///  &lt;ItemGroup&gt;
+        ///    &lt;PackageReference Include=&quot;Microsoft.NET.Test.Sdk&quot; Version=&quot;16.11.0&quot; /&gt;
+        ///    &lt;PackageReference Include=&quot;xunit&quot; Version=&quot;2.4.1&quot; /&gt;
+        ///    &lt;PackageReference Include=&quot;xunit.runner.visualstudio&quot; Version=&quot;2.4.3&quot;&gt;
+        ///      &lt;IncludeAssets&gt;runtime; build; native; contentfiles; analyzers; buildtransitive&lt;/IncludeAssets&gt;
+        ///      &lt;Pr [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DefaultProjectContent {
+            get {
+                return ResourceManager.GetString("DefaultProjectContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to //   _   _      _ _                       
         /////  | | | |_ _ (_) |___ _____ _ _ ___ ___ 
         /////  | |_| | &apos; \| |  _\ V / -_) &apos;_(_-&lt;/ -_)

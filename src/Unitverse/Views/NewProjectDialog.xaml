@@ -1,0 +1,237 @@
+﻿<Window
+    x:Class="Unitverse.Views.NewProjectDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:editing="clr-namespace:Unitverse.Core.Options.Editing;assembly=Unitverse.Core"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:platformUI="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+    xmlns:views="clr-namespace:Unitverse.Views"
+    xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+    Title="Create Unit Test Project"
+    Width="800"
+    Height="500"
+    d:DataContext="{d:DesignInstance views:NewProjectDialogViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowBackgroundBrushKey}}"
+    ResizeMode="CanResize"
+    WindowStartupLocation="CenterOwner"
+    WindowStyle="ToolWindow"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="SharedResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.LayoutTransform>
+            <ScaleTransform x:Name="RootScale" ScaleX="1" ScaleY="1" />
+        </Grid.LayoutTransform>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" HorizontalAlignment="Stretch">
+            <Grid>
+                <ScrollViewer
+                    Margin="6"
+                    HorizontalAlignment="Stretch"
+                    Grid.IsSharedSizeScope="True"
+                    HorizontalScrollBarVisibility="Disabled"
+                    Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ScrollViewerStyleKey}}">
+                    <StackPanel Orientation="Vertical">
+                        <Border
+                            Margin="6,4"
+                            BorderBrush="{DynamicResource {x:Static platformUI:CommonDocumentColors.InnerTabActiveIndicatorBrushKey}}"
+                            BorderThickness="0,0,0,1">
+                            <TextBlock
+                                Margin="0,0,0,2"
+                                FontSize="14"
+                                FontWeight="Bold"
+                                Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                Text="Name and Location" />
+                        </Border>
+                        <Grid
+                            Grid.Row="0"
+                            Margin="6,4"
+                            HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Names" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Icons" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Margin="0,0,6,0"
+                                HorizontalAlignment="Right"
+                                Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                Text="Name:" />
+
+                            <Path
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Width="16"
+                                Height="16"
+                                Margin="0,2,6,0"
+                                Data="M17,8.5L12.25,12.32L17,16V8.5M4.7,18.4L2,16.7V7.7L5,6.7L9.3,10.03L18,2L22,4.5V20L17,22L9.34,14.66L4.7,18.4M5,14L6.86,12.28L5,10.5V14Z"
+                                Fill="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                Opacity="0.4"
+                                Stretch="Uniform" />
+
+                            <TextBox
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTextBoxStyleKey}}"
+                                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Margin="0,2"
+                                FontSize="11"
+                                Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                Opacity="0.6"
+                                Text="The name of the unit test project to create"
+                                TextWrapping="Wrap" />
+                        </Grid>
+                        <Grid
+                            Grid.Row="1"
+                            Margin="6,4"
+                            HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Names" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Icons" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Margin="0,0,6,0"
+                                HorizontalAlignment="Right"
+                                Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                Text="Location:" />
+
+                            <Path
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Width="16"
+                                Height="16"
+                                Margin="0,2,6,0"
+                                Data="M17,8.5L12.25,12.32L17,16V8.5M4.7,18.4L2,16.7V7.7L5,6.7L9.3,10.03L18,2L22,4.5V20L17,22L9.34,14.66L4.7,18.4M5,14L6.86,12.28L5,10.5V14Z"
+                                Fill="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                Opacity="0.4"
+                                Stretch="Uniform" />
+
+                            <Grid
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox
+                                    x:Name="LocationTextBox"
+                                    Margin="0"
+                                    Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTextBoxStyleKey}}"
+                                    Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <Grid Grid.Column="1" Margin="4,0,0,0">
+
+                                    <Button
+                                        Width="30"
+                                        Height="18"
+                                        MinWidth="30"
+                                        MinHeight="18"
+                                        Click="OnFolderSelect"
+                                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}" />
+
+                                    <Path
+                                        Width="14"
+                                        Height="8"
+                                        HorizontalAlignment="Center"
+                                        Data="M16,12A2,2 0 0,1 18,10A2,2 0 0,1 20,12A2,2 0 0,1 18,14A2,2 0 0,1 16,12M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12M4,12A2,2 0 0,1 6,10A2,2 0 0,1 8,12A2,2 0 0,1 6,14A2,2 0 0,1 4,12Z"
+                                        Fill="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                        IsHitTestVisible="False"
+                                        Opacity="0.4"
+                                        Stretch="Uniform" />
+                                </Grid>
+
+                            </Grid>
+
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Margin="0,1,0,2"
+                                FontSize="11"
+                                Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                Opacity="0.6"
+                                Text="The folder in which the project folder will be created"
+                                TextWrapping="Wrap" />
+                        </Grid>
+                        <ItemsControl
+                            Grid.Row="2"
+                            ItemTemplateSelector="{StaticResource EditableItemTemplateSelector}"
+                            ItemsSource="{Binding GenerationOptionsItems}" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+        <Border
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            BorderBrush="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+            BorderThickness="0,1,0,0"
+            Opacity="0.5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Path
+                    Grid.Column="0"
+                    Width="160"
+                    Height="32"
+                    Margin="6"
+                    Data="{StaticResource Logo}"
+                    Fill="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                    Opacity="0.65"
+                    Stretch="Uniform" />
+
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="10"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <Button
+                        Margin="6,0"
+                        Click="OnOK"
+                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}">
+                        Ok
+                    </Button>
+                    <Button
+                        Click="OnCancel"
+                        IsCancel="True"
+                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}">
+                        Cancel
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

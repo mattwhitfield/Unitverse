@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.LanguageServices;
     using Microsoft.VisualStudio.Threading;
+    using NuGet.VisualStudio;
     using Unitverse.Core.Options;
 
     public interface IUnitTestGeneratorPackage : IServiceProvider
@@ -19,6 +20,12 @@
         IStrategyOptions StrategyOptions { get; }
 
         VisualStudioWorkspace Workspace { get; }
+
+        IVsPackageInstaller PackageInstaller { get; }
+
+        IVsPackageInstallerServices PackageInstallerServices { get; }
+
+        IVsFrameworkParser FrameworkParser { get; }
 
         Task<object> GetServiceAsync(Type serviceType);
     }

@@ -8,7 +8,7 @@
 
     public static class EditableItemExtractor
     {
-        public static IEnumerable<DisplayItem> ExtractFrom(object source, object modifiableInstance, bool skipExcluded, Func<string, string> sourceFileExtractor = null)
+        public static IEnumerable<DisplayItem> ExtractFrom(object source, object modifiableInstance, bool skipExcluded, Func<string, string> sourceFileExtractor = null, Func<string, bool> propertySelector = null)
         {
             if (source is null)
             {
@@ -25,6 +25,11 @@
             var modifiableProperties = modifiableInstance.GetType().GetProperties().Where(x => x.CanWrite).ToDictionary(x => x.Name);
             foreach (var property in type.GetProperties().Where(x => x.CanWrite))
             {
+                if (propertySelector != null && !propertySelector(property.Name))
+                {
+                    continue;
+                }
+
                 var propertyType = property.PropertyType;
 
                 // skip if it's not in the modifiable instance, the type is not the same or it has [ExcludedFromUserInterface]

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Include href="KnownImageIds.vsct"/>
   <Extern href="stdidcmd.h" />
   <Extern href="vsshlids.h" />
   <Commands package="guidUnitTestGeneratorPackage">
@@ -24,6 +25,15 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>Generate tests</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidUnitTestGeneratorPackageCmdSet" id="CreatTestProjectCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidUnitTestGeneratorPackageCmdSet" id="projectMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="CSTestApplication" />
+		<CommandFlag>IconIsMoniker</CommandFlag>
+		<CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Create unit test project...</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidUnitTestGeneratorPackageCmdSet" id="GenerateUnitTestsCommandId" priority="0x0100" type="Button">
@@ -104,6 +114,7 @@
       <IDSymbol name="RegenerateTestForMethodCommandId" value="0x0103"/>
       <IDSymbol name="RegenerateUnitTestsCommandId" value="0x0104" />
       <IDSymbol name="GoToTestForMethodCommandId" value="0x0105" />
+      <IDSymbol name="CreatTestProjectCommandId" value="0x0106" />
     </GuidSymbol>
     <GuidSymbol name="guidCommandImages" value="{8b760adc-9540-4474-87ce-4743acdaf4a1}">
       <IDSymbol name="bmpGenerate" value="1" />
