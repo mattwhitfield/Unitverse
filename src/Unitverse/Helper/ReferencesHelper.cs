@@ -29,14 +29,11 @@
                     Assumes.Present(operationProgressStatusService);
                     var stageStatus = operationProgressStatusService.GetStageStatus(CommonOperationProgressStageIds.Intellisense);
 
-                    await stageStatus.WaitForCompletionAsync();
+                    await package.JoinableTaskFactory.RunAsync(stageStatus.WaitForCompletionAsync);
 
                     await package.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                    var installedPackages = package.PackageInstallerServices.GetInstalledPackages(source).ToList();
-                    var installablePackages = packagesToInstall.Where(x => !installedPackages.Any(installedPackage => string.Equals(installedPackage.Id, x.Name, StringComparison.OrdinalIgnoreCase))).ToList();
-
-                    foreach (var installablePackage in installablePackages)
+                    foreach (var installablePackage in packagesToInstall)
                     {
                         var message = string.Format(CultureInfo.CurrentCulture, "Installing package '{0}'...", installablePackage.Name);
                         logMessage(message);

@@ -23,8 +23,6 @@
 
         IVsPackageInstaller PackageInstaller { get; }
 
-        IVsPackageInstallerServices PackageInstallerServices { get; }
-
         IVsFrameworkParser FrameworkParser { get; }
 
         Task<object> GetServiceAsync(Type serviceType);

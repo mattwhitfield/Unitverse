@@ -88,7 +88,11 @@ namespace Unitverse.Views
                 return;
             }
 
-            if (VsProjectHelper.FindProjects(_sourceProject.DTE.Solution).Any(x => string.Equals(x.Name, _viewModel.Name, StringComparison.OrdinalIgnoreCase)))
+            if (VsProjectHelper.FindProjects(_sourceProject.DTE.Solution).Any(x => 
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                return string.Equals(x.Name, _viewModel.Name, StringComparison.OrdinalIgnoreCase);
+            }))
             {
                 System.Windows.MessageBox.Show("There is already a project in the solution named '" + _viewModel.Name + "'. Please choose a unique name for the project.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
