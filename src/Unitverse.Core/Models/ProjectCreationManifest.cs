@@ -1,6 +1,7 @@
 ﻿namespace Unitverse.Core.Models
 {
     using System;
+    using System.IO;
     using Unitverse.Core.Options;
 
     public class ProjectCreationManifest
@@ -27,5 +28,7 @@
         public string FolderName { get; }
 
         public IGenerationOptions GenerationOptions { get; }
+
+        public string ProjectFileName => Path.Combine(FolderName, Name, Name + ".csproj");
     }
 }

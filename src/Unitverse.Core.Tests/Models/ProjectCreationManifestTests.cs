@@ -2,12 +2,12 @@ namespace Unitverse.Core.Tests.Models
 {
     using Unitverse.Core.Models;
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using FluentAssertions;
     using FakeItEasy;
     using Unitverse.Core.Options;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class ProjectCreationManifestTests
     {
         private ProjectCreationManifest _testClass;
@@ -15,16 +15,16 @@ namespace Unitverse.Core.Tests.Models
         private string _folderName;
         private IGenerationOptions _generationOptions;
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
-            _name = "TestValue1063717306";
-            _folderName = "TestValue589327833";
+            _name = "NewProject";
+            _folderName = "C:\\Stuff";
             _generationOptions = A.Fake<IGenerationOptions>();
             _testClass = new ProjectCreationManifest(_name, _folderName, _generationOptions);
         }
 
-        [TestMethod]
+        [Test]
         public void CanConstruct()
         {
             // Act
@@ -34,46 +34,51 @@ namespace Unitverse.Core.Tests.Models
             instance.Should().NotBeNull();
         }
 
-        [TestMethod]
+        [Test]
         public void CannotConstructWithNullGenerationOptions()
         {
             FluentActions.Invoking(() => new ProjectCreationManifest("TestValue1310356924", "TestValue2089427287", default(IGenerationOptions))).Should().Throw<ArgumentNullException>();
         }
 
-        [DataTestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow("   ")]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("   ")]
         public void CannotConstructWithInvalidName(string value)
         {
             FluentActions.Invoking(() => new ProjectCreationManifest(value, "TestValue1465155088", A.Fake<IGenerationOptions>())).Should().Throw<ArgumentNullException>();
         }
 
-        [DataTestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow("   ")]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("   ")]
         public void CannotConstructWithInvalidFolderName(string value)
         {
             FluentActions.Invoking(() => new ProjectCreationManifest("TestValue477371174", value, A.Fake<IGenerationOptions>())).Should().Throw<ArgumentNullException>();
         }
 
-        [TestMethod]
+        [Test]
         public void NameIsInitializedCorrectly()
         {
             _testClass.Name.Should().Be(_name);
         }
 
-        [TestMethod]
+        [Test]
         public void FolderNameIsInitializedCorrectly()
         {
             _testClass.FolderName.Should().Be(_folderName);
         }
 
-        [TestMethod]
+        [Test]
         public void GenerationOptionsIsInitializedCorrectly()
         {
             _testClass.GenerationOptions.Should().BeSameAs(_generationOptions);
+        }
+
+        [Test]
+        public void CanGetProjectFileName()
+        {
+            // Assert
+            _testClass.ProjectFileName.Should().Be("C:\\Stuff\\NewProject\\NewProject.csproj");
         }
     }
 }

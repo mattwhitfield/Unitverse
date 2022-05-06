@@ -1,6 +1,8 @@
 ﻿using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using System;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -29,6 +31,7 @@ namespace Unitverse.Views
 
             _scale = ZoomTracker.Get();
             RootScale.ScaleY = RootScale.ScaleX = 1 + (_scale / 100.0);
+            _sourceProject = sourceProject;
         }
 
         private void NewProjectDialog_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
@@ -45,6 +48,7 @@ namespace Unitverse.Views
         }
 
         private NewProjectDialogViewModel _viewModel;
+        private readonly Project _sourceProject;
 
         public ProjectCreationManifest Manifest => _viewModel.Manifest;
 
@@ -78,9 +82,22 @@ namespace Unitverse.Views
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(_viewModel.Location))
+            if (string.IsNullOrWhiteSpace(_viewModel.Location) || !Directory.Exists(_viewModel.Location))
             {
-                System.Windows.MessageBox.Show("You must enter a location for the target project.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("You must enter a location for the target project and the directory must already exist.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (VsProjectHelper.FindProjects(_sourceProject.DTE.Solution).Any(x => string.Equals(x.Name, _viewModel.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                System.Windows.MessageBox.Show("There is already a project in the solution named '" + _viewModel.Name + "'. Please choose a unique name for the project.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            var filename = _viewModel.Manifest.ProjectFileName;
+            if (File.Exists(filename))
+            {
+                System.Windows.MessageBox.Show("The file '" + filename + "' already exists on disk. Please remove the existing file before continuing.", Constants.ExtensionName, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 

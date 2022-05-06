@@ -139,7 +139,7 @@
                         var manifest = window.Manifest;
 
                         // write out project file
-                        var projectFileName = Path.Combine(manifest.FolderName, manifest.Name, manifest.Name + ".csproj");
+                        var projectFileName = manifest.ProjectFileName;
                         var directory = Path.GetDirectoryName(projectFileName);
                         if (!Directory.Exists(directory))
                         {
