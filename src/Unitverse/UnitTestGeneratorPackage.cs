@@ -41,8 +41,6 @@
 
         public IVsPackageInstaller PackageInstaller { get; private set; }
 
-        public IVsPackageInstallerServices PackageInstallerServices { get; private set; }
-
         public IUnitTestGeneratorOptions Options
         {
             get
@@ -76,7 +74,6 @@
                 throw new InvalidOperationException();
             }
 
-            PackageInstallerServices = componentModel.GetService<IVsPackageInstallerServices>();
             PackageInstaller = componentModel.GetService<IVsPackageInstaller>();
             FrameworkParser = componentModel.GetService<IVsFrameworkParser>();
             Workspace = componentModel.GetService<VisualStudioWorkspace>();
