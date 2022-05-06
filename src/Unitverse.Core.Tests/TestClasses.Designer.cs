@@ -1196,9 +1196,10 @@ namespace Unitverse.Core.Tests {
         ///    {
         ///        public static Tuple&lt;FlowStage, IList&lt;FlowStage&gt;&gt; Follows(this FlowStage stage, params FlowStage[] followedStages)
         ///        {
-        ///            if (followedStages == null)
-        ///            {
-        ///                throw new ArgumentNull [rest of string was truncated]&quot;;.
+        ///            return null;
+        ///        }
+        ///
+        ///        public static IDictionary&lt;FlowStage, IList&lt;Flow [rest of string was truncated]&quot;;.
         /// </summary>
         public static string MultipleOverloads {
             get {
@@ -1232,6 +1233,23 @@ namespace Unitverse.Core.Tests {
         public static string NestedClassTestFile {
             get {
                 return ResourceManager.GetString("NestedClassTestFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace Unitverse.Web.Services.Flow
+        ///{
+        ///    public class Crash&lt;TRequest&gt; where TRequest : notnull
+        ///    {
+        ///        public Crash(TRequest foo)
+        ///        {
+        ///        }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string NotNullConstraint {
+            get {
+                return ResourceManager.GetString("NotNullConstraint", resourceCulture);
             }
         }
         
@@ -1820,6 +1838,7 @@ namespace Unitverse.Core.Tests {
         ///	using System;
         ///    using System.Collections.Generic;
         ///    using System.Linq;	
+        ///    using System.Threading.Tasks;
         ///	
         ///	public enum FlowStage
         ///    {
@@ -1832,9 +1851,8 @@ namespace Unitverse.Core.Tests {
         ///    {
         ///        public static Tuple&lt;FlowStage, IList&lt;FlowStage&gt;&gt; Follows(this FlowStage stage, params FlowStage[] followedStages)
         ///        {
-        ///            if (followedStages == null)
-        ///            {
-        ///       [rest of string was truncated]&quot;;.
+        ///            return null;
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string XmlComments {
             get {
