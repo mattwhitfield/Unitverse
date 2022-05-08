@@ -54,3 +54,6 @@ Unitverse will create values for a wide variety of types when needed for method 
 
 Unitverse can generate tests for single members, meaning that you can generate tests for only the items that you want to test, or add tests for new members when your classes already have tests defined.
 
+### 🟠 Test project creation
+
+Unitverse allows you to easily create unit tests projects with the right packages installed by clicking on the 'Create unit test project' option on the project context menu.
