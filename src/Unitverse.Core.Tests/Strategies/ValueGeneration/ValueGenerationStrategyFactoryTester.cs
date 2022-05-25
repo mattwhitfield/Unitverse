@@ -33,6 +33,7 @@ namespace Unitverse.Core.Tests.Strategies.ValueGeneration
         [TestCase("System.Guid")]
         [TestCase("System.DateTime")]
         [TestCase("System.DateTimeOffset")]
+        [TestCase("System.TimeSpan")]
         [TestCase("System.Globalization.CultureInfo")]
         [TestCase("System.Byte[]")]
         [TestCase("System.IO.Stream")]

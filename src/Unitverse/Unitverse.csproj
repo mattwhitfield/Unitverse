@@ -206,7 +206,7 @@
         <PackageReference Include="Microsoft.VisualStudio.LanguageServices" Version="4.0.1" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.1" />
-        <PackageReference Include="NuGet.VisualStudio" Version="6.0.0" />
+        <PackageReference Include="NuGet.VisualStudio" Version="6.0.0" NoWarn="NU1603" />
       </ItemGroup>
     </When>
     <Otherwise>

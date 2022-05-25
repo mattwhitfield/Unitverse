@@ -15,7 +15,7 @@ namespace Unitverse.Web.Services.Flow
 
 	public static class FlowConstraintProviderFactory
     {
-        public static Tuple<FlowStage, IList<FlowStage>> Follows(this FlowStage stage, params FlowStage[] followedStages)
+        public static Tuple<FlowStage, IList<FlowStage>> Follows(this FlowStage stage, TimeSpan span, params FlowStage[] followedStages)
         {
             return null;
         }
