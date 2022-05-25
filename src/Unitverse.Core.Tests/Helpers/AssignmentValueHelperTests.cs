@@ -16,37 +16,6 @@ namespace Unitverse.Core.Tests.Helpers
     [TestFixture]
     public static class AssignmentValueHelperTests
     {
-        //private static IEnumerable<object[]> TestCases
-        //{
-        //    get
-        //    {
-        //        yield return new object[] { typeof(Func<>), new[] { typeof(Task) }, "\\(\\) => Task.CompletedTask" };
-        //        yield return new object[] { typeof(Func<,>), new[] { typeof(string), typeof(Task) }, "x => Task.CompletedTask" };
-        //        yield return new object[] { typeof(Func<,,>), new[] { typeof(string), typeof(string), typeof(Task) }, "\\(x, y\\) => Task.CompletedTask" };
-        //        yield return new object[] { typeof(Func<,,,>), new[] { typeof(string), typeof(string), typeof(string), typeof(Task) }, "\\(x, y, z\\) => Task.CompletedTask" };
-        //        yield return new object[] { typeof(Func<,,,,>), new[] { typeof(string), typeof(string), typeof(string), typeof(string), typeof(Task) }, "\\(a, b, c, d\\) => Task.CompletedTask" };
-        //        yield return new object[] { typeof(Func<,,,,,>), new[] { typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(Task) }, "\\(a, b, c, d, e\\) => Task.CompletedTask" };
-        //        yield return new object[] { typeof(Func<>), new[] { typeof(Task<int>) }, "\\(\\) => Task.FromResult\\([0-9]+\\)" };
-        //        yield return new object[] { typeof(Func<,>), new[] { typeof(string), typeof(Task<int>) }, "x => Task.FromResult\\([0-9]+\\)" };
-        //        yield return new object[] { typeof(Func<,,>), new[] { typeof(string), typeof(string), typeof(Task<int>) }, "\\(x, y\\) => Task.FromResult\\([0-9]+\\)" };
-        //        yield return new object[] { typeof(Func<,,,>), new[] { typeof(string), typeof(string), typeof(string), typeof(Task<int>) }, "\\(x, y, z\\) => Task.FromResult\\([0-9]+\\)" };
-        //        yield return new object[] { typeof(Func<,,,,>), new[] { typeof(string), typeof(string), typeof(string), typeof(string), typeof(Task<int>) }, "\\(a, b, c, d\\) => Task.FromResult\\([0-9]+\\)" };
-        //        yield return new object[] { typeof(Func<,,,,,>), new[] { typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(Task<int>) }, "\\(a, b, c, d, e\\) => Task.FromResult\\([0-9]+\\)" };
-        //        yield return new object[] { typeof(Func<>), new[] { typeof(string) }, "\\(\\) => \"TestValue[0-9]+\"" };
-        //        yield return new object[] { typeof(Func<,>), new[] { typeof(string), typeof(string) }, "x => \"TestValue[0-9]+\"" };
-        //        yield return new object[] { typeof(Func<,,>), new[] { typeof(string), typeof(string), typeof(string) }, "\\(x, y\\) => \"TestValue[0-9]+\"" };
-        //        yield return new object[] { typeof(Func<,,,>), new[] { typeof(string), typeof(string), typeof(string), typeof(string) }, "\\(x, y, z\\) => \"TestValue[0-9]+\"" };
-        //        yield return new object[] { typeof(Func<,,,,>), new[] { typeof(string), typeof(string), typeof(string), typeof(string), typeof(string) }, "\\(a, b, c, d\\) => \"TestValue[0-9]+\"" };
-        //        yield return new object[] { typeof(Func<,,,,,>), new[] { typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string) }, "\\(a, b, c, d, e\\) => \"TestValue[0-9]+\"" };
-        //        yield return new object[] { typeof(Action), new Type[] { }, "\\(\\) => \\{ \\}" };
-        //        yield return new object[] { typeof(Action<>), new[] { typeof(string) }, "x => \\{ \\}" };
-        //        yield return new object[] { typeof(Action<,>), new[] { typeof(string), typeof(string) }, "\\(x, y\\) => \\{ \\}" };
-        //        yield return new object[] { typeof(Action<,,>), new[] { typeof(string), typeof(string), typeof(string) }, "\\(x, y, z\\) => \\{ \\}" };
-        //        yield return new object[] { typeof(Action<,,,>), new[] { typeof(string), typeof(string), typeof(string), typeof(string) }, "\\(a, b, c, d\\) => \\{ \\}" };
-        //        yield return new object[] { typeof(Action<,,,,>), new[] { typeof(string), typeof(string), typeof(string), typeof(string), typeof(string) }, "\\(a, b, c, d, e\\) => \\{ \\}" };
-        //    }
-        //}
-
         private static IEnumerable<object[]> TestCases
         {
             get
