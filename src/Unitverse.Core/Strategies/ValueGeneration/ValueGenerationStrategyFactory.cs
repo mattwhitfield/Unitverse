@@ -50,9 +50,11 @@
                 new SimpleValueGenerationStrategy(() => Generate.PropertyAccess(SyntaxFactory.IdentifierName("DateTimeOffset"), "UtcNow"), "System.DateTimeOffset", "System.DateTimeOffset?"),
                 new SimpleValueGenerationStrategy(() => Generate.Literal(GenerateDouble()), "double", "double?"),
                 new SimpleValueGenerationStrategy(() => Generate.Literal((float)(Random.NextDouble() * short.MaxValue)), "float", "float?"),
+                new SimpleValueGenerationStrategy(() => SyntaxFactory.InvocationExpression(Generate.MemberAccess("TimeSpan", "FromSeconds"), Generate.Arguments(Generate.Literal(Random.Next(500)))), "System.TimeSpan", "System.TimeSpan?"),
                 new SimpleValueGenerationStrategy(() => (Random.Next(int.MaxValue) % 2) > 0 ? Generate.Literal(true) : Generate.Literal(false), "bool", "bool?"),
-                new SimpleValueGenerationStrategy(() => SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("CultureInfo"), SyntaxFactory.IdentifierName((Random.Next(int.MaxValue) % 2) > 0 ? "CurrentCulture" : "InvariantCulture")), "System.Globalization.CultureInfo"),
-                new SimpleValueGenerationStrategy(() => SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("CancellationToken"), SyntaxFactory.IdentifierName("None")), "System.Threading.CancellationToken"),
+                new SimpleValueGenerationStrategy(() => Generate.MemberAccess("CultureInfo", (Random.Next(int.MaxValue) % 2) > 0 ? "CurrentCulture" : "InvariantCulture"), "System.Globalization.CultureInfo"),
+                new SimpleValueGenerationStrategy(() => Generate.MemberAccess("CancellationToken", "None"), "System.Threading.CancellationToken"),
+                new SimpleValueGenerationStrategy(() => Generate.MemberAccess("Task", "CompletedTask"), "System.Threading.Tasks.Task"),
                 new SimpleValueGenerationStrategy(() => SyntaxFactory.TypeOfExpression(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword))), "System.Type"),
                 new SimpleValueGenerationStrategy(ArrayFactory.Byte, "byte[]"),
                 new TypedValueGenerationStrategy(EnumFactory.Random, "System.Enum"),
@@ -101,6 +103,13 @@
             if (symbol == null)
             {
                 throw new ArgumentNullException(nameof(symbol));
+            }
+
+            // special handling for Task<T>
+            if (string.Equals(typeName, "System.Threading.Tasks.Task", StringComparison.OrdinalIgnoreCase) && symbol is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.IsGenericType && !namedTypeSymbol.IsUnboundGenericType && namedTypeSymbol.TypeArguments.Length == 1)
+            {
+                var returnableValue = GenerateFor(namedTypeSymbol.TypeArguments[0], model, visitedTypes, frameworkSet);
+                return SyntaxFactory.InvocationExpression(Generate.MemberAccess("Task", "FromResult"), Generate.Arguments(returnableValue));
             }
 
             var strategy = Strategies.FirstOrDefault(x => x.SupportedTypeNames.Any(t => string.Equals(t, typeName, StringComparison.OrdinalIgnoreCase)));

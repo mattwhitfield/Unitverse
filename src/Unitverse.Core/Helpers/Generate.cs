@@ -76,6 +76,11 @@
             return builder.ToString();
         }
 
+        public static MemberAccessExpressionSyntax MemberAccess(string container, string member)
+        {
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(container), SyntaxFactory.IdentifierName(member));
+        }
+
         public static LiteralExpressionSyntax Literal(object literal)
         {
             if (literal is string s)
