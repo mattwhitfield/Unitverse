@@ -47,7 +47,7 @@ namespace Unitverse.Views
             }
         }
 
-        private NewProjectDialogViewModel _viewModel;
+        private readonly NewProjectDialogViewModel _viewModel;
         private readonly Project _sourceProject;
 
         public ProjectCreationManifest Manifest => _viewModel.Manifest;

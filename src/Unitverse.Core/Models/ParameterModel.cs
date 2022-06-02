@@ -2,6 +2,7 @@
 {
     using System;
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     public class ParameterModel : TestableModel<ParameterSyntax>
@@ -26,5 +27,30 @@
         public string Type { get; }
 
         public TypeInfo TypeInfo { get; }
+
+        public bool IsNullableTypeSyntax => Node.Type is NullableTypeSyntax;
+
+        public bool HasNullDefaultValue
+        {
+            get
+            {
+                if (Node.Default == null)
+                {
+                    return false;
+                }
+
+                if (Node.Default.Value is DefaultExpressionSyntax)
+                {
+                    return true;
+                }
+
+                if (Node.Default.Value is LiteralExpressionSyntax literal)
+                {
+                    return literal.Kind() == SyntaxKind.DefaultLiteralExpression || literal.Kind() == SyntaxKind.NullLiteralExpression;
+                }
+
+                return false;
+            }
+        }
     }
 }

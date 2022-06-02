@@ -5,28 +5,21 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Windows.Data;
 using Unitverse.Core.Helpers;
 using Unitverse.Core.Models;
 using Unitverse.Core.Options;
 using Unitverse.Core.Options.Editing;
-using Unitverse.Helper;
 using Unitverse.Options;
 
 namespace Unitverse.Views
 {
     public class NewProjectDialogViewModel : INotifyPropertyChanged
     {
-        private MutableGenerationOptions _originalGenerationOptions;
-        private MutableGenerationOptions _generationOptions;
-        private bool _allowDetachedGeneration;
-        private readonly IUnitTestGeneratorOptions _projectOptions;
+        private readonly MutableGenerationOptions _generationOptions;
 
         public NewProjectDialogViewModel(Project sourceProject, IUnitTestGeneratorOptions projectOptions)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-
-            _projectOptions = projectOptions;
 
             _generationOptions = new MutableGenerationOptions(projectOptions.GenerationOptions);
             var strategyOptions = new MutableStrategyOptions(projectOptions.StrategyOptions);
@@ -34,9 +27,6 @@ namespace Unitverse.Views
 
             _name = projectOptions.GenerationOptions.GetTargetProjectNames(sourceProject.Name).FirstOrDefault();
             _location = new FileInfo(sourceProject.FileName).Directory.Parent.FullName;
-
-            _originalGenerationOptions = new MutableGenerationOptions(_generationOptions);
-            _allowDetachedGeneration = _originalGenerationOptions.AllowGenerationWithoutTargetProject;
 
             bool IsValidProperty(string propertyName)
             {

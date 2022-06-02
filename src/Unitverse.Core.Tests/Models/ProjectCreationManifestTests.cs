@@ -37,7 +37,7 @@ namespace Unitverse.Core.Tests.Models
         [Test]
         public void CannotConstructWithNullGenerationOptions()
         {
-            FluentActions.Invoking(() => new ProjectCreationManifest("TestValue1310356924", "TestValue2089427287", default(IGenerationOptions))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new ProjectCreationManifest("TestValue1310356924", "TestValue2089427287", default)).Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(null)]

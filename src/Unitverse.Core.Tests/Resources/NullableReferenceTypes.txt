@@ -8,11 +8,19 @@ namespace TestNamespace.SubNameSpace
         {
         }
  
+        public TestClass(string stringProp, int i, string defaultedStringProp = null)
+        {
+        }
+ 
         public TestClass(ITest? test)
         {
         }
  
-        public TestClass(ITest test, string someOtherThing)
+        public TestClass(ITest? test, ITest defaulted = default)
+        {
+        }
+ 
+        public TestClass(ITest test, string someOtherThing, ITest nulled = null)
         {
         }
  
@@ -22,10 +30,22 @@ namespace TestNamespace.SubNameSpace
         public void SomeMethod(ITest? test)
         { }
 
+        public void SomeMethod(ITest? test, ITest defaulted = default(ITest))
+        { }
+
         public void SomeMethod(ITest test, string someOtherThing)
         { }
 
+        public void SomeMethod(ITest test, int i, string defaultedStringProp = default, string nulledStringProp = null)
+        { }
+
         public void MethodForWhichNoNullabilityTestShouldBeEmitted(ITest? test)
+        { }
+
+        public void SecondMethodForWhichNoNullabilityTestShouldBeEmitted(ITest test = default, ITest test2 = default(ITest), ITest test3 = null)
+        { }
+
+        public void ThirdMethodForWhichNoNullabilityTestShouldBeEmitted(ITest? test, ITest testDefaulted = default)
         { }
     }
 }
