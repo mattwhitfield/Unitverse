@@ -47,7 +47,6 @@ namespace Unitverse.Core.Tests.Strategies.ValueGeneration
             var model = ClassModelProvider.Instance.SemanticModel;
 
             ITypeSymbol info;
-#pragma warning disable CA1062 // it's a test case parameter
             if (typeName.EndsWith("[]", StringComparison.Ordinal))
             {
                 info = model.Compilation.CreateArrayTypeSymbol(model.Compilation.GetTypeByMetadataName(typeName.Substring(0, typeName.Length - 2)));

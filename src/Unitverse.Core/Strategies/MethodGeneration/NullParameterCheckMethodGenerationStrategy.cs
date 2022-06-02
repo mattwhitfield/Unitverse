@@ -55,30 +55,31 @@
 
             for (var i = 0; i < method.Parameters.Count; i++)
             {
-                if (!method.Parameters[i].TypeInfo.Type.IsReferenceType)
+                ParameterModel currentParam = method.Parameters[i];
+                if (!currentParam.TypeInfo.Type.IsReferenceType)
                 {
                     continue;
                 }
 
-                if (method.Parameters[i].TypeInfo.Type.SpecialType == SpecialType.System_String)
+                if (currentParam.TypeInfo.Type.SpecialType == SpecialType.System_String)
                 {
                     continue;
                 }
 
-                if (method.Parameters[i].Node.Modifiers.Any(x => x.Kind() == SyntaxKind.OutKeyword))
+                if (currentParam.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.OutKeyword))
                 {
                     continue;
                 }
 
-                if (method.Parameters[i].Node.Type is NullableTypeSyntax)
+                if (currentParam.IsNullableTypeSyntax || currentParam.HasNullDefaultValue)
                 {
                     continue;
                 }
 
                 var paramList = new List<CSharpSyntaxNode>();
 
-                namingContext = namingContext.WithParameterName(method.Parameters[i].Name.ToPascalCase());
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotCallWithNull, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, "Checks that the " + method.Name + " method throws when the " + method.Parameters[i].Name + " parameter is null.");
+                namingContext = namingContext.WithParameterName(currentParam.Name.ToPascalCase());
+                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotCallWithNull, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, "Checks that the " + method.Name + " method throws when the " + currentParam.Name + " parameter is null.");
 
                 for (var index = 0; index < method.Parameters.Count; index++)
                 {
@@ -89,7 +90,7 @@
 
                         if (index == i)
                         {
-                            defaultAssignmentValue = SyntaxFactory.DefaultExpression(method.Parameters[i].TypeInfo.ToTypeSyntax(_frameworkSet.Context));
+                            defaultAssignmentValue = SyntaxFactory.DefaultExpression(currentParam.TypeInfo.ToTypeSyntax(_frameworkSet.Context));
                         }
 
                         generatedMethod.Emit(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
@@ -104,7 +105,7 @@
                     {
                         if (index == i)
                         {
-                            paramList.Add(SyntaxFactory.DefaultExpression(method.Parameters[i].TypeInfo.ToTypeSyntax(_frameworkSet.Context)));
+                            paramList.Add(SyntaxFactory.DefaultExpression(currentParam.TypeInfo.ToTypeSyntax(_frameworkSet.Context)));
                         }
                         else
                         {

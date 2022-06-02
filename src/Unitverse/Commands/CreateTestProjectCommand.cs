@@ -40,7 +40,9 @@
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
+#pragma warning disable IDE0052 // Remove unread private members - required to hold GC root
         private static CreateTestProjectCommand _instance;
+#pragma warning restore IDE0052 // Remove unread private members
 
         /// <summary>
         /// VS Package that provides this command, not null.

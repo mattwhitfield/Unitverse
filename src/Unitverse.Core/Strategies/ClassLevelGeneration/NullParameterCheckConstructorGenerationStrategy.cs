@@ -62,7 +62,7 @@
 
             foreach (var nullableParameter in nullableParameters)
             {
-                var isNonNullable = model.Constructors.SelectMany(x => x.Parameters.Where(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))).All(x => x.Node.Type is NullableTypeSyntax);
+                var isNonNullable = model.Constructors.SelectMany(x => x.Parameters.Where(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))).All(x => x.IsNullableTypeSyntax || x.HasNullDefaultValue);
 
                 if (isNonNullable)
                 {
@@ -77,7 +77,7 @@
                 foreach (var constructorModel in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))))
                 {
                     var constructorParam = constructorModel.Parameters.First(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase));
-                    if (constructorParam.Node.Type is NullableTypeSyntax)
+                    if (constructorParam.IsNullableTypeSyntax || constructorParam.HasNullDefaultValue)
                     {
                         continue;
                     }
