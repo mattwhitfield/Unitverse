@@ -18,6 +18,7 @@
             TestFileNaming = options.TestFileNaming;
             TestTypeNaming = options.TestTypeNaming;
             UseFluentAssertions = options.UseFluentAssertions;
+            UseAutoFixture = options.UseAutoFixture;
             AutoDetectFrameworkTypes = options.AutoDetectFrameworkTypes;
             EmitUsingsOutsideNamespace = options.EmitUsingsOutsideNamespace;
             PartialGenerationAllowed = options.PartialGenerationAllowed;
@@ -47,6 +48,8 @@
         public string TestTypeNaming { get; set; }
 
         public bool UseFluentAssertions { get; set; }
+
+        public bool UseAutoFixture { get; set; }
 
         public bool AutoDetectFrameworkTypes { get; set; }
 

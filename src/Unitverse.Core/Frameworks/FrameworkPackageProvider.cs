@@ -21,6 +21,11 @@
                 yield return new NugetPackageReference("FluentAssertions", null);
             }
 
+            if (generationOptions.UseAutoFixture)
+            {
+                yield return new NugetPackageReference("AutoFixture", null);
+            }
+
             switch (generationOptions.FrameworkType)
             {
                 case TestFrameworkTypes.NUnit2:
