@@ -106,9 +106,8 @@
             return MockingHelper.GetMethodCall(dependencyMethod, received, MockingHelper.TranslateArgumentFunc(GetArgument, parameters), frameworkSet.Context);
         }
 
-        public BaseMethodDeclarationSyntax AddSetupMethodStatements(BaseMethodDeclarationSyntax setupMethod)
+        public virtual void AddSetupMethodStatements(SectionedMethodHandler setupMethod)
         {
-            return setupMethod;
         }
 
         public ExpressionSyntax GetObjectCreationExpression(TypeSyntax type)

@@ -42,16 +42,14 @@
             }
         }
 
-        public override BaseMethodDeclarationSyntax AddSetupMethodStatements(BaseMethodDeclarationSyntax setupMethod)
+        public override void AddSetupMethodStatements(SectionedMethodHandler setupMethod)
         {
             if (IsActive)
             {
                 _context.MocksUsed = true;
                 var creation = Generate.ImplicitlyTypedVariableDeclaration("mocker", Generate.ObjectCreation(SyntaxFactory.IdentifierName("AutoMocker")));
-                setupMethod = setupMethod.AddBodyStatements(creation);
+                setupMethod.Emit(creation);
             }
-
-            return setupMethod;
         }
 
         public override ExpressionSyntax GetFieldInitializer(TypeSyntax type)

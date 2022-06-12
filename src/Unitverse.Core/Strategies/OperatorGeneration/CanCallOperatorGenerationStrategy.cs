@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
@@ -40,7 +39,7 @@
             return true;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IOperatorModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IOperatorModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -52,7 +51,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanCallOperator, namingContext, false, model.IsStatic, "Checks that the " + method.Name + " operator functions correctly.");
+            var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanCallOperator, namingContext, false, model.IsStatic, "Checks that the " + method.Name + " operator functions correctly.");
 
             var paramExpressions = new List<CSharpSyntaxNode>();
 
@@ -73,7 +72,7 @@
 
             generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
 
-            yield return generatedMethod.Method;
+            yield return generatedMethod;
         }
     }
 }

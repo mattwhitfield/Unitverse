@@ -15,7 +15,7 @@ namespace Unitverse.Core.Tests.Frameworks
     public class FrameworkSetTests
     {
         private FrameworkSet _testClass;
-        private ITestFramework _testFramework;
+        private IExtendedTestFramework _testFramework;
         private IMockingFramework _mockingFramework;
         private IAssertionFramework _assertionFramework;
         private INamingProvider _namingProvider;
@@ -25,7 +25,7 @@ namespace Unitverse.Core.Tests.Frameworks
         [SetUp]
         public void SetUp()
         {
-            _testFramework = Substitute.For<ITestFramework>();
+            _testFramework = Substitute.For<IExtendedTestFramework>();
             _mockingFramework = Substitute.For<IMockingFramework>();
             _assertionFramework = Substitute.For<IAssertionFramework>();
             _namingProvider = Substitute.For<INamingProvider>();
@@ -47,37 +47,37 @@ namespace Unitverse.Core.Tests.Frameworks
         [Test]
         public void CannotConstructWithNullTestFramework()
         {
-            FluentActions.Invoking(() => new FrameworkSet(default(ITestFramework), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new FrameworkSet(default(IExtendedTestFramework), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullMockingFramework()
         {
-            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<ITestFramework>(), default(IMockingFramework), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<IExtendedTestFramework>(), default(IMockingFramework), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullAssertionFramework()
         {
-            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), default(IAssertionFramework), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<IExtendedTestFramework>(), Substitute.For<IMockingFramework>(), default(IAssertionFramework), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullNamingProvider()
         {
-            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), default(INamingProvider), Substitute.For<IGenerationContext>(), Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<IExtendedTestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), default(INamingProvider), Substitute.For<IGenerationContext>(), Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullContext()
         {
-            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), default(IGenerationContext), Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<IExtendedTestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), default(IGenerationContext), Substitute.For<IUnitTestGeneratorOptions>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullOptions()
         {
-            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<ITestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), default(IUnitTestGeneratorOptions))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new FrameworkSet(Substitute.For<IExtendedTestFramework>(), Substitute.For<IMockingFramework>(), Substitute.For<IAssertionFramework>(), Substitute.For<INamingProvider>(), Substitute.For<IGenerationContext>(), default(IUnitTestGeneratorOptions))).Should().Throw<ArgumentNullException>();
         }
 
         [Test]

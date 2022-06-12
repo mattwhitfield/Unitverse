@@ -51,7 +51,7 @@
             return model.Declaration is RecordDeclarationSyntax;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -63,13 +63,13 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanConstruct, namingContext, false, false, "Checks that instance construction works.");
+            var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanConstruct, namingContext, false, false, "Checks that instance construction works.");
 
             generatedMethod.Act(Generate.ImplicitlyTypedVariableDeclaration("instance", model.GetObjectCreationExpression(_frameworkSet, false)));
 
             generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));
 
-            yield return generatedMethod.Method;
+            yield return generatedMethod;
         }
     }
 }

@@ -1,0 +1,22 @@
+// ! Value Generation
+// $ Demonstrates how random values are created when required
+
+namespace Unitverse.Examples
+{
+    using System;
+
+    public class Writer
+    {
+        public void Write(char c);
+        public void Write(byte b);
+        public void Write(short s);
+        public void Write(int i);
+        public void Write(long l);
+        public void Write(double d);
+        public void Write(decimal d);
+        public void Write(DateTime d);
+        public void Write(string s);
+        public void Write(TimeSpan t);
+        public void Write(Guid g);
+    }
+}

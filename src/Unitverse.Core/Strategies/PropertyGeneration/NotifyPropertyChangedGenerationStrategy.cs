@@ -44,7 +44,7 @@
             return classImplementsNotifyPropertyChanged && property.HasGet && property.HasSet;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
         {
             if (property == null)
             {
@@ -60,10 +60,10 @@
 
             model.RequiredAssets.Add(TargetAsset.PropertyTester);
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic, "Checks that setting the " + property.Name + " property correctly raises PropertyChanged events.");
+            var method = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic, "Checks that setting the " + property.Name + " property correctly raises PropertyChanged events.");
             method.Emit(GetPropertyAssertionBodyStatements(property, model, withDefaults).ToArray());
 
-            yield return method.Method;
+            yield return method;
         }
 
         private IEnumerable<StatementSyntax> GetPropertyAssertionBodyStatements(IPropertyModel property, ClassModel sourceModel, bool withDefaults)

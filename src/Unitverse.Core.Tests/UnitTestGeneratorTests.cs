@@ -15,6 +15,7 @@
     using System.Windows.Markup;
     using System.Xml;
     using System.Xml.Linq;
+    using AutoFixture;
     using FakeItEasy;
     using FluentAssertions;
     using Microsoft.CodeAnalysis;
@@ -56,8 +57,10 @@
                     {
                         foreach (var resourceName in entryKeys)
                         {
-                            yield return new object[] { resourceName, framework, mock, true };
-                            yield return new object[] { resourceName, framework, mock, false };
+                            yield return new object[] { resourceName, framework, mock, true, false };
+                            yield return new object[] { resourceName, framework, mock, false, false };
+                            yield return new object[] { resourceName, framework, mock, true, true };
+                            yield return new object[] { resourceName, framework, mock, false, true };
                         }
                     }
                 }
@@ -65,13 +68,13 @@
         }
 
         [TestCaseSource(nameof(TestClassResourceNames))]
-        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions)
+        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture)
         {
             var classAsText = TestClasses.ResourceManager.GetString(resourceName, TestClasses.Culture);
 
-            var options = ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, classAsText, false);
+            var options = ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, classAsText, false);
 
-            Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
+            Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
 
             var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
@@ -110,7 +113,7 @@
             Assert.That(streamLength, Is.GreaterThan(0));
         }
 
-        public static void Compile(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, string classAsText, out SyntaxTree tree, out List<MetadataReference> references, out SyntaxTree externalInitTree, out SemanticModel semanticModel)
+        public static void Compile(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, string classAsText, out SyntaxTree tree, out List<MetadataReference> references, out SyntaxTree externalInitTree, out SemanticModel semanticModel)
         {
             tree = CSharpSyntaxTree.ParseText(classAsText, new CSharpParseOptions(LanguageVersion.Latest));
             var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
@@ -143,6 +146,11 @@
                 references.Add(MetadataReference.CreateFromFile(typeof(IQueryAmbient).Assembly.Location));
             }
 
+            if (useAutoFixture)
+            {
+                references.Add(MetadataReference.CreateFromFile(typeof(Fixture).Assembly.Location));
+            }
+
             externalInitTree = CSharpSyntaxTree.ParseText("namespace System.Runtime.CompilerServices { internal static class IsExternalInit { } }", new CSharpParseOptions(LanguageVersion.Latest));
             var compilation = CSharpCompilation.Create(
                 "MyTest",
@@ -152,7 +160,7 @@
             semanticModel = compilation.GetSemanticModel(tree);
         }
 
-        public static UnitTestGeneratorOptions ExtractOptions(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, string classAsText, bool withPartialGeneration)
+        public static UnitTestGeneratorOptions ExtractOptions(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, string classAsText, bool withPartialGeneration)
         {
             var generationOptions = new MutableGenerationOptions(new DefaultGenerationOptions());
             var namingOptions = new MutableNamingOptions(new DefaultNamingOptions());
@@ -163,6 +171,7 @@
             generationOptions.FrameworkType = testFrameworkTypes;
             generationOptions.MockingFrameworkType = mockingFrameworkType;
             generationOptions.UseFluentAssertions = useFluentAssertions;
+            generationOptions.UseAutoFixture = useAutoFixture;
 
             var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false, new Dictionary<string, string>());
 

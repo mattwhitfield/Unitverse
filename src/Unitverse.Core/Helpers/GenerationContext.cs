@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
+    using Unitverse.Core.Models;
 
     public class GenerationContext : IGenerationContext
     {
@@ -29,6 +30,10 @@
         public long TestMethodsGenerated { get; set; }
 
         public long TestMethodsRegenerated { get; set; }
+
+        public ModelGenerationContext CurrentModel { get; set; }
+
+        public SectionedMethodHandler CurrentMethod { get; set; }
 
         public void AddEmittedType(ITypeSymbol typeInfo)
         {

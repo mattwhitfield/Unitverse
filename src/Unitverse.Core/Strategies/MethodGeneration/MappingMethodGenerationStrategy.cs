@@ -90,7 +90,7 @@
             return dictionary;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -102,7 +102,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.PerformsMapping, namingContext, method.IsAsync, model.IsStatic, "Checks that the " + method.Name + " maps values from the input to the returned instance.");
+            var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.PerformsMapping, namingContext, method.IsAsync, model.IsStatic, "Checks that the " + method.Name + " maps values from the input to the returned instance.");
 
             var paramExpressions = new List<CSharpSyntaxNode>();
 
@@ -192,7 +192,7 @@
                 }
             }
 
-            yield return generatedMethod.Method;
+            yield return generatedMethod;
         }
     }
 }

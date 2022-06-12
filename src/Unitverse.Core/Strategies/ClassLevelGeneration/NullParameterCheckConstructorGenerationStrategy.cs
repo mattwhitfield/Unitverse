@@ -46,7 +46,7 @@
             return model.Constructors.SelectMany(x => x.Parameters).Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String) && !model.IsStatic;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -72,7 +72,7 @@
 
                 namingContext = namingContext.WithParameterName(nullableParameter.ToPascalCase());
 
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotConstructWithNull, namingContext, false, false, "Checks that instance construction throws when the " + nullableParameter + " parameter is null.");
+                var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CannotConstructWithNull, namingContext, false, false, "Checks that instance construction throws when the " + nullableParameter + " parameter is null.");
 
                 foreach (var constructorModel in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))))
                 {
@@ -87,7 +87,7 @@
                     generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));
                 }
 
-                yield return generatedMethod.Method;
+                yield return generatedMethod;
             }
         }
     }

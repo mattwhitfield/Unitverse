@@ -97,7 +97,7 @@
             return isThere;
         }
 
-        public static void WriteMethods(IEnumerable<MethodDeclarationSyntax> methodList)
+        public static void WriteMethods(IEnumerable<BaseMethodDeclarationSyntax> methodList)
         {
             using (var workspace = new AdhocWorkspace())
             {
@@ -108,10 +108,9 @@
             }
         }
 
-        public static IEnumerable<MethodDeclarationSyntax> GetMethodList<T>(this IEnumerable<T> list, Func<T, bool> canHandle, Func<T, IEnumerable<MethodDeclarationSyntax>> generate)
-
+        public static IEnumerable<BaseMethodDeclarationSyntax> GetMethodList<T>(this IEnumerable<T> list, Func<T, bool> canHandle, Func<T, IEnumerable<BaseMethodDeclarationSyntax>> generate)
         {
-            var methodList = new List<MethodDeclarationSyntax>();
+            var methodList = new List<BaseMethodDeclarationSyntax>();
 
             foreach (var item in list)
             {

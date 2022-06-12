@@ -7,20 +7,26 @@
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
 
-    public class MsTestTestFramework : BaseTestFramework, ITestFramework, IAssertionFramework
+    public class MsTestTestFramework : BaseTestFramework, IExtendedTestFramework
     {
         public MsTestTestFramework(IUnitTestGeneratorOptions options)
             : base(options)
         {
         }
 
-        public bool SupportsStaticTestClasses => false;
+        public override bool SupportsStaticTestClasses => false;
 
         public bool AssertThrowsAsyncIsAwaitable => true;
 
         public AttributeSyntax SingleThreadedApartmentAttribute => null;
 
         public string TestClassAttribute => "TestClass";
+
+        protected override string TestAttributeName => "TestMethod";
+
+        protected override string TestCaseMethodAttributeName => "DataTestMethod";
+
+        protected override string TestCaseAttributeName => "DataRow";
 
         public StatementSyntax AssertEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)
         {
@@ -151,75 +157,9 @@
             return SyntaxFactory.ExpressionStatement(SyntaxFactory.AwaitExpression(AssertThrows(exceptionType, methodCall, "ThrowsExceptionAsync")));
         }
 
-        public BaseMethodDeclarationSyntax CreateSetupMethod(string targetTypeName)
+        protected override BaseMethodDeclarationSyntax CreateSetupMethodSyntax(string targetTypeName)
         {
-            if (string.IsNullOrWhiteSpace(targetTypeName))
-            {
-                throw new ArgumentNullException(nameof(targetTypeName));
-            }
-
-            var method = Generate.Method("SetUp", false, false);
-
-            return method.AddAttributeLists(
-                SyntaxFactory.AttributeList(
-                    SyntaxFactory.SingletonSeparatedList(Generate.Attribute("TestInitialize"))));
-        }
-
-        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues, string description)
-        {
-            if (nameResolver is null)
-            {
-                throw new ArgumentNullException(nameof(nameResolver));
-            }
-
-            if (namingContext is null)
-            {
-                throw new ArgumentNullException(nameof(namingContext));
-            }
-
-            if (valueType == null)
-            {
-                throw new ArgumentNullException(nameof(valueType));
-            }
-
-            if (testValues == null)
-            {
-                throw new ArgumentNullException(nameof(testValues));
-            }
-
-            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, false);
-
-            method = method.AddParameterListParameters(Generate.Parameter("value").WithType(valueType));
-            method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("DataTestMethod"))));
-
-            foreach (var testValue in testValues)
-            {
-                method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("DataRow", testValue))));
-            }
-
-            method = AddXmlCommentsIfConfigured(method, description, "value", "The parameter that receives the test case values.");
-
-            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
-        }
-
-        public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, string description)
-        {
-            if (nameResolver is null)
-            {
-                throw new ArgumentNullException(nameof(nameResolver));
-            }
-
-            if (namingContext is null)
-            {
-                throw new ArgumentNullException(nameof(namingContext));
-            }
-
-            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, false)
-                                 .AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("TestMethod"))));
-
-            method = AddXmlCommentsIfConfigured(method, description);
-
-            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
+            return Generate.Method("SetUp", false, false).AddAttributeLists(Generate.Attribute("TestInitialize").AsList());
         }
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()

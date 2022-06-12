@@ -1,7 +1,6 @@
 ﻿namespace Unitverse.Core.Options.Editing
 {
     using System;
-    using System.ComponentModel;
 
     public abstract class EditableItem : DisplayItem
     {

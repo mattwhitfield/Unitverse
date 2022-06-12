@@ -68,29 +68,33 @@
         private static void MarkEmittedItems<T>(ModelGenerationContext generationContext, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector)
             where T : ITestableModel
         {
-            var namingContext = new NamingContext(generationContext.Model.ClassName);
-
             foreach (var member in selector(generationContext.Model))
             {
                 member.MarkedForGeneration =
                     member.ShouldGenerate &&
-                    factory.CreateFor(member, generationContext.Model, namingContext, generationContext.FrameworkSet.Options.StrategyOptions).Any();
+                    factory.CreateFor(member, generationContext.Model, generationContext.BaseNamingContext, generationContext.FrameworkSet.Options.StrategyOptions).Any();
             }
         }
 
         private static TypeDeclarationSyntax AddGeneratedItems<T>(ModelGenerationContext generationContext, TypeDeclarationSyntax declaration, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector, Func<T, bool> shouldGenerate, Func<NamingContext, T, NamingContext> nameDecorator)
         {
-            var namingContext = new NamingContext(generationContext.Model.ClassName);
-
             foreach (var member in selector(generationContext.Model))
             {
                 if (shouldGenerate(member))
                 {
-                    namingContext = nameDecorator(namingContext, member);
-                    foreach (var method in factory.CreateFor(member, generationContext.Model, namingContext, generationContext.FrameworkSet.Options.StrategyOptions))
+                    var namingContext = nameDecorator(generationContext.BaseNamingContext, member);
+                    foreach (var methodHandler in factory.CreateFor(member, generationContext.Model, namingContext, generationContext.FrameworkSet.Options.StrategyOptions))
                     {
-                        var methodName = method.Identifier.Text;
-                        var existingMethod = declaration.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault(x => string.Equals(x.Identifier.Text, methodName, StringComparison.OrdinalIgnoreCase));
+                        var method = methodHandler.Method;
+
+                        MethodDeclarationSyntax existingMethod = null;
+                        string methodName = "ctor"; // will be replaced below if it's not a constructor
+
+                        if (method is MethodDeclarationSyntax typeMethod)
+                        {
+                            methodName = typeMethod.Identifier.Text;
+                            existingMethod = declaration.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault(x => string.Equals(x.Identifier.Text, methodName, StringComparison.OrdinalIgnoreCase));
+                        }
 
                         if (existingMethod != null)
                         {
@@ -233,6 +237,11 @@
                 targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, frameworkSet.MockingFramework.GetUsings());
             }
 
+            if (frameworkSet.Options.GenerationOptions.UseAutoFixture)
+            {
+                targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("AutoFixture")));
+            }
+
             foreach (var emittedType in frameworkSet.Context.EmittedTypes)
             {
                 if (emittedType?.ContainingNamespace != null)
@@ -318,14 +327,14 @@
 
         private static TypeDeclarationSyntax EnsureAllConstructorParametersHaveFields(IFrameworkSet frameworkSet, ClassModel classModel, TypeDeclarationSyntax targetType)
         {
-            var setupMethod = frameworkSet.TestFramework.CreateSetupMethod(frameworkSet.GetTargetTypeName(classModel));
+            var setupMethod = frameworkSet.CreateSetupMethod(frameworkSet.GetTargetTypeName(classModel), classModel.ClassName);
 
             BaseMethodDeclarationSyntax foundMethod = null, updatedMethod = null;
-            if (setupMethod is MethodDeclarationSyntax methodSyntax)
+            if (setupMethod.Method is MethodDeclarationSyntax methodSyntax)
             {
                 updatedMethod = foundMethod = targetType.Members.OfType<MethodDeclarationSyntax>().FirstOrDefault(x => x.Identifier.Text == methodSyntax.Identifier.Text && x.ParameterList.Parameters.Count == 0);
             }
-            else if (setupMethod is ConstructorDeclarationSyntax)
+            else if (setupMethod.Method is ConstructorDeclarationSyntax)
             {
                 updatedMethod = foundMethod = targetType.Members.OfType<ConstructorDeclarationSyntax>().FirstOrDefault(x => x.ParameterList.Parameters.Count == 0);
             }
@@ -369,34 +378,24 @@
                             defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameterModel.TypeInfo, classModel.SemanticModel, frameworkSet);
                         }
 
-                        var variable = SyntaxFactory.VariableDeclaration(fieldTypeSyntax)
-                            .AddVariables(SyntaxFactory.VariableDeclarator(fieldName));
-                        var field = SyntaxFactory.FieldDeclaration(variable)
-                            .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
-
-                        fields.Add(field);
-
-                        var statement = SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(fieldName), defaultExpression));
-
-                        var body = updatedMethod.Body ?? SyntaxFactory.Block();
-
-                        SyntaxList<StatementSyntax> newStatements;
-                        var index = body.Statements.LastIndexOf(x => x.DescendantNodes().OfType<AssignmentExpressionSyntax>().Any(a => a.Left is IdentifierNameSyntax identifierName && allFields.Contains(identifierName.Identifier.Text)));
-                        if (index >= 0 && index < body.Statements.Count - 1)
-                        {
-                            newStatements = body.Statements.Insert(index + 1, statement);
-                        }
-                        else
-                        {
-                            newStatements = body.Statements.Add(statement);
-                        }
-
-                        updatedMethod = updatedMethod.WithBody(body.WithStatements(newStatements));
+                        updatedMethod = UpdateMethod(updatedMethod, allFields, fields, fieldName, fieldTypeSyntax, defaultExpression);
                     }
                 }
 
                 if (fields.Any())
                 {
+                    if (frameworkSet.Options.GenerationOptions.UseAutoFixture)
+                    {
+                        // TODO - add declaration statement if not present
+                        //var fieldName = frameworkSet.Context.AutoFixtureFieldName;
+                        //var fieldExists = targetType.Members.OfType<FieldDeclarationSyntax>().Any(x => x.Declaration.Variables.Any(v => v.Identifier.Text == fieldName));
+
+                        //if (!fieldExists)
+                        //{
+                        //    updatedMethod = UpdateMethod(updatedMethod, allFields, fields, fieldName, AutoFixtureHelper.TypeSyntax, AutoFixtureHelper.CreationExpression);
+                        //}
+                    }
+
                     targetType = targetType.ReplaceNode(foundMethod, updatedMethod);
                     var existingField = targetType.Members.OfType<FieldDeclarationSyntax>().LastOrDefault();
                     if (existingField != null)
@@ -411,6 +410,34 @@
             }
 
             return targetType;
+        }
+
+        private static BaseMethodDeclarationSyntax UpdateMethod(BaseMethodDeclarationSyntax updatedMethod, HashSet<string> allFields, List<FieldDeclarationSyntax> fields, string fieldName, TypeSyntax fieldTypeSyntax, ExpressionSyntax defaultExpression)
+        {
+            var variable = SyntaxFactory.VariableDeclaration(fieldTypeSyntax)
+                                        .AddVariables(SyntaxFactory.VariableDeclarator(fieldName));
+            var field = SyntaxFactory.FieldDeclaration(variable)
+                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+
+            fields.Add(field);
+
+            var statement = SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(fieldName), defaultExpression));
+
+            var body = updatedMethod.Body ?? SyntaxFactory.Block();
+
+            SyntaxList<StatementSyntax> newStatements;
+            var index = body.Statements.LastIndexOf(x => x.DescendantNodes().OfType<AssignmentExpressionSyntax>().Any(a => a.Left is IdentifierNameSyntax identifierName && allFields.Contains(identifierName.Identifier.Text)));
+            if (index >= 0 && index < body.Statements.Count - 1)
+            {
+                newStatements = body.Statements.Insert(index + 1, statement);
+            }
+            else
+            {
+                newStatements = body.Statements.Add(statement);
+            }
+
+            updatedMethod = updatedMethod.WithBody(body.WithStatements(newStatements));
+            return updatedMethod;
         }
 
         private static GenerationResult Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, bool withRegeneration, IUnitTestGeneratorOptions options, NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax originalTargetNamespace, bool isSingleItemGeneration, IMessageLogger messageLogger)
@@ -439,7 +466,8 @@
             {
                 targetNamespace = AddTypeParameterAliases(classModel, frameworkSet.Context, targetNamespace);
 
-                var context = new ModelGenerationContext(classModel, frameworkSet, withRegeneration, options.GenerationOptions.PartialGenerationAllowed);
+                var context = new ModelGenerationContext(classModel, frameworkSet, withRegeneration, options.GenerationOptions.PartialGenerationAllowed, new NamingContext(classModel.ClassName));
+
                 MarkEmittedItems(context);
 
                 var targetType = GetOrCreateTargetType(targetNamespace, frameworkSet, classModel, out var originalTargetType);

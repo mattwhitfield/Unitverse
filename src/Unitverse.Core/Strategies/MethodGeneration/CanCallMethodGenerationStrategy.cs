@@ -42,7 +42,7 @@
             return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword));
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -54,7 +54,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanCall, namingContext, method.IsAsync, model.IsStatic, "Checks that the " + method.Name + " method functions correctly.");
+            var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanCall, namingContext, method.IsAsync, model.IsStatic, "Checks that the " + method.Name + " method functions correctly.");
 
             var interfaceMethodsImplemented = model.GetImplementedInterfaceSymbolsFor(method.Symbol);
             var testIsComplete = MockHelper.PrepareMockCalls(model, method.Node, null, interfaceMethodsImplemented, method.Parameters.Select(x => x.Name), _frameworkSet, out var mockSetupStatements, out var mockAssertionStatements);
@@ -125,7 +125,7 @@
                 generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
             }
 
-            yield return generatedMethod.Method;
+            yield return generatedMethod;
         }
     }
 }

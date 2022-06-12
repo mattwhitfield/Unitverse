@@ -133,9 +133,8 @@
             return SyntaxFactory.InvocationExpression(mockSetup).WithArgumentList(Generate.Arguments(SyntaxFactory.SimpleLambdaExpression(Generate.Parameter("mock"), methodCall)));
         }
 
-        public virtual BaseMethodDeclarationSyntax AddSetupMethodStatements(BaseMethodDeclarationSyntax setupMethod)
+        public virtual void AddSetupMethodStatements(SectionedMethodHandler setupMethod)
         {
-            return setupMethod;
         }
 
         public virtual ExpressionSyntax GetObjectCreationExpression(TypeSyntax type)

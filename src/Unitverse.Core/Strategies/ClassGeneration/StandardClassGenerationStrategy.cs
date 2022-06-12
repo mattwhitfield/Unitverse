@@ -75,9 +75,9 @@
                 model.TargetInstance,
                 creationExpression);
 
-            setupMethod = setupMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(assignment));
+            setupMethod.Emit(SyntaxFactory.ExpressionStatement(assignment));
 
-            classDeclaration = classDeclaration.AddMembers(setupMethod);
+            classDeclaration = classDeclaration.AddMembers(setupMethod.Method);
 
             return classDeclaration;
         }

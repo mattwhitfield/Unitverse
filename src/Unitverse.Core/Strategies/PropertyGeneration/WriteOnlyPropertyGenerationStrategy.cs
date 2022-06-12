@@ -41,7 +41,7 @@
             return !property.HasGet && property.HasSet;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
         {
             if (property == null)
             {
@@ -53,10 +53,10 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSet, namingContext, false, model.IsStatic, "Checks that the " + property.Name + " property can be written to.");
+            var method = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanSet, namingContext, false, model.IsStatic, "Checks that the " + property.Name + " property can be written to.");
             method.Emit(GetPropertyAssertionBodyStatements(property, model).ToArray());
 
-            yield return method.Method;
+            yield return method;
         }
 
         private IEnumerable<StatementSyntax> GetPropertyAssertionBodyStatements(IPropertyModel property, ClassModel sourceModel)

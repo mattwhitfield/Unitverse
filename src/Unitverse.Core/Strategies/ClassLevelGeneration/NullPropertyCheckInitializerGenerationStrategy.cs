@@ -41,7 +41,7 @@
             return !model.Constructors.Any() && model.Properties.Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String && x.HasInit) && !model.IsStatic;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -69,7 +69,7 @@
 
                 namingContext = namingContext.WithMemberName(property.Name, property.Name);
 
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotInitializeWithNull, namingContext, false, false, "Checks that the " + property.Name + " property cannot be initialized with null.");
+                var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CannotInitializeWithNull, namingContext, false, false, "Checks that the " + property.Name + " property cannot be initialized with null.");
 
                 ExpressionSyntax GetAssignedValue(IPropertyModel propertyModel)
                 {
@@ -84,7 +84,7 @@
                 var methodCall = Generate.ObjectCreation(model.TypeSyntax, initializableProperties.Select(x => Generate.Assignment(x.Name, GetAssignedValue(x))));
                 generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));
 
-                yield return generatedMethod.Method;
+                yield return generatedMethod;
             }
         }
     }

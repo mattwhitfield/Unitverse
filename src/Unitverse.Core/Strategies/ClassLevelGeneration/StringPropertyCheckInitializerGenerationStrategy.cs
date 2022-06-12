@@ -41,7 +41,7 @@
             return !model.Constructors.Any() && model.Properties.Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType == SpecialType.System_String && x.HasInit) && !model.IsStatic;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -66,7 +66,7 @@
                 namingContext = namingContext.WithMemberName(property.Name, property.Name);
 
                 object[] testValues = isNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotInitializeWithInvalid, namingContext, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues, "Checks that the property " + property.Name + " cannot be initialized with null, empty or white space.");
+                var generatedMethod = _frameworkSet.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotInitializeWithInvalid, namingContext, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues, "Checks that the property " + property.Name + " cannot be initialized with null, empty or white space.");
 
                 ExpressionSyntax GetAssignedValue(IPropertyModel propertyModel)
                 {
@@ -81,7 +81,7 @@
                 var methodCall = Generate.ObjectCreation(model.TypeSyntax, initializableProperties.Select(x => Generate.Assignment(x.Name, GetAssignedValue(x))));
                 generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));
 
-                yield return generatedMethod.Method;
+                yield return generatedMethod;
             }
         }
     }

@@ -217,11 +217,5 @@ namespace Unitverse.Core.Tests.Helpers
         {
             FluentActions.Invoking(() => _testClass.Emit(default(IEnumerable<StatementSyntax>))).Should().Throw<ArgumentNullException>();
         }
-
-        [Test]
-        public void MethodIsInitializedCorrectly()
-        {
-            _testClass.Method.Should().BeSameAs(_method);
-        }
     }
 }

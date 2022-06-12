@@ -89,10 +89,10 @@
             var updatedClassAsText = second.ToString();
 
             // Extract the options from the first part
-            var options = UnitTestGeneratorTests.ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, classAsText, true);
+            var options = UnitTestGeneratorTests.ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, classAsText, true);
 
             // Compile the first
-            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
+            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
             var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             Assert.IsNotNull(core);
@@ -117,7 +117,7 @@
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
             // Compile the second, using the output from the first compile
-            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, updatedClassAsText, out var updatedTree, out _, out _, out var updatedModel);
+            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, updatedClassAsText, out var updatedTree, out _, out _, out var updatedModel);
             var core2 = await CoreGenerator.Generate(updatedModel, null, targetCompilation.GetSemanticModel(generatedTree), false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
 

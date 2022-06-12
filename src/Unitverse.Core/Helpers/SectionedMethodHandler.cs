@@ -8,9 +8,14 @@
 
     public class SectionedMethodHandler
     {
-        public SectionedMethodHandler(MethodDeclarationSyntax method, string arrangeComment, string actComment, string assertComment)
+        public SectionedMethodHandler(BaseMethodDeclarationSyntax method)
+            : this(method, string.Empty, string.Empty, string.Empty)
         {
-            Method = method ?? throw new ArgumentNullException(nameof(method));
+        }
+
+        public SectionedMethodHandler(BaseMethodDeclarationSyntax method, string arrangeComment, string actComment, string assertComment)
+        {
+            _method = method ?? throw new ArgumentNullException(nameof(method));
             _arrangeComment = arrangeComment;
             _actComment = actComment;
             _assertComment = assertComment;
@@ -19,6 +24,7 @@
         private readonly string _arrangeComment;
         private readonly string _actComment;
         private readonly string _assertComment;
+        private readonly HashSet<string> _requirements = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         private enum Section
         {
@@ -28,13 +34,45 @@
             Assert,
         }
 
+        private BaseMethodDeclarationSyntax _method;
+
         private Section _currentSection;
 
         private bool _blankLineRequired;
 
         private bool _anyEmitted;
 
-        public MethodDeclarationSyntax Method { get; private set; }
+        private IList<Func<BaseMethodDeclarationSyntax, BaseMethodDeclarationSyntax>> _modifiers = new List<Func<BaseMethodDeclarationSyntax, BaseMethodDeclarationSyntax>>();
+
+        public void AddRequirement(string requirement)
+        {
+            _requirements.Add(requirement);
+        }
+
+        public BaseMethodDeclarationSyntax Method
+        {
+            get
+            {
+                var method = _method;
+
+                if (_requirements.Contains(Requirements.AutoFixture))
+                {
+                    method = method.AddBodyStatements(Prepare(AutoFixtureHelper.VariableDeclaration, Section.Arrange));
+                }
+
+                foreach (var modifier in _modifiers)
+                {
+                    method = modifier(method);
+                }
+
+                if (method.Body == null)
+                {
+                    method = method.WithBody(SyntaxFactory.Block());
+                }
+
+                return method;
+            }
+        }
 
         public void Arrange(StatementSyntax statement)
         {
@@ -43,7 +81,7 @@
                 throw new ArgumentNullException(nameof(statement));
             }
 
-            Method = Method.AddBodyStatements(Prepare(statement, Section.Arrange));
+            _modifiers.Add(method => method.AddBodyStatements(Prepare(statement, Section.Arrange)));
         }
 
         public void Arrange(IEnumerable<StatementSyntax> statements)
@@ -66,7 +104,7 @@
                 throw new ArgumentNullException(nameof(statement));
             }
 
-            Method = Method.AddBodyStatements(Prepare(statement, Section.Act));
+            _modifiers.Add(method => method.AddBodyStatements(Prepare(statement, Section.Act)));
         }
 
         public void Assert(StatementSyntax statement)
@@ -76,7 +114,7 @@
                 throw new ArgumentNullException(nameof(statement));
             }
 
-            Method = Method.AddBodyStatements(Prepare(statement, Section.Assert));
+            _modifiers.Add(method => method.AddBodyStatements(Prepare(statement, Section.Assert)));
         }
 
         public void Assert(IEnumerable<StatementSyntax> statements)
@@ -94,7 +132,11 @@
 
         public void BlankLine()
         {
-            _blankLineRequired = true;
+            _modifiers.Add(method =>
+            {
+                _blankLineRequired = true;
+                return method;
+            });
         }
 
         public void Emit(StatementSyntax statement)
@@ -104,7 +146,7 @@
                 throw new ArgumentNullException(nameof(statement));
             }
 
-            Method = Method.AddBodyStatements(Prepare(statement, Section.None));
+            _modifiers.Add(method => method.AddBodyStatements(Prepare(statement, Section.None)));
         }
 
         public void Emit(IEnumerable<StatementSyntax> statements)

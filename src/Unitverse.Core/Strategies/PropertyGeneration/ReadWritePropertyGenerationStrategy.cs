@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
@@ -40,7 +39,7 @@
             return property.HasGet && property.HasSet;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
         {
             if (property == null)
             {
@@ -57,7 +56,7 @@
             var interfaceMethodsImplemented = model.GetImplementedInterfaceSymbolsFor(property.Symbol);
             MockHelper.PrepareMockCalls(model, property.Node, property.Access(target), interfaceMethodsImplemented, Enumerable.Empty<string>(), _frameworkSet, out var mockSetupStatements, out var mockAssertionStatements);
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic, "Checks that the " + property.Name + " property can be read from and written to.");
+            var method = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanSetAndGet, namingContext, false, model.IsStatic, "Checks that the " + property.Name + " property can be read from and written to.");
 
             method.Arrange(mockSetupStatements);
             method.BlankLine();
@@ -76,7 +75,7 @@
 
             method.Assert(mockAssertionStatements);
 
-            yield return method.Method;
+            yield return method;
         }
     }
 }

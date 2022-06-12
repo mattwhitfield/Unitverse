@@ -35,6 +35,7 @@
         private static IEnumerable<IValueGenerationStrategy> Strategies =>
             new IValueGenerationStrategy[]
             {
+                new SimpleValueGenerationStrategy(() => Generate.Literal((char)((Random.Next(int.MaxValue) % 2 == 0 ? 65 : 97) + Random.Next(26))), "char", "char?"),
                 new SimpleValueGenerationStrategy(() => Generate.Literal("TestValue" + Random.Next(int.MaxValue)), "string"),
                 new SimpleValueGenerationStrategy(() => Generate.Literal(Random.Next(int.MaxValue)), "int", "int?"),
                 new SimpleValueGenerationStrategy(() => Generate.Literal((long)Random.Next(int.MaxValue)), "long", "long?"),

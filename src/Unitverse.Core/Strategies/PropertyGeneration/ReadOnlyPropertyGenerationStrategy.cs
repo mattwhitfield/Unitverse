@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
@@ -48,7 +47,7 @@
             return property.HasGet && !property.HasSet && !model.Constructors.Any(x => x.Parameters.Any(p => string.Equals(p.Name, property.Name, StringComparison.OrdinalIgnoreCase)));
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IPropertyModel property, ClassModel model, NamingContext namingContext)
         {
             if (property == null)
             {
@@ -62,10 +61,10 @@
 
             var target = property.IsStatic ? model.TypeSyntax : model.TargetInstance;
 
+            var method = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic, "Checks that the " + property.Name + " property can be read from.");
+
             var interfaceMethodsImplemented = model.GetImplementedInterfaceSymbolsFor(property.Symbol);
             var testIsComplete = MockHelper.PrepareMockCalls(model, property.Node, property.Access(target), interfaceMethodsImplemented, Enumerable.Empty<string>(), _frameworkSet, out var mockSetupStatements, out var mockAssertionStatements);
-
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic, "Checks that the " + property.Name + " property can be read from.");
 
             method.Arrange(mockSetupStatements);
             method.BlankLine();
@@ -86,7 +85,7 @@
                 method.Assert(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
             }
 
-            yield return method.Method;
+            yield return method;
         }
     }
 }

@@ -78,7 +78,12 @@
 
         public static MemberAccessExpressionSyntax MemberAccess(string container, string member)
         {
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(container), SyntaxFactory.IdentifierName(member));
+            return MemberAccess(SyntaxFactory.IdentifierName(container), SyntaxFactory.IdentifierName(member));
+        }
+
+        public static MemberAccessExpressionSyntax MemberAccess(ExpressionSyntax container, SimpleNameSyntax member)
+        {
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, container, member);
         }
 
         public static LiteralExpressionSyntax Literal(object literal)
@@ -126,6 +131,11 @@
             if (literal is float f)
             {
                 return SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(f));
+            }
+
+            if (literal is char c)
+            {
+                return SyntaxFactory.LiteralExpression(SyntaxKind.CharacterLiteralExpression, SyntaxFactory.Literal(c));
             }
 
             if (literal is null)
@@ -195,6 +205,11 @@
                         target,
                         methodReference))
                 .WithArgumentList(Arguments(arguments));
+        }
+
+        public static AttributeListSyntax AsList(this AttributeSyntax attribute)
+        {
+            return SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(attribute));
         }
 
         public static AttributeSyntax Attribute(string name)
@@ -327,7 +342,7 @@
             return SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(identifier), value);
         }
 
-        public static BaseMethodDeclarationSyntax SetupMethod(ClassModel model, string targetTypeName, IFrameworkSet frameworkSet, ref ClassDeclarationSyntax classDeclaration)
+        public static SectionedMethodHandler SetupMethod(ClassModel model, string targetTypeName, IFrameworkSet frameworkSet, ref ClassDeclarationSyntax classDeclaration)
         {
             if (model == null)
             {
@@ -349,9 +364,9 @@
                 throw new ArgumentNullException(nameof(targetTypeName));
             }
 
-            var setupMethod = frameworkSet.TestFramework.CreateSetupMethod(targetTypeName);
+            var setupMethod = frameworkSet.CreateSetupMethod(targetTypeName, model.ClassName);
 
-            setupMethod = frameworkSet.MockingFramework.AddSetupMethodStatements(setupMethod);
+            frameworkSet.MockingFramework.AddSetupMethodStatements(setupMethod);
 
             var parametersEmitted = new HashSet<ParameterModel>(new ParameterModelComparer());
 
@@ -366,7 +381,7 @@
                 var fieldName = model.GetConstructorParameterFieldName(parameterModel, frameworkSet.NamingProvider);
                 var typeInfo = parameterModel.TypeInfo;
 
-                AddConstructorField(model, frameworkSet, ref classDeclaration, ref setupMethod, fieldName, typeInfo);
+                AddConstructorField(model, frameworkSet, ref classDeclaration, setupMethod, fieldName, typeInfo);
             }
 
             if (!model.Constructors.Any())
@@ -376,41 +391,20 @@
                     var fieldName = model.GetConstructorParameterFieldName(propertyModel, frameworkSet.NamingProvider);
                     var typeInfo = propertyModel.TypeInfo;
 
-                    AddConstructorField(model, frameworkSet, ref classDeclaration, ref setupMethod, fieldName, typeInfo);
+                    AddConstructorField(model, frameworkSet, ref classDeclaration, setupMethod, fieldName, typeInfo);
                 }
-            }
-
-            if (frameworkSet.Options.GenerationOptions.EmitXmlDocumentation)
-            {
-                var documentation = XmlCommentHelper.DocumentationComment(
-                    XmlCommentHelper.Summary(
-                        XmlCommentHelper.TextLiteral("Sets up the dependencies required for the tests for "),
-                        XmlCommentHelper.See(model.ClassName),
-                        XmlCommentHelper.TextLiteral(".")));
-                setupMethod = setupMethod.WithXmlDocumentation(documentation);
             }
 
             return setupMethod;
         }
 
-        private static void AddConstructorField(ClassModel model, IFrameworkSet frameworkSet, ref ClassDeclarationSyntax classDeclaration, ref BaseMethodDeclarationSyntax setupMethod, string fieldName, TypeInfo typeInfo)
+        private static void AddConstructorField(ClassModel model, IFrameworkSet frameworkSet, ref ClassDeclarationSyntax classDeclaration, SectionedMethodHandler setupMethod, string fieldName, TypeInfo typeInfo)
         {
             var typeSyntax = typeInfo.ToTypeSyntax(frameworkSet.Context);
-            if (typeInfo.Type.TypeKind == TypeKind.Interface)
-            {
-                typeSyntax = frameworkSet.MockingFramework.GetFieldType(typeSyntax);
-            }
-
-            var variable = SyntaxFactory.VariableDeclaration(typeSyntax)
-                                    .AddVariables(SyntaxFactory.VariableDeclarator(fieldName));
-            var field = SyntaxFactory.FieldDeclaration(variable)
-                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
-
-            classDeclaration = classDeclaration.AddMembers(field);
-
             ExpressionSyntax defaultExpression;
             if (typeInfo.Type.TypeKind == TypeKind.Interface)
             {
+                typeSyntax = frameworkSet.MockingFramework.GetFieldType(typeSyntax);
                 frameworkSet.Context.InterfacesMocked++;
                 defaultExpression = frameworkSet.MockingFramework.GetFieldInitializer(typeInfo.ToTypeSyntax(frameworkSet.Context));
             }
@@ -419,10 +413,20 @@
                 defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(typeInfo, model.SemanticModel, frameworkSet);
             }
 
-            setupMethod = setupMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(
+            AddConstructorField(frameworkSet, ref classDeclaration, setupMethod, fieldName, typeSyntax, defaultExpression);
+        }
+
+        private static void AddConstructorField(IFrameworkSet frameworkSet, ref ClassDeclarationSyntax classDeclaration, SectionedMethodHandler setupMethod, string fieldName, TypeSyntax typeSyntax, ExpressionSyntax defaultExpression)
+        {
+            var variable = SyntaxFactory.VariableDeclaration(typeSyntax).AddVariables(SyntaxFactory.VariableDeclarator(fieldName));
+            var field = SyntaxFactory.FieldDeclaration(variable).AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+
+            classDeclaration = classDeclaration.AddMembers(field);
+
+            setupMethod.Emit(SyntaxFactory.ExpressionStatement(
                 SyntaxFactory.AssignmentExpression(
                     SyntaxKind.SimpleAssignmentExpression,
-                    frameworkSet.Options.GenerationOptions.QualifyFieldReference(SyntaxFactory.IdentifierName(fieldName)),
+                    frameworkSet.QualifyFieldReference(SyntaxFactory.IdentifierName(fieldName)),
                     defaultExpression)));
         }
 
