@@ -41,7 +41,7 @@
             return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type.IsReferenceType);
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IOperatorModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IOperatorModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -63,7 +63,7 @@
                 var paramList = new List<CSharpSyntaxNode>();
 
                 namingContext = namingContext.WithParameterName(method.Parameters[i].Name.ToPascalCase());
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotCallOperatorWithNull, namingContext, false, model.IsStatic, "Checks that the " + method.Name + " operator handles null values for the " + method.Parameters[i].Name + " parameter.");
+                var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CannotCallOperatorWithNull, namingContext, false, model.IsStatic, "Checks that the " + method.Name + " operator handles null values for the " + method.Parameters[i].Name + " parameter.");
 
                 for (var index = 0; index < method.Parameters.Count; index++)
                 {
@@ -93,7 +93,7 @@
 
                 generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), assignment));
 
-                yield return generatedMethod.Method;
+                yield return generatedMethod;
             }
         }
     }

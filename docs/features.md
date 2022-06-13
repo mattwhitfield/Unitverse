@@ -12,7 +12,7 @@ Unitverse automatically mimics the structure of your source project, making test
 
 ### 🟡 Framework auto-detection
 
-Unitverse can automatically inspect the references in the test project, and emit tests compatible with the frameworks you use. It will look for references for test framework, mocking framework and whether or not Fluent Assertions is present. If it doesn't find those references, it will use the defaults configured in the Visual Studio options page.
+Unitverse can automatically inspect the references in the test project, and emit tests compatible with the frameworks you use. It will look for references for test framework, mocking framework and whether or not Fluent Assertions and AutoFixture are present. If it doesn't find those references, it will use the defaults configured in the Visual Studio options page.
 
 ### 🟢 Generation of tests for abstract classes & protected methods
 

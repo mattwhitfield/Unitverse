@@ -5,7 +5,6 @@
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
@@ -41,7 +40,7 @@
             return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type.SpecialType == SpecialType.System_String);
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -73,7 +72,7 @@
                 var isNonNullable = currentParam.IsNullableTypeSyntax || currentParam.HasNullDefaultValue;
                 object[] testValues = isNonNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
 
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotCallWithInvalid, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues, "Checks that the " + method.Name + " method throws when the " + currentParam.Name + " parameter is null, empty or white space.");
+                var generatedMethod = _frameworkSet.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotCallWithInvalid, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues, "Checks that the " + method.Name + " method throws when the " + currentParam.Name + " parameter is null, empty or white space.");
 
                 for (var index = 0; index < method.Parameters.Count; index++)
                 {
@@ -119,7 +118,7 @@
                     generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));
                 }
 
-                yield return generatedMethod.Method;
+                yield return generatedMethod;
             }
         }
     }

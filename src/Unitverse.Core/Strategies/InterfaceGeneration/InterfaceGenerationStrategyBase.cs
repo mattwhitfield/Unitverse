@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
@@ -48,7 +47,7 @@
             return classModel.Interfaces.Any(y => y.InterfaceName == SupportedInterfaceName && y.GenericTypes.Count >= MinimumRequiredGenericParameterCount && y.GenericTypes.Count <= MaximumRequiredGenericParameterCount);
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel classModel, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(ClassModel classModel, ClassModel model, NamingContext namingContext)
         {
             if (classModel is null)
             {
@@ -65,9 +64,9 @@
                 var typeParameters = interfaceModel.GenericTypes.Select(x => x.Name).Aggregate(string.Empty, (current, next) => current + $"_{next}");
                 namingContext = namingContext.WithInterfaceName(interfaceModel.InterfaceName).WithTypeParameters(typeParameters);
 
-                var method = FrameworkSet.TestFramework.CreateTestMethod(GeneratedMethodNamePattern, namingContext, false, model != null && model.IsStatic, "Checks that the " + SupportedInterfaceName + " interface is implemented correctly.");
+                var method = FrameworkSet.CreateTestMethod(GeneratedMethodNamePattern, namingContext, false, model != null && model.IsStatic, "Checks that the " + SupportedInterfaceName + " interface is implemented correctly.");
                 AddBodyStatements(classModel, interfaceModel, method);
-                yield return method.Method;
+                yield return method;
             }
         }
 

@@ -5,7 +5,6 @@
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
@@ -46,7 +45,7 @@
             return model.Properties.Any(x => x.HasInit);
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -58,13 +57,13 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanInitialize, namingContext, false, false, "Checks that instance initialization works.");
+            var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanInitialize, namingContext, false, false, "Checks that instance initialization works.");
 
             generatedMethod.Act(Generate.ImplicitlyTypedVariableDeclaration("instance", model.GetObjectCreationExpression(_frameworkSet, false)));
 
             generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));
 
-            yield return generatedMethod.Method;
+            yield return generatedMethod;
         }
     }
 }

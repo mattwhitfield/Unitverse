@@ -5,7 +5,6 @@
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
@@ -41,7 +40,7 @@
             return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String);
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -79,7 +78,7 @@
                 var paramList = new List<CSharpSyntaxNode>();
 
                 namingContext = namingContext.WithParameterName(currentParam.Name.ToPascalCase());
-                var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CannotCallWithNull, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, "Checks that the " + method.Name + " method throws when the " + currentParam.Name + " parameter is null.");
+                var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CannotCallWithNull, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, "Checks that the " + method.Name + " method throws when the " + currentParam.Name + " parameter is null.");
 
                 for (var index = 0; index < method.Parameters.Count; index++)
                 {
@@ -125,7 +124,7 @@
                     generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));
                 }
 
-                yield return generatedMethod.Method;
+                yield return generatedMethod;
             }
         }
     }

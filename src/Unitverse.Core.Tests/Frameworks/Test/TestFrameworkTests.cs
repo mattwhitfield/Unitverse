@@ -16,7 +16,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
     [TestFixture]
     public class TestFrameworkTests
     {
-        public static IEnumerable<ITestFramework> Targets
+        public static IEnumerable<IExtendedTestFramework> Targets
         {
             get
             {
@@ -140,22 +140,22 @@ namespace Unitverse.Core.Tests.Frameworks.Test
             Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 
-        [TestCase(TestFrameworkTypes.NUnit2, "[SetUp]\r\npublic void SetUp()")]
-        [TestCase(TestFrameworkTypes.NUnit3, "[SetUp]\r\npublic void SetUp()")]
-        [TestCase(TestFrameworkTypes.MsTest, "[TestInitialize]\r\npublic void SetUp()")]
-        [TestCase(TestFrameworkTypes.XUnit, "public TestValue1801609112()")]
+        [TestCase(TestFrameworkTypes.NUnit2, "[SetUp]\r\npublic void SetUp()\r\n{\r\n}")]
+        [TestCase(TestFrameworkTypes.NUnit3, "[SetUp]\r\npublic void SetUp()\r\n{\r\n}")]
+        [TestCase(TestFrameworkTypes.MsTest, "[TestInitialize]\r\npublic void SetUp()\r\n{\r\n}")]
+        [TestCase(TestFrameworkTypes.XUnit, "public TestValue1801609112()\r\n{\r\n}")]
         public void CanCallCreateSetupMethod(TestFrameworkTypes frameworkTypes, string expectedOutput)
         {
             var testClass = CreateFramework(frameworkTypes);
             var targetTypeName = "TestValue1801609112";
-            var result = testClass.CreateSetupMethod(targetTypeName);
-            Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
+            var result = testClass.CreateSetupMethod(targetTypeName, "className");
+            Assert.That(result.Method.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 
-        [TestCase(TestFrameworkTypes.NUnit2, "[TestCase(1)]\r\n[TestCase(2)]\r\npublic void TestValue947022583(int value)")]
-        [TestCase(TestFrameworkTypes.NUnit3, "[TestCase(1)]\r\n[TestCase(2)]\r\npublic void TestValue947022583(int value)")]
-        [TestCase(TestFrameworkTypes.MsTest, "[DataTestMethod]\r\n[DataRow(1)]\r\n[DataRow(2)]\r\npublic void TestValue947022583(int value)")]
-        [TestCase(TestFrameworkTypes.XUnit, "[Theory]\r\n[InlineData(1)]\r\n[InlineData(2)]\r\npublic void TestValue947022583(int value)")]
+        [TestCase(TestFrameworkTypes.NUnit2, "[TestCase(1)]\r\n[TestCase(2)]\r\npublic void TestValue947022583(int value)\r\n{\r\n}")]
+        [TestCase(TestFrameworkTypes.NUnit3, "[TestCase(1)]\r\n[TestCase(2)]\r\npublic void TestValue947022583(int value)\r\n{\r\n}")]
+        [TestCase(TestFrameworkTypes.MsTest, "[DataTestMethod]\r\n[DataRow(1)]\r\n[DataRow(2)]\r\npublic void TestValue947022583(int value)\r\n{\r\n}")]
+        [TestCase(TestFrameworkTypes.XUnit, "[Theory]\r\n[InlineData(1)]\r\n[InlineData(2)]\r\npublic void TestValue947022583(int value)\r\n{\r\n}")]
         public void CanCallCreateTestCaseMethod(TestFrameworkTypes frameworkTypes, string expectedOutput)
         {
             var testClass = CreateFramework(frameworkTypes);
@@ -168,10 +168,10 @@ namespace Unitverse.Core.Tests.Frameworks.Test
             Assert.That(result.Method.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 
-        [TestCase(TestFrameworkTypes.NUnit2, "[Test]\r\npublic static void TestValue1606901338()")]
-        [TestCase(TestFrameworkTypes.NUnit3, "[Test]\r\npublic static void TestValue1606901338()")]
-        [TestCase(TestFrameworkTypes.MsTest, "[TestMethod]\r\npublic void TestValue1606901338()")]
-        [TestCase(TestFrameworkTypes.XUnit, "[Fact]\r\npublic static void TestValue1606901338()")]
+        [TestCase(TestFrameworkTypes.NUnit2, "[Test]\r\npublic static void TestValue1606901338()\r\n{\r\n}")]
+        [TestCase(TestFrameworkTypes.NUnit3, "[Test]\r\npublic static void TestValue1606901338()\r\n{\r\n}")]
+        [TestCase(TestFrameworkTypes.MsTest, "[TestMethod]\r\npublic void TestValue1606901338()\r\n{\r\n}")]
+        [TestCase(TestFrameworkTypes.XUnit, "[Fact]\r\npublic static void TestValue1606901338()\r\n{\r\n}")]
         public void CanCallCreateTestMethod(TestFrameworkTypes frameworkTypes, string expectedOutput)
         {
             var testClass = CreateFramework(frameworkTypes);
@@ -274,36 +274,36 @@ namespace Unitverse.Core.Tests.Frameworks.Test
         }
 
         [TestCaseSource(nameof(Targets))]
-        public void CannotCallCreateSetupMethodWithInvalidTargetTypeName(ITestFramework testClass)
+        public void CannotCallCreateSetupMethodWithInvalidTargetTypeName(IExtendedTestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.CreateSetupMethod(null));
+            Assert.Throws<ArgumentNullException>(() => testClass.CreateSetupMethod(null, "className"));
         }
 
         [TestCaseSource(nameof(Targets))]
-        public void CannotCallCreateTestCaseMethodWithNullName(ITestFramework testClass)
+        public void CannotCallCreateTestCaseMethodWithNullName(IExtendedTestFramework testClass)
         {
             Assert.Throws<ArgumentNullException>(() => testClass.CreateTestCaseMethod(null, new NamingContext("class"), true, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), new[] { new object(), new object(), new object() }, ""));
         }
 
         [TestCaseSource(nameof(Targets))]
-        public void CannotCallCreateTestCaseMethodWithNullTestValues(ITestFramework testClass)
+        public void CannotCallCreateTestCaseMethodWithNullTestValues(IExtendedTestFramework testClass)
         {
             Assert.Throws<ArgumentNullException>(() => testClass.CreateTestCaseMethod(new NameResolver("name"), new NamingContext("class"), false, true, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), default(IEnumerable<object>), ""));
         }
 
         [TestCaseSource(nameof(Targets))]
-        public void CannotCallCreateTestCaseMethodWithNullValueType(ITestFramework testClass)
+        public void CannotCallCreateTestCaseMethodWithNullValueType(IExtendedTestFramework testClass)
         {
             Assert.Throws<ArgumentNullException>(() => testClass.CreateTestCaseMethod(new NameResolver("name"), new NamingContext("class"), true, false, default(TypeSyntax), new[] { new object(), new object(), new object() }, ""));
         }
 
         [TestCaseSource(nameof(Targets))]
-        public void CannotCallCreateTestMethodWithInvalidName(ITestFramework testClass)
+        public void CannotCallCreateTestMethodWithInvalidName(IExtendedTestFramework testClass)
         {
             Assert.Throws<ArgumentNullException>(() => testClass.CreateTestMethod(null, new NamingContext("class"), true, false, ""));
         }
 
-        private static ITestFramework CreateFramework(TestFrameworkTypes frameworkTypes)
+        private static IExtendedTestFramework CreateFramework(TestFrameworkTypes frameworkTypes)
         {
             switch (frameworkTypes)
             {

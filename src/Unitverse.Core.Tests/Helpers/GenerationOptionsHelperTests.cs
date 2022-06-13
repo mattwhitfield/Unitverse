@@ -8,6 +8,7 @@ namespace Unitverse.Core.Tests.Helpers
     using Unitverse.Core.Options;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.CSharp;
+    using Unitverse.Core.Frameworks;
 
     [TestFixture]
     public static class GenerationOptionsHelperTests
@@ -16,12 +17,16 @@ namespace Unitverse.Core.Tests.Helpers
         public static void CanCallQualifyFieldReference()
         {
             // Arrange
+            var set = Substitute.For<IFrameworkSet>();
+            var fullOptions = Substitute.For<IUnitTestGeneratorOptions>();
             var options = Substitute.For<IGenerationOptions>();
+            set.Options.Returns(fullOptions);
+            fullOptions.GenerationOptions.Returns(options);
             options.PrefixFieldReferencesWithThis.Returns(true);
             var nameSyntax = SyntaxFactory.IdentifierName("fred");
 
             // Act
-            var result = options.QualifyFieldReference(nameSyntax);
+            var result = set.QualifyFieldReference(nameSyntax);
 
             // Assert
             result.ToFullString().Should().Be("this.fred");
@@ -32,12 +37,16 @@ namespace Unitverse.Core.Tests.Helpers
         public static void QualifyFieldReferenceDoesNotQualifyWhenNotConfigured()
         {
             // Arrange
+            var set = Substitute.For<IFrameworkSet>();
+            var fullOptions = Substitute.For<IUnitTestGeneratorOptions>();
             var options = Substitute.For<IGenerationOptions>();
+            set.Options.Returns(fullOptions);
+            fullOptions.GenerationOptions.Returns(options);
             options.PrefixFieldReferencesWithThis.Returns(false);
             var nameSyntax = SyntaxFactory.IdentifierName("fred");
 
             // Act
-            var result = options.QualifyFieldReference(nameSyntax);
+            var result = set.QualifyFieldReference(nameSyntax);
 
             // Assert
             result.ToFullString().Should().Be("fred");
@@ -47,13 +56,13 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public static void CannotCallQualifyFieldReferenceWithNullOptions()
         {
-            FluentActions.Invoking(() => default(IGenerationOptions).QualifyFieldReference(SyntaxFactory.IdentifierName("fred"))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => default(IFrameworkSet).QualifyFieldReference(SyntaxFactory.IdentifierName("fred"))).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public static void CannotCallQualifyFieldReferenceWithNullNameSyntax()
         {
-            FluentActions.Invoking(() => Substitute.For<IGenerationOptions>().QualifyFieldReference(default(SimpleNameSyntax))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => Substitute.For<IFrameworkSet>().QualifyFieldReference(default(SimpleNameSyntax))).Should().Throw<ArgumentNullException>();
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
+    using Unitverse.Core.Models;
 
     public interface IGenerationContext : IGenerationStatistics
     {
@@ -16,5 +17,9 @@
         void AddEmittedType(ITypeSymbol typeInfo);
 
         void AddVisitedGenericType(string identifier);
+
+        ModelGenerationContext CurrentModel { get; set; }
+
+        SectionedMethodHandler CurrentMethod { get; set; }
     }
 }

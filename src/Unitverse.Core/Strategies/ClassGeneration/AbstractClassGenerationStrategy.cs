@@ -81,9 +81,9 @@
                 model.TargetInstance,
                 creationExpression);
 
-            setupMethod = setupMethod.AddBodyStatements(SyntaxFactory.ExpressionStatement(assignment));
+            setupMethod.Emit(SyntaxFactory.ExpressionStatement(assignment));
 
-            classDeclaration = classDeclaration.AddMembers(setupMethod);
+            classDeclaration = classDeclaration.AddMembers(setupMethod.Method);
 
             return classDeclaration;
         }
@@ -229,23 +229,25 @@
 
                 if (methodSymbol != null)
                 {
-                    var statements = new List<StatementSyntax>();
+                    var initialMethod = Generate.Method(method.Name, method.IsAsync, false)
+                                                .WithIdentifier(SyntaxFactory.Identifier("Public" + method.Name))
+                                                .WithModifiers(modifiers)
+                                                .WithReturnType(methodSymbol.ReturnType.ToTypeSyntax(_frameworkSet.Context));
+
+                    var methodHandler = new SectionedMethodHandler(initialMethod);
+                    _frameworkSet.Context.CurrentMethod = methodHandler;
+
                     var parameters = new List<ParameterSyntax>();
 
                     foreach (var param in methodSymbol.Parameters)
                     {
-                        parameters.Add(GetParameter(param, model.SemanticModel, statements));
+                        parameters.Add(GetParameter(param, model.SemanticModel, methodHandler));
                     }
 
-                    statements.Clear();
-                    statements.Add(methodStatement);
+                    methodHandler = new SectionedMethodHandler(initialMethod);
+                    methodHandler.Emit(methodStatement);
 
-                    var newMethod = Generate.Method(method.Name, method.IsAsync, false)
-                        .WithParameterList(Generate.ParameterList(parameters))
-                        .WithIdentifier(SyntaxFactory.Identifier("Public" + method.Name))
-                        .WithModifiers(modifiers)
-                        .WithReturnType(methodSymbol.ReturnType.ToTypeSyntax(_frameworkSet.Context))
-                        .WithBody(SyntaxFactory.Block(statements.ToArray()));
+                    var newMethod = (MethodDeclarationSyntax)methodHandler.Method.WithParameterList(Generate.ParameterList(parameters));
 
                     if (methodSymbol.TypeParameters.Length > 0)
                     {
@@ -375,31 +377,33 @@
 
             foreach (var method in methodCatalog.Values)
             {
-                var statements = new List<StatementSyntax>();
+                var initialMethod = Generate.Method(method.Name, method.IsAsync, false)
+                                            .WithModifiers(GetOverrideTokens(method.DeclaredAccessibility))
+                                            .WithIdentifier(SyntaxFactory.Identifier(method.Name))
+                                            .WithReturnType(method.ReturnType.ToTypeSyntax(_frameworkSet.Context));
+
+                var methodHandler = new SectionedMethodHandler(initialMethod);
+                _frameworkSet.Context.CurrentMethod = methodHandler;
+
                 var parameters = new List<ParameterSyntax>();
 
                 foreach (var param in method.Parameters)
                 {
-                    parameters.Add(GetParameter(param, model.SemanticModel, statements));
+                    parameters.Add(GetParameter(param, model.SemanticModel, methodHandler));
                 }
 
-                var methodOverride = Generate.Method(method.Name, method.IsAsync, false)
-                    .WithParameterList(Generate.ParameterList(parameters))
-                    .WithModifiers(GetOverrideTokens(method.DeclaredAccessibility))
-                    .WithIdentifier(SyntaxFactory.Identifier(method.Name))
-                    .WithReturnType(method.ReturnType.ToTypeSyntax(_frameworkSet.Context));
+                if (!string.Equals(method.ReturnType.ToFullName(), "void", StringComparison.OrdinalIgnoreCase))
+                {
+                    methodHandler.Emit(SyntaxFactory.ReturnStatement(SyntaxFactory.DefaultExpression(method.ReturnType.ToTypeSyntax(_frameworkSet.Context))));
+                }
+
+                var methodOverride = (MethodDeclarationSyntax)methodHandler.Method.WithParameterList(Generate.ParameterList(parameters));
 
                 if (method.TypeParameters.Length > 0)
                 {
                     methodOverride = methodOverride.WithTypeParameterList(SyntaxFactory.TypeParameterList(SyntaxFactory.SeparatedList(method.TypeParameters.Select(x => SyntaxFactory.TypeParameter(x.Name)))));
                 }
 
-                if (!string.Equals(method.ReturnType.ToFullName(), "void", StringComparison.OrdinalIgnoreCase))
-                {
-                    statements.Add(SyntaxFactory.ReturnStatement(SyntaxFactory.DefaultExpression(method.ReturnType.ToTypeSyntax(_frameworkSet.Context))));
-                }
-
-                methodOverride = methodOverride.WithBody(SyntaxFactory.Block(statements.ToArray()));
                 classDeclaration = classDeclaration.AddMembers(methodOverride);
             }
 
@@ -429,13 +433,13 @@
             return classDeclaration;
         }
 
-        private ParameterSyntax GetParameter(IParameterSymbol parameter, SemanticModel model, IList<StatementSyntax> statements)
+        private ParameterSyntax GetParameter(IParameterSymbol parameter, SemanticModel model, SectionedMethodHandler statements)
         {
             var syntax = Generate.Parameter(parameter.Name);
             if (parameter.RefKind == RefKind.Out)
             {
                 syntax = syntax.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
-                statements.Add(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(parameter.Name), AssignmentValueHelper.GetDefaultAssignmentValue(parameter.Type, model, _frameworkSet))));
+                statements.Emit(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(parameter.Name), AssignmentValueHelper.GetDefaultAssignmentValue(parameter.Type, model, _frameworkSet))));
             }
             else if (parameter.RefKind == RefKind.Ref)
             {

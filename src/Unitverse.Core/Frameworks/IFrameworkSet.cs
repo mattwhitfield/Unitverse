@@ -3,7 +3,7 @@
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
 
-    public interface IFrameworkSet : IClassModelEvaluator
+    public interface IFrameworkSet : IClassModelEvaluator, ITestMethodFactory
     {
         IUnitTestGeneratorOptions Options { get; }
 

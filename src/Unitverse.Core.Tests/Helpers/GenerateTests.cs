@@ -267,7 +267,7 @@ namespace Unitverse.Core.Tests.Helpers
             var classDeclaration = TestSemanticModelFactory.Class;
 
             var result = Generate.SetupMethod(model, targetTypeName, frameworkSet, ref classDeclaration);
-            Assert.That(result.NormalizeWhitespace().ToFullString().StartsWith("[SetUp]\r\npublic void SetUp()\r\n{\r\n    _param = \"TestValue", StringComparison.Ordinal));
+            Assert.That(result.Method.NormalizeWhitespace().ToFullString().StartsWith("[SetUp]\r\npublic void SetUp()\r\n{\r\n    _param = \"TestValue", StringComparison.Ordinal));
         }
 
         [Test]

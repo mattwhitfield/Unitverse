@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
@@ -16,6 +16,6 @@
 
         bool CanHandle(T member, ClassModel model);
 
-        IEnumerable<MethodDeclarationSyntax> Create(T member, ClassModel model, NamingContext namingContext);
+        IEnumerable<SectionedMethodHandler> Create(T member, ClassModel model, NamingContext namingContext);
     }
 }

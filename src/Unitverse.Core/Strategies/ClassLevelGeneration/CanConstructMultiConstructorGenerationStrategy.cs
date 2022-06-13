@@ -41,7 +41,7 @@
             return model.Declaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Count(x => x.Modifiers.All(m => !m.IsKind(SyntaxKind.StaticKeyword))) > 1 && !model.IsStatic;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(ClassModel method, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -53,7 +53,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var generatedMethod = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanConstruct, namingContext, false, false, "Checks that instance construction works.");
+            var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanConstruct, namingContext, false, false, "Checks that instance construction works.");
 
             bool isFirst = true;
             foreach (var constructor in model.Constructors)
@@ -76,7 +76,7 @@
                 generatedMethod.BlankLine();
             }
 
-            yield return generatedMethod.Method;
+            yield return generatedMethod;
         }
     }
 }

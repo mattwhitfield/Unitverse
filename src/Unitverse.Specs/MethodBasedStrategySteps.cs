@@ -78,7 +78,7 @@
 
             if (generationStrategy.CanHandle(_context.ClassModel, _context.ClassModel))
             {
-                _context.Result = generationStrategy.Create(_context.ClassModel, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName));
+                _context.Result = generationStrategy.Create(_context.ClassModel, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName)).Select(x => x.Method);
             }
 
             SemanticModelHelper.WriteMethods(_context.Result);
@@ -118,7 +118,7 @@
 
             _context.Result = _context.ClassModel.Methods.GetMethodList(
                 method => generationStrategy.CanHandle(method, _context.ClassModel),
-                method => generationStrategy.Create(method, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(_context.ClassModel.GetMethodUniqueName(method), method.Name)));
+                method => generationStrategy.Create(method, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(_context.ClassModel.GetMethodUniqueName(method), method.Name)).Select(x => x.Method));
         }
 
         [When(@"I generate tests for the indexer using the strategy '(.*)'")]
@@ -150,7 +150,7 @@
 
             _context.Result = _context.ClassModel.Indexers.GetMethodList(
                 indexer => generationStrategy.CanHandle(indexer, _context.ClassModel),
-                indexer => generationStrategy.Create(indexer, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(_context.ClassModel.GetIndexerName(indexer))));
+                indexer => generationStrategy.Create(indexer, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(_context.ClassModel.GetIndexerName(indexer))).Select(x => x.Method));
         }
 
         [When(@"I generate tests for the operator using the strategy '(.*)'")]
@@ -177,7 +177,7 @@
             
             _context.Result = _context.ClassModel.Operators.GetMethodList(
                 methodOperator => generationStrategy.CanHandle(methodOperator, _context.ClassModel),
-                methodOperator => generationStrategy.Create(methodOperator, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(methodOperator.Name)));
+                methodOperator => generationStrategy.Create(methodOperator, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(methodOperator.Name)).Select(x => x.Method));
         }
 
         [When(@"I generate tests for the property using the strategy '(.*)'")]
@@ -224,13 +224,13 @@
 
             _context.Result = _context.ClassModel.Properties.GetMethodList(
                 property => generationStrategy.CanHandle(property, _context.ClassModel),
-                property => generationStrategy.Create(property, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(property.Name)));
+                property => generationStrategy.Create(property, _context.ClassModel, new NamingContext(_context.ClassModel.ClassName).WithMemberName(property.Name)).Select(x => x.Method));
         }
 
         [Then (@"I expect a method called '(.*)'")]
         public void ThenIExpectMethod(string methodName)
         {
-            var isThere = _context.Result.FindMatches(
+            var isThere = _context.Result.OfType<MethodDeclarationSyntax>().FindMatches(
                 method => method.Identifier.ValueText,
                 methodName,
                 out var found,
@@ -350,7 +350,7 @@
         public void ThenIExpectNotMethod(string methodName)
         { 
             var matcher = new Regex(methodName);
-            var isThere = _context.Result.FindMatches(
+            var isThere = _context.Result.OfType<MethodDeclarationSyntax>().FindMatches(
                 method => matcher.IsMatch(method.Identifier.ValueText), 
                 out _);
             
@@ -399,7 +399,7 @@
             foreach (var row in table.Rows)
             {
                 string methodName = row.First().Value;
-                var methodThere = _context.Result.FindMatches(
+                var methodThere = _context.Result.OfType<MethodDeclarationSyntax>().FindMatches(
                     method => method.Identifier.ValueText,
                     methodName,
                     out var found,

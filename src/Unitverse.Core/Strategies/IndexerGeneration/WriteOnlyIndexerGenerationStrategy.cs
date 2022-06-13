@@ -41,7 +41,7 @@
             return !indexer.HasGet && indexer.HasSet;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IIndexerModel indexer, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IIndexerModel indexer, ClassModel model, NamingContext namingContext)
         {
             if (indexer == null)
             {
@@ -53,10 +53,10 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanSet, namingContext, false, model.IsStatic, "Checks that the indexer functions correctly.");
+            var method = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanSet, namingContext, false, model.IsStatic, "Checks that the indexer functions correctly.");
             method.Emit(GetPropertyAssertionBodyStatements(indexer, model).ToArray());
 
-            yield return method.Method;
+            yield return method;
         }
 
         private IEnumerable<StatementSyntax> GetPropertyAssertionBodyStatements(IIndexerModel indexer, ClassModel sourceModel)

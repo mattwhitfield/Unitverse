@@ -193,7 +193,7 @@
         {
             var identifierName = SyntaxFactory.IdentifierName(GetConstructorParameterFieldName(name, typeInfo, frameworkSet.NamingProvider));
 
-            var fieldSyntax = frameworkSet.Options.GenerationOptions.QualifyFieldReference(identifierName);
+            var fieldSyntax = frameworkSet.QualifyFieldReference(identifierName);
 
             if (typeInfo.Type.TypeKind == TypeKind.Interface)
             {
@@ -309,7 +309,7 @@
             TargetFieldName = fieldName;
             var nameSyntax = SyntaxFactory.IdentifierName(TargetFieldName);
 
-            TargetInstance = frameworkSet.Options.GenerationOptions.QualifyFieldReference(nameSyntax);
+            TargetInstance = frameworkSet.QualifyFieldReference(nameSyntax);
         }
     }
 }

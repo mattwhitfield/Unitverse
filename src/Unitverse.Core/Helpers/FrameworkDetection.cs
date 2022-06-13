@@ -31,6 +31,8 @@
 
         private static readonly IList<Matcher<bool>> FluentAssertionsMatchers = new[] { new Matcher<bool>("FluentAssertions", null, true) };
 
+        private static readonly IList<Matcher<bool>> AutoFixtureMatchers = new[] { new Matcher<bool>("AutoFixture", null, true) };
+
         private static readonly IList<Matcher<TestFrameworkTypes>> TestFrameworkMatchers = new[]
         {
             new Matcher<TestFrameworkTypes>("nunit.framework", x => x == 2, TestFrameworkTypes.NUnit2),
@@ -78,22 +80,24 @@
             }
 
             bool? fluentAssertionsPresent = null;
+            bool? autoFixturePresent = null;
             TestFrameworkTypes? detectedTestFramework = null;
             MockingFrameworkType? detectedMockingFramework = null;
 
             foreach (var reference in referencedAssemblies)
             {
                 Resolve(ref fluentAssertionsPresent, FluentAssertionsMatchers, reference.AssemblyName, reference.MajorVersion);
+                Resolve(ref autoFixturePresent, AutoFixtureMatchers, reference.AssemblyName, reference.MajorVersion);
                 Resolve(ref detectedTestFramework, TestFrameworkMatchers, reference.AssemblyName, reference.MajorVersion);
                 Resolve(ref detectedMockingFramework, MockingFrameworkMatchers, reference.AssemblyName, reference.MajorVersion);
 
-                if (fluentAssertionsPresent.HasValue && detectedTestFramework.HasValue && detectedMockingFramework.HasValue)
+                if (fluentAssertionsPresent.HasValue && detectedTestFramework.HasValue && detectedMockingFramework.HasValue && autoFixturePresent.HasValue)
                 {
                     break;
                 }
             }
 
-            return new DetectedGenerationOptions(baseOptions, fluentAssertionsPresent, detectedTestFramework, detectedMockingFramework);
+            return new DetectedGenerationOptions(baseOptions, fluentAssertionsPresent, autoFixturePresent, detectedTestFramework, detectedMockingFramework);
         }
     }
 }

@@ -20,7 +20,9 @@
             var context = new GenerationContext();
             var testFramework = CreateTestFramework(options);
             IAssertionFramework assertionFramework = testFramework;
-            return new FrameworkSet(testFramework, Create(options.GenerationOptions.MockingFrameworkType, context), options.GenerationOptions.UseFluentAssertions ? new FluentAssertionFramework(assertionFramework) : assertionFramework, new NamingProvider(options.NamingOptions), context, options);
+            var namingProvider = new NamingProvider(options.NamingOptions);
+
+            return new FrameworkSet(testFramework, Create(options.GenerationOptions.MockingFrameworkType, context), options.GenerationOptions.UseFluentAssertions ? new FluentAssertionFramework(assertionFramework) : assertionFramework, namingProvider, context, options);
         }
 
         private static IMockingFramework Create(MockingFrameworkType mockingFrameworkType, IGenerationContext context)
@@ -40,7 +42,7 @@
             }
         }
 
-        private static ITestFramework CreateTestFramework(IUnitTestGeneratorOptions options)
+        private static IExtendedTestFramework CreateTestFramework(IUnitTestGeneratorOptions options)
         {
             var testFrameworkTypes = options.GenerationOptions.FrameworkType;
 

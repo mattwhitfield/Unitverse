@@ -8,6 +8,8 @@
 
         bool UseFluentAssertions { get; }
 
+        bool UseAutoFixture { get; }
+
         bool AutoDetectFrameworkTypes { get; }
 
         bool AllowGenerationWithoutTargetProject { get; }

@@ -13,7 +13,7 @@
             BaseContext = baseContext ?? throw new ArgumentNullException(nameof(baseContext));
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Result { get; set; }
+        public IEnumerable<BaseMethodDeclarationSyntax> Result { get; set; }
 
         private BaseContext BaseContext { get; }
 

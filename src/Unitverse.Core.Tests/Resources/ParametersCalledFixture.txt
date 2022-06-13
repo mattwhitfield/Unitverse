@@ -1,0 +1,13 @@
+namespace TestNamespace.SubNameSpace
+{
+    public class TestClass
+    {
+        public TestClass(string fixture)
+        {
+        }
+
+	    public void ThisIsAMethod(string fixture)
+	    {
+	    }
+    }
+}

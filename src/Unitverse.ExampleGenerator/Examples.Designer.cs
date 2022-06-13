@@ -783,7 +783,7 @@ namespace Unitverse.ExampleGenerator {
         
         /// <summary>
         ///   Looks up a localized string similar to // ! StyleCop Compatbility
-        ///// $ Demonstrates how tests can be generated with XML documentation and this. prefixed to test class fields
+        ///// $ Demonstrates how tests can be generated with XML documentation and `this.` prefixed to test class fields
         ///// # PrefixFieldReferencesWithThis=true
         ///// # EmitXmlDocumentation=true
         ///
@@ -801,11 +801,65 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///        public void SomeMethod(string methodName, int methodValue)
         ///        {
-        ///            Sy [rest of string was truncated]&quot;;.
+        ///             [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string StyleCopCompatibility {
             get {
                 return ResourceManager.GetString("StyleCopCompatibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // ! Value Generation
+        ///// $ Demonstrates how random values are created when required
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///    using System;
+        ///
+        ///    public class Writer
+        ///    {
+        ///        public void Write(char c);
+        ///        public void Write(byte b);
+        ///        public void Write(short s);
+        ///        public void Write(int i);
+        ///        public void Write(long l);
+        ///        public void Write(double d);
+        ///        public void Write(decimal d);
+        ///        public void Write(DateTime d);
+        ///        public void Write(string s);
+        ///    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ValueGeneration {
+            get {
+                return ResourceManager.GetString("ValueGeneration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // ! Value Generation
+        ///// $ Demonstrates how random values are created when required
+        ///// # UseAutoFixture=true
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///    using System;
+        ///
+        ///    public class Writer
+        ///    {
+        ///        public void Write(char c);
+        ///        public void Write(byte b);
+        ///        public void Write(short s);
+        ///        public void Write(int i);
+        ///        public void Write(long l);
+        ///        public void Write(double d);
+        ///        public void Write(decimal d);
+        ///        public void Write(DateTime d);
+        ///        public  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ValueGenerationWithAutoFixture {
+            get {
+                return ResourceManager.GetString("ValueGenerationWithAutoFixture", resourceCulture);
             }
         }
     }

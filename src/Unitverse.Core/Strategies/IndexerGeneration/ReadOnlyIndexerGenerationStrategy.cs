@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
@@ -41,7 +40,7 @@
             return indexer.HasGet && !indexer.HasSet;
         }
 
-        public IEnumerable<MethodDeclarationSyntax> Create(IIndexerModel indexer, ClassModel model, NamingContext namingContext)
+        public IEnumerable<SectionedMethodHandler> Create(IIndexerModel indexer, ClassModel model, NamingContext namingContext)
         {
             if (indexer == null)
             {
@@ -53,14 +52,14 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var paramExpressions = indexer.Parameters.Select(param => AssignmentValueHelper.GetDefaultAssignmentValue(param.TypeInfo, model.SemanticModel, _frameworkSet)).ToArray();
+            var method = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic, "Checks that the indexer functions correctly.");
 
-            var method = _frameworkSet.TestFramework.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic, "Checks that the indexer functions correctly.");
+            var paramExpressions = indexer.Parameters.Select(param => AssignmentValueHelper.GetDefaultAssignmentValue(param.TypeInfo, model.SemanticModel, _frameworkSet)).ToArray();
 
             method.Emit(_frameworkSet.AssertionFramework.AssertIsInstanceOf(Generate.IndexerAccess(model.TargetInstance, paramExpressions), indexer.TypeInfo.ToTypeSyntax(_frameworkSet.Context), indexer.TypeInfo.Type.IsReferenceType));
             method.Emit(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
 
-            yield return method.Method;
+            yield return method;
         }
     }
 }

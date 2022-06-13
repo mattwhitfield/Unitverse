@@ -55,6 +55,25 @@
 
             frameworkSet.Context.AddEmittedType(propertyType);
 
+            if (frameworkSet.Options.GenerationOptions.UseAutoFixture)
+            {
+                // with AutoFixture, we do interfaces and delegates and let AutoFixture do the rest
+                var expression =
+                    GetInterfaceOrNull(propertyType, frameworkSet) ??
+                    GetDelegateOrNull(propertyType, model, visitedTypes, frameworkSet);
+
+                if (expression != null)
+                {
+                    return expression;
+                }
+
+                frameworkSet.Context.CurrentMethod?.AddRequirement(Requirements.AutoFixture);
+                return SyntaxFactory.InvocationExpression(Generate.MemberAccess(
+                    AutoFixtureHelper.VariableReference,
+                    SyntaxFactory.GenericName(SyntaxFactory.Identifier("Create"))
+                                                           .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(propertyType.ToTypeSyntax(frameworkSet.Context))))));
+            }
+
             var fullName = propertyType.ToFullName();
             if (visitedTypes.Add(fullName))
             {
@@ -68,40 +87,72 @@
                     }
 
                     frameworkSet.Context.ValuesGenerated++;
-                    return ValueGenerationStrategyFactory.GenerateFor("string", typeParameterSymbol, model, visitedTypes,  frameworkSet);
+                    return ValueGenerationStrategyFactory.GenerateFor("string", typeParameterSymbol, model, visitedTypes, frameworkSet);
                 }
 
-                if (ValueGenerationStrategyFactory.IsSupported(propertyType))
-                {
-                    frameworkSet.Context.ValuesGenerated++;
-                    return ValueGenerationStrategyFactory.GenerateFor(propertyType, model, visitedTypes, frameworkSet);
-                }
+                var expression =
+                    GetStrategyGeneratedValueOrNull(propertyType, model, visitedTypes, frameworkSet) ??
+                    GetInterfaceOrNull(propertyType, frameworkSet) ??
+                    GetClassStructOrNull(propertyType, model, visitedTypes, frameworkSet) ??
+                    GetDelegateOrNull(propertyType, model, visitedTypes, frameworkSet);
 
-                if (propertyType.TypeKind == TypeKind.Interface)
+                if (expression != null)
                 {
-                    frameworkSet.Context.InterfacesMocked++;
-                    return frameworkSet.MockingFramework.GetThrowawayReference(propertyType.ToTypeSyntax(frameworkSet.Context));
-                }
-
-                if (propertyType is INamedTypeSymbol namedType && (propertyType.TypeKind == TypeKind.Class || propertyType.TypeKind == TypeKind.Struct))
-                {
-                    frameworkSet.Context.TypesConstructed++;
-                    return GetClassDefaultAssignmentValue(model, visitedTypes, frameworkSet, namedType);
-                }
-
-                if (propertyType is INamedTypeSymbol delegateType && (propertyType.TypeKind == TypeKind.Delegate))
-                {
-                    var invokeMethod = delegateType.DelegateInvokeMethod;
-                    if (invokeMethod != null)
-                    {
-                        return GetDefaultDelegateValue(model, visitedTypes, frameworkSet, invokeMethod);
-                    }
+                    return expression;
                 }
 
                 visitedTypes.Remove(fullName);
             }
 
             return SyntaxFactory.DefaultExpression(propertyType.ToTypeSyntax(frameworkSet.Context));
+        }
+
+        private static ExpressionSyntax GetStrategyGeneratedValueOrNull(ITypeSymbol propertyType, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
+        {
+            if (ValueGenerationStrategyFactory.IsSupported(propertyType))
+            {
+                frameworkSet.Context.ValuesGenerated++;
+                return ValueGenerationStrategyFactory.GenerateFor(propertyType, model, visitedTypes, frameworkSet);
+            }
+
+            return null;
+        }
+
+        private static ExpressionSyntax GetDelegateOrNull(ITypeSymbol propertyType, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
+        {
+            if (propertyType is INamedTypeSymbol delegateType && (propertyType.TypeKind == TypeKind.Delegate))
+            {
+                var invokeMethod = delegateType.DelegateInvokeMethod;
+                if (invokeMethod != null)
+                {
+                    return GetDefaultDelegateValue(model, visitedTypes, frameworkSet, invokeMethod);
+                }
+            }
+
+            return null;
+        }
+
+        private static ExpressionSyntax GetClassStructOrNull(ITypeSymbol propertyType, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
+        {
+            // TODO - can we do record types here?
+            if (propertyType is INamedTypeSymbol namedType && (propertyType.TypeKind == TypeKind.Class || propertyType.TypeKind == TypeKind.Struct))
+            {
+                frameworkSet.Context.TypesConstructed++;
+                return GetClassDefaultAssignmentValue(model, visitedTypes, frameworkSet, namedType);
+            }
+
+            return null;
+        }
+
+        private static ExpressionSyntax GetInterfaceOrNull(ITypeSymbol propertyType, IFrameworkSet frameworkSet)
+        {
+            if (propertyType.TypeKind == TypeKind.Interface)
+            {
+                frameworkSet.Context.InterfacesMocked++;
+                return frameworkSet.MockingFramework.GetThrowawayReference(propertyType.ToTypeSyntax(frameworkSet.Context));
+            }
+
+            return null;
         }
 
         private static ExpressionSyntax GetDefaultDelegateValue(SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, IMethodSymbol invokeMethod)

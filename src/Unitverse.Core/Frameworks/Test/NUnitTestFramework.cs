@@ -7,20 +7,26 @@
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
 
-    public abstract class NUnitTestFramework : BaseTestFramework, ITestFramework, IAssertionFramework
+    public abstract class NUnitTestFramework : BaseTestFramework, IExtendedTestFramework
     {
         protected NUnitTestFramework(IUnitTestGeneratorOptions options)
             : base(options)
         {
         }
 
-        public bool SupportsStaticTestClasses => true;
+        public override bool SupportsStaticTestClasses => true;
 
         public bool AssertThrowsAsyncIsAwaitable => false;
 
         public abstract AttributeSyntax SingleThreadedApartmentAttribute { get; }
 
         public string TestClassAttribute => "TestFixture";
+
+        protected override string TestAttributeName => "Test";
+
+        protected override string TestCaseMethodAttributeName => string.Empty;
+
+        protected override string TestCaseAttributeName => "TestCase";
 
         private static MemberAccessExpressionSyntax AssertThat =>
             SyntaxFactory.MemberAccessExpression(
@@ -204,74 +210,9 @@
             return AssertThrows(exceptionType, methodCall, "ThrowsAsync");
         }
 
-        public BaseMethodDeclarationSyntax CreateSetupMethod(string targetTypeName)
+        protected override BaseMethodDeclarationSyntax CreateSetupMethodSyntax(string targetTypeName)
         {
-            if (string.IsNullOrWhiteSpace(targetTypeName))
-            {
-                throw new ArgumentNullException(nameof(targetTypeName));
-            }
-
-            var method = Generate.Method("SetUp", false, false);
-
-            return method.AddAttributeLists(
-                SyntaxFactory.AttributeList(
-                    SyntaxFactory.SingletonSeparatedList(Generate.Attribute("SetUp"))));
-        }
-
-        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues, string description)
-        {
-            if (valueType == null)
-            {
-                throw new ArgumentNullException(nameof(valueType));
-            }
-
-            if (testValues == null)
-            {
-                throw new ArgumentNullException(nameof(testValues));
-            }
-
-            if (nameResolver is null)
-            {
-                throw new ArgumentNullException(nameof(nameResolver));
-            }
-
-            if (namingContext is null)
-            {
-                throw new ArgumentNullException(nameof(namingContext));
-            }
-
-            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic);
-
-            method = method.AddParameterListParameters(Generate.Parameter("value").WithType(valueType));
-
-            foreach (var testValue in testValues)
-            {
-                method = method.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("TestCase", testValue))));
-            }
-
-            method = AddXmlCommentsIfConfigured(method, description, "value", "The parameter that receives the test case values.");
-
-            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
-        }
-
-        public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, string description)
-        {
-            if (nameResolver is null)
-            {
-                throw new ArgumentNullException(nameof(nameResolver));
-            }
-
-            if (namingContext is null)
-            {
-                throw new ArgumentNullException(nameof(namingContext));
-            }
-
-            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic)
-                                 .AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute("Test"))));
-
-            method = AddXmlCommentsIfConfigured(method, description);
-
-            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
+            return Generate.Method("SetUp", false, false).AddAttributeLists(Generate.Attribute("SetUp").AsList());
         }
 
         public virtual IEnumerable<UsingDirectiveSyntax> GetUsings()

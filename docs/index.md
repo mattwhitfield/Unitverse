@@ -28,6 +28,8 @@ Due to the transition to 64-bit, Visual Studio 2022 introduces some architectura
 
 FluentAssertions can also be used for assertions, replacing the assertions built in to whichever test framework is being used.
 
+Unitverse can also use AutoFixture for value generation if configured. There are examples of [standard value generation](examples/ValueGeneration.md) and [value generation with AutoFixture](examples/ValueGenerationWithAutoFixture.md).
+
 #### Mocking Frameworks 
 
 * NSubstitute 
@@ -37,7 +39,7 @@ FluentAssertions can also be used for assertions, replacing the assertions built
 
 ### Framework Auto-Detection 🔍
 
-If Unitverse finds a test project related to the source project, it will look at the project references to determine what test and mocking frameworks to use. It will automatically use FluentAssertions if present. You can turn off framework auto-detection by going to Tools->Options->Unitverse.
+If Unitverse finds a test project related to the source project, it will look at the project references to determine what test and mocking frameworks to use. It will automatically use FluentAssertions and AutoFixture if present. You can turn off framework auto-detection by going to Tools->Options->Unitverse.
 
 ## Contributing ✋
 

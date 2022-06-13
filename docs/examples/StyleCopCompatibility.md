@@ -102,7 +102,7 @@ public class TestClassTests
     /// <summary>
     /// Checks that the SomeAsyncMethod method functions correctly.
     /// </summary>
-    /// <returns>A task that represents the running test</returns>
+    /// <returns>A task that represents the running test.</returns>
     [Fact]
     public async Task CanCallSomeAsyncMethod()
     {
@@ -121,7 +121,7 @@ public class TestClassTests
     /// Checks that the SomeAsyncMethod method throws when the methodName parameter is null, empty or white space.
     /// </summary>
     /// <param name="value">The parameter that receives the test case values.</param>
-    /// <returns>A task that represents the running test</returns>
+    /// <returns>A task that represents the running test.</returns>
     [Theory]
     [InlineData(null)]
     [InlineData("")]

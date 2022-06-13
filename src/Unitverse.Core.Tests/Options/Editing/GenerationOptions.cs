@@ -49,6 +49,11 @@
         [Description("Whether to use Fluent Assertions in preference to the test framework's built in assertion capabilities")]
         public bool UseFluentAssertions { get; set; } = false;
 
+        [Category("Frameworks")]
+        [DisplayName("Use AutoFixture")]
+        [Description("Whether to use AutoFixture when generating scalar values")]
+        public bool UseAutoFixture { get; set; } = false;
+
         [Category("Layout")]
         [DisplayName("Emit using directives outside namespace")]
         [Description("Whether to place the required using directives outside the namespace declaration")]

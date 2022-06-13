@@ -10,6 +10,8 @@
 
         public bool UseFluentAssertions => false;
 
+        public bool UseAutoFixture => false;
+
         public bool AutoDetectFrameworkTypes => false;
 
         public bool AllowGenerationWithoutTargetProject => false;

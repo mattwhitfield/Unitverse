@@ -1239,7 +1239,13 @@ namespace Unitverse.Core.Tests {
         /// <summary>
         ///   Looks up a localized string similar to namespace Unitverse.Web.Services.Flow
         ///{
-        ///    public class Crash&lt;TRequest&gt; where TRequest : notnull
+        ///    public interface P
+        ///    { }
+        ///
+        ///    public class R : P
+        ///    { }
+        ///
+        ///    public class Crash&lt;TRequest&gt; where TRequest : notnull, P
         ///    {
         ///        public Crash(TRequest foo)
         ///        {
@@ -1264,16 +1270,19 @@ namespace Unitverse.Core.Tests {
         ///        {
         ///        }
         /// 
+        ///        public TestClass(string stringProp, int i, string defaultedStringProp = null)
+        ///        {
+        ///        }
+        /// 
         ///        public TestClass(ITest? test)
         ///        {
         ///        }
         /// 
-        ///        public TestClass(ITest test, string someOtherThing)
+        ///        public TestClass(ITest? test, ITest defaulted = default)
         ///        {
         ///        }
         /// 
-        ///        public string GetFullName(string first, string? middle, string last) =&gt;
-        ///            middle != null ? $&quot;{first} {middle} {last}&quot; : $&quot;{first} {l [rest of string was truncated]&quot;;.
+        ///        public TestClass(ITest tes [rest of string was truncated]&quot;;.
         /// </summary>
         public static string NullableReferenceTypes {
             get {
@@ -1338,6 +1347,27 @@ namespace Unitverse.Core.Tests {
         public static string OverloadGenericDisambiguation {
             get {
                 return ResourceManager.GetString("OverloadGenericDisambiguation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(string fixture)
+        ///        {
+        ///        }
+        ///
+        ///	    public void ThisIsAMethod(string fixture)
+        ///	    {
+        ///	    }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string ParametersCalledFixture {
+            get {
+                return ResourceManager.GetString("ParametersCalledFixture", resourceCulture);
             }
         }
         
@@ -1807,6 +1837,33 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to namespace Unitverse.Examples
+        ///{
+        ///    using System;
+        ///
+        ///    public class Writer
+        ///    {
+        ///        public void Write(char c);
+        ///        public void Write(byte b);
+        ///        public void Write(short s);
+        ///        public void Write(int i);
+        ///        public void Write(long l);
+        ///        public void Write(double d);
+        ///        public void Write(decimal d);
+        ///        public void Write(DateTime d);
+        ///        public void Write(string s);
+        ///        public void Write(TimeSpan t);
+        ///        public void Write(Guid g);
+        ///    }
+        ///}.
+        /// </summary>
+        public static string ValueGeneration {
+            get {
+                return ResourceManager.GetString("ValueGeneration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///using System.Drawing;
         ///using System.Linq;
@@ -1849,10 +1906,9 @@ namespace Unitverse.Core.Tests {
         ///
         ///	public static class FlowConstraintProviderFactory
         ///    {
-        ///        public static Tuple&lt;FlowStage, IList&lt;FlowStage&gt;&gt; Follows(this FlowStage stage, params FlowStage[] followedStages)
+        ///        public static Tuple&lt;FlowStage, IList&lt;FlowStage&gt;&gt; Follows(this FlowStage stage, TimeSpan span, params FlowStage[] followedStages)
         ///        {
-        ///            return null;
-        ///  [rest of string was truncated]&quot;;.
+        ///             [rest of string was truncated]&quot;;.
         /// </summary>
         public static string XmlComments {
             get {
