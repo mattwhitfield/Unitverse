@@ -92,7 +92,7 @@
             var options = UnitTestGeneratorTests.ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, classAsText, true);
 
             // Compile the first
-            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
+            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, options.GenerationOptions.UseAutoFixture, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
             var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             Assert.IsNotNull(core);
@@ -185,48 +185,6 @@
             Assert.That(methodModel, Is.Not.Null);
 
             Assert.That(methodModel.Name, Is.EqualTo("ThisIsAMethod"));
-        }
-
-        private static IEnumerable<PortableExecutableReference> GetReferences(MockingFrameworkType mockingFrameworkType)
-        {
-            switch (mockingFrameworkType)
-            {
-                case MockingFrameworkType.NSubstitute:
-                    yield return MetadataReference.CreateFromFile(typeof(Substitute).Assembly.Location);
-                    break;
-
-                case MockingFrameworkType.Moq:
-                    yield return MetadataReference.CreateFromFile(typeof(Mock).Assembly.Location);
-                    break;
-
-                case MockingFrameworkType.MoqAutoMock:
-                    yield return MetadataReference.CreateFromFile(typeof(AutoMocker).Assembly.Location);
-                    yield return MetadataReference.CreateFromFile(typeof(Mock).Assembly.Location);
-                    break;
-
-                case MockingFrameworkType.FakeItEasy:
-                    yield return MetadataReference.CreateFromFile(typeof(A).Assembly.Location);
-                    break;
-            }
-        }
-
-        private static IEnumerable<PortableExecutableReference> GetReferences(TestFrameworkTypes testFrameworkTypes)
-        {
-            if ((testFrameworkTypes & TestFrameworkTypes.XUnit) > 0)
-            {
-                yield return MetadataReference.CreateFromFile(typeof(FactAttribute).Assembly.Location);
-                yield return MetadataReference.CreateFromFile(typeof(Xunit.Assert).Assembly.Location);
-            }
-
-            if ((testFrameworkTypes & (TestFrameworkTypes.NUnit3 | TestFrameworkTypes.NUnit2)) > 0)
-            {
-                yield return MetadataReference.CreateFromFile(typeof(TestFixtureAttribute).Assembly.Location);
-            }
-
-            if ((testFrameworkTypes & TestFrameworkTypes.MsTest) > 0)
-            {
-                yield return MetadataReference.CreateFromFile(typeof(Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute).Assembly.Location);
-            }
         }
     }
 }

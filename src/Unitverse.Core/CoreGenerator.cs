@@ -386,14 +386,11 @@
                 {
                     if (frameworkSet.Options.GenerationOptions.UseAutoFixture)
                     {
-                        // TODO - add declaration statement if not present
-                        //var fieldName = frameworkSet.Context.AutoFixtureFieldName;
-                        //var fieldExists = targetType.Members.OfType<FieldDeclarationSyntax>().Any(x => x.Declaration.Variables.Any(v => v.Identifier.Text == fieldName));
-
-                        //if (!fieldExists)
-                        //{
-                        //    updatedMethod = UpdateMethod(updatedMethod, allFields, fields, fieldName, AutoFixtureHelper.TypeSyntax, AutoFixtureHelper.CreationExpression);
-                        //}
+                        var fixtureAssignment = foundMethod.Body?.Statements.OfType<LocalDeclarationStatementSyntax>().FirstOrDefault(x => x.Declaration.Variables.Any(v => v.Identifier.Text == "fixture"));
+                        if (fixtureAssignment == null)
+                        {
+                            updatedMethod = UpdateMethod(updatedMethod, allFields, AutoFixtureHelper.VariableDeclaration, true);
+                        }
                     }
 
                     targetType = targetType.ReplaceNode(foundMethod, updatedMethod);
@@ -423,21 +420,39 @@
 
             var statement = SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(fieldName), defaultExpression));
 
+            return UpdateMethod(updatedMethod, allFields, statement, true);
+        }
+
+        private static BaseMethodDeclarationSyntax UpdateMethod(BaseMethodDeclarationSyntax updatedMethod, HashSet<string> allFields, StatementSyntax statement, bool first = false)
+        {
             var body = updatedMethod.Body ?? SyntaxFactory.Block();
 
             SyntaxList<StatementSyntax> newStatements;
-            var index = body.Statements.LastIndexOf(x => x.DescendantNodes().OfType<AssignmentExpressionSyntax>().Any(a => a.Left is IdentifierNameSyntax identifierName && allFields.Contains(identifierName.Identifier.Text)));
-            if (index >= 0 && index < body.Statements.Count - 1)
+            if (first)
             {
-                newStatements = body.Statements.Insert(index + 1, statement);
+                if (body.Statements.Count > 0)
+                {
+                    newStatements = body.Statements.Insert(0, statement);
+                }
+                else
+                {
+                    newStatements = body.Statements.Add(statement);
+                }
             }
             else
             {
-                newStatements = body.Statements.Add(statement);
+                var index = body.Statements.LastIndexOf(x => x.DescendantNodes().OfType<AssignmentExpressionSyntax>().Any(a => a.Left is IdentifierNameSyntax identifierName && allFields.Contains(identifierName.Identifier.Text)));
+                if (index >= 0 && index < body.Statements.Count - 1)
+                {
+                    newStatements = body.Statements.Insert(index + 1, statement);
+                }
+                else
+                {
+                    newStatements = body.Statements.Add(statement);
+                }
             }
 
-            updatedMethod = updatedMethod.WithBody(body.WithStatements(newStatements));
-            return updatedMethod;
+            return updatedMethod.WithBody(body.WithStatements(newStatements));
         }
 
         private static GenerationResult Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, bool withRegeneration, IUnitTestGeneratorOptions options, NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax originalTargetNamespace, bool isSingleItemGeneration, IMessageLogger messageLogger)

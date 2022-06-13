@@ -61,6 +61,44 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // # UseAutoFixture=true
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass()
+        ///        {
+        ///
+        ///        }
+        ///
+        ///        public string WillReturnAString()
+        ///        {
+        ///            return &quot;Hello&quot;;
+        ///        }
+        ///    }
+        ///}
+        ///-------------------
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(string stringProp)
+        ///        {
+        ///
+        ///        }
+        /// 
+        ///        public string WillReturnAString()
+        ///        {
+        ///            return &quot;Hello&quot;;
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Regeneration_AutoFixture {
+            get {
+                return ResourceManager.GetString("Regeneration-AutoFixture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
         ///{
         ///    public class TestClass

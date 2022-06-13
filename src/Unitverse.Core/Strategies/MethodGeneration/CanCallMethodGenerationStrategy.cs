@@ -71,15 +71,23 @@
                 {
                     var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
 
-                    generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                    var paramName = parameter.Name;
+                    var paramIdentifier = SyntaxFactory.IdentifierName(parameter.Identifier);
+                    if (paramName == "fixture" && _frameworkSet.Options.GenerationOptions.UseAutoFixture)
+                    {
+                        paramName = "fixtureParam";
+                        paramIdentifier = SyntaxFactory.IdentifierName(paramName);
+                    }
+
+                    generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, paramName, defaultAssignmentValue));
 
                     if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
                     {
-                        paramExpressions.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Identifier)).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
+                        paramExpressions.Add(SyntaxFactory.Argument(paramIdentifier).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
                     }
                     else
                     {
-                        paramExpressions.Add(SyntaxFactory.IdentifierName(parameter.Identifier));
+                        paramExpressions.Add(paramIdentifier);
                     }
                 }
             }
