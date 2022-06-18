@@ -67,11 +67,7 @@
                     return expression;
                 }
 
-                frameworkSet.Context.CurrentMethod?.AddRequirement(Requirements.AutoFixture);
-                return SyntaxFactory.InvocationExpression(Generate.MemberAccess(
-                    AutoFixtureHelper.VariableReference,
-                    SyntaxFactory.GenericName(SyntaxFactory.Identifier("Create"))
-                                                           .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(propertyType.ToTypeSyntax(frameworkSet.Context))))));
+                return AutoFixtureHelper.Create(propertyType, frameworkSet.Context);
             }
 
             var fullName = propertyType.ToFullName();

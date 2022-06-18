@@ -71,7 +71,7 @@
                 method = method.WithXmlDocumentation(documentation);
             }
 
-            return new SectionedMethodHandler(method);
+            return new SectionedMethodHandler(method, Options.GenerationOptions);
         }
 
         public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, string description)
@@ -91,7 +91,7 @@
 
             method = AddXmlCommentsIfConfigured(method, description);
 
-            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
+            return new SectionedMethodHandler(method, Options.GenerationOptions, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }
 
         public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues, string description)
@@ -131,7 +131,7 @@
 
             method = AddXmlCommentsIfConfigured(method, description, "value", "The parameter that receives the test case values.");
 
-            return new SectionedMethodHandler(method, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
+            return new SectionedMethodHandler(method, Options.GenerationOptions, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }
     }
 }

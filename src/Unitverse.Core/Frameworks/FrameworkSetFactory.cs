@@ -18,11 +18,28 @@
             }
 
             var context = new GenerationContext();
+
+            // test
             var testFramework = CreateTestFramework(options);
+
+            // assertion
             IAssertionFramework assertionFramework = testFramework;
+            if (options.GenerationOptions.UseFluentAssertions)
+            {
+                assertionFramework = new FluentAssertionFramework(assertionFramework);
+            }
+
+            // mocking
+            var mockingFramework = Create(options.GenerationOptions.MockingFrameworkType, context);
+            if (options.GenerationOptions.UseAutoFixture && options.GenerationOptions.UseAutoFixtureForMocking)
+            {
+                mockingFramework = new AutoFixtureMockingAdaptor(mockingFramework, context);
+            }
+
+            // naming
             var namingProvider = new NamingProvider(options.NamingOptions);
 
-            return new FrameworkSet(testFramework, Create(options.GenerationOptions.MockingFrameworkType, context), options.GenerationOptions.UseFluentAssertions ? new FluentAssertionFramework(assertionFramework) : assertionFramework, namingProvider, context, options);
+            return new FrameworkSet(testFramework, mockingFramework, assertionFramework, namingProvider, context, options);
         }
 
         private static IMockingFramework Create(MockingFrameworkType mockingFrameworkType, IGenerationContext context)

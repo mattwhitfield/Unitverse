@@ -24,6 +24,23 @@
             if (generationOptions.UseAutoFixture)
             {
                 yield return new NugetPackageReference("AutoFixture", null);
+
+                if (generationOptions.UseAutoFixtureForMocking)
+                {
+                    switch (generationOptions.MockingFrameworkType)
+                    {
+                        case MockingFrameworkType.NSubstitute:
+                            yield return new NugetPackageReference("AutoFixture.AutoNSubstitute", null);
+                            break;
+                        case MockingFrameworkType.Moq:
+                        case MockingFrameworkType.MoqAutoMock:
+                            yield return new NugetPackageReference("AutoFixture.AutoMoq", null);
+                            break;
+                        case MockingFrameworkType.FakeItEasy:
+                            yield return new NugetPackageReference("AutoFixture.AutoFakeItEasy", null);
+                            break;
+                    }
+                }
             }
 
             switch (generationOptions.FrameworkType)

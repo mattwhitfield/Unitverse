@@ -54,6 +54,11 @@
         [Description("Whether to use AutoFixture when generating scalar values")]
         public bool UseAutoFixture { get; set; } = false;
 
+        [Category("Frameworks")]
+        [DisplayName("Use AutoFixture for mocking")]
+        [Description("Whether to use AutoFixture when generating mocks ('Use AutoFixture' must be enabled)")]
+        public bool UseAutoFixtureForMocking { get; set; } = false;
+
         [Category("Layout")]
         [DisplayName("Emit using directives outside namespace")]
         [Description("Whether to place the required using directives outside the namespace declaration")]

@@ -6,6 +6,7 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
 
     public class MoqMockingFramework : IMockingFramework
     {
@@ -127,7 +128,7 @@
             return Mock("Verify", mockFieldName, methodCall);
         }
 
-        private ExpressionSyntax Mock(string actionName, string mockFieldName, ExpressionSyntax methodCall)
+        private static ExpressionSyntax Mock(string actionName, string mockFieldName, ExpressionSyntax methodCall)
         {
             var mockSetup = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(mockFieldName), SyntaxFactory.IdentifierName(actionName));
             return SyntaxFactory.InvocationExpression(mockSetup).WithArgumentList(Generate.Arguments(SyntaxFactory.SimpleLambdaExpression(Generate.Parameter("mock"), methodCall)));

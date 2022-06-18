@@ -30,6 +30,8 @@
 
         public bool UseAutoFixture { get; }
 
+        public bool UseAutoFixtureForMocking { get; }
+
         public bool AutoDetectFrameworkTypes { get; }
 
         public bool EmitUsingsOutsideNamespace { get; }

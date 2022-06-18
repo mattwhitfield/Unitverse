@@ -5,17 +5,19 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Unitverse.Core.Options;
 
     public class SectionedMethodHandler
     {
-        public SectionedMethodHandler(BaseMethodDeclarationSyntax method)
-            : this(method, string.Empty, string.Empty, string.Empty)
+        public SectionedMethodHandler(BaseMethodDeclarationSyntax method, IGenerationOptions generationOptions)
+            : this(method, generationOptions, string.Empty, string.Empty, string.Empty)
         {
         }
 
-        public SectionedMethodHandler(BaseMethodDeclarationSyntax method, string arrangeComment, string actComment, string assertComment)
+        public SectionedMethodHandler(BaseMethodDeclarationSyntax method, IGenerationOptions generationOptions, string arrangeComment, string actComment, string assertComment)
         {
             _method = method ?? throw new ArgumentNullException(nameof(method));
+            _generationOptions = generationOptions ?? throw new ArgumentNullException(nameof(generationOptions));
             _arrangeComment = arrangeComment;
             _actComment = actComment;
             _assertComment = assertComment;
@@ -35,7 +37,7 @@
         }
 
         private BaseMethodDeclarationSyntax _method;
-
+        private readonly IGenerationOptions _generationOptions;
         private Section _currentSection;
 
         private bool _blankLineRequired;
@@ -57,7 +59,7 @@
 
                 if (_requirements.Contains(Requirements.AutoFixture))
                 {
-                    method = method.AddBodyStatements(Prepare(AutoFixtureHelper.VariableDeclaration, Section.Arrange));
+                    method = method.AddBodyStatements(Prepare(AutoFixtureHelper.VariableDeclaration(_generationOptions), Section.Arrange));
                 }
 
                 foreach (var modifier in _modifiers)

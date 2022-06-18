@@ -6,6 +6,7 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
 
     public class FakeItEasyMockingFramework : IMockingFramework
     {
@@ -104,7 +105,7 @@
                         SyntaxFactory.IdentifierName("MustHaveHappened")));
         }
 
-        private ExpressionSyntax ACallTo(ExpressionSyntax methodCall)
+        private static ExpressionSyntax ACallTo(ExpressionSyntax methodCall)
         {
             var aCallTo = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("A"), SyntaxFactory.IdentifierName("CallTo"));
             return SyntaxFactory.InvocationExpression(aCallTo).WithArgumentList(Generate.Arguments(SyntaxFactory.ParenthesizedLambdaExpression().WithExpressionBody(methodCall)));

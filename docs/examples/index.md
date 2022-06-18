@@ -5,6 +5,7 @@ This section contains examples of the output that Unitverse outputs, refreshed e
 | --- | --- |
 | [Abstract Classes](AbstractClass.md) | Demonstrates how Unitverse generates tests when the source class is abstract or contains protected methods, as well as how inheritance chains are accounted for |
 | [Async Methods](AsyncMethod.md) | Demonstrates how tests are generated for async methods, as well as showing how the assertion framework is driven differently for async methods |
+| [AutoFixture Mock Generation](AutoFixtureMockGeneration.md) | Demonstrates how constructor dependencies can be configured using AutoFixture, and mock configuration calls can still be generated |
 | [Automatic Mock Generation](AutomaticMockGeneration.md) | Demonstrates how dependencies injected into constructors are tracked, and mock configuration calls emitted for any detected dependencies |
 | [Constrained Generic Types](ConstrainedGenericType.md) | Demonstrates how appropriate types are selected for the generation of tests for generic types with type constraints |
 | [Delegate Generation](DelegateGeneration.md) | Demonstrates how Unitverse generates default values for method parameters when the parameter is a delegate type |

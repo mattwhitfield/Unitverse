@@ -41,6 +41,11 @@
                 return false;
             }
 
+            if (_frameworkSet.Options.GenerationOptions.UseAutoFixture && _frameworkSet.Options.GenerationOptions.UseAutoFixtureForMocking)
+            {
+                return false;
+            }
+
             // if this is a record type without a primary constructor and this property has an init accessor
             if (property.HasInit && !model.Constructors.Any() && !model.IsStatic)
             {

@@ -7,14 +7,16 @@
         private readonly IGenerationOptions _baseOptions;
         private readonly bool? _usefluentAssertions;
         private readonly bool? _useAutoFixture;
+        private readonly bool? _useAutoFixtureForMocking;
         private readonly TestFrameworkTypes? _testFramework;
         private readonly MockingFrameworkType? _mockingFramework;
 
-        public DetectedGenerationOptions(IGenerationOptions baseOptions, bool? usefluentAssertions, bool? useAutoFixture, TestFrameworkTypes? testFramework, MockingFrameworkType? mockingFramework)
+        public DetectedGenerationOptions(IGenerationOptions baseOptions, bool? usefluentAssertions, bool? useAutoFixture, bool? useAutoFixtureForMocking, TestFrameworkTypes? testFramework, MockingFrameworkType? mockingFramework)
         {
             _baseOptions = baseOptions ?? throw new System.ArgumentNullException(nameof(baseOptions));
             _usefluentAssertions = usefluentAssertions;
             _useAutoFixture = useAutoFixture;
+            _useAutoFixtureForMocking = useAutoFixtureForMocking;
             _testFramework = testFramework;
             _mockingFramework = mockingFramework;
         }
@@ -26,6 +28,8 @@
         public bool UseFluentAssertions => _usefluentAssertions ?? _baseOptions.UseFluentAssertions;
 
         public bool UseAutoFixture => _useAutoFixture ?? _baseOptions.UseAutoFixture;
+
+        public bool UseAutoFixtureForMocking => _useAutoFixtureForMocking ?? _baseOptions.UseAutoFixtureForMocking;
 
         public bool AutoDetectFrameworkTypes => _baseOptions.AutoDetectFrameworkTypes;
 

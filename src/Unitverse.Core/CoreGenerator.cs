@@ -240,6 +240,23 @@
             if (frameworkSet.Options.GenerationOptions.UseAutoFixture)
             {
                 targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("AutoFixture")));
+
+                if (frameworkSet.Options.GenerationOptions.UseAutoFixtureForMocking)
+                {
+                    switch (frameworkSet.Options.GenerationOptions.MockingFrameworkType)
+                    {
+                        case MockingFrameworkType.NSubstitute:
+                            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("AutoFixture.AutoNSubstitute")));
+                            break;
+                        case MockingFrameworkType.MoqAutoMock:
+                        case MockingFrameworkType.Moq:
+                            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("AutoFixture.AutoMoq")));
+                            break;
+                        case MockingFrameworkType.FakeItEasy:
+                            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("AutoFixture.AutoFakeItEasy")));
+                            break;
+                    }
+                }
             }
 
             foreach (var emittedType in frameworkSet.Context.EmittedTypes)
@@ -389,7 +406,7 @@
                         var fixtureAssignment = foundMethod.Body?.Statements.OfType<LocalDeclarationStatementSyntax>().FirstOrDefault(x => x.Declaration.Variables.Any(v => v.Identifier.Text == "fixture"));
                         if (fixtureAssignment == null)
                         {
-                            updatedMethod = UpdateMethod(updatedMethod, allFields, AutoFixtureHelper.VariableDeclaration, true);
+                            updatedMethod = UpdateMethod(updatedMethod, allFields, AutoFixtureHelper.VariableDeclaration(frameworkSet.Options.GenerationOptions), true);
                         }
                     }
 

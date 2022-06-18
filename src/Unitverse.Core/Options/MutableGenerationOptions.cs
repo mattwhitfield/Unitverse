@@ -19,6 +19,7 @@
             TestTypeNaming = options.TestTypeNaming;
             UseFluentAssertions = options.UseFluentAssertions;
             UseAutoFixture = options.UseAutoFixture;
+            UseAutoFixtureForMocking = options.UseAutoFixtureForMocking;
             AutoDetectFrameworkTypes = options.AutoDetectFrameworkTypes;
             EmitUsingsOutsideNamespace = options.EmitUsingsOutsideNamespace;
             PartialGenerationAllowed = options.PartialGenerationAllowed;
@@ -78,5 +79,7 @@
         public bool PrefixFieldReferencesWithThis { get; set; }
 
         public bool EmitXmlDocumentation { get; set; }
+
+        public bool UseAutoFixtureForMocking { get; set; }
     }
 }

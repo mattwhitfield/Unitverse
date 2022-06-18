@@ -199,12 +199,18 @@
                 methodReference = SyntaxFactory.IdentifierName(name);
             }
 
-            return SyntaxFactory.InvocationExpression(
-                    SyntaxFactory.MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        target,
-                        methodReference))
-                .WithArgumentList(Arguments(arguments));
+            return MethodCall(target, methodReference, arguments);
+        }
+
+        public static ExpressionSyntax MethodCall(ExpressionSyntax target, SimpleNameSyntax methodReference, params CSharpSyntaxNode[] arguments)
+        {
+            return SyntaxFactory.InvocationExpression(MemberAccess(target, methodReference))
+                                .WithArgumentList(Arguments(arguments));
+        }
+
+        public static TypeArgumentListSyntax AsList(this TypeSyntax typeSyntax)
+        {
+            return SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(typeSyntax));
         }
 
         public static AttributeListSyntax AsList(this AttributeSyntax attribute)
