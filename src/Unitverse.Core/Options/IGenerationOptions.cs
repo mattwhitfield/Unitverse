@@ -10,6 +10,8 @@
 
         bool UseAutoFixture { get; }
 
+        bool UseAutoFixtureForMocking { get; }
+
         bool AutoDetectFrameworkTypes { get; }
 
         bool AllowGenerationWithoutTargetProject { get; }

@@ -33,7 +33,8 @@ namespace Unitverse.Views
                 return string.Equals(propertyName, nameof(IGenerationOptions.FrameworkType), StringComparison.OrdinalIgnoreCase) ||
                        string.Equals(propertyName, nameof(IGenerationOptions.MockingFrameworkType), StringComparison.OrdinalIgnoreCase) ||
                        string.Equals(propertyName, nameof(IGenerationOptions.UseFluentAssertions), StringComparison.OrdinalIgnoreCase) ||
-                       string.Equals(propertyName, nameof(IGenerationOptions.UseAutoFixture), StringComparison.OrdinalIgnoreCase);
+                       string.Equals(propertyName, nameof(IGenerationOptions.UseAutoFixture), StringComparison.OrdinalIgnoreCase) ||
+                       string.Equals(propertyName, nameof(IGenerationOptions.UseAutoFixtureForMocking), StringComparison.OrdinalIgnoreCase);
             }
 
             GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), _generationOptions, true, projectOptions.GetFieldSourceFileName, IsValidProperty).ToList();

@@ -108,6 +108,34 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // ! AutoFixture Mock Generation
+        ///// $ Demonstrates how constructor dependencies can be configured using AutoFixture, and mock configuration calls can still be generated
+        ///// # UseAutoFixture=true
+        ///// # UseAutoFixtureForMocking=true
+        ///
+        ///using System.Threading.Tasks;
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///    public interface IDummyService
+        ///    {
+        ///        string SomeProp { get; set; }
+        ///
+        ///        void NoReturnMethod();
+        ///
+        ///        int ReturnMethod();
+        ///
+        ///        T GenericMethod&lt;T&gt;(T val);
+        ///
+        ///        Task&lt;string&gt; Asy [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AutoFixtureMockGeneration {
+            get {
+                return ResourceManager.GetString("AutoFixtureMockGeneration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to // ! Automatic Mock Generation
         ///// $ Demonstrates how dependencies injected into constructors are tracked, and mock configuration calls emitted for any detected dependencies
         ///
@@ -837,8 +865,8 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // ! Value Generation
-        ///// $ Demonstrates how random values are created when required
+        ///   Looks up a localized string similar to // ! Value Generation (with AutoFixture)
+        ///// $ Demonstrates how Unitverse can be configured to work with AutoFixture for test value generation
         ///// # UseAutoFixture=true
         ///
         ///namespace Unitverse.Examples
@@ -853,9 +881,7 @@ namespace Unitverse.ExampleGenerator {
         ///        public void Write(int i);
         ///        public void Write(long l);
         ///        public void Write(double d);
-        ///        public void Write(decimal d);
-        ///        public void Write(DateTime d);
-        ///        public  [rest of string was truncated]&quot;;.
+        ///        public void Write(decimal d) [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ValueGenerationWithAutoFixture {
             get {

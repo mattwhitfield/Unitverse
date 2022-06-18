@@ -57,10 +57,12 @@
                     {
                         foreach (var resourceName in entryKeys)
                         {
-                            yield return new object[] { resourceName, framework, mock, true, false };
-                            yield return new object[] { resourceName, framework, mock, false, false };
-                            yield return new object[] { resourceName, framework, mock, true, true };
-                            yield return new object[] { resourceName, framework, mock, false, true };
+                            yield return new object[] { resourceName, framework, mock, true, false, false };
+                            yield return new object[] { resourceName, framework, mock, false, false, false };
+                            yield return new object[] { resourceName, framework, mock, true, true, false };
+                            yield return new object[] { resourceName, framework, mock, false, true, false };
+                            yield return new object[] { resourceName, framework, mock, true, true, true };
+                            yield return new object[] { resourceName, framework, mock, false, true, true };
                         }
                     }
                 }
@@ -68,13 +70,13 @@
         }
 
         [TestCaseSource(nameof(TestClassResourceNames))]
-        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture)
+        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking)
         {
             var classAsText = TestClasses.ResourceManager.GetString(resourceName, TestClasses.Culture);
 
-            var options = ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, classAsText, false);
+            var options = ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, useAutoFixtureForMocking, classAsText, false);
 
-            Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
+            Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, useAutoFixtureForMocking, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
 
             var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
@@ -113,7 +115,7 @@
             Assert.That(streamLength, Is.GreaterThan(0));
         }
 
-        public static void Compile(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, string classAsText, out SyntaxTree tree, out List<MetadataReference> references, out SyntaxTree externalInitTree, out SemanticModel semanticModel)
+        public static void Compile(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking, string classAsText, out SyntaxTree tree, out List<MetadataReference> references, out SyntaxTree externalInitTree, out SemanticModel semanticModel)
         {
             tree = CSharpSyntaxTree.ParseText(classAsText, new CSharpParseOptions(LanguageVersion.Latest));
             var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
@@ -149,6 +151,11 @@
             if (useAutoFixture)
             {
                 references.Add(MetadataReference.CreateFromFile(typeof(Fixture).Assembly.Location));
+
+                if (useAutoFixtureForMocking)
+                {
+                    references.AddRange(GetAutoFixtureReferences(mockingFrameworkType));
+                }
             }
 
             externalInitTree = CSharpSyntaxTree.ParseText("namespace System.Runtime.CompilerServices { internal static class IsExternalInit { } }", new CSharpParseOptions(LanguageVersion.Latest));
@@ -160,7 +167,7 @@
             semanticModel = compilation.GetSemanticModel(tree);
         }
 
-        public static UnitTestGeneratorOptions ExtractOptions(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, string classAsText, bool withPartialGeneration)
+        public static UnitTestGeneratorOptions ExtractOptions(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking, string classAsText, bool withPartialGeneration)
         {
             var generationOptions = new MutableGenerationOptions(new DefaultGenerationOptions());
             var namingOptions = new MutableNamingOptions(new DefaultNamingOptions());
@@ -172,6 +179,7 @@
             generationOptions.MockingFrameworkType = mockingFrameworkType;
             generationOptions.UseFluentAssertions = useFluentAssertions;
             generationOptions.UseAutoFixture = useAutoFixture;
+            generationOptions.UseAutoFixtureForMocking = useAutoFixtureForMocking;
 
             var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false, new Dictionary<string, string>());
 
@@ -225,6 +233,25 @@
             Assert.That(methodModel, Is.Not.Null);
 
             Assert.That(methodModel.Name, Is.EqualTo("ThisIsAMethod"));
+        }
+
+        private static IEnumerable<PortableExecutableReference> GetAutoFixtureReferences(MockingFrameworkType mockingFrameworkType)
+        {
+            switch (mockingFrameworkType)
+            {
+                case MockingFrameworkType.NSubstitute:
+                    yield return MetadataReference.CreateFromFile(typeof(AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization).Assembly.Location);
+                    break;
+
+                case MockingFrameworkType.Moq:
+                case MockingFrameworkType.MoqAutoMock:
+                    yield return MetadataReference.CreateFromFile(typeof(AutoFixture.AutoMoq.AutoMoqCustomization).Assembly.Location);
+                    break;
+
+                case MockingFrameworkType.FakeItEasy:
+                    yield return MetadataReference.CreateFromFile(typeof(AutoFixture.AutoFakeItEasy.AutoFakeItEasyCustomization).Assembly.Location);
+                    break;
+            }
         }
 
         private static IEnumerable<PortableExecutableReference> GetReferences(MockingFrameworkType mockingFrameworkType)

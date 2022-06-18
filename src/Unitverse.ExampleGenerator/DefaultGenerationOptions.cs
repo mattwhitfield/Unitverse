@@ -12,6 +12,8 @@
 
         public bool UseAutoFixture => false;
 
+        public bool UseAutoFixtureForMocking => false;
+
         public bool AutoDetectFrameworkTypes => false;
 
         public bool AllowGenerationWithoutTargetProject => false;

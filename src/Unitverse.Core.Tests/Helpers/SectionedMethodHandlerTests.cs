@@ -21,19 +21,25 @@ namespace Unitverse.Core.Tests.Helpers
         public void SetUp()
         {
             _method = SyntaxFactory.MethodDeclaration(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.VoidKeyword)), "method");
-            _testClass = new SectionedMethodHandler(_method, "Arrange", "Act", "Assert");
+            _testClass = new SectionedMethodHandler(_method, new DefaultGenerationOptions(), "Arrange", "Act", "Assert");
         }
 
         [Test]
         public void CannotConstructWithNullMethod()
         {
-            FluentActions.Invoking(() => new SectionedMethodHandler(default(MethodDeclarationSyntax), "Arrange", "Act", "Assert")).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new SectionedMethodHandler(default(MethodDeclarationSyntax), new DefaultGenerationOptions(), "Arrange", "Act", "Assert")).Should().Throw<ArgumentNullException>();
+        }
+
+        [Test]
+        public void CannotConstructWithNullGenerationOptions()
+        {
+            FluentActions.Invoking(() => new SectionedMethodHandler(_method, null, "Arrange", "Act", "Assert")).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void SingleTransitionNoComments()
         {
-            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass = new SectionedMethodHandler(_method, new DefaultGenerationOptions(), null, null, null);
             _testClass.Arrange(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
             AssertOutput("var someVar = 5;");
         }
@@ -41,7 +47,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void EndingBlankLineNoComments()
         {
-            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass = new SectionedMethodHandler(_method, new DefaultGenerationOptions(), null, null, null);
             _testClass.Arrange(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
             _testClass.BlankLine();
             AssertOutput("var someVar = 5;");
@@ -50,7 +56,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void DoubleTransitionNoComments()
         {
-            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass = new SectionedMethodHandler(_method, new DefaultGenerationOptions(), null, null, null);
             _testClass.Arrange(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
             _testClass.Act(Generate.ImplicitlyTypedVariableDeclaration("someVar2", Generate.Literal(6)));
             AssertOutput("var someVar = 5;", "", "var someVar2 = 6;");
@@ -59,7 +65,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void DoubleTransitionExplicitBlankNoComments()
         {
-            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass = new SectionedMethodHandler(_method, new DefaultGenerationOptions(), null, null, null);
             _testClass.Arrange(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
             _testClass.BlankLine();
             _testClass.Act(Generate.ImplicitlyTypedVariableDeclaration("someVar2", Generate.Literal(6)));
@@ -69,7 +75,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void DoubleTransitionStupidBlankNoComments()
         {
-            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass = new SectionedMethodHandler(_method, new DefaultGenerationOptions(), null, null, null);
             _testClass.Arrange(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
             _testClass.BlankLine();
             _testClass.BlankLine();
@@ -83,7 +89,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void PlainEmitNoComments()
         {
-            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass = new SectionedMethodHandler(_method, new DefaultGenerationOptions(), null, null, null);
             _testClass.Emit(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
             AssertOutput("var someVar = 5;");
         }
@@ -91,7 +97,7 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void PlainEmitBlankLinesNoComments()
         {
-            _testClass = new SectionedMethodHandler(_method, null, null, null);
+            _testClass = new SectionedMethodHandler(_method, new DefaultGenerationOptions(), null, null, null);
             _testClass.Emit(Generate.ImplicitlyTypedVariableDeclaration("someVar", Generate.Literal(5)));
             _testClass.BlankLine();
             _testClass.Emit(Generate.ImplicitlyTypedVariableDeclaration("someVar2", Generate.Literal(6)));

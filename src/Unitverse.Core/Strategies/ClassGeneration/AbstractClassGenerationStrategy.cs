@@ -234,7 +234,7 @@
                                                 .WithModifiers(modifiers)
                                                 .WithReturnType(methodSymbol.ReturnType.ToTypeSyntax(_frameworkSet.Context));
 
-                    var methodHandler = new SectionedMethodHandler(initialMethod);
+                    var methodHandler = new SectionedMethodHandler(initialMethod, _frameworkSet.Options.GenerationOptions);
                     _frameworkSet.Context.CurrentMethod = methodHandler;
 
                     var parameters = new List<ParameterSyntax>();
@@ -244,7 +244,7 @@
                         parameters.Add(GetParameter(param, model.SemanticModel, methodHandler));
                     }
 
-                    methodHandler = new SectionedMethodHandler(initialMethod);
+                    methodHandler = new SectionedMethodHandler(initialMethod, _frameworkSet.Options.GenerationOptions);
                     methodHandler.Emit(methodStatement);
 
                     var newMethod = (MethodDeclarationSyntax)methodHandler.Method.WithParameterList(Generate.ParameterList(parameters));
@@ -382,7 +382,7 @@
                                             .WithIdentifier(SyntaxFactory.Identifier(method.Name))
                                             .WithReturnType(method.ReturnType.ToTypeSyntax(_frameworkSet.Context));
 
-                var methodHandler = new SectionedMethodHandler(initialMethod);
+                var methodHandler = new SectionedMethodHandler(initialMethod, _frameworkSet.Options.GenerationOptions);
                 _frameworkSet.Context.CurrentMethod = methodHandler;
 
                 var parameters = new List<ParameterSyntax>();

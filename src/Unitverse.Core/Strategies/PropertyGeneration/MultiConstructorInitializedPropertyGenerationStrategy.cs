@@ -50,6 +50,11 @@
                 return false;
             }
 
+            if (_frameworkSet.Options.GenerationOptions.UseAutoFixture && _frameworkSet.Options.GenerationOptions.UseAutoFixtureForMocking)
+            {
+                return false;
+            }
+
             var isSingleConstructorProperty = constructorCount == 1 &&
                    model.DefaultConstructor != null && model.DefaultConstructor.Parameters.Any(p => string.Equals(p.Name, property.Name, StringComparison.OrdinalIgnoreCase));
 
