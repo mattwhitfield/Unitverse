@@ -41,24 +41,14 @@
             SimpleNameSyntax methodReference;
             if (dependencyMethodCall.TypeArguments.Any())
             {
-                methodReference = SyntaxFactory.GenericName(SyntaxFactory.Identifier(dependencyMethodCall.Name)).WithTypeArgumentList(TypeArgumentList(dependencyMethodCall.TypeArguments, context));
+                methodReference = Generate.GenericName(dependencyMethodCall.Name, dependencyMethodCall.TypeArguments.Select(x => x.ToTypeSyntax(context)).ToArray());
             }
             else
             {
                 methodReference = SyntaxFactory.IdentifierName(dependencyMethodCall.Name);
             }
 
-            return SyntaxFactory.InvocationExpression(
-                    SyntaxFactory.MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        target,
-                        methodReference))
-                .WithArgumentList(Generate.Arguments(dependencyMethodCall.Parameters.Select((x, i) => getArgument(i, x.Type, context))));
-        }
-
-        public static TypeArgumentListSyntax TypeArgumentList(IEnumerable<ITypeSymbol> typeSymbols, IGenerationContext context)
-        {
-            return SyntaxFactory.TypeArgumentList(SyntaxFactory.SeparatedList<TypeSyntax>(typeSymbols.Select(x => x.ToTypeSyntax(context))));
+            return Generate.MemberInvocation(target, methodReference, dependencyMethodCall.Parameters.Select((x, i) => getArgument(i, x.Type, context)).ToArray());
         }
 
         public static ITypeSymbol ReduceAsyncReturnType(ITypeSymbol returnType)

@@ -118,7 +118,7 @@
             }
             else
             {
-                bodyStatement = SyntaxFactory.ExpressionStatement(methodCall);
+                bodyStatement = Generate.Statement(methodCall);
             }
 
             generatedMethod.Act(bodyStatement);

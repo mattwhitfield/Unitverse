@@ -23,7 +23,7 @@
             var testClassIsStatic = isStatic && frameworkSet.TestFramework.SupportsStaticTestClasses;
             if (frameworkSet.Options.GenerationOptions.PrefixFieldReferencesWithThis && !testClassIsStatic)
             {
-                return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.ThisExpression(), nameSyntax);
+                return Generate.MemberAccess(SyntaxFactory.ThisExpression(), nameSyntax);
             }
 
             return nameSyntax;

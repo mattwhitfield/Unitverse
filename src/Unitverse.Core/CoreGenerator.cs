@@ -229,7 +229,7 @@
 
         private static NamespaceDeclarationSyntax AddUsingStatements(NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, IFrameworkSet frameworkSet, List<ClassModel> classModels)
         {
-            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System")));
+            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, Helpers.Generate.UsingDirective("System"));
             targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, frameworkSet.TestFramework.GetUsings());
             targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, frameworkSet.AssertionFramework.GetUsings());
             if (frameworkSet.Context.MocksUsed)
@@ -239,21 +239,21 @@
 
             if (frameworkSet.Options.GenerationOptions.UseAutoFixture)
             {
-                targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("AutoFixture")));
+                targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, Helpers.Generate.UsingDirective("AutoFixture"));
 
                 if (frameworkSet.Options.GenerationOptions.UseAutoFixtureForMocking)
                 {
                     switch (frameworkSet.Options.GenerationOptions.MockingFrameworkType)
                     {
                         case MockingFrameworkType.NSubstitute:
-                            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("AutoFixture.AutoNSubstitute")));
+                            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, Helpers.Generate.UsingDirective("AutoFixture.AutoNSubstitute"));
                             break;
                         case MockingFrameworkType.MoqAutoMock:
                         case MockingFrameworkType.Moq:
-                            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("AutoFixture.AutoMoq")));
+                            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, Helpers.Generate.UsingDirective("AutoFixture.AutoMoq"));
                             break;
                         case MockingFrameworkType.FakeItEasy:
-                            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("AutoFixture.AutoFakeItEasy")));
+                            targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, Helpers.Generate.UsingDirective("AutoFixture.AutoFakeItEasy"));
                             break;
                     }
                 }
@@ -263,13 +263,13 @@
             {
                 if (emittedType?.ContainingNamespace != null)
                 {
-                    targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName(emittedType.ContainingNamespace.ToDisplayString())));
+                    targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, Helpers.Generate.UsingDirective(emittedType.ContainingNamespace.ToDisplayString()));
                 }
             }
 
             if (classModels.SelectMany(x => x.Methods).Any(x => x.IsAsync))
             {
-                targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName(typeof(Task).Namespace)));
+                targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, Helpers.Generate.UsingDirective(typeof(Task).Namespace));
             }
 
             return targetNamespace;
@@ -435,7 +435,7 @@
 
             fields.Add(field);
 
-            var statement = SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(fieldName), defaultExpression));
+            var statement = Helpers.Generate.Statement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(fieldName), defaultExpression));
 
             return UpdateMethod(updatedMethod, allFields, statement, true);
         }
@@ -488,7 +488,7 @@
                 c.SetTargetInstance(frameworkSet.NamingProvider.TargetFieldName.Resolve(new NamingContext(c.ClassName)), frameworkSet);
                 if (c.Declaration.Parent is NamespaceDeclarationSyntax namespaceDeclaration)
                 {
-                    targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(namespaceDeclaration.Name.ToString())));
+                    targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, Helpers.Generate.UsingDirective(namespaceDeclaration.Name.ToString()));
                 }
             }
 
@@ -523,9 +523,7 @@
 
                 foreach (var parameter in frameworkSet.Context.GenericTypesVisited)
                 {
-                    targetNamespace = targetNamespace.AddUsings(
-                        SyntaxFactory.UsingDirective(SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName("System"), SyntaxFactory.IdentifierName("String")))
-                            .WithAlias(SyntaxFactory.NameEquals(SyntaxFactory.IdentifierName(parameter))));
+                    targetNamespace = targetNamespace.AddUsings(Helpers.Generate.UsingDirective("System.String").WithAlias(SyntaxFactory.NameEquals(SyntaxFactory.IdentifierName(parameter))));
                 }
             }
 

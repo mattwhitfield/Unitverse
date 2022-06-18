@@ -27,7 +27,7 @@
 
             var identifier = enumMembers[ValueGenerationStrategyFactory.Random.Next(enumMembers.Count)];
 
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, typeSymbol.ToTypeSyntax(frameworkSet.Context), SyntaxFactory.IdentifierName(identifier));
+            return Generate.MemberAccess(typeSymbol.ToTypeSyntax(frameworkSet.Context), identifier);
         }
     }
 }

@@ -69,7 +69,7 @@
                                         parameters = parameterNames;
                                     }
 
-                                    mockSetupStatements.Add(SyntaxFactory.ExpressionStatement(frameworkSet.MockingFramework.GetSetupFor(dependencyMethod, mockFieldName, model.SemanticModel, frameworkSet, expectedReturnValue, parameters)));
+                                    mockSetupStatements.Add(Generate.Statement(frameworkSet.MockingFramework.GetSetupFor(dependencyMethod, mockFieldName, model.SemanticModel, frameworkSet, expectedReturnValue, parameters)));
                                 }
 
                                 var assertion = frameworkSet.MockingFramework.GetAssertionFor(dependencyMethod, mockFieldName, model.SemanticModel, frameworkSet, parameters);
@@ -78,7 +78,7 @@
                                     assertion = SyntaxFactory.AwaitExpression(assertion);
                                 }
 
-                                mockAssertionStatements.Add(SyntaxFactory.ExpressionStatement(assertion));
+                                mockAssertionStatements.Add(Generate.Statement(assertion));
 
                                 if (isPlainInterfaceMethodRedirection && hasReturnType)
                                 {
@@ -110,7 +110,7 @@
                                     expectedReturnValue = SyntaxFactory.IdentifierName("expectedValue");
                                 }
 
-                                mockSetupStatements.Add(SyntaxFactory.ExpressionStatement(frameworkSet.MockingFramework.GetSetupFor(dependencyProperty, mockFieldName, model.SemanticModel, frameworkSet, expectedReturnValue)));
+                                mockSetupStatements.Add(Generate.Statement(frameworkSet.MockingFramework.GetSetupFor(dependencyProperty, mockFieldName, model.SemanticModel, frameworkSet, expectedReturnValue)));
 
                                 if (isPlainInterfacePropertyRedirection)
                                 {

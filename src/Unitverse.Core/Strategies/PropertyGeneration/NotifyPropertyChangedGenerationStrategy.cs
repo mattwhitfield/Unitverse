@@ -71,7 +71,7 @@
             var propertyLambda = SyntaxFactory.Argument(
                 SyntaxFactory.SimpleLambdaExpression(
                     Generate.Parameter("x"),
-                    SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("x"), SyntaxFactory.IdentifierName(property.Name))));
+                    Generate.MemberAccess("x", property.Name)));
 
             var argumentList = new List<SyntaxNodeOrToken> { propertyLambda };
 
@@ -83,9 +83,8 @@
                 argumentList.Add(SyntaxFactory.Argument(AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, sourceModel.SemanticModel, _frameworkSet)));
             }
 
-            yield return SyntaxFactory.ExpressionStatement(
-                SyntaxFactory.InvocationExpression(
-                        SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, sourceModel.TargetInstance, SyntaxFactory.IdentifierName("CheckProperty")))
+            yield return Generate.Statement(
+                Generate.MemberInvocation(sourceModel.TargetInstance, "CheckProperty")
                     .WithArgumentList(SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList<ArgumentSyntax>(argumentList))));
         }
     }

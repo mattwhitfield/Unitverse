@@ -3,8 +3,6 @@
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Unitverse.Core.Helpers;
-    using Unitverse.Core.Options;
 
     public interface IMockingFramework
     {
@@ -25,8 +23,6 @@
         ExpressionSyntax GetSetupFor(IPropertySymbol dependencyProperty, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, ExpressionSyntax expectedReturnValue);
 
         ExpressionSyntax GetAssertionFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, IEnumerable<string> parameters);
-
-        void AddSetupMethodStatements(SectionedMethodHandler setupMethod);
 
         ExpressionSyntax GetObjectCreationExpression(TypeSyntax typeSyntax);
     }

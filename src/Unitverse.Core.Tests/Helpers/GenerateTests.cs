@@ -182,35 +182,6 @@ namespace Unitverse.Core.Tests.Helpers
         }
 
         [Test]
-        public static void CanCallPropertyAccess()
-        {
-            var target = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword));
-            var propertyName = "TestValue1946163608";
-            var result = Generate.PropertyAccess(target, propertyName);
-            Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo("string.TestValue1946163608"));
-        }
-
-        [Test]
-        public static void CannotCallPropertyAccessWithNullTarget()
-        {
-            Assert.Throws<ArgumentNullException>(() => Generate.PropertyAccess(default(ExpressionSyntax), "TestValue1085151352"));
-        }
-
-        [Test]
-        public static void CannotCallPropertyAccessWithNullPropertyName()
-        {
-            Assert.Throws<ArgumentNullException>(() => Generate.PropertyAccess(Generate.Literal(1), default(string)));
-        }
-
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase("   ")]
-        public static void CannotCallPropertyAccessWithInvalidPropertyName(string value)
-        {
-            Assert.Throws<ArgumentNullException>(() => Generate.PropertyAccess(Generate.Literal(1), value));
-        }
-
-        [Test]
         public static void CanCallIndexerAccess()
         {
             var target = SyntaxFactory.IdentifierName("_test");

@@ -51,7 +51,7 @@
                 var attribute = _frameworkSet.TestFramework.SingleThreadedApartmentAttribute;
                 if (attribute != null)
                 {
-                    declaration = declaration.AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(attribute)));
+                    declaration = declaration.AddAttributeLists(attribute.AsList());
                 }
             }
 

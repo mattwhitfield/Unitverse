@@ -29,7 +29,7 @@
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()
         {
-            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("FakeItEasy"));
+            yield return Generate.UsingDirective("FakeItEasy");
         }
 
         public ExpressionSyntax GetThrowawayReference(TypeSyntax type)
@@ -45,74 +45,38 @@
             }
 
             _context.MocksUsed = true;
-            return SyntaxFactory.InvocationExpression(
-                SyntaxFactory.MemberAccessExpression(
-                    SyntaxKind.SimpleMemberAccessExpression,
-                    SyntaxFactory.IdentifierName("A"),
-                    SyntaxFactory.GenericName(
-                            SyntaxFactory.Identifier("Fake"))
-                        .WithTypeArgumentList(
-                            SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(type)))));
+            return Generate.MemberInvocation("A", Generate.GenericName("Fake", type));
         }
 
         private ExpressionSyntax GetArgument(ITypeSymbol typeSymbol, IGenerationContext context)
         {
-            return SyntaxFactory.MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        SyntaxFactory.GenericName(SyntaxFactory.Identifier("A")).WithTypeArgumentList(MockingHelper.TypeArgumentList(new[] { typeSymbol }, context)),
-                        SyntaxFactory.IdentifierName("_"));
+            return Generate.MemberAccess(Generate.GenericName("A", typeSymbol, context), "_");
         }
 
         public ExpressionSyntax GetSetupFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, ExpressionSyntax expectedReturnValue, IEnumerable<string> parameters)
         {
             var methodCall = MockingHelper.GetMethodCall(dependencyMethod, mockFieldName, MockingHelper.TranslateArgumentFunc(GetArgument, parameters), _context);
 
-            var methodReference = SyntaxFactory.IdentifierName("Returns");
-
-            return SyntaxFactory.InvocationExpression(
-                    SyntaxFactory.MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        ACallTo(methodCall),
-                        methodReference))
-                    .WithArgumentList(Generate.Arguments(expectedReturnValue));
+            return Generate.MemberInvocation(ACallTo(methodCall), "Returns", expectedReturnValue);
         }
 
         public ExpressionSyntax GetSetupFor(IPropertySymbol dependencyProperty, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, ExpressionSyntax expectedReturnValue)
         {
-            var propertyAccess = SyntaxFactory.MemberAccessExpression(
-                                    SyntaxKind.SimpleMemberAccessExpression,
-                                    SyntaxFactory.IdentifierName(mockFieldName),
-                                    SyntaxFactory.IdentifierName(dependencyProperty.Name));
+            var propertyAccess = Generate.MemberAccess(mockFieldName, dependencyProperty.Name);
 
-            var methodReference = SyntaxFactory.IdentifierName("Returns");
-
-            return SyntaxFactory.InvocationExpression(
-                    SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            ACallTo(propertyAccess),
-                            methodReference))
-                    .WithArgumentList(Generate.Arguments(expectedReturnValue));
+            return Generate.MemberInvocation(ACallTo(propertyAccess), "Returns", expectedReturnValue);
         }
 
         public ExpressionSyntax GetAssertionFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, IEnumerable<string> parameters)
         {
             var methodCall = MockingHelper.GetMethodCall(dependencyMethod, mockFieldName, MockingHelper.TranslateArgumentFunc(GetArgument, parameters), frameworkSet.Context);
 
-            return SyntaxFactory.InvocationExpression(
-                    SyntaxFactory.MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        ACallTo(methodCall),
-                        SyntaxFactory.IdentifierName("MustHaveHappened")));
+            return Generate.MemberInvocation(ACallTo(methodCall), "MustHaveHappened");
         }
 
         private static ExpressionSyntax ACallTo(ExpressionSyntax methodCall)
         {
-            var aCallTo = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("A"), SyntaxFactory.IdentifierName("CallTo"));
-            return SyntaxFactory.InvocationExpression(aCallTo).WithArgumentList(Generate.Arguments(SyntaxFactory.ParenthesizedLambdaExpression().WithExpressionBody(methodCall)));
-        }
-
-        public void AddSetupMethodStatements(SectionedMethodHandler setupMethod)
-        {
+            return Generate.MemberInvocation("A", "CallTo", Generate.ParenthesizedLambdaExpression(methodCall));
         }
 
         public ExpressionSyntax GetObjectCreationExpression(TypeSyntax type)

@@ -69,7 +69,7 @@
                 }
                 else
                 {
-                    generatedMethod.Act(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("instance"), creationExpression)));
+                    generatedMethod.Act(Generate.Statement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("instance"), creationExpression)));
                 }
 
                 generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));

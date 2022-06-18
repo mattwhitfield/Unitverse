@@ -56,8 +56,7 @@
             if (!string.IsNullOrWhiteSpace(_frameworkSet.TestFramework.TestClassAttribute))
             {
                 var testFixtureAtt = Generate.Attribute(_frameworkSet.TestFramework.TestClassAttribute);
-                var list = SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(testFixtureAtt));
-                classDeclaration = classDeclaration.AddAttributeLists(list);
+                classDeclaration = classDeclaration.AddAttributeLists(testFixtureAtt.AsList());
             }
 
             classDeclaration = classDeclaration.AddMembers(GenerateConcreteInheritor(model));
@@ -81,7 +80,7 @@
                 model.TargetInstance,
                 creationExpression);
 
-            setupMethod.Emit(SyntaxFactory.ExpressionStatement(assignment));
+            setupMethod.Emit(Generate.Statement(assignment));
 
             classDeclaration = classDeclaration.AddMembers(setupMethod.Method);
 
@@ -182,33 +181,25 @@
 
                 if (method.Symbol != null && method.Symbol.TypeParameters.Length > 0)
                 {
-                    identifier = SyntaxFactory.GenericName(SyntaxFactory.Identifier(method.Name)).WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SeparatedList<TypeSyntax>(method.Symbol.TypeParameters.Select(x => SyntaxFactory.IdentifierName(x.Name)))));
+                    identifier = Generate.GenericName(method.Name, method.Symbol.TypeParameters.Select(x => SyntaxFactory.IdentifierName(x.Name)).ToArray());
                 }
 
                 InvocationExpressionSyntax baseInvocation;
                 if (method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.StaticKeyword)))
                 {
                     baseInvocation = SyntaxFactory.InvocationExpression(identifier)
-                        .WithArgumentList(
-                            SyntaxFactory.ArgumentList(
-                                SyntaxFactory.SeparatedList<ArgumentSyntax>(tokenList)));
+                                                  .WithArgumentList(SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList<ArgumentSyntax>(tokenList)));
                 }
                 else
                 {
-                    baseInvocation = SyntaxFactory.InvocationExpression(
-                            SyntaxFactory.MemberAccessExpression(
-                                SyntaxKind.SimpleMemberAccessExpression,
-                                SyntaxFactory.BaseExpression(),
-                                identifier))
-                        .WithArgumentList(
-                            SyntaxFactory.ArgumentList(
-                                SyntaxFactory.SeparatedList<ArgumentSyntax>(tokenList)));
+                    baseInvocation = Generate.MemberInvocation(SyntaxFactory.BaseExpression(), identifier)
+                                             .WithArgumentList(SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList<ArgumentSyntax>(tokenList)));
                 }
 
                 StatementSyntax methodStatement;
                 if (method.IsVoid)
                 {
-                    methodStatement = SyntaxFactory.ExpressionStatement(baseInvocation);
+                    methodStatement = Generate.Statement(baseInvocation);
                 }
                 else
                 {
@@ -439,7 +430,7 @@
             if (parameter.RefKind == RefKind.Out)
             {
                 syntax = syntax.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
-                statements.Emit(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(parameter.Name), AssignmentValueHelper.GetDefaultAssignmentValue(parameter.Type, model, _frameworkSet))));
+                statements.Emit(Generate.Statement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(parameter.Name), AssignmentValueHelper.GetDefaultAssignmentValue(parameter.Type, model, _frameworkSet))));
             }
             else if (parameter.RefKind == RefKind.Ref)
             {
@@ -483,10 +474,7 @@
                     baseExpression = SyntaxFactory.BaseExpression();
                 }
 
-                var baseMember = SyntaxFactory.MemberAccessExpression(
-                    SyntaxKind.SimpleMemberAccessExpression,
-                    baseExpression,
-                    SyntaxFactory.IdentifierName(property.Name));
+                var baseMember = Generate.MemberAccess(baseExpression, property.Name);
 
                 if (!property.HasSet)
                 {

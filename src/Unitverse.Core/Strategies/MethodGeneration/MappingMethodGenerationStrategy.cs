@@ -152,7 +152,7 @@
             }
             else
             {
-                bodyStatement = SyntaxFactory.ExpressionStatement(methodCall);
+                bodyStatement = Generate.Statement(methodCall);
             }
 
             generatedMethod.Act(bodyStatement);
@@ -175,7 +175,7 @@
                 if (returnTypeMembers.ContainsKey(methodParameter.Name))
                 {
                     var returnTypeMember = returnTypeMembers.FirstOrDefault(x => string.Equals(x.Key, methodParameter.Name, StringComparison.OrdinalIgnoreCase));
-                    var resultProperty = Generate.PropertyAccess(SyntaxFactory.IdentifierName("result"), returnTypeMember.Key);
+                    var resultProperty = Generate.MemberAccess("result", returnTypeMember.Key);
                     generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertEqual(resultProperty, SyntaxFactory.IdentifierName(methodParameter.Name), returnTypeMembers[methodParameter.Name]));
                     continue;
                 }
@@ -186,8 +186,8 @@
                     foreach (var matchedSourceProperty in properties.Where(x => returnTypeMembers.ContainsKey(x.Key)))
                     {
                         var returnTypeMember = returnTypeMembers.FirstOrDefault(x => string.Equals(x.Key, matchedSourceProperty.Key, StringComparison.OrdinalIgnoreCase));
-                        var resultProperty = Generate.PropertyAccess(SyntaxFactory.IdentifierName("result"), returnTypeMember.Key);
-                        generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertEqual(resultProperty,  Generate.PropertyAccess(SyntaxFactory.IdentifierName(methodParameter.Name), matchedSourceProperty.Key), matchedSourceProperty.Value));
+                        var resultProperty = Generate.MemberAccess("result", returnTypeMember.Key);
+                        generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertEqual(resultProperty,  Generate.MemberAccess(methodParameter.Name, matchedSourceProperty.Key), matchedSourceProperty.Value));
                     }
                 }
             }

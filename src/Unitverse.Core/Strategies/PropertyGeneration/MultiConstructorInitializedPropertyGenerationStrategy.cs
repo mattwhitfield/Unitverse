@@ -102,7 +102,7 @@
                     model.TargetInstance,
                     objectCreation);
 
-                yield return SyntaxFactory.ExpressionStatement(assignment);
+                yield return Generate.Statement(assignment);
 
                 var parameterToCheck = model.Constructors.SelectMany(x => x.Parameters).First(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
 

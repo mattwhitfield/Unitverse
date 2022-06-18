@@ -28,11 +28,7 @@
 
         protected override string TestCaseAttributeName => "TestCase";
 
-        private static MemberAccessExpressionSyntax AssertThat =>
-            SyntaxFactory.MemberAccessExpression(
-                SyntaxKind.SimpleMemberAccessExpression,
-                SyntaxFactory.IdentifierName("Assert"),
-                SyntaxFactory.IdentifierName("That"));
+        private static InvocationExpressionSyntax AssertThat => Generate.MemberInvocation("Assert", "That");
 
         public StatementSyntax AssertEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)
         {
@@ -60,16 +56,10 @@
             ExpressionSyntax target = SyntaxFactory.IdentifierName("Is");
             if (not)
             {
-                target = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, target, SyntaxFactory.IdentifierName("Not"));
+                target = Generate.MemberAccess(target, "Not");
             }
 
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(AssertThat)
-                .WithArgumentList(Generate.Arguments(actual, SyntaxFactory.InvocationExpression(
-                        SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            target,
-                            SyntaxFactory.IdentifierName(method)))
-                    .WithArgumentList(Generate.Arguments(expected)))));
+            return Generate.Statement(AssertThat.WithArgs(actual, Generate.MemberInvocation(target, method, expected)));
         }
 
         public StatementSyntax AssertFail(string message)
@@ -79,12 +69,7 @@
                 throw new ArgumentNullException(nameof(message));
             }
 
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(
-                    SyntaxFactory.MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        SyntaxFactory.IdentifierName("Assert"),
-                        SyntaxFactory.IdentifierName("Fail")))
-                .WithArgumentList(Generate.Arguments(Generate.Literal(message))));
+            return Generate.Statement(Generate.MemberInvocation("Assert", "Fail", Generate.Literal(message)));
         }
 
         public StatementSyntax AssertGreaterThan(ExpressionSyntax actual, ExpressionSyntax expected)
@@ -99,13 +84,7 @@
                 throw new ArgumentNullException(nameof(expected));
             }
 
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(AssertThat)
-                .WithArgumentList(Generate.Arguments(actual, SyntaxFactory.InvocationExpression(
-                        SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            SyntaxFactory.IdentifierName("Is"),
-                            SyntaxFactory.IdentifierName("GreaterThan")))
-                    .WithArgumentList(Generate.Arguments(expected)))));
+            return Generate.Statement(AssertThat.WithArgs(actual, Generate.MemberInvocation("Is", "GreaterThan", expected)));
         }
 
         public StatementSyntax AssertTrue(ExpressionSyntax actual)
@@ -115,11 +94,7 @@
                 throw new ArgumentNullException(nameof(actual));
             }
 
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(AssertThat)
-                .WithArgumentList(Generate.Arguments(actual, SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            SyntaxFactory.IdentifierName("Is"),
-                            SyntaxFactory.IdentifierName("True")))));
+            return Generate.Statement(AssertThat.WithArgs(actual, Generate.MemberAccess("Is", "True")));
         }
 
         public StatementSyntax AssertFalse(ExpressionSyntax actual)
@@ -129,11 +104,7 @@
                 throw new ArgumentNullException(nameof(actual));
             }
 
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(AssertThat)
-                .WithArgumentList(Generate.Arguments(actual, SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            SyntaxFactory.IdentifierName("Is"),
-                            SyntaxFactory.IdentifierName("False")))));
+            return Generate.Statement(AssertThat.WithArgs(actual, Generate.MemberAccess("Is", "False")));
         }
 
         public StatementSyntax AssertIsInstanceOf(ExpressionSyntax value, TypeSyntax type, bool isReferenceType)
@@ -148,16 +119,8 @@
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(AssertThat)
-                .WithArgumentList(Generate.Arguments(value, SyntaxFactory.InvocationExpression(
-                    SyntaxFactory.MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        SyntaxFactory.IdentifierName("Is"),
-                        SyntaxFactory.GenericName(
-                                SyntaxFactory.Identifier("InstanceOf"))
-                            .WithTypeArgumentList(
-                                SyntaxFactory.TypeArgumentList(
-                                    SyntaxFactory.SingletonSeparatedList(type))))))));
+            return Generate.Statement(
+                        AssertThat.WithArgs(value, Generate.MemberInvocation("Is", Generate.GenericName("InstanceOf", type))));
         }
 
         public StatementSyntax AssertLessThan(ExpressionSyntax actual, ExpressionSyntax expected)
@@ -172,13 +135,8 @@
                 throw new ArgumentNullException(nameof(expected));
             }
 
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(AssertThat)
-                .WithArgumentList(Generate.Arguments(actual, SyntaxFactory.InvocationExpression(
-                        SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            SyntaxFactory.IdentifierName("Is"),
-                            SyntaxFactory.IdentifierName("LessThan")))
-                    .WithArgumentList(Generate.Arguments(expected)))));
+            return Generate.Statement(
+                        AssertThat.WithArgs(actual, Generate.MemberInvocation("Is", "LessThan", expected)));
         }
 
         public StatementSyntax AssertNotNull(ExpressionSyntax value)
@@ -188,16 +146,8 @@
                 throw new ArgumentNullException(nameof(value));
             }
 
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(AssertThat)
-                .WithArgumentList(Generate.Arguments(
-                    value,
-                    SyntaxFactory.MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            SyntaxFactory.IdentifierName("Is"),
-                            SyntaxFactory.IdentifierName("Not")),
-                        SyntaxFactory.IdentifierName("Null")))));
+            return Generate.Statement(
+                        AssertThat.WithArgs(value, Generate.MemberAccess(Generate.MemberAccess("Is", "Not"), "Null")));
         }
 
         public StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall)
@@ -217,7 +167,7 @@
 
         public virtual IEnumerable<UsingDirectiveSyntax> GetUsings()
         {
-            yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("NUnit.Framework"));
+            yield return Generate.UsingDirective("NUnit.Framework");
         }
 
         private static StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string throws)
@@ -232,13 +182,7 @@
                 throw new ArgumentNullException(nameof(methodCall));
             }
 
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(
-                    SyntaxFactory.MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        SyntaxFactory.IdentifierName("Assert"),
-                        SyntaxFactory.GenericName(SyntaxFactory.Identifier(throws))
-                            .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(exceptionType)))))
-                .WithArgumentList(Generate.Arguments(Generate.ParenthesizedLambdaExpression(methodCall))));
+            return Generate.Statement(Generate.MemberInvocation("Assert", Generate.GenericName(throws, exceptionType), Generate.ParenthesizedLambdaExpression(methodCall)));
         }
     }
 }

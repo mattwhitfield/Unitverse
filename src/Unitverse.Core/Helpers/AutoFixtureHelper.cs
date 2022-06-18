@@ -30,11 +30,11 @@
 
                 if (customization != null)
                 {
-                    creationExpression = Generate.MethodCall(creationExpression, SyntaxFactory.IdentifierName("Customize"), customization);
+                    creationExpression = Generate.MemberInvocation(creationExpression, "Customize", customization);
                 }
             }
 
-            return SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName("var")).AddVariables(SyntaxFactory.VariableDeclarator("fixture").WithInitializer(SyntaxFactory.EqualsValueClause(creationExpression))));
+            return Generate.VariableDeclarator("fixture", creationExpression).AsLocal(SyntaxFactory.IdentifierName("var"));
         }
 
         internal static IdentifierNameSyntax VariableReference => SyntaxFactory.IdentifierName("fixture");
@@ -91,8 +91,8 @@
         private static ExpressionSyntax GetValue(TypeSyntax typeSyntax, IGenerationContext context, string methodName)
         {
             context.CurrentMethod?.AddRequirement(Requirements.AutoFixture);
-            var method = SyntaxFactory.GenericName(SyntaxFactory.Identifier(methodName)).WithTypeArgumentList(typeSyntax.AsList());
-            return SyntaxFactory.InvocationExpression(Generate.MemberAccess(VariableReference, method));
+            var method = Generate.GenericName(methodName, typeSyntax);
+            return Generate.MemberInvocation(VariableReference, method);
         }
     }
 }
