@@ -12,7 +12,7 @@
             FrameworkSet = frameworkSet ?? throw new ArgumentNullException(nameof(frameworkSet));
             WithRegeneration = withRegeneration;
             PartialGenerationAllowed = partialGenerationAllowed;
-            BaseNamingContext = baseNamingContext;
+            BaseNamingContext = baseNamingContext ?? throw new ArgumentNullException(nameof(baseNamingContext));
         }
 
         public ClassModel Model { get; }

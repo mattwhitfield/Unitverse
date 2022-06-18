@@ -55,8 +55,7 @@
             if (!string.IsNullOrWhiteSpace(_frameworkSet.TestFramework.TestClassAttribute))
             {
                 var testFixtureAtt = Generate.Attribute(_frameworkSet.TestFramework.TestClassAttribute);
-                var list = SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(testFixtureAtt));
-                classDeclaration = classDeclaration.AddAttributeLists(list);
+                classDeclaration = classDeclaration.AddAttributeLists(testFixtureAtt.AsList());
             }
 
             var variableDeclaration = SyntaxFactory.VariableDeclaration(model.TypeSyntax)
@@ -75,7 +74,7 @@
                 model.TargetInstance,
                 creationExpression);
 
-            setupMethod.Emit(SyntaxFactory.ExpressionStatement(assignment));
+            setupMethod.Emit(Generate.Statement(assignment));
 
             classDeclaration = classDeclaration.AddMembers(setupMethod.Method);
 

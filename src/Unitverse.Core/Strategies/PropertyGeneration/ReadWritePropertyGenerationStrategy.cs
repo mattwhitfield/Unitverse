@@ -66,7 +66,7 @@
 
             method.Arrange(declareTestValue);
 
-            method.Act(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), SyntaxFactory.IdentifierName("testValue"))));
+            method.Act(Generate.Statement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), SyntaxFactory.IdentifierName("testValue"))));
 
             var bodyStatement = _frameworkSet.AssertionFramework.AssertEqual(property.Access(target), SyntaxFactory.IdentifierName("testValue"), property.TypeInfo.Type.IsReferenceTypeAndNotString());
 

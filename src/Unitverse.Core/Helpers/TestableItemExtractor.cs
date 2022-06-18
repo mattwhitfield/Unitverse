@@ -47,7 +47,7 @@
             return models.Where(x => x.ShouldGenerateOrContainsItemThatShouldGenerate());
         }
 
-        private static IList<Func<SyntaxTokenList, bool>> GetAllowedModifiers(TypeDeclarationSyntax syntax, IUnitTestGeneratorOptions options)
+        private static IList<Func<SyntaxTokenList, bool>> GetAllowedModifiers(IUnitTestGeneratorOptions options)
         {
             var functionList = new List<Func<SyntaxTokenList, bool>>();
 
@@ -88,7 +88,7 @@
 
         private ClassModel ExtractClassModel(TypeDeclarationSyntax syntax, IUnitTestGeneratorOptions options)
         {
-            var allowedModifiers = GetAllowedModifiers(syntax, options);
+            var allowedModifiers = GetAllowedModifiers(options);
 
             var model = new ClassModel(syntax, SemanticModel, false);
 

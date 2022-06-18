@@ -57,6 +57,11 @@
             {
                 var method = _method;
 
+                if (_requirements.Contains(Requirements.AutoMocker))
+                {
+                    method = method.AddBodyStatements(Prepare(Generate.ImplicitlyTypedVariableDeclaration("mocker", Generate.ObjectCreation(SyntaxFactory.IdentifierName("AutoMocker"))), Section.Arrange));
+                }
+
                 if (_requirements.Contains(Requirements.AutoFixture))
                 {
                     method = method.AddBodyStatements(Prepare(AutoFixtureHelper.VariableDeclaration(_generationOptions), Section.Arrange));

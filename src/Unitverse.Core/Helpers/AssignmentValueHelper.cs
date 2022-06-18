@@ -206,7 +206,7 @@
                 if (parameter.RefKind == RefKind.Out)
                 {
                     syntax = syntax.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
-                    setStatements.Add(SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(name), GetDefaultAssignmentValue(parameter.Type, model, visitedTypes, frameworkSet))));
+                    setStatements.Add(Generate.Statement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(name), GetDefaultAssignmentValue(parameter.Type, model, visitedTypes, frameworkSet))));
                 }
                 else if (parameter.RefKind == RefKind.Ref)
                 {
@@ -321,12 +321,8 @@
                 if (factoryMethod != null)
                 {
                     {
-                        memberAccessExpression = SyntaxFactory.InvocationExpression(
-                                SyntaxFactory.MemberAccessExpression(
-                                    SyntaxKind.SimpleMemberAccessExpression,
-                                    namedType.ToTypeSyntax(frameworkSet.Context),
-                                    SyntaxFactory.IdentifierName(factoryMethod.Name)))
-                            .WithArgumentList(Generate.Arguments(factoryMethod.Parameters.Select(x =>
+                        memberAccessExpression = Generate.MemberInvocation(namedType.ToTypeSyntax(frameworkSet.Context), factoryMethod.Name)
+                                                         .WithArgumentList(Generate.Arguments(factoryMethod.Parameters.Select(x =>
                             {
                                 var visitedTypesThisMember = new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase);
                                 return GetDefaultAssignmentValue(x.Type, semanticModel, visitedTypesThisMember, frameworkSet);
@@ -339,10 +335,7 @@
                 if (instanceProperty != null)
                 {
                     {
-                        memberAccessExpression = SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            namedType.ToTypeSyntax(frameworkSet.Context),
-                            SyntaxFactory.IdentifierName(instanceProperty.Name));
+                        memberAccessExpression = Generate.MemberAccess(namedType.ToTypeSyntax(frameworkSet.Context), instanceProperty.Name);
                         return true;
                     }
                 }

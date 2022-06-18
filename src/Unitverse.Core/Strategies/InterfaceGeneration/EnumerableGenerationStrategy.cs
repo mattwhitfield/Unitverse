@@ -29,51 +29,26 @@
                 enumerableTypeSymbol = interfaceModel.GenericTypes.First();
             }
 
-            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
-                sourceModel.TypeSymbol.ToTypeSyntax(FrameworkSet.Context),
-                "enumerable",
-                SyntaxFactory.DefaultExpression(sourceModel.TypeSyntax))
-                .AsLocalVariableDeclarationStatementSyntax());
-
-            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
-                SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)),
-                "expectedCount",
-                SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(-1)))
-                .AsLocalVariableDeclarationStatementSyntax());
-
-            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
-                SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)),
-                "actualCount",
-                SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, SyntaxFactory.Literal(0)))
-                .AsLocalVariableDeclarationStatementSyntax());
+            method.Arrange(Generate.VariableDeclarator("enumerable", SyntaxFactory.DefaultExpression(sourceModel.TypeSyntax)).AsLocal(sourceModel.TypeSymbol.ToTypeSyntax(FrameworkSet.Context)));
+            method.Arrange(Generate.VariableDeclarator("expectedCount", Generate.Literal(-1)).AsLocal(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword))));
+            method.Arrange(Generate.VariableDeclarator("actualCount", Generate.Literal(0)).AsLocal(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword))));
 
             method.Act(SyntaxFactory.UsingStatement(
                 SyntaxFactory.Block(
                     FrameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("enumerator")),
                     SyntaxFactory.WhileStatement(
-                        SyntaxFactory.InvocationExpression(
-                            SyntaxFactory.MemberAccessExpression(
-                                SyntaxKind.SimpleMemberAccessExpression,
-                                SyntaxFactory.IdentifierName("enumerator"),
-                                SyntaxFactory.IdentifierName("MoveNext"))),
+                        Generate.MemberInvocation("enumerator", "MoveNext"),
                         SyntaxFactory.Block(
-                            SyntaxFactory.ExpressionStatement(
+                            Generate.Statement(
                                 SyntaxFactory.PostfixUnaryExpression(
                                     SyntaxKind.PostIncrementExpression,
                                     SyntaxFactory.IdentifierName("actualCount"))),
                             FrameworkSet.AssertionFramework.AssertIsInstanceOf(
-                                SyntaxFactory.MemberAccessExpression(
-                                    SyntaxKind.SimpleMemberAccessExpression,
-                                    SyntaxFactory.IdentifierName("enumerator"),
-                                    SyntaxFactory.IdentifierName("Current")),
+                                Generate.MemberAccess("enumerator", "Current"),
                                 enumerableTypeSymbol.ToTypeSyntax(FrameworkSet.Context),
                                 enumerableTypeSymbol.IsReferenceType)))))
                 .WithDeclaration(
-                    SyntaxHelper.CreateVariableDeclaration(SyntaxFactory.IdentifierName("var"), "enumerator", SyntaxFactory.InvocationExpression(
-                        SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            SyntaxFactory.IdentifierName("enumerable"),
-                            SyntaxFactory.IdentifierName("GetEnumerator"))))));
+                    Generate.VariableDeclarator("enumerator", Generate.MemberInvocation("enumerable", "GetEnumerator")).AsDeclaration(SyntaxFactory.IdentifierName("var"))));
 
             method.Assert(FrameworkSet.AssertionFramework.AssertEqual(SyntaxFactory.IdentifierName("actualCount"), SyntaxFactory.IdentifierName("expectedCount"), false));
         }

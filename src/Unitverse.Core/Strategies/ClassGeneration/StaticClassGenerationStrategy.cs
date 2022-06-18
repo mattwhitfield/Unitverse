@@ -49,8 +49,7 @@
             if (!string.IsNullOrWhiteSpace(_frameworkSet.TestFramework.TestClassAttribute))
             {
                 var testFixtureAtt = Generate.Attribute(_frameworkSet.TestFramework.TestClassAttribute);
-                var list = SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(testFixtureAtt));
-                classDeclaration = classDeclaration.AddAttributeLists(list);
+                classDeclaration = classDeclaration.AddAttributeLists(testFixtureAtt.AsList());
             }
 
             return classDeclaration;

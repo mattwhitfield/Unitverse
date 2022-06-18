@@ -34,7 +34,7 @@
         {
             if (IsActive)
             {
-                yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Moq.AutoMock"));
+                yield return Generate.UsingDirective("Moq.AutoMock");
             }
 
             foreach (var usingStatement in base.GetUsings())
@@ -43,29 +43,13 @@
             }
         }
 
-        public override void AddSetupMethodStatements(SectionedMethodHandler setupMethod)
-        {
-            if (IsActive)
-            {
-                _context.MocksUsed = true;
-                var creation = Generate.ImplicitlyTypedVariableDeclaration("mocker", Generate.ObjectCreation(SyntaxFactory.IdentifierName("AutoMocker")));
-                setupMethod.Emit(creation);
-            }
-        }
-
         public override ExpressionSyntax GetFieldInitializer(TypeSyntax type)
         {
             if (IsActive)
             {
-                var typeList = SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(type));
-
                 _context.MocksUsed = true;
-                return SyntaxFactory.InvocationExpression(
-                           SyntaxFactory.MemberAccessExpression(
-                               SyntaxKind.SimpleMemberAccessExpression,
-                               SyntaxFactory.IdentifierName("mocker"),
-                               SyntaxFactory.GenericName(SyntaxFactory.Identifier("GetMock"))
-                                            .WithTypeArgumentList(typeList)));
+                _context.CurrentMethod.AddRequirement(Requirements.AutoMocker);
+                return Generate.MemberInvocation("mocker", Generate.GenericName("GetMock", type));
             }
 
             return base.GetFieldInitializer(type);
@@ -75,15 +59,9 @@
         {
             if (IsActive)
             {
-                var typeList = SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(type));
-
                 _context.MocksUsed = true;
-                return SyntaxFactory.InvocationExpression(
-                           SyntaxFactory.MemberAccessExpression(
-                               SyntaxKind.SimpleMemberAccessExpression,
-                               SyntaxFactory.IdentifierName("mocker"),
-                               SyntaxFactory.GenericName(SyntaxFactory.Identifier("CreateInstance"))
-                                            .WithTypeArgumentList(typeList)));
+                _context.CurrentMethod.AddRequirement(Requirements.AutoMocker);
+                return Generate.MemberInvocation("mocker", Generate.GenericName("CreateInstance", type));
             }
 
             return base.GetObjectCreationExpression(type);

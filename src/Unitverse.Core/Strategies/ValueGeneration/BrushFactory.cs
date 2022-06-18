@@ -1,8 +1,8 @@
 ﻿namespace Unitverse.Core.Strategies.ValueGeneration
 {
     using System;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Unitverse.Core.Helpers;
 
     public static class BrushFactory
     {
@@ -18,7 +18,7 @@
         {
             var identifier = ColorsArray[ValueGenerationStrategyFactory.Random.Next(ColorsArray.Length)];
 
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(typeName), SyntaxFactory.IdentifierName(identifier));
+            return Generate.MemberAccess(typeName, identifier);
         }
     }
 }

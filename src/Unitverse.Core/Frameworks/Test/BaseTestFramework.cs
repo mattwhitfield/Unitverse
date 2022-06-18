@@ -87,7 +87,7 @@
             }
 
             var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic && SupportsStaticTestClasses)
-                                 .AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(Generate.Attribute(TestAttributeName))));
+                                 .AddAttributeLists(Generate.Attribute(TestAttributeName).AsList());
 
             method = AddXmlCommentsIfConfigured(method, description);
 

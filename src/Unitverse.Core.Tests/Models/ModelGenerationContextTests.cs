@@ -2,15 +2,13 @@ namespace Unitverse.Core.Tests.Models
 {
     using Unitverse.Core.Models;
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using FluentAssertions;
     using FakeItEasy;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Options;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class ModelGenerationContextTests
     {
         private ModelGenerationContext _testClass;
@@ -20,7 +18,7 @@ namespace Unitverse.Core.Tests.Models
         private bool _partialGenerationAllowed;
         private NamingContext _baseNamingContext;
 
-        [TestInitialize]
+        [SetUp]
         public void SetUp()
         {
             _model = ClassModelProvider.Instance;
@@ -31,7 +29,7 @@ namespace Unitverse.Core.Tests.Models
             _testClass = new ModelGenerationContext(_model, _frameworkSet, _withRegeneration, _partialGenerationAllowed, _baseNamingContext);
         }
 
-        [TestMethod]
+        [Test]
         public void CanConstruct()
         {
             // Act
@@ -41,55 +39,55 @@ namespace Unitverse.Core.Tests.Models
             instance.Should().NotBeNull();
         }
 
-        [TestMethod]
+        [Test]
         public void CannotConstructWithNullModel()
         {
             FluentActions.Invoking(() => new ModelGenerationContext(default(ClassModel), A.Fake<IFrameworkSet>(), false, false, new NamingContext("TestValue205118814"))).Should().Throw<ArgumentNullException>();
         }
 
-        [TestMethod]
+        [Test]
         public void CannotConstructWithNullFrameworkSet()
         {
             FluentActions.Invoking(() => new ModelGenerationContext(ClassModelProvider.Instance, default(IFrameworkSet), true, true, new NamingContext("TestValue1200384518"))).Should().Throw<ArgumentNullException>();
         }
 
-        [TestMethod]
+        [Test]
         public void CannotConstructWithNullBaseNamingContext()
         {
             FluentActions.Invoking(() => new ModelGenerationContext(ClassModelProvider.Instance, A.Fake<IFrameworkSet>(), false, true, default(NamingContext))).Should().Throw<ArgumentNullException>();
         }
 
-        [TestMethod]
+        [Test]
         public void ModelIsInitializedCorrectly()
         {
             _testClass.Model.Should().BeSameAs(_model);
         }
 
-        [TestMethod]
+        [Test]
         public void FrameworkSetIsInitializedCorrectly()
         {
             _testClass.FrameworkSet.Should().BeSameAs(_frameworkSet);
         }
 
-        [TestMethod]
+        [Test]
         public void WithRegenerationIsInitializedCorrectly()
         {
             _testClass.WithRegeneration.Should().Be(_withRegeneration);
         }
 
-        [TestMethod]
+        [Test]
         public void PartialGenerationAllowedIsInitializedCorrectly()
         {
             _testClass.PartialGenerationAllowed.Should().Be(_partialGenerationAllowed);
         }
 
-        [TestMethod]
+        [Test]
         public void BaseNamingContextIsInitializedCorrectly()
         {
             _testClass.BaseNamingContext.Should().BeSameAs(_baseNamingContext);
         }
 
-        [TestMethod]
+        [Test]
         public void CanSetAndGetMethodsEmitted()
         {
             // Arrange

@@ -46,10 +46,10 @@
         {
             if (Name == OriginalName)
             {
-                return Generate.PropertyAccess(target, Node.Identifier.Text);
+                return Generate.MemberAccess(target, Node.Identifier.Text);
             }
 
-            return Generate.PropertyAccess(target, Name);
+            return Generate.MemberAccess(target, Name);
         }
     }
 }

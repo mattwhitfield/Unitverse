@@ -25,11 +25,6 @@
             return _targetFramework.GetAssertionFor(dependencyMethod, mockFieldName, model, frameworkSet, parameters);
         }
 
-        public void AddSetupMethodStatements(SectionedMethodHandler setupMethod)
-        {
-            // fixture is created by SectionedMethodHandler requirements
-        }
-
         public ExpressionSyntax GetFieldInitializer(TypeSyntax type)
         {
             var mockFieldType = GetFieldType(type);

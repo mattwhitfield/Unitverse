@@ -30,23 +30,9 @@
 
             var typeSyntax = comparableTypeIdentifier.ToTypeSyntax(FrameworkSet.Context);
 
-            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
-                    sourceModel.TypeSymbol.ToTypeSyntax(FrameworkSet.Context),
-                    "baseValue",
-                    SyntaxFactory.DefaultExpression(sourceModel.TypeSyntax))
-                .AsLocalVariableDeclarationStatementSyntax());
-
-            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
-                    typeSyntax,
-                    "equalToBaseValue",
-                    SyntaxFactory.DefaultExpression(typeSyntax))
-                .AsLocalVariableDeclarationStatementSyntax());
-
-            method.Arrange(SyntaxHelper.CreateVariableDeclaration(
-                    typeSyntax,
-                    "greaterThanBaseValue",
-                    SyntaxFactory.DefaultExpression(typeSyntax))
-                .AsLocalVariableDeclarationStatementSyntax());
+            method.Arrange(Generate.VariableDeclarator("baseValue", SyntaxFactory.DefaultExpression(sourceModel.TypeSyntax)).AsLocal(sourceModel.TypeSymbol.ToTypeSyntax(FrameworkSet.Context)));
+            method.Arrange(Generate.VariableDeclarator("equalToBaseValue", SyntaxFactory.DefaultExpression(typeSyntax)).AsLocal(typeSyntax));
+            method.Arrange(Generate.VariableDeclarator("greaterThanBaseValue", SyntaxFactory.DefaultExpression(typeSyntax)).AsLocal(typeSyntax));
 
             method.Assert(FrameworkSet.AssertionFramework.AssertEqual(CreateInvocationStatement("baseValue", "CompareTo", "equalToBaseValue"), Generate.Literal(0), false));
 
@@ -57,12 +43,7 @@
 
         private static InvocationExpressionSyntax CreateInvocationStatement(string targetName, string memberName, string parameterName)
         {
-            return SyntaxFactory.InvocationExpression(
-                    SyntaxFactory.MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        SyntaxFactory.IdentifierName(targetName),
-                        SyntaxFactory.IdentifierName(memberName)))
-                .WithArgumentList(Generate.Arguments(SyntaxFactory.IdentifierName(parameterName)));
+            return Generate.MemberInvocation(targetName, memberName, SyntaxFactory.IdentifierName(parameterName));
         }
     }
 }

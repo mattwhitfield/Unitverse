@@ -20,7 +20,7 @@
             get
             {
                 _requiresSystemThreading = true;
-                return Generate.Attribute("Apartment", SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("ApartmentState"), SyntaxFactory.IdentifierName("STA")));
+                return Generate.Attribute("Apartment", Generate.MemberAccess("ApartmentState", "STA"));
             }
         }
 
@@ -33,7 +33,7 @@
 
             if (_requiresSystemThreading)
             {
-                yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System.Threading"));
+                yield return Generate.UsingDirective("System.Threading");
             }
         }
     }

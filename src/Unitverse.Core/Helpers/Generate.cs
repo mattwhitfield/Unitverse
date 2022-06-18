@@ -76,9 +76,71 @@
             return builder.ToString();
         }
 
+        public static UsingDirectiveSyntax UsingDirective(string name)
+        {
+            return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(name));
+        }
+
+        public static SimpleNameSyntax GenericName(string identifier, ITypeSymbol typeSymbol, IGenerationContext context)
+        {
+            return SyntaxFactory.GenericName(SyntaxFactory.Identifier(identifier))
+                                .WithTypeArgumentList(typeSymbol.ToTypeSyntax(context).AsList());
+        }
+
+        public static SimpleNameSyntax GenericName(string identifier, params TypeSyntax[] arguments)
+        {
+            return SyntaxFactory.GenericName(SyntaxFactory.Identifier(identifier))
+                                .WithTypeArgumentList(arguments.AsList());
+        }
+
+        public static StatementSyntax Statement(ExpressionSyntax expression)
+        {
+            return SyntaxFactory.ExpressionStatement(expression);
+        }
+
+        public static SimpleNameSyntax GenericName(string identifier, params SyntaxKind[] arguments)
+        {
+            return GenericName(identifier, arguments.Select(x => (TypeSyntax)SyntaxFactory.PredefinedType(SyntaxFactory.Token(x))).ToArray());
+        }
+
+        public static InvocationExpressionSyntax MemberInvocation(ExpressionSyntax container, string member, params ExpressionSyntax[] arguments)
+        {
+            return MemberInvocation(container, SyntaxFactory.IdentifierName(member), arguments);
+        }
+
+        public static InvocationExpressionSyntax MemberInvocation(string container, string member, params ExpressionSyntax[] arguments)
+        {
+            return MemberInvocation(SyntaxFactory.IdentifierName(container), SyntaxFactory.IdentifierName(member), arguments);
+        }
+
+        public static InvocationExpressionSyntax MemberInvocation(string container, SimpleNameSyntax member, params ExpressionSyntax[] arguments)
+        {
+            return MemberInvocation(SyntaxFactory.IdentifierName(container), member, arguments);
+        }
+
+        public static InvocationExpressionSyntax MemberInvocation(ExpressionSyntax container, SimpleNameSyntax member, params ExpressionSyntax[] arguments)
+        {
+            return SyntaxFactory.InvocationExpression(MemberAccess(container, member)).WithArgs(arguments);
+        }
+
+        public static InvocationExpressionSyntax WithArgs(this InvocationExpressionSyntax syntax, params ExpressionSyntax[] arguments)
+        {
+            return syntax.WithArgumentList(Arguments(arguments));
+        }
+
         public static MemberAccessExpressionSyntax MemberAccess(string container, string member)
         {
             return MemberAccess(SyntaxFactory.IdentifierName(container), SyntaxFactory.IdentifierName(member));
+        }
+
+        public static MemberAccessExpressionSyntax MemberAccess(ExpressionSyntax container, string member)
+        {
+            return MemberAccess(container, SyntaxFactory.IdentifierName(member));
+        }
+
+        public static MemberAccessExpressionSyntax MemberAccess(string container, SimpleNameSyntax member)
+        {
+            return MemberAccess(SyntaxFactory.IdentifierName(container), member);
         }
 
         public static MemberAccessExpressionSyntax MemberAccess(ExpressionSyntax container, SimpleNameSyntax member)
@@ -192,20 +254,19 @@
                     frameworkSet.Context.AddVisitedGenericType(parameter.Identifier.ValueText);
                 }
 
-                methodReference = SyntaxFactory.GenericName(SyntaxFactory.Identifier(name)).WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SeparatedList<TypeSyntax>(method.TypeParameterList.Parameters.Select(x => SyntaxFactory.IdentifierName(x.Identifier)))));
+                methodReference = GenericName(name, method.TypeParameterList.Parameters.Select(x => SyntaxFactory.IdentifierName(x.Identifier)).ToArray());
             }
             else
             {
                 methodReference = SyntaxFactory.IdentifierName(name);
             }
 
-            return MethodCall(target, methodReference, arguments);
+            return SyntaxFactory.InvocationExpression(MemberAccess(target, methodReference)).WithArgumentList(Arguments(arguments));
         }
 
-        public static ExpressionSyntax MethodCall(ExpressionSyntax target, SimpleNameSyntax methodReference, params CSharpSyntaxNode[] arguments)
+        public static TypeArgumentListSyntax AsList(this IEnumerable<TypeSyntax> typeSyntaxEnumerable)
         {
-            return SyntaxFactory.InvocationExpression(MemberAccess(target, methodReference))
-                                .WithArgumentList(Arguments(arguments));
+            return SyntaxFactory.TypeArgumentList(SyntaxFactory.SeparatedList(typeSyntaxEnumerable));
         }
 
         public static TypeArgumentListSyntax AsList(this TypeSyntax typeSyntax)
@@ -269,24 +330,6 @@
             }
 
             return SyntaxFactory.Attribute(nameSyntax);
-        }
-
-        public static ExpressionSyntax PropertyAccess(ExpressionSyntax target, string propertyName)
-        {
-            if (target == null)
-            {
-                throw new ArgumentNullException(nameof(target));
-            }
-
-            if (string.IsNullOrWhiteSpace(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
-
-            return SyntaxFactory.MemberAccessExpression(
-                SyntaxKind.SimpleMemberAccessExpression,
-                target,
-                SyntaxFactory.IdentifierName(propertyName));
         }
 
         public static ExpressionSyntax IndexerAccess(ExpressionSyntax target, params ExpressionSyntax[] arguments)
@@ -372,8 +415,6 @@
 
             var setupMethod = frameworkSet.CreateSetupMethod(targetTypeName, model.ClassName);
 
-            frameworkSet.MockingFramework.AddSetupMethodStatements(setupMethod);
-
             var parametersEmitted = new HashSet<ParameterModel>(new ParameterModelComparer());
 
             // generate fields for each constructor parameter
@@ -429,39 +470,36 @@
 
             classDeclaration = classDeclaration.AddMembers(field);
 
-            setupMethod.Emit(SyntaxFactory.ExpressionStatement(
+            setupMethod.Emit(Statement(
                 SyntaxFactory.AssignmentExpression(
                     SyntaxKind.SimpleAssignmentExpression,
                     frameworkSet.QualifyFieldReference(SyntaxFactory.IdentifierName(fieldName)),
                     defaultExpression)));
         }
 
-        public static InvocationExpressionSyntax Invocation(ExpressionSyntax target, string method, params ExpressionSyntax[] arguments)
+        public static VariableDeclaratorSyntax VariableDeclarator(string name, ExpressionSyntax defaultValue)
         {
-            return SyntaxFactory.InvocationExpression(
-                                    SyntaxFactory.MemberAccessExpression(
-                                        SyntaxKind.SimpleMemberAccessExpression,
-                                        target,
-                                        SyntaxFactory.IdentifierName(method)))
-                                .WithArgumentList(Arguments(arguments));
+            return SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(KeywordSafeName(name))).WithInitializer(SyntaxFactory.EqualsValueClause(defaultValue));
+        }
+
+        public static VariableDeclarationSyntax AsDeclaration(this VariableDeclaratorSyntax declaratorSyntax, TypeSyntax typeSyntax)
+        {
+            return SyntaxFactory.VariableDeclaration(typeSyntax).WithVariables(SyntaxFactory.SingletonSeparatedList(declaratorSyntax));
+        }
+
+        public static LocalDeclarationStatementSyntax AsLocal(this VariableDeclaratorSyntax declaratorSyntax, TypeSyntax typeSyntax)
+        {
+            return SyntaxFactory.LocalDeclarationStatement(declaratorSyntax.AsDeclaration(typeSyntax));
         }
 
         public static LocalDeclarationStatementSyntax VariableDeclaration(ITypeSymbol type, IFrameworkSet frameworkSet, string name, ExpressionSyntax defaultValue)
         {
-            var variableDeclaration = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(KeywordSafeName(name)))
-                                                   .WithInitializer(SyntaxFactory.EqualsValueClause(defaultValue));
-
-            return SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.VariableDeclaration(AssignmentValueHelper.GetTypeOrImplicitType(type, frameworkSet))
-                                .WithVariables(SyntaxFactory.SingletonSeparatedList(variableDeclaration)));
+            return VariableDeclarator(name, defaultValue).AsLocal(AssignmentValueHelper.GetTypeOrImplicitType(type, frameworkSet));
         }
 
         public static LocalDeclarationStatementSyntax ImplicitlyTypedVariableDeclaration(string name, ExpressionSyntax defaultValue)
         {
-            var variableDeclaration = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(KeywordSafeName(name)))
-                                                   .WithInitializer(SyntaxFactory.EqualsValueClause(defaultValue));
-
-            return SyntaxFactory.LocalDeclarationStatement(SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName("var"))
-                                .WithVariables(SyntaxFactory.SingletonSeparatedList(variableDeclaration)));
+            return VariableDeclarator(name, defaultValue).AsLocal(SyntaxFactory.IdentifierName("var"));
         }
 
         public static ParenthesizedLambdaExpressionSyntax ParenthesizedLambdaExpression(ExpressionSyntax expression)
