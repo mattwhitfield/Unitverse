@@ -35,10 +35,20 @@
 
             var root = await model.SyntaxTree.GetRootAsync().ConfigureAwait(true);
             var namespaceDeclaration = root.DescendantNodes().FirstOrDefault(node => node.IsKind(SyntaxKind.NamespaceDeclaration));
+            if (namespaceDeclaration != null)
+            {
+                return ((NamespaceDeclarationSyntax)namespaceDeclaration)?.Name.ToString();
+            }
 
-            var namespaceString = ((NamespaceDeclarationSyntax)namespaceDeclaration)?.Name.ToString();
+#if VS2022
+            var fileScopedNamespaceDeclaration = root.DescendantNodes().FirstOrDefault(node => node.IsKind(SyntaxKind.FileScopedNamespaceDeclaration));
+            if (fileScopedNamespaceDeclaration != null)
+            {
+                return ((FileScopedNamespaceDeclarationSyntax)fileScopedNamespaceDeclaration)?.Name.ToString();
+            }
+#endif
 
-            return namespaceString;
+            return null;
         }
     }
 }
