@@ -64,7 +64,7 @@
                     return true;
                 }
 
-                if (methodParameter.TypeInfo.Type.SpecialType == SpecialType.None && !Equals(methodParameter.TypeInfo.Type, returnTypeInfo))
+                if (methodParameter.TypeInfo.Type != null && methodParameter.TypeInfo.Type.SpecialType == SpecialType.None && !Equals(methodParameter.TypeInfo.Type, returnTypeInfo))
                 {
                     var properties = GetProperties(methodParameter.TypeInfo.Type);
                     if (properties.Any(x => returnTypeMembers.ContainsKey(x.Key)))
@@ -116,7 +116,10 @@
                 {
                     var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
 
-                    generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                    if (parameter.TypeInfo.Type != null)
+                    {
+                        generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                    }
 
                     if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
                     {
@@ -180,7 +183,7 @@
                     continue;
                 }
 
-                if (methodParameter.TypeInfo.Type.SpecialType == SpecialType.None && !Equals(methodParameter.TypeInfo.Type, returnTypeInfo))
+                if (methodParameter.TypeInfo.Type != null && methodParameter.TypeInfo.Type.SpecialType == SpecialType.None && !Equals(methodParameter.TypeInfo.Type, returnTypeInfo))
                 {
                     var properties = GetProperties(methodParameter.TypeInfo.Type);
                     foreach (var matchedSourceProperty in properties.Where(x => returnTypeMembers.ContainsKey(x.Key)))

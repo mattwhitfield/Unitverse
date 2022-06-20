@@ -259,7 +259,7 @@
             return classDeclaration;
         }
 
-        private static bool IsAccessible(IMethodSymbol method)
+        private static bool IsAccessible(IMethodSymbol? method)
         {
             if (method == null)
             {

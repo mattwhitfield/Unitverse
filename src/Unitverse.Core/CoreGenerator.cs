@@ -33,11 +33,11 @@
             }
 
             var sourceNameSpace = await sourceModel.GetNamespace().ConfigureAwait(true);
-            var targetNameSpace = nameSpaceTransform(sourceNameSpace);
+            var targetNameSpace = nameSpaceTransform(sourceNameSpace ?? "Namespace");
 
             var usingsEmitted = new HashSet<string>();
 
-            NamespaceDeclarationSyntax originalTargetNamespace = null;
+            NamespaceDeclarationSyntax? originalTargetNamespace = null;
 
             CompilationUnitSyntax compilation;
             NamespaceDeclarationSyntax targetNamespace;
@@ -87,7 +87,7 @@
                     {
                         var method = methodHandler.Method;
 
-                        MethodDeclarationSyntax existingMethod = null;
+                        MethodDeclarationSyntax? existingMethod = null;
                         string methodName = "ctor"; // will be replaced below if it's not a constructor
 
                         if (method is MethodDeclarationSyntax typeMethod)
@@ -123,7 +123,7 @@
             return declaration;
         }
 
-        private static CompilationUnitSyntax AddTargetNamespaceToCompilation(NamespaceDeclarationSyntax originalTargetNamespace, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax targetNamespace, IGenerationOptions generationOptions)
+        private static CompilationUnitSyntax AddTargetNamespaceToCompilation(NamespaceDeclarationSyntax? originalTargetNamespace, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax targetNamespace, IGenerationOptions generationOptions)
         {
             if (originalTargetNamespace == null)
             {
@@ -135,7 +135,8 @@
             }
             else
             {
-                compilation = compilation.RemoveNode(originalTargetNamespace, SyntaxRemoveOptions.KeepNoTrivia);
+                var newCompilation = compilation.RemoveNode(originalTargetNamespace, SyntaxRemoveOptions.KeepNoTrivia);
+                compilation = newCompilation ?? compilation;
 
                 if (generationOptions.EmitUsingsOutsideNamespace)
                 {
@@ -161,7 +162,11 @@
                 var node = targetNamespace.Usings.FirstOrDefault(x => x.NormalizeWhitespace().ToFullString() == fullString);
                 if (node != null)
                 {
-                    targetNamespace = targetNamespace.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);
+                    var newNamespace = targetNamespace.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);
+                    if (newNamespace != null)
+                    {
+                        targetNamespace = newNamespace;
+                    }
                 }
             }
 
@@ -173,13 +178,13 @@
             foreach (var parameter in classModel.Declaration.TypeParameterList?.Parameters ?? Enumerable.Empty<TypeParameterSyntax>())
             {
                 NameSyntax nameSyntax = SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName("System"), SyntaxFactory.IdentifierName("String"));
-                ITypeSymbol derivedType = null;
+                ITypeSymbol? derivedType = null;
                 var constraint = classModel.Declaration.ConstraintClauses.FirstOrDefault(x => x.Name.Identifier.ValueText == parameter.Identifier.ValueText);
 
                 if (constraint != null)
                 {
-                    var typeConstraints = constraint.Constraints.OfType<TypeConstraintSyntax>().Select(x => x.Type).Select(x => classModel.SemanticModel.GetTypeInfo(x));
-                    var constrainableTypes = typeConstraints.Select(x => x.Type).Where(x => x != null && !(x is IErrorTypeSymbol)).ToArray();
+                    var typeConstraints = constraint.Constraints.OfType<TypeConstraintSyntax>().Select(x => x.Type).Select(x => classModel.SemanticModel.GetTypeInfo(x)) ?? Enumerable.Empty<TypeInfo>();
+                    ITypeSymbol[] constrainableTypes = typeConstraints.Select(x => x.Type).WhereNotNull().Where(x => !(x is IErrorTypeSymbol)).ToArray();
                     if (constrainableTypes.Any())
                     {
                         derivedType = TypeHelper.FindDerivedNonAbstractType(constrainableTypes);
@@ -208,18 +213,20 @@
             return targetNamespace;
         }
 
-        private static NamespaceDeclarationSyntax AddTypeToTargetNamespace(TypeDeclarationSyntax originalTargetType, NamespaceDeclarationSyntax targetNamespace, TypeDeclarationSyntax targetType)
+        private static NamespaceDeclarationSyntax AddTypeToTargetNamespace(TypeDeclarationSyntax? originalTargetType, NamespaceDeclarationSyntax targetNamespace, TypeDeclarationSyntax targetType)
         {
             if (originalTargetType != null)
             {
-                targetNamespace = targetNamespace.RemoveNode(originalTargetType, SyntaxRemoveOptions.KeepNoTrivia);
+                var newTargetNamespace = targetNamespace.RemoveNode(originalTargetType, SyntaxRemoveOptions.KeepNoTrivia);
+                targetNamespace = newTargetNamespace ?? targetNamespace;
             }
             else
             {
                 var type = targetNamespace.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault(x => x.Identifier.ValueText == targetType.Identifier.ValueText);
                 if (type != null)
                 {
-                    targetNamespace = targetNamespace.RemoveNode(type, SyntaxRemoveOptions.KeepNoTrivia);
+                    var newTargetNamespace = targetNamespace.RemoveNode(type, SyntaxRemoveOptions.KeepNoTrivia);
+                    targetNamespace = newTargetNamespace ?? targetNamespace;
                 }
             }
 
@@ -346,18 +353,20 @@
         {
             var setupMethod = frameworkSet.CreateSetupMethod(frameworkSet.GetTargetTypeName(classModel), classModel.ClassName);
 
-            BaseMethodDeclarationSyntax foundMethod = null, updatedMethod = null;
+            BaseMethodDeclarationSyntax? foundMethod = null;
             if (setupMethod.Method is MethodDeclarationSyntax methodSyntax)
             {
-                updatedMethod = foundMethod = targetType.Members.OfType<MethodDeclarationSyntax>().FirstOrDefault(x => x.Identifier.Text == methodSyntax.Identifier.Text && x.ParameterList.Parameters.Count == 0);
+                foundMethod = targetType.Members.OfType<MethodDeclarationSyntax>().FirstOrDefault(x => x.Identifier.Text == methodSyntax.Identifier.Text && x.ParameterList.Parameters.Count == 0);
             }
             else if (setupMethod.Method is ConstructorDeclarationSyntax)
             {
-                updatedMethod = foundMethod = targetType.Members.OfType<ConstructorDeclarationSyntax>().FirstOrDefault(x => x.ParameterList.Parameters.Count == 0);
+                foundMethod = targetType.Members.OfType<ConstructorDeclarationSyntax>().FirstOrDefault(x => x.ParameterList.Parameters.Count == 0);
             }
 
             if (foundMethod != null)
             {
+                var updatedMethod = foundMethod;
+
                 var parametersEmitted = new HashSet<string>();
                 var allFields = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -384,7 +393,7 @@
                         var fieldTypeSyntax = parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context);
                         ExpressionSyntax defaultExpression;
 
-                        if (parameterModel.TypeInfo.Type.TypeKind == TypeKind.Interface)
+                        if (parameterModel.TypeInfo.IsInterface())
                         {
                             frameworkSet.Context.InterfacesMocked++;
                             fieldTypeSyntax = frameworkSet.MockingFramework.GetFieldType(fieldTypeSyntax);
@@ -472,7 +481,7 @@
             return updatedMethod.WithBody(body.WithStatements(newStatements));
         }
 
-        private static GenerationResult Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, bool withRegeneration, IUnitTestGeneratorOptions options, NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax originalTargetNamespace, bool isSingleItemGeneration, IMessageLogger messageLogger)
+        private static GenerationResult Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, bool withRegeneration, IUnitTestGeneratorOptions options, NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax? originalTargetNamespace, bool isSingleItemGeneration, IMessageLogger messageLogger)
         {
             var frameworkSet = FrameworkSetFactory.Create(options);
 
@@ -536,9 +545,9 @@
             return generationResult;
         }
 
-        private static TypeDeclarationSyntax GetOrCreateTargetType(SyntaxNode targetNamespace, IFrameworkSet frameworkSet, ClassModel classModel, out TypeDeclarationSyntax originalTargetType)
+        private static TypeDeclarationSyntax GetOrCreateTargetType(SyntaxNode targetNamespace, IFrameworkSet frameworkSet, ClassModel classModel, out TypeDeclarationSyntax? originalTargetType)
         {
-            TypeDeclarationSyntax targetType = null;
+            TypeDeclarationSyntax? targetType = null;
             originalTargetType = null;
 
             if (targetNamespace != null)

@@ -34,12 +34,12 @@
                     {
                         foreach (var pair in section)
                         {
-                            string memberName;
+                            string? memberName;
                             var applied = Apply(mutableGenerationOptions, pair, generationOptionsMutators, out memberName) ||
                                           Apply(mutableNamingOptions, pair, namingOptionsMutators, out memberName) ||
                                           Apply(mutableStrategyOptions, pair, strategyOptionsMutators, out memberName);
 
-                            if (applied)
+                            if (applied && memberName != null)
                             {
                                 // record
                                 membersSetByFilename[memberName] = Path.Combine(file.Directory, CoreConstants.ConfigFileName);
@@ -52,7 +52,7 @@
             return new UnitTestGeneratorOptions(mutableGenerationOptions, mutableNamingOptions, mutableStrategyOptions, statisticsGenerationEnabled, membersSetByFilename);
         }
 
-        private static bool Apply(object instance, KeyValuePair<string, string> valuePair, Dictionary<string, TypeMemberSetter> mutatorSet, out string memberName)
+        private static bool Apply(object instance, KeyValuePair<string, string> valuePair, Dictionary<string, TypeMemberSetter> mutatorSet, out string? memberName)
         {
             var cleanFieldName = valuePair.Key.Replace("_", string.Empty).Replace("-", string.Empty);
             if (mutatorSet.TryGetValue(cleanFieldName, out var mutator))

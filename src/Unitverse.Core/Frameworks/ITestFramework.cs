@@ -6,7 +6,7 @@
     {
         bool SupportsStaticTestClasses { get; }
 
-        AttributeSyntax SingleThreadedApartmentAttribute { get; }
+        AttributeSyntax? SingleThreadedApartmentAttribute { get; }
 
         string TestClassAttribute { get; }
     }

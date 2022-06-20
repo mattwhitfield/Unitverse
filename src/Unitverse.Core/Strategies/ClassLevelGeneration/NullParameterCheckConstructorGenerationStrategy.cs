@@ -43,7 +43,7 @@
                 return false;
             }
 
-            return model.Constructors.SelectMany(x => x.Parameters).Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String) && !model.IsStatic;
+            return model.Constructors.SelectMany(x => x.Parameters).Any(x => x.TypeInfo.Type != null && x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String) && !model.IsStatic;
         }
 
         public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
@@ -58,7 +58,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var nullableParameters = new HashSet<string>(model.Constructors.SelectMany(x => x.Parameters).Where(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String).Select(x => x.Name), StringComparer.OrdinalIgnoreCase);
+            var nullableParameters = new HashSet<string>(model.Constructors.SelectMany(x => x.Parameters).Where(x => x.TypeInfo.Type != null && x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String).Select(x => x.Name), StringComparer.OrdinalIgnoreCase);
 
             foreach (var nullableParameter in nullableParameters)
             {

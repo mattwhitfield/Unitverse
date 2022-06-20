@@ -59,16 +59,22 @@
             {
                 var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
 
-                generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                if (parameter.TypeInfo.Type != null)
+                {
+                    generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                }
 
                 paramExpressions.Add(SyntaxFactory.IdentifierName(parameter.Name));
             }
 
             var methodCall = method.Invoke(model, false, _frameworkSet, paramExpressions.ToArray());
 
-            var bodyStatement = Generate.ImplicitlyTypedVariableDeclaration("result", methodCall);
+            if (methodCall != null)
+            {
+                var bodyStatement = Generate.ImplicitlyTypedVariableDeclaration("result", methodCall);
 
-            generatedMethod.Act(bodyStatement);
+                generatedMethod.Act(bodyStatement);
+            }
 
             generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
 

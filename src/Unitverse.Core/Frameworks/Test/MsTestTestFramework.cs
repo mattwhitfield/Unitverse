@@ -18,7 +18,7 @@
 
         public bool AssertThrowsAsyncIsAwaitable => true;
 
-        public AttributeSyntax SingleThreadedApartmentAttribute => null;
+        public AttributeSyntax? SingleThreadedApartmentAttribute => null;
 
         public string TestClassAttribute => "TestClass";
 

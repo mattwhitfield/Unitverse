@@ -4,6 +4,6 @@ namespace Unitverse.Core.Models
     {
         string Name { get; }
 
-        string Version { get; }
+        string? Version { get; }
     }
 }

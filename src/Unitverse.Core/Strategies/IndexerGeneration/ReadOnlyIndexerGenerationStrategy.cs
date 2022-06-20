@@ -56,7 +56,7 @@
 
             var paramExpressions = indexer.Parameters.Select(param => AssignmentValueHelper.GetDefaultAssignmentValue(param.TypeInfo, model.SemanticModel, _frameworkSet)).ToArray();
 
-            method.Emit(_frameworkSet.AssertionFramework.AssertIsInstanceOf(Generate.IndexerAccess(model.TargetInstance, paramExpressions), indexer.TypeInfo.ToTypeSyntax(_frameworkSet.Context), indexer.TypeInfo.Type.IsReferenceType));
+            method.Emit(_frameworkSet.AssertionFramework.AssertIsInstanceOf(Generate.IndexerAccess(model.TargetInstance, paramExpressions), indexer.TypeInfo.ToTypeSyntax(_frameworkSet.Context), indexer.TypeInfo.Type != null && indexer.TypeInfo.Type.IsReferenceType));
             method.Emit(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
 
             yield return method;

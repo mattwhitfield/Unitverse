@@ -37,7 +37,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type.SpecialType == SpecialType.System_String);
+            return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type != null && x.TypeInfo.Type.SpecialType == SpecialType.System_String);
         }
 
         public IEnumerable<SectionedMethodHandler> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
@@ -55,7 +55,7 @@
             for (var i = 0; i < method.Parameters.Count; i++)
             {
                 ParameterModel currentParam = method.Parameters[i];
-                if (currentParam.TypeInfo.Type.SpecialType != SpecialType.System_String)
+                if (currentParam.TypeInfo.Type == null || currentParam.TypeInfo.Type.SpecialType != SpecialType.System_String)
                 {
                     continue;
                 }
@@ -70,7 +70,7 @@
                 namingContext = namingContext.WithParameterName(currentParam.Name.ToPascalCase());
 
                 var isNonNullable = currentParam.IsNullableTypeSyntax || currentParam.HasNullDefaultValue;
-                object[] testValues = isNonNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
+                object?[] testValues = isNonNullable ? new object?[] { string.Empty, "   " } : new object?[] { null, string.Empty, "   " };
 
                 var generatedMethod = _frameworkSet.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotCallWithInvalid, namingContext, method.IsAsync && _frameworkSet.AssertionFramework.AssertThrowsAsyncIsAwaitable, model.IsStatic, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues, "Checks that the " + method.Name + " method throws when the " + currentParam.Name + " parameter is null, empty or white space.");
 
@@ -86,7 +86,10 @@
                             defaultAssignmentValue = SyntaxFactory.DefaultExpression(currentParam.TypeInfo.ToTypeSyntax(_frameworkSet.Context));
                         }
 
-                        generatedMethod.Emit(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                        if (parameter.TypeInfo.Type != null)
+                        {
+                            generatedMethod.Emit(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                        }
 
                         paramList.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Name)).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
                     }

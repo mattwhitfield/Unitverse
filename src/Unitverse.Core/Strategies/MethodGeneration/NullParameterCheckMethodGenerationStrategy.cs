@@ -37,7 +37,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String);
+            return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type != null && x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String);
         }
 
         public IEnumerable<SectionedMethodHandler> Create(IMethodModel method, ClassModel model, NamingContext namingContext)
@@ -55,7 +55,7 @@
             for (var i = 0; i < method.Parameters.Count; i++)
             {
                 ParameterModel currentParam = method.Parameters[i];
-                if (!currentParam.TypeInfo.Type.IsReferenceType)
+                if (currentParam.TypeInfo.Type == null || !currentParam.TypeInfo.Type.IsReferenceType)
                 {
                     continue;
                 }
@@ -92,7 +92,10 @@
                             defaultAssignmentValue = SyntaxFactory.DefaultExpression(currentParam.TypeInfo.ToTypeSyntax(_frameworkSet.Context));
                         }
 
-                        generatedMethod.Emit(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                        if (parameter.TypeInfo.Type != null)
+                        {
+                            generatedMethod.Emit(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, parameter.Name, defaultAssignmentValue));
+                        }
 
                         paramList.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Name)).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
                     }

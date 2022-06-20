@@ -26,7 +26,7 @@
             return classIdentifierToken.Text;
         }
 
-        public static async Task<string> GetNamespace(this SemanticModel model)
+        public static async Task<string?> GetNamespace(this SemanticModel model)
         {
             if (model == null)
             {

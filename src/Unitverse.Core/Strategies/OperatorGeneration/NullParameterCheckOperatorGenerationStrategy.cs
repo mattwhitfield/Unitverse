@@ -38,7 +38,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type.IsReferenceType);
+            return !method.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.AbstractKeyword)) && method.Parameters.Any(x => x.TypeInfo.Type != null && x.TypeInfo.Type.IsReferenceType);
         }
 
         public IEnumerable<SectionedMethodHandler> Create(IOperatorModel method, ClassModel model, NamingContext namingContext)
@@ -55,7 +55,8 @@
 
             for (var i = 0; i < method.Parameters.Count; i++)
             {
-                if (!method.Parameters[i].TypeInfo.Type.IsReferenceType)
+                var typeInfo = method.Parameters[i].TypeInfo;
+                if (typeInfo.Type == null || !typeInfo.Type.IsReferenceType)
                 {
                     continue;
                 }
@@ -71,7 +72,7 @@
 
                     if (index == i)
                     {
-                        paramList.Add(SyntaxFactory.DefaultExpression(method.Parameters[i].TypeInfo.ToTypeSyntax(_frameworkSet.Context)));
+                        paramList.Add(SyntaxFactory.DefaultExpression(typeInfo.ToTypeSyntax(_frameworkSet.Context)));
                     }
                     else
                     {

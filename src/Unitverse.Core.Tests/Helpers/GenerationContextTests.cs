@@ -4,8 +4,10 @@ namespace Unitverse.Core.Tests.Helpers
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CodeAnalysis;
+    using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Helpers;
+    using Unitverse.Core.Options;
 
     [TestFixture]
     public class GenerationContextTests
@@ -15,13 +17,13 @@ namespace Unitverse.Core.Tests.Helpers
         [SetUp]
         public void SetUp()
         {
-            _testClass = new GenerationContext();
+            _testClass = new GenerationContext(Substitute.For<IGenerationOptions>());
         }
 
         [Test]
         public void CanConstruct()
         {
-            var instance = new GenerationContext();
+            var instance = new GenerationContext(Substitute.For<IGenerationOptions>());
             Assert.That(instance, Is.Not.Null);
         }
 

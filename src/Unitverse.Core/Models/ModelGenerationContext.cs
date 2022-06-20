@@ -13,6 +13,8 @@
             WithRegeneration = withRegeneration;
             PartialGenerationAllowed = partialGenerationAllowed;
             BaseNamingContext = baseNamingContext ?? throw new ArgumentNullException(nameof(baseNamingContext));
+
+            FrameworkSet.Context.CurrentModelIsStatic = Model.IsStatic;
         }
 
         public ClassModel Model { get; }

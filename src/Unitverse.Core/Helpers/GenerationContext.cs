@@ -3,10 +3,17 @@
     using System;
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class GenerationContext : IGenerationContext
     {
+        public GenerationContext(IGenerationOptions options)
+        {
+            CurrentMethod = new SectionedMethodHandler(SyntaxFactory.MethodDeclaration(SyntaxFactory.IdentifierName("void"), "Dummy"), options);
+        }
+
         private readonly List<ITypeSymbol> _emittedTypes = new List<ITypeSymbol>();
         private readonly HashSet<string> _emittedTypeFullNames = new HashSet<string>();
         private readonly HashSet<string> _visitedGenericTypes = new HashSet<string>();
@@ -15,7 +22,7 @@
 
         public bool MocksUsed { get; set; }
 
-        public IDictionary<string, ITypeSymbol> GenericTypes { get; } = new Dictionary<string, ITypeSymbol>();
+        public IDictionary<string, ITypeSymbol?> GenericTypes { get; } = new Dictionary<string, ITypeSymbol?>();
 
         public IEnumerable<string> GenericTypesVisited => _visitedGenericTypes;
 
@@ -31,7 +38,7 @@
 
         public long TestMethodsRegenerated { get; set; }
 
-        public ModelGenerationContext CurrentModel { get; set; }
+        public bool CurrentModelIsStatic { get; set; }
 
         public SectionedMethodHandler CurrentMethod { get; set; }
 

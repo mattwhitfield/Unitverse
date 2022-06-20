@@ -38,7 +38,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return !model.Constructors.Any() && model.Properties.Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String && x.HasInit) && !model.IsStatic;
+            return !model.Constructors.Any() && model.Properties.Any(x => x.TypeInfo.Type != null && x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String && x.HasInit) && !model.IsStatic;
         }
 
         public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
@@ -59,7 +59,7 @@
             }
 
             var initializableProperties = model.Properties.Where(x => x.HasInit).ToList();
-            foreach (var property in initializableProperties.Where(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String))
+            foreach (var property in initializableProperties.Where(x => x.TypeInfo.Type != null && x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String))
             {
                 if (property.Node.Type is NullableTypeSyntax)
                 {

@@ -8,7 +8,7 @@
 
     public static class EditableItemExtractor
     {
-        public static IEnumerable<DisplayItem> ExtractFrom(object source, object modifiableInstance, bool skipExcluded, Func<string, string> sourceFileExtractor = null, Func<string, bool> propertySelector = null)
+        public static IEnumerable<DisplayItem> ExtractFrom(object source, object modifiableInstance, bool skipExcluded, Func<string, string>? sourceFileExtractor = null, Func<string, bool>? propertySelector = null)
         {
             if (source is null)
             {
@@ -42,7 +42,7 @@
 
                 var category = GetAttribute<CategoryAttribute>(property)?.Category ?? null;
 
-                if (!string.IsNullOrWhiteSpace(category))
+                if (category != null && !string.IsNullOrWhiteSpace(category))
                 {
                     if (!categories.TryGetValue(category, out var list))
                     {
@@ -91,7 +91,7 @@
             }
         }
 
-        private static T GetAttribute<T>(MemberInfo member)
+        private static T? GetAttribute<T>(MemberInfo member)
             where T : class
         {
             return Attribute.IsDefined(member, typeof(T)) ? (Attribute.GetCustomAttribute(member, typeof(T)) as T) : default;

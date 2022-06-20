@@ -24,6 +24,6 @@
 
         ExpressionSyntax GetAssertionFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, IEnumerable<string> parameters);
 
-        ExpressionSyntax GetObjectCreationExpression(TypeSyntax typeSyntax);
+        ExpressionSyntax? GetObjectCreationExpression(TypeSyntax typeSyntax);
     }
 }

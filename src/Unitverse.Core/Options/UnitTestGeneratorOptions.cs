@@ -27,7 +27,7 @@
 
         public IEnumerable<KeyValuePair<string, int>> SourceCounts => _membersSetByFilename.GroupBy(x => x.Value).Select(x => new KeyValuePair<string, int>(x.Key, x.Count()));
 
-        public string GetFieldSourceFileName(string fieldName)
+        public string? GetFieldSourceFileName(string fieldName)
         {
             if (string.IsNullOrWhiteSpace(fieldName))
             {

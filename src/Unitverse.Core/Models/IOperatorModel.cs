@@ -11,6 +11,6 @@
 
         IList<ParameterModel> Parameters { get; }
 
-        ExpressionSyntax Invoke(ClassModel owner, bool suppressAwait, IFrameworkSet frameworkSet, params CSharpSyntaxNode[] arguments);
+        ExpressionSyntax? Invoke(ClassModel owner, bool suppressAwait, IFrameworkSet frameworkSet, params CSharpSyntaxNode[] arguments);
     }
 }

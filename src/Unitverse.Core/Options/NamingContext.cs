@@ -9,15 +9,15 @@
 
         public string TypeName { get; }
 
-        public string InterfaceName { get; private set; }
+        public string? InterfaceName { get; private set; }
 
-        public string MemberName { get; private set; }
+        public string? MemberName { get; private set; }
 
-        public string MemberBareName { get; private set; }
+        public string? MemberBareName { get; private set; }
 
-        public string ParameterName { get; private set; }
+        public string? ParameterName { get; private set; }
 
-        public string TypeParameters { get; private set; }
+        public string? TypeParameters { get; private set; }
 
         private NamingContext Clone()
         {

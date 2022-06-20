@@ -10,7 +10,7 @@
     {
         private class Matcher<T>
         {
-            public Matcher(string assemblyName, Func<int, bool> majorVersionMatch, T result)
+            public Matcher(string assemblyName, Func<int, bool>? majorVersionMatch, T result)
             {
                 AssemblyName = assemblyName;
                 MajorVersionMatch = majorVersionMatch ?? (_ => true);

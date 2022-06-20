@@ -4,7 +4,7 @@
 
     public interface IUnitTestGeneratorOptions
     {
-        string GetFieldSourceFileName(string fieldName);
+        string? GetFieldSourceFileName(string fieldName);
 
         bool StatisticsCollectionEnabled { get; }
 

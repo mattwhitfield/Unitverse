@@ -20,7 +20,14 @@
             SemanticModel = semanticModel ?? throw new ArgumentNullException(nameof(semanticModel));
             IsSingleItem = isSingleItem;
             TargetFieldName = "_testClass";
-            TypeSymbol = SemanticModel.GetDeclaredSymbol(declaration);
+            var typeSymbol = SemanticModel.GetDeclaredSymbol(declaration);
+
+            if (typeSymbol == null)
+            {
+                throw new InvalidOperationException("Could not find the type symbol for the type '" + ClassName + "'.");
+            }
+
+            TypeSymbol = typeSymbol;
 
             TypeSyntax = SyntaxFactory.ParseTypeName(TypeSymbol.ToDisplayString(new SymbolDisplayFormat(
                 SymbolDisplayGlobalNamespaceStyle.Omitted,
@@ -58,7 +65,7 @@
 
         public TypeDeclarationSyntax Declaration { get; }
 
-        public IConstructorModel DefaultConstructor { get; set; }
+        public IConstructorModel? DefaultConstructor { get; set; }
 
         public IList<IIndexerModel> Indexers { get; } = new List<IIndexerModel>();
 
@@ -161,7 +168,7 @@
                 return baseFieldName;
             }
 
-            return baseFieldName + typeInfo.Type.Name;
+            return baseFieldName + typeInfo.Type?.Name ?? "UnknownType";
         }
 
         public string GetIndexerName(IIndexerModel indexer)
@@ -176,7 +183,7 @@
                 return "Indexer";
             }
 
-            return "IndexerFor" + indexer.Parameters.Select(x => x.TypeInfo.Type.GetLastNamePart().ToPascalCase()).Aggregate((x, y) => x + "And" + y);
+            return "IndexerFor" + indexer.Parameters.Select(x => x.TypeInfo.Type).WhereNotNull().Select(x => x.GetLastNamePart().ToPascalCase()).Aggregate((x, y) => x + "And" + y);
         }
 
         public ExpressionSyntax GetConstructorFieldReference(IPropertyModel model, IFrameworkSet frameworkSet)
@@ -195,7 +202,7 @@
 
             var fieldSyntax = frameworkSet.QualifyFieldReference(identifierName);
 
-            if (typeInfo.Type.TypeKind == TypeKind.Interface)
+            if (typeInfo.IsInterface())
             {
                 return frameworkSet.MockingFramework.GetFieldReference(fieldSyntax);
             }
@@ -262,7 +269,7 @@
             var hasEquallyNamedOverload = Methods.Any(x => x != method && x.Parameters.Count == method.Parameters.Count && x.Parameters.Select(p => p.Name.ToPascalCase()).SequenceEqual(method.Parameters.Select(p => p.Name.ToPascalCase())));
             var hasEquallyTypedOverload = Methods.Any(x => x != method && x.Parameters.Count == method.Parameters.Count && x.Parameters.Select(p => p.Type.ToPascalCase()).SequenceEqual(method.Parameters.Select(p => p.Type.ToPascalCase())));
 
-            if (hasEquallyTypedOverload && (method.Node?.TypeParameterList?.Parameters.Count ?? 0) > 0)
+            if (hasEquallyTypedOverload && method.Node?.TypeParameterList != null && method.Node.TypeParameterList.Parameters.Count > 0)
             {
                 parameters.AddRange(method.Node.TypeParameterList.Parameters.Select(x => x.Identifier.ValueText));
             }
@@ -272,7 +279,11 @@
                 var hasEquallyNamedParameter = Methods.Any(x => x != method && x.Parameters.Count == method.Parameters.Count && string.Equals(x.Parameters[i].Name, method.Parameters[i].Name, StringComparison.OrdinalIgnoreCase));
                 if (hasEquallyNamedOverload && hasEquallyNamedParameter)
                 {
-                    parameters.Add(method.Parameters[i].TypeInfo.Type.ToIdentifierName().ToPascalCase());
+                    var type = method.Parameters[i].TypeInfo.Type;
+                    if (type != null)
+                    {
+                        parameters.Add(type.ToIdentifierName().ToPascalCase());
+                    }
                 }
                 else
                 {
@@ -301,7 +312,7 @@
                 return model.OriginalName;
             }
 
-            return string.Format(CultureInfo.InvariantCulture, "{0}With{1}", model.OriginalName, model.Parameters.Any() ? model.Parameters.Select(x => x.TypeInfo.Type.ToIdentifierName().ToPascalCase()).Aggregate((x, y) => x + "And" + y) : "NoParameters");
+            return string.Format(CultureInfo.InvariantCulture, "{0}With{1}", model.OriginalName, model.Parameters.Any() ? model.Parameters.Select(x => x.TypeInfo.Type).WhereNotNull().Select(x => x.ToIdentifierName().ToPascalCase()).Aggregate((x, y) => x + "And" + y) : "NoParameters");
         }
 
         internal void SetTargetInstance(string fieldName, IFrameworkSet frameworkSet)

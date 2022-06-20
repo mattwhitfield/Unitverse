@@ -38,7 +38,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return !model.Constructors.Any() && model.Properties.Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType == SpecialType.System_String && x.HasInit) && !model.IsStatic;
+            return !model.Constructors.Any() && model.Properties.Any(x => x.TypeInfo.Type != null && x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType == SpecialType.System_String && x.HasInit) && !model.IsStatic;
         }
 
         public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
@@ -59,13 +59,13 @@
             }
 
             var initializableProperties = model.Properties.Where(x => x.HasInit).ToList();
-            foreach (var property in initializableProperties.Where(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType == SpecialType.System_String))
+            foreach (var property in initializableProperties.Where(IsString))
             {
                 var isNullable = property.Node.Type is NullableTypeSyntax;
 
                 namingContext = namingContext.WithMemberName(property.Name, property.Name);
 
-                object[] testValues = isNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
+                object?[] testValues = isNullable ? new object?[] { string.Empty, "   " } : new object?[] { null, string.Empty, "   " };
                 var generatedMethod = _frameworkSet.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotInitializeWithInvalid, namingContext, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues, "Checks that the property " + property.Name + " cannot be initialized with null, empty or white space.");
 
                 ExpressionSyntax GetAssignedValue(IPropertyModel propertyModel)
@@ -83,6 +83,17 @@
 
                 yield return generatedMethod;
             }
+        }
+
+        private static bool IsString(IPropertyModel property)
+        {
+            var type = property.TypeInfo.Type;
+            if (type == null)
+            {
+                return false;
+            }
+
+            return type.IsReferenceType && type.SpecialType == SpecialType.System_String;
         }
     }
 }
