@@ -7,7 +7,7 @@
 
     public class NameResolver
     {
-        private static readonly Dictionary<string, Func<NamingContext, string>> TokenResolvers = new Dictionary<string, Func<NamingContext, string>>(StringComparer.OrdinalIgnoreCase)
+        private static readonly Dictionary<string, Func<NamingContext, string?>> TokenResolvers = new Dictionary<string, Func<NamingContext, string?>>(StringComparer.OrdinalIgnoreCase)
         {
             { "typeName", x => x.TypeName },
             { "interfaceName", x => x.InterfaceName },
@@ -17,12 +17,12 @@
             { "typeParameters", x => x.TypeParameters },
         };
 
-        private static readonly Dictionary<string, Func<string, string>> Formatters = new Dictionary<string, Func<string, string>>(StringComparer.OrdinalIgnoreCase)
+        private static readonly Dictionary<string, Func<string?, string>> Formatters = new Dictionary<string, Func<string?, string>>(StringComparer.OrdinalIgnoreCase)
         {
-            { "lower", x => x.ToLowerInvariant() },
-            { "upper", x => x.ToUpperInvariant() },
-            { "camel", x => x.ToCamelCase() },
-            { "pascal", x => x.ToPascalCase() },
+            { "lower", x => x == null ? string.Empty : x.ToLowerInvariant() },
+            { "upper", x => x == null ? string.Empty : x.ToUpperInvariant() },
+            { "camel", x => x == null ? string.Empty : x.ToCamelCase() },
+            { "pascal", x => x == null ? string.Empty : x.ToPascalCase() },
         };
 
         private readonly string _pattern;
@@ -63,7 +63,7 @@
                     {
                         if (formatter.Length == 0 || !Formatters.TryGetValue(formatter.ToString(), out var formatterFunc))
                         {
-                            formatterFunc = x => x;
+                            formatterFunc = x => x == null ? string.Empty : x;
                         }
 
                         output.Append(formatterFunc(resolverFunc(context)));

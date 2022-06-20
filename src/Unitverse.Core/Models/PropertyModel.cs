@@ -9,7 +9,7 @@
 
     public class PropertyModel : TestableModel<PropertyDeclarationSyntax>, IPropertyModel
     {
-        public PropertyModel(string name, PropertyDeclarationSyntax node, TypeInfo typeInfo, SemanticModel model, IPropertySymbol propertySymbol)
+        public PropertyModel(string name, PropertyDeclarationSyntax node, TypeInfo typeInfo, SemanticModel model, IPropertySymbol? propertySymbol)
             : base(name, node)
         {
             if (model is null)
@@ -28,7 +28,7 @@
 
         public TypeInfo TypeInfo { get; }
 
-        public IPropertySymbol Symbol { get; }
+        public IPropertySymbol? Symbol { get; }
 
         private Lazy<bool> _hasGet;
         private Lazy<bool> _hasSet;

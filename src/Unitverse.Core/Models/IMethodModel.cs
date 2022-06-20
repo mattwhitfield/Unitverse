@@ -12,7 +12,7 @@
 
         bool IsVoid { get; }
 
-        IMethodSymbol Symbol { get; }
+        IMethodSymbol? Symbol { get; }
 
         IList<ParameterModel> Parameters { get; }
 

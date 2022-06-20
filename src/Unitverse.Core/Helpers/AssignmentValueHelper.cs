@@ -28,6 +28,11 @@
                 throw new ArgumentNullException(nameof(frameworkSet));
             }
 
+            if (propertyType.Type == null)
+            {
+                return Generate.ObjectCreation(SyntaxFactory.IdentifierName("object"));
+            }
+
             return GetDefaultAssignmentValue(propertyType.Type, model, new HashSet<string>(StringComparer.OrdinalIgnoreCase), frameworkSet);
         }
 
@@ -83,7 +88,12 @@
                     }
 
                     frameworkSet.Context.ValuesGenerated++;
-                    return ValueGenerationStrategyFactory.GenerateFor("string", typeParameterSymbol, model, visitedTypes, frameworkSet);
+                    var typeParameterValue = ValueGenerationStrategyFactory.GenerateFor("string", typeParameterSymbol, model, visitedTypes, frameworkSet);
+
+                    if (typeParameterValue != null)
+                    {
+                        return typeParameterValue;
+                    }
                 }
 
                 var expression =
@@ -103,7 +113,7 @@
             return SyntaxFactory.DefaultExpression(propertyType.ToTypeSyntax(frameworkSet.Context));
         }
 
-        private static ExpressionSyntax GetStrategyGeneratedValueOrNull(ITypeSymbol propertyType, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
+        private static ExpressionSyntax? GetStrategyGeneratedValueOrNull(ITypeSymbol propertyType, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
             if (ValueGenerationStrategyFactory.IsSupported(propertyType))
             {
@@ -114,7 +124,7 @@
             return null;
         }
 
-        private static ExpressionSyntax GetDelegateOrNull(ITypeSymbol propertyType, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
+        private static ExpressionSyntax? GetDelegateOrNull(ITypeSymbol propertyType, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
             if (propertyType is INamedTypeSymbol delegateType && (propertyType.TypeKind == TypeKind.Delegate))
             {
@@ -128,7 +138,7 @@
             return null;
         }
 
-        private static ExpressionSyntax GetClassStructOrNull(ITypeSymbol propertyType, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
+        private static ExpressionSyntax? GetClassStructOrNull(ITypeSymbol propertyType, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
             // TODO - can we do record types here?
             if (propertyType is INamedTypeSymbol namedType && (propertyType.TypeKind == TypeKind.Class || propertyType.TypeKind == TypeKind.Struct))
@@ -140,7 +150,7 @@
             return null;
         }
 
-        private static ExpressionSyntax GetInterfaceOrNull(ITypeSymbol propertyType, IFrameworkSet frameworkSet)
+        private static ExpressionSyntax? GetInterfaceOrNull(ITypeSymbol propertyType, IFrameworkSet frameworkSet)
         {
             if (propertyType.TypeKind == TypeKind.Interface)
             {
@@ -264,17 +274,17 @@
             var constructor = namedType.Constructors.Where(x => !x.IsStatic && x.DeclaredAccessibility == Accessibility.Public).OrderBy(x => x.Parameters.Length).FirstOrDefault() ??
                               namedType.Constructors.Where(x => !x.IsStatic).OrderBy(x => x.Parameters.Length).FirstOrDefault();
 
-            if (GetImplicitConstructorInvocation(semanticModel, visitedTypes, frameworkSet, namedType, constructor, out var implicitConstructorInvocation))
+            if (GetImplicitConstructorInvocation(semanticModel, visitedTypes, frameworkSet, namedType, constructor, out var implicitConstructorInvocation) && implicitConstructorInvocation != null)
             {
                 return implicitConstructorInvocation;
             }
 
-            if (GetFactoryMethodInvocation(semanticModel, visitedTypes, frameworkSet, namedType, constructor, out var factoryMethodInvocation))
+            if (GetFactoryMethodInvocation(semanticModel, visitedTypes, frameworkSet, namedType, constructor, out var factoryMethodInvocation) && factoryMethodInvocation != null)
             {
                 return factoryMethodInvocation;
             }
 
-            if (GetDerivedTypeInvocation(semanticModel, visitedTypes, frameworkSet, namedType, out var derivedTypeInvocation))
+            if (GetDerivedTypeInvocation(semanticModel, visitedTypes, frameworkSet, namedType, out var derivedTypeInvocation) && derivedTypeInvocation != null)
             {
                 return derivedTypeInvocation;
             }
@@ -297,7 +307,7 @@
             return Generate.ObjectCreation(namedType.ToTypeSyntax(frameworkSet.Context), parameters.ToArray());
         }
 
-        private static bool GetDerivedTypeInvocation(SemanticModel semanticModel, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, INamedTypeSymbol namedType, out ExpressionSyntax expressionSyntax)
+        private static bool GetDerivedTypeInvocation(SemanticModel semanticModel, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, INamedTypeSymbol namedType, out ExpressionSyntax? expressionSyntax)
         {
             if (namedType.IsAbstract)
             {
@@ -313,7 +323,7 @@
             return false;
         }
 
-        private static bool GetFactoryMethodInvocation(SemanticModel semanticModel, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, INamedTypeSymbol namedType, IMethodSymbol constructor, out ExpressionSyntax memberAccessExpression)
+        private static bool GetFactoryMethodInvocation(SemanticModel semanticModel, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, INamedTypeSymbol namedType, IMethodSymbol constructor, out ExpressionSyntax? memberAccessExpression)
         {
             if (constructor.DeclaredAccessibility != Accessibility.Public)
             {
@@ -345,11 +355,11 @@
             return false;
         }
 
-        private static bool GetImplicitConstructorInvocation(SemanticModel semanticModel, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, INamedTypeSymbol namedType, IMethodSymbol constructor, out ExpressionSyntax expressionSyntax)
+        private static bool GetImplicitConstructorInvocation(SemanticModel semanticModel, HashSet<string> visitedTypes, IFrameworkSet frameworkSet, INamedTypeSymbol namedType, IMethodSymbol constructor, out ExpressionSyntax? expressionSyntax)
         {
             if (constructor == null || constructor.IsImplicitlyDeclared || (!constructor.Parameters.Any() && constructor.DeclaredAccessibility == Accessibility.Public))
             {
-                var initializableProperties = namedType.GetMembers().OfType<IPropertySymbol>().Where(x => x.DeclaredAccessibility == Accessibility.Public && !x.IsReadOnly && !x.IsStatic && x.SetMethod.DeclaredAccessibility != Accessibility.Private).ToList();
+                var initializableProperties = namedType.GetMembers().OfType<IPropertySymbol>().Where(x => x.DeclaredAccessibility == Accessibility.Public && !x.IsReadOnly && !x.IsStatic && x.SetMethod != null && x.SetMethod.DeclaredAccessibility != Accessibility.Private).ToList();
                 var methods = namedType.GetMembers().OfType<IMethodSymbol>().Where(x => x.MethodKind == MethodKind.Ordinary);
                 if (initializableProperties.Any() && !methods.Any())
                 {

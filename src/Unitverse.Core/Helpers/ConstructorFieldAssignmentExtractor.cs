@@ -52,11 +52,14 @@
                 foreach (var parameter in constructor.ParameterList.Parameters)
                 {
                     var typeModel = model.GetDeclaredSymbol(parameter);
-                    var typeInfo = model.GetTypeInfo(parameter.Type);
+                    if (typeModel != null && parameter.Type != null)
+                    {
+                        var typeInfo = model.GetTypeInfo(parameter.Type);
 
-                    var parameterModel = new ParameterModel(parameter.Identifier.Text, parameter, typeModel.ToDisplayString(), typeInfo);
+                        var parameterModel = new ParameterModel(parameter.Identifier.Text, parameter, typeModel.ToDisplayString(), typeInfo);
 
-                    extractor._parameters.Add(parameterModel);
+                        extractor._parameters.Add(parameterModel);
+                    }
                 }
 
                 constructor.Accept(extractor);
@@ -69,7 +72,7 @@
         {
             base.VisitAssignmentExpression(node);
 
-            IdentifierNameSyntax identifier = null;
+            IdentifierNameSyntax? identifier = null;
 
             if (node.Left is MemberAccessExpressionSyntax memberAccess && memberAccess.Expression is ThisExpressionSyntax && memberAccess.Name is IdentifierNameSyntax identifierSyntax)
             {

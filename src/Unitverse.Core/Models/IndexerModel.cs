@@ -15,9 +15,9 @@
             Parameters = parameters ?? new List<ParameterModel>();
         }
 
-        public bool HasGet => Node.AccessorList.Accessors.Any(x => x.IsKind(SyntaxKind.GetAccessorDeclaration) && !x.Modifiers.Any(m => m.IsKind(SyntaxKind.PrivateKeyword)));
+        public bool HasGet => Node.AccessorList?.Accessors.Any(x => x.IsKind(SyntaxKind.GetAccessorDeclaration) && !x.Modifiers.Any(m => m.IsKind(SyntaxKind.PrivateKeyword))) ?? false;
 
-        public bool HasSet => Node.AccessorList.Accessors.Any(x => x.IsKind(SyntaxKind.SetAccessorDeclaration) && !x.Modifiers.Any(m => m.IsKind(SyntaxKind.PrivateKeyword)));
+        public bool HasSet => Node.AccessorList?.Accessors.Any(x => x.IsKind(SyntaxKind.SetAccessorDeclaration) && !x.Modifiers.Any(m => m.IsKind(SyntaxKind.PrivateKeyword))) ?? false;
 
         public IList<ParameterModel> Parameters { get; }
 

@@ -17,7 +17,7 @@
                 throw new ArgumentNullException(nameof(options));
             }
 
-            var context = new GenerationContext();
+            var context = new GenerationContext(options.GenerationOptions);
 
             // test
             var testFramework = CreateTestFramework(options);

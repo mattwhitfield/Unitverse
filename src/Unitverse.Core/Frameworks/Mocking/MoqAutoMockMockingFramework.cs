@@ -27,7 +27,7 @@
             // activate if the class model primary constructor takes all interface params, or there is no primary constructor
             IsActive =
                 classModel.DefaultConstructor == null ||
-                classModel.DefaultConstructor.Parameters.All(x => x.TypeInfo.Type.TypeKind == TypeKind.Interface);
+                classModel.DefaultConstructor.Parameters.All(x => x.TypeInfo.IsInterface());
         }
 
         public override IEnumerable<UsingDirectiveSyntax> GetUsings()
@@ -55,7 +55,7 @@
             return base.GetFieldInitializer(type);
         }
 
-        public override ExpressionSyntax GetObjectCreationExpression(TypeSyntax type)
+        public override ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type)
         {
             if (IsActive)
             {

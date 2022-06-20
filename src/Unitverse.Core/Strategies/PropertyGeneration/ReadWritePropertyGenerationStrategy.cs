@@ -51,6 +51,11 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
+            if (property.Symbol == null)
+            {
+                yield break;
+            }
+
             var target = property.IsStatic ? model.TypeSyntax : model.TargetInstance;
 
             var interfaceMethodsImplemented = model.GetImplementedInterfaceSymbolsFor(property.Symbol);
@@ -62,9 +67,12 @@
             method.BlankLine();
 
             var defaultValue = AssignmentValueHelper.GetDefaultAssignmentValue(property.TypeInfo, model.SemanticModel, _frameworkSet);
-            var declareTestValue = Generate.VariableDeclaration(property.TypeInfo.Type, _frameworkSet, "testValue", defaultValue);
 
-            method.Arrange(declareTestValue);
+            if (property.TypeInfo.Type != null)
+            {
+                var declareTestValue = Generate.VariableDeclaration(property.TypeInfo.Type, _frameworkSet, "testValue", defaultValue);
+                method.Arrange(declareTestValue);
+            }
 
             method.Act(Generate.Statement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, property.Access(target), SyntaxFactory.IdentifierName("testValue"))));
 

@@ -8,9 +8,9 @@
 
     public static class TypeInfoExtensions
     {
-        public static bool IsReferenceTypeAndNotString(this ITypeSymbol symbol)
+        public static bool IsReferenceTypeAndNotString(this ITypeSymbol? symbol)
         {
-            return symbol.IsReferenceType && symbol.SpecialType != SpecialType.System_String;
+            return symbol != null && symbol.IsReferenceType && symbol.SpecialType != SpecialType.System_String;
         }
 
         public static string GetLastNamePart(this ITypeSymbol symbol)
@@ -51,9 +51,14 @@
             return symbol.GetLastNamePart();
         }
 
+        public static bool IsInterface(this TypeInfo typeInfo)
+        {
+            return typeInfo.Type != null && typeInfo.Type.TypeKind == TypeKind.Interface;
+        }
+
         public static TypeSyntax ToTypeSyntax(this TypeInfo typeInfo, IGenerationContext context)
         {
-            return typeInfo.Type.ToTypeSyntax(context);
+            return typeInfo.Type?.ToTypeSyntax(context) ?? SyntaxFactory.IdentifierName("UnknownType");
         }
 
         public static TypeSyntax ToTypeSyntax(this ITypeSymbol symbol, IGenerationContext context)

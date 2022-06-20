@@ -27,7 +27,7 @@
             return Generate.MemberInvocation(actual, "Should");
         }
 
-        private static ExpressionSyntax Should(ExpressionSyntax actual, string methodName, ExpressionSyntax expected = null)
+        private static ExpressionSyntax Should(ExpressionSyntax actual, string methodName, ExpressionSyntax? expected = null)
         {
             var invocation = Generate.MemberInvocation(Should(actual), methodName);
 

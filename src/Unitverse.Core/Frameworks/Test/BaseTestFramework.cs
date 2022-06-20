@@ -27,14 +27,14 @@
 
         public IUnitTestGeneratorOptions Options { get; }
 
-        protected MethodDeclarationSyntax AddXmlCommentsIfConfigured(MethodDeclarationSyntax method, string description, string parameterName = null, string parameterDescription = null)
+        protected MethodDeclarationSyntax AddXmlCommentsIfConfigured(MethodDeclarationSyntax method, string description, string? parameterName = null, string? parameterDescription = null)
         {
             if (Options.GenerationOptions.EmitXmlDocumentation)
             {
                 IEnumerable<XmlElementSyntax> Elements()
                 {
                     yield return XmlCommentHelper.Summary(XmlCommentHelper.TextLiteral(description));
-                    if (!string.IsNullOrWhiteSpace(parameterName) && !string.IsNullOrWhiteSpace(parameterDescription))
+                    if (parameterName != null && parameterDescription != null && !string.IsNullOrWhiteSpace(parameterName) && !string.IsNullOrWhiteSpace(parameterDescription))
                     {
                         yield return XmlCommentHelper.Param(parameterName, parameterDescription);
                     }
@@ -94,7 +94,7 @@
             return new SectionedMethodHandler(method, Options.GenerationOptions, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }
 
-        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues, string description)
+        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object?> testValues, string description)
         {
             if (valueType == null)
             {

@@ -79,7 +79,7 @@
 
         public IList<ParameterModel> Parameters { get; }
 
-        public ExpressionSyntax Invoke(ClassModel owner, bool suppressAwait, IFrameworkSet frameworkSet, params CSharpSyntaxNode[] arguments)
+        public ExpressionSyntax? Invoke(ClassModel owner, bool suppressAwait, IFrameworkSet frameworkSet, params CSharpSyntaxNode[] arguments)
         {
             if (owner == null)
             {

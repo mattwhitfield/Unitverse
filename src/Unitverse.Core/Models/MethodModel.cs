@@ -29,7 +29,7 @@
             }
         }
 
-        public IMethodSymbol Symbol { get; }
+        public IMethodSymbol? Symbol { get; }
 
         public bool IsAsync { get; }
 
@@ -60,7 +60,10 @@
             {
                 ownerTargetInstance = SyntaxFactory.ParenthesizedExpression(SyntaxFactory.CastExpression(Node.ExplicitInterfaceSpecifier.Name, ownerTargetInstance));
                 var typeSymbol = owner.SemanticModel.GetTypeInfo(Node.ExplicitInterfaceSpecifier.Name).Type;
-                frameworkSet.Context.AddEmittedType(typeSymbol);
+                if (typeSymbol != null)
+                {
+                    frameworkSet.Context.AddEmittedType(typeSymbol);
+                }
             }
 
             var name = Name == OriginalName ? Node.Identifier.Text : Name;

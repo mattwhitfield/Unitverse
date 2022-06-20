@@ -37,7 +37,7 @@
             _selections[sourceProjectUniqueName] = targetProjectName;
         }
 
-        private static TargetSelectionRegister _instance;
+        private static TargetSelectionRegister? _instance;
 
         public static TargetSelectionRegister Instance
         {

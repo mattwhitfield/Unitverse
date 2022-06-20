@@ -12,7 +12,7 @@
 
     public static class MockHelper
     {
-        public static bool PrepareMockCalls(ClassModel model, CSharpSyntaxNode targetBody, ExpressionSyntax propertyAccess, IList<ISymbol> interfaceMethodsImplemented, IEnumerable<string> parameterNames, IFrameworkSet frameworkSet, out List<StatementSyntax> mockSetupStatements, out List<StatementSyntax> mockAssertionStatements)
+        public static bool PrepareMockCalls(ClassModel model, CSharpSyntaxNode targetBody, ExpressionSyntax? propertyAccess, IList<ISymbol> interfaceMethodsImplemented, IEnumerable<string> parameterNames, IFrameworkSet frameworkSet, out List<StatementSyntax> mockSetupStatements, out List<StatementSyntax> mockAssertionStatements)
         {
             mockSetupStatements = new List<StatementSyntax>();
             mockAssertionStatements = new List<StatementSyntax>();
@@ -55,7 +55,7 @@
                                 var isPlainTaskReturnType = isAsync && ((INamedTypeSymbol)returnType).TypeArguments.Length == 0;
 
                                 var hasReturnType = !dependencyMethod.ReturnsVoid && !isPlainTaskReturnType;
-                                var parameters = default(IEnumerable<string>);
+                                var parameters = Enumerable.Empty<string>();
 
                                 if (hasReturnType)
                                 {
@@ -112,7 +112,7 @@
 
                                 mockSetupStatements.Add(Generate.Statement(frameworkSet.MockingFramework.GetSetupFor(dependencyProperty, mockFieldName, model.SemanticModel, frameworkSet, expectedReturnValue)));
 
-                                if (isPlainInterfacePropertyRedirection)
+                                if (isPlainInterfacePropertyRedirection && propertyAccess != null)
                                 {
                                     // add assert to check that the property is the same as 'expectedValue'
                                     mockAssertionStatements.Add(frameworkSet.AssertionFramework.AssertEqual(propertyAccess, SyntaxFactory.IdentifierName("expectedValue"), dependencyProperty.Type.IsReferenceTypeAndNotString()));

@@ -148,7 +148,7 @@
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, container, member);
         }
 
-        public static LiteralExpressionSyntax Literal(object literal)
+        public static LiteralExpressionSyntax Literal(object? literal)
         {
             if (literal is string s)
             {
@@ -290,7 +290,7 @@
             return SyntaxFactory.Attribute(nameSyntax);
         }
 
-        public static AttributeSyntax Attribute(string name, params object[] arguments)
+        public static AttributeSyntax Attribute(string name, params object?[] arguments)
         {
             if (arguments == null)
             {
@@ -449,7 +449,7 @@
         {
             var typeSyntax = typeInfo.ToTypeSyntax(frameworkSet.Context);
             ExpressionSyntax defaultExpression;
-            if (typeInfo.Type.TypeKind == TypeKind.Interface)
+            if (typeInfo.IsInterface())
             {
                 typeSyntax = frameworkSet.MockingFramework.GetFieldType(typeSyntax);
                 frameworkSet.Context.InterfacesMocked++;

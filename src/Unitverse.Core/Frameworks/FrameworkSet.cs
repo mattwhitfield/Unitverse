@@ -41,7 +41,7 @@
             return methodHandler;
         }
 
-        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object> testValues, string description)
+        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object?> testValues, string description)
         {
             var methodHandler = _testMethodFactory.CreateTestCaseMethod(nameResolver, namingContext, isAsync, isStatic, valueType, testValues, description);
             Context.CurrentMethod = methodHandler;

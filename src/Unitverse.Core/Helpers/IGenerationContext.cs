@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
-    using Unitverse.Core.Models;
 
     public interface IGenerationContext : IGenerationStatistics
     {
@@ -10,7 +9,7 @@
 
         IEnumerable<string> GenericTypesVisited { get; }
 
-        IDictionary<string, ITypeSymbol> GenericTypes { get; }
+        IDictionary<string, ITypeSymbol?> GenericTypes { get; }
 
         bool MocksUsed { get; set; }
 
@@ -18,7 +17,7 @@
 
         void AddVisitedGenericType(string identifier);
 
-        ModelGenerationContext CurrentModel { get; set; }
+        bool CurrentModelIsStatic { get; set; }
 
         SectionedMethodHandler CurrentMethod { get; set; }
     }

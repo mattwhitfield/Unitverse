@@ -13,7 +13,7 @@
             var creationExpression = CreationExpression;
             if (options.UseAutoFixtureForMocking)
             {
-                ExpressionSyntax customization = null;
+                ExpressionSyntax? customization = null;
                 switch (options.MockingFrameworkType)
                 {
                     case MockingFrameworkType.NSubstitute:

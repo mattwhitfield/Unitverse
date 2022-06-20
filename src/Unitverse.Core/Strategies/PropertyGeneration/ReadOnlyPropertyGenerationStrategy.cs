@@ -59,6 +59,11 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
+            if (property.Symbol == null)
+            {
+                yield break;
+            }
+
             var target = property.IsStatic ? model.TypeSyntax : model.TargetInstance;
 
             var method = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanGet, namingContext, false, model.IsStatic, "Checks that the " + property.Name + " property can be read from.");
@@ -71,7 +76,7 @@
 
             if (!testIsComplete)
             {
-                var bodyStatement = _frameworkSet.AssertionFramework.AssertIsInstanceOf(property.Access(target), property.TypeInfo.ToTypeSyntax(_frameworkSet.Context), property.TypeInfo.Type.IsReferenceType);
+                var bodyStatement = _frameworkSet.AssertionFramework.AssertIsInstanceOf(property.Access(target), property.TypeInfo.ToTypeSyntax(_frameworkSet.Context), property.TypeInfo.Type?.IsReferenceType ?? false);
 
                 method.Assert(bodyStatement);
                 method.BlankLine();

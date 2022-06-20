@@ -56,7 +56,7 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var withDefaults = !SupportedTypes.Contains(property.TypeInfo.Type.SpecialType);
+            var withDefaults = property.TypeInfo.Type != null && !SupportedTypes.Contains(property.TypeInfo.Type.SpecialType);
 
             model.RequiredAssets.Add(TargetAsset.PropertyTester);
 

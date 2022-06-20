@@ -43,7 +43,7 @@
                 return false;
             }
 
-            return model.Constructors.SelectMany(x => x.Parameters).Any(x => x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType == SpecialType.System_String) && !model.IsStatic;
+            return model.Constructors.SelectMany(x => x.Parameters).Any(x => x.TypeInfo.Type != null && x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType == SpecialType.System_String) && !model.IsStatic;
         }
 
         public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
@@ -58,13 +58,13 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var nullableParameters = new HashSet<string>(model.Constructors.SelectMany(x => x.Parameters).Where(x => x.TypeInfo.Type.SpecialType == SpecialType.System_String).Select(x => x.Name), StringComparer.OrdinalIgnoreCase);
+            var nullableParameters = new HashSet<string>(model.Constructors.SelectMany(x => x.Parameters).Where(x => x.TypeInfo.Type != null && x.TypeInfo.Type.SpecialType == SpecialType.System_String).Select(x => x.Name), StringComparer.OrdinalIgnoreCase);
 
             foreach (var nullableParameter in nullableParameters)
             {
                 namingContext = namingContext.WithParameterName(nullableParameter.ToPascalCase());
                 var isNonNullable = model.Constructors.SelectMany(x => x.Parameters.Where(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))).All(x => x.IsNullableTypeSyntax || x.HasNullDefaultValue);
-                object[] testValues = isNonNullable ? new object[] { string.Empty, "   " } : new object[] { null, string.Empty, "   " };
+                object?[] testValues = isNonNullable ? new object?[] { string.Empty, "   " } : new object?[] { null, string.Empty, "   " };
                 var generatedMethod = _frameworkSet.CreateTestCaseMethod(_frameworkSet.NamingProvider.CannotConstructWithInvalid, namingContext, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues, "Checks that the constructor throws when the " + nullableParameter + " parameter is null, empty or white space.");
 
                 foreach (var constructorModel in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))))

@@ -22,7 +22,7 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
         [SetUp]
         public void SetUp()
         {
-            var generationContext = new GenerationContext();
+            var generationContext = new GenerationContext(Substitute.For<IGenerationOptions>());
 
             var options = Substitute.For<INamingOptions>();
             options.ImplementsIComparableNamingPattern.Returns("ImplementsIComparable{0}");

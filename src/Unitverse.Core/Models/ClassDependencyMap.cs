@@ -35,7 +35,7 @@
             _fieldTypes = fieldTypes ?? throw new ArgumentNullException(nameof(fieldTypes));
         }
 
-        public ITypeSymbol GetTypeSymbolFor(string fieldName)
+        public ITypeSymbol? GetTypeSymbolFor(string fieldName)
         {
             if (_fieldTypes.TryGetValue(fieldName, out var typeSymbol))
             {

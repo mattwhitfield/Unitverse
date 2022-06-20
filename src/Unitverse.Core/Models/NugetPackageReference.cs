@@ -4,7 +4,7 @@ namespace Unitverse.Core.Models
 
     public class NugetPackageReference : INugetPackageReference
     {
-        public NugetPackageReference(string name, string version)
+        public NugetPackageReference(string name, string? version)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -17,6 +17,6 @@ namespace Unitverse.Core.Models
 
         public string Name { get; }
 
-        public string Version { get; }
+        public string? Version { get; }
     }
 }

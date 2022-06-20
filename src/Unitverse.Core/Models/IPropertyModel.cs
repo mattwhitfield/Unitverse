@@ -11,7 +11,7 @@
 
         bool HasInit { get; }
 
-        IPropertySymbol Symbol { get; }
+        IPropertySymbol? Symbol { get; }
 
         TypeInfo TypeInfo { get; }
 

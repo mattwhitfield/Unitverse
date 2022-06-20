@@ -6,7 +6,7 @@
 
     public class EnumEditableItem : EditableItem
     {
-        public EnumEditableItem(string text, string description, string fieldName, object value, Action<object> setValue, Type enumerationType, bool showSourceIcon, string sourceFileName)
+        public EnumEditableItem(string text, string description, string fieldName, object value, Action<object> setValue, Type enumerationType, bool showSourceIcon, string? sourceFileName)
             : base(text, description, fieldName, showSourceIcon, sourceFileName)
         {
             var selectedValueName = value.ToString();
@@ -15,7 +15,7 @@
             {
                 var enumValueName = enumValue.ToString();
                 var field = enumerationType.GetField(enumValueName);
-                var enumValueText = Attribute.IsDefined(field, typeof(DescriptionAttribute)) ? (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute).Description : enumValueName;
+                var enumValueText = Attribute.IsDefined(field, typeof(DescriptionAttribute)) ? ((DescriptionAttribute)Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute))).Description : enumValueName;
 
                 var item = new ObjectItem(enumValueText, enumValue);
                 Items.Add(item);
@@ -32,9 +32,9 @@
 
         public List<ObjectItem> Items { get; } = new List<ObjectItem>();
 
-        private ObjectItem _selectedItem;
+        private ObjectItem? _selectedItem;
 
-        public ObjectItem SelectedItem
+        public ObjectItem? SelectedItem
         {
             get
             {
@@ -46,7 +46,11 @@
                 if (value != _selectedItem)
                 {
                     _selectedItem = value;
-                    _setValue(value.Value);
+                    if (value != null)
+                    {
+                        _setValue(value.Value);
+                    }
+
                     RaisePropertyChanged(nameof(SelectedItem));
                 }
             }

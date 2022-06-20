@@ -102,7 +102,7 @@
             {
                 if (record.ParameterList != null)
                 {
-                    var dummyContext = new GenerationContext();
+                    var dummyContext = new GenerationContext(options.GenerationOptions);
                     foreach (var recordContstructor in model.TypeSymbol.Constructors.Where(x => x.IsImplicitlyDeclared && !model.Constructors.Any(c => c == x)))
                     {
                         var constructor = SyntaxFactory.ConstructorDeclaration(model.ClassName);
@@ -217,9 +217,13 @@
             foreach (var parameter in parameterList)
             {
                 var typeModel = SemanticModel.GetDeclaredSymbol(parameter);
-                var typeInfo = SemanticModel.GetTypeInfo(parameter.Type);
 
-                parameters.Add(new ParameterModel(typeModel.Name, parameter, typeModel.ToDisplayString(), typeInfo));
+                if (typeModel != null && parameter.Type != null)
+                {
+                    var typeInfo = SemanticModel.GetTypeInfo(parameter.Type);
+
+                    parameters.Add(new ParameterModel(typeModel.Name, parameter, typeModel.ToDisplayString(), typeInfo));
+                }
             }
 
             return parameters;

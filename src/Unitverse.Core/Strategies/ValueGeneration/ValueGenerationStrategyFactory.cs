@@ -94,12 +94,12 @@
             return Guid.NewGuid();
         }
 
-        public static ExpressionSyntax GenerateFor(ITypeSymbol symbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
+        public static ExpressionSyntax? GenerateFor(ITypeSymbol symbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
             return GenerateFor(symbol.ToFullName(), symbol, model, visitedTypes, frameworkSet);
         }
 
-        public static ExpressionSyntax GenerateFor(string typeName, ITypeSymbol symbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
+        public static ExpressionSyntax? GenerateFor(string typeName, ITypeSymbol symbol, SemanticModel model, HashSet<string> visitedTypes, IFrameworkSet frameworkSet)
         {
             if (symbol == null)
             {
@@ -110,7 +110,10 @@
             if (string.Equals(typeName, "System.Threading.Tasks.Task", StringComparison.OrdinalIgnoreCase) && symbol is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.IsGenericType && !namedTypeSymbol.IsUnboundGenericType && namedTypeSymbol.TypeArguments.Length == 1)
             {
                 var returnableValue = GenerateFor(namedTypeSymbol.TypeArguments[0], model, visitedTypes, frameworkSet);
-                return SyntaxFactory.InvocationExpression(Generate.MemberAccess("Task", "FromResult"), Generate.Arguments(returnableValue));
+                if (returnableValue != null)
+                {
+                    return SyntaxFactory.InvocationExpression(Generate.MemberAccess("Task", "FromResult"), Generate.Arguments(returnableValue));
+                }
             }
 
             var strategy = Strategies.FirstOrDefault(x => x.SupportedTypeNames.Any(t => string.Equals(t, typeName, StringComparison.OrdinalIgnoreCase)));

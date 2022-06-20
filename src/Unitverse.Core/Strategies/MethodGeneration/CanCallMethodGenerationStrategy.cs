@@ -56,6 +56,11 @@
 
             var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CanCall, namingContext, method.IsAsync, model.IsStatic, "Checks that the " + method.Name + " method functions correctly.");
 
+            if (method.Symbol == null)
+            {
+                yield break;
+            }
+
             var interfaceMethodsImplemented = model.GetImplementedInterfaceSymbolsFor(method.Symbol);
             var testIsComplete = MockHelper.PrepareMockCalls(model, method.Node, null, interfaceMethodsImplemented, method.Parameters.Select(x => x.Name), _frameworkSet, out var mockSetupStatements, out var mockAssertionStatements);
 
@@ -79,7 +84,10 @@
                         paramIdentifier = SyntaxFactory.IdentifierName(paramName);
                     }
 
-                    generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, paramName, defaultAssignmentValue));
+                    if (parameter.TypeInfo.Type != null)
+                    {
+                        generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, paramName, defaultAssignmentValue));
+                    }
 
                     if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
                     {

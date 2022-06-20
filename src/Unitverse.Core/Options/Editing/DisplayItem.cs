@@ -5,7 +5,7 @@
 
     public abstract class DisplayItem : INotifyPropertyChanged
     {
-        protected DisplayItem(string text, bool showSourceIcon, string sourceFileName)
+        protected DisplayItem(string text, bool showSourceIcon, string? sourceFileName)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -40,7 +40,7 @@
 
         public bool ShowAutoDetectionSource { get; private set; }
 
-        public string SourceFileName { get; }
+        public string? SourceFileName { get; }
 
         public abstract EditableItemType ItemType { get; }
 
@@ -56,6 +56,6 @@
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
