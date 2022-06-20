@@ -6,5 +6,7 @@
     public interface IConstructorModel : ITestableModel<ConstructorDeclarationSyntax>
     {
         IList<ParameterModel> Parameters { get; }
+
+        bool IsFromRelatedPartial { get; set; }
     }
 }

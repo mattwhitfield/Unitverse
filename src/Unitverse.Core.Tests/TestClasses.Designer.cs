@@ -1374,6 +1374,33 @@ namespace Unitverse.Core.Tests {
         /// <summary>
         ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
         ///{
+        ///
+        ///    public partial class TestClass
+        ///    {
+        ///        public TestClass(string stringProp)
+        ///        {
+        ///
+        ///        }
+        ///    }
+        ///
+        ///    public partial class TestClass
+        ///    {
+        ///	    public void ThisIsAMethod(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string PartialClasses {
+            get {
+                return ResourceManager.GetString("PartialClasses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///{
         ///	using System;
         ///
         ///    public class SomePoco
@@ -1843,19 +1870,17 @@ namespace Unitverse.Core.Tests {
         ///
         ///    public class Writer
         ///    {
-        ///        public void Write(char c);
-        ///        public void Write(byte b);
-        ///        public void Write(short s);
-        ///        public void Write(int i);
-        ///        public void Write(long l);
-        ///        public void Write(double d);
-        ///        public void Write(decimal d);
-        ///        public void Write(DateTime d);
-        ///        public void Write(string s);
-        ///        public void Write(TimeSpan t);
-        ///        public void Write(Guid g);
-        ///    }
-        ///}.
+        ///        public void Write(char c) { }
+        ///        public void Write(byte b) { }
+        ///        public void Write(short s) { }
+        ///        public void Write(int i) { }
+        ///        public void Write(long l) { }
+        ///        public void Write(double d) { }
+        ///        public void Write(decimal d) { }
+        ///        public void Write(DateTime d) { }
+        ///        public void Write(string s) { }
+        ///        public void Write(TimeSpan t) { }
+        ///        public void W [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ValueGeneration {
             get {

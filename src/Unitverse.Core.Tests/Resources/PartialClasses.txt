@@ -1,0 +1,21 @@
+namespace TestNamespace.SubNameSpace
+{
+    public partial class TestClass
+    {
+	    public void ThisIsAMethod(string methodName, int methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+    }
+}
+-----------------------------------------
+namespace TestNamespace.SubNameSpace
+{
+    public partial class TestClass
+    {
+        public TestClass(string stringProp)
+        {
+
+        }
+    }
+}

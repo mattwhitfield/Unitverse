@@ -92,7 +92,7 @@
             var options = UnitTestGeneratorTests.ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, false, classAsText, true);
 
             // Compile the first
-            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, options.GenerationOptions.UseAutoFixture, options.GenerationOptions.UseAutoFixtureForMocking, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
+            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, options.GenerationOptions.UseAutoFixture, options.GenerationOptions.UseAutoFixtureForMocking, classAsText, out var tree, out var secondTree, out var references, out var externalInitTree, out var semanticModel);
             var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             Assert.IsNotNull(core);
@@ -102,6 +102,11 @@
             // Check the first generated tree
             var generatedTree = CSharpSyntaxTree.ParseText(core.FileContent, new CSharpParseOptions(LanguageVersion.Latest));
             var syntaxTrees = new List<SyntaxTree> { tree, externalInitTree, generatedTree };
+            if (secondTree != null)
+            {
+                syntaxTrees.Add(secondTree);
+            }
+
             var propertyTesterEmitted = false;
             if (core.RequiredAssets.Any(x => x == TargetAsset.PropertyTester))
             {
@@ -117,7 +122,7 @@
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
             // Compile the second, using the output from the first compile
-            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, false, updatedClassAsText, out var updatedTree, out _, out _, out var updatedModel);
+            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, false, updatedClassAsText, out var updatedTree, out _, out _, out _, out var updatedModel);
             var core2 = await CoreGenerator.Generate(updatedModel, null, targetCompilation.GetSemanticModel(generatedTree), false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
 
