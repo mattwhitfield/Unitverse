@@ -9,6 +9,7 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Forms;
@@ -76,7 +77,7 @@
 
             var options = ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, useAutoFixtureForMocking, classAsText, false);
 
-            Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, useAutoFixtureForMocking, classAsText, out var tree, out var references, out var externalInitTree, out var semanticModel);
+            Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, useAutoFixtureForMocking, classAsText, out var tree, out var secondTree, out var references, out var externalInitTree, out var semanticModel);
 
             var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
@@ -87,6 +88,10 @@
             var generatedTree = CSharpSyntaxTree.ParseText(core.FileContent, new CSharpParseOptions(LanguageVersion.Latest));
 
             var syntaxTrees = new List<SyntaxTree> { tree, externalInitTree, generatedTree };
+            if (secondTree != null)
+            {
+                syntaxTrees.Add(secondTree);
+            }
 
             if (core.RequiredAssets.Any(x => x == TargetAsset.PropertyTester))
             {
@@ -115,8 +120,25 @@
             Assert.That(streamLength, Is.GreaterThan(0));
         }
 
-        public static void Compile(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking, string classAsText, out SyntaxTree tree, out List<MetadataReference> references, out SyntaxTree externalInitTree, out SemanticModel semanticModel)
+        public static void Compile(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking, string classAsText, out SyntaxTree tree, out SyntaxTree secondTree, out List<MetadataReference> references, out SyntaxTree externalInitTree, out SemanticModel semanticModel)
         {
+            StringBuilder first = new StringBuilder(), second = new StringBuilder();
+            var current = first;
+
+            foreach (var line in classAsText.Lines())
+            {
+                if (line.Trim().All(x => x == '-') && line.Trim().Length > 0)
+                {
+                    current = second;
+                }
+                else
+                {
+                    current.AppendLine(line);
+                }
+            }
+
+            classAsText = first.ToString();
+
             tree = CSharpSyntaxTree.ParseText(classAsText, new CSharpParseOptions(LanguageVersion.Latest));
             var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
             references = new List<MetadataReference>
@@ -159,9 +181,20 @@
             }
 
             externalInitTree = CSharpSyntaxTree.ParseText("namespace System.Runtime.CompilerServices { internal static class IsExternalInit { } }", new CSharpParseOptions(LanguageVersion.Latest));
+            var trees = new List<SyntaxTree> { tree, externalInitTree };
+            if (second.Length > 0)
+            {
+                secondTree = CSharpSyntaxTree.ParseText(second.ToString(), new CSharpParseOptions(LanguageVersion.Latest));
+                trees.Add(secondTree);
+            }
+            else
+            {
+                secondTree = null;
+            }
+
             var compilation = CSharpCompilation.Create(
                 "MyTest",
-                syntaxTrees: new[] { tree, externalInitTree },
+                syntaxTrees: trees,
                 references: references);
 
             semanticModel = compilation.GetSemanticModel(tree);

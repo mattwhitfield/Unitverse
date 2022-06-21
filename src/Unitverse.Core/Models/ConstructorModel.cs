@@ -20,9 +20,11 @@
 
         public IList<ParameterModel> Parameters { get; }
 
+        public bool IsFromRelatedPartial { get; set; }
+
         public override void SetShouldGenerateForSingleItem(SyntaxNode syntaxNode)
         {
-            ShouldGenerate = syntaxNode is ConstructorDeclarationSyntax || syntaxNode == Node.Parent;
+            ShouldGenerate = (syntaxNode is ConstructorDeclarationSyntax && !IsFromRelatedPartial) || syntaxNode == Node.Parent;
         }
     }
 }

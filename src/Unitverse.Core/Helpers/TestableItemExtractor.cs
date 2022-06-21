@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,13 +12,13 @@
 
     public class TestableItemExtractor
     {
+        private readonly SemanticModel _semanticModel;
+
         public TestableItemExtractor(SyntaxTree tree, SemanticModel semanticModel)
         {
             Tree = tree ?? throw new ArgumentNullException(nameof(tree));
-            SemanticModel = semanticModel ?? throw new ArgumentNullException(nameof(semanticModel));
+            _semanticModel = semanticModel ?? throw new ArgumentNullException(nameof(semanticModel));
         }
-
-        private SemanticModel SemanticModel { get; }
 
         private SyntaxTree Tree { get; }
 
@@ -37,7 +38,7 @@
 
         public IEnumerable<ClassModel> Extract(SyntaxNode sourceSymbol, IUnitTestGeneratorOptions options)
         {
-            var models = ExtractClassModels(Tree, options).ToList();
+            var models = ExtractClassModels(Tree, _semanticModel, options).ToList();
             if (sourceSymbol != null)
             {
                 models.Each(x => x.SetShouldGenerateForSingleItem(sourceSymbol));
@@ -78,25 +79,27 @@
             return functionList;
         }
 
-        private void AddModels<TIn, TOut>(TypeDeclarationSyntax type, Func<TIn, SyntaxTokenList> modifiersSelector, Func<TIn, TOut> converter, IList<Func<SyntaxTokenList, bool>> allowedModifiers, ICollection<TOut> target)
+        private void AddModels<TIn, TOut>(TypeDeclarationSyntax type, SemanticModel semanticModel, Func<TIn, SyntaxTokenList> modifiersSelector, Func<TIn, SemanticModel, TOut> converter, IList<Func<SyntaxTokenList, bool>> allowedModifiers, ICollection<TOut> target)
         {
-            foreach (var model in type.ChildNodes().OfType<TIn>().Where(x => allowedModifiers.Any(modifierFilter => modifierFilter(modifiersSelector(x)))).Select(converter))
+            foreach (var model in type.ChildNodes().OfType<TIn>().Where(x => allowedModifiers.Any(modifierFilter => modifierFilter(modifiersSelector(x)))).Select(x => converter(x, semanticModel)))
             {
                 target.Add(model);
             }
         }
 
-        private ClassModel ExtractClassModel(TypeDeclarationSyntax syntax, IUnitTestGeneratorOptions options)
+        private ClassModel ExtractClassModel(TypeDeclarationSyntax syntax, SemanticModel semanticModel, IUnitTestGeneratorOptions options)
         {
             var allowedModifiers = GetAllowedModifiers(options);
 
-            var model = new ClassModel(syntax, SemanticModel, false);
+            var model = new ClassModel(syntax, semanticModel, false);
 
-            AddModels<ConstructorDeclarationSyntax, IConstructorModel>(syntax, x => x.Modifiers, ExtractConstructorModel, allowedModifiers, model.Constructors);
-            AddModels<OperatorDeclarationSyntax, IOperatorModel>(syntax, x => x.Modifiers, ExtractOperatorModel, allowedModifiers, model.Operators);
-            AddModels<MethodDeclarationSyntax, IMethodModel>(syntax, x => x.Modifiers, ExtractMethodModel, allowedModifiers, model.Methods);
-            AddModels<PropertyDeclarationSyntax, IPropertyModel>(syntax, x => x.Modifiers, ExtractPropertyModel, allowedModifiers, model.Properties);
-            AddModels<IndexerDeclarationSyntax, IIndexerModel>(syntax, x => x.Modifiers, ExtractIndexerModel, allowedModifiers, model.Indexers);
+            CollectRelatedPartialTypeConstructors(syntax, semanticModel, allowedModifiers, model);
+
+            AddModels<ConstructorDeclarationSyntax, IConstructorModel>(syntax, semanticModel, x => x.Modifiers, ExtractConstructorModel, allowedModifiers, model.Constructors);
+            AddModels<OperatorDeclarationSyntax, IOperatorModel>(syntax, semanticModel, x => x.Modifiers, ExtractOperatorModel, allowedModifiers, model.Operators);
+            AddModels<MethodDeclarationSyntax, IMethodModel>(syntax, semanticModel, x => x.Modifiers, ExtractMethodModel, allowedModifiers, model.Methods);
+            AddModels<PropertyDeclarationSyntax, IPropertyModel>(syntax, semanticModel, x => x.Modifiers, ExtractPropertyModel, allowedModifiers, model.Properties);
+            AddModels<IndexerDeclarationSyntax, IIndexerModel>(syntax, semanticModel, x => x.Modifiers, ExtractIndexerModel, allowedModifiers, model.Indexers);
 
             if (syntax is RecordDeclarationSyntax record)
             {
@@ -111,7 +114,7 @@
                         if (record.ParameterList != null)
                         {
                             constructor = constructor.WithParameterList(record.ParameterList);
-                            parameters = ExtractParameters(record.ParameterList.Parameters);
+                            parameters = ExtractParameters(record.ParameterList.Parameters, semanticModel);
                         }
                         else
                         {
@@ -135,13 +138,13 @@
                                                         .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
                                                         .WithAccessorList(SyntaxFactory.AccessorList(SyntaxFactory.SingletonList(SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration))));
 
-                            model.Properties.Add(new PropertyModel(propertyName, property, parameter.TypeInfo, SemanticModel, allProperties.FirstOrDefault(x => x.Name == propertyName)));
+                            model.Properties.Add(new PropertyModel(propertyName, property, parameter.TypeInfo, semanticModel, allProperties.FirstOrDefault(x => x.Name == propertyName)));
                         }
                     }
                 }
             }
 
-            foreach (var methodModel in syntax.ChildNodes().OfType<MethodDeclarationSyntax>().Where(x => x.ExplicitInterfaceSpecifier != null).Select(ExtractMethodModel))
+            foreach (var methodModel in syntax.ChildNodes().OfType<MethodDeclarationSyntax>().Where(x => x.ExplicitInterfaceSpecifier != null).Select(x => ExtractMethodModel(x, semanticModel)))
             {
                 model.Methods.Add(methodModel);
             }
@@ -157,7 +160,53 @@
             return model;
         }
 
-        private IEnumerable<ClassModel> ExtractClassModels(SyntaxTree tree, IUnitTestGeneratorOptions options)
+        private void CollectRelatedPartialTypeConstructors(TypeDeclarationSyntax syntax, SemanticModel semanticModel, IList<Func<SyntaxTokenList, bool>> allowedModifiers, ClassModel model)
+        {
+            if (!syntax.Modifiers.Any(x => x.Kind() == SyntaxKind.PartialKeyword))
+            {
+                return;
+            }
+
+            if (model.TypeSymbol.Locations.Length <= 1)
+            {
+                return;
+            }
+
+            var currentLocation = syntax.GetLocation();
+            foreach (var location in model.TypeSymbol.Locations.Where(x => x.SourceTree != currentLocation.SourceTree))
+            {
+                var node = location.SourceTree?.GetRoot();
+
+                if (node == null)
+                {
+                    continue;
+                }
+
+                var relatedModel = semanticModel.Compilation.GetSemanticModel(node.SyntaxTree);
+
+                if (relatedModel == null)
+                {
+                    continue;
+                }
+
+                // this is a related partial
+                foreach (var child in node.DescendantNodesAndSelf().OfType<TypeDeclarationSyntax>())
+                {
+                    ConstructorModel ExtractRelatedPartialConstructorModel(ConstructorDeclarationSyntax constructor, SemanticModel semanticModel)
+                    {
+                        var constructorModel = ExtractConstructorModel(constructor, semanticModel);
+                        constructorModel.IsFromRelatedPartial = true;
+                        constructorModel.ShouldGenerate = false;
+
+                        return constructorModel;
+                    }
+
+                    AddModels<ConstructorDeclarationSyntax, IConstructorModel>(child, relatedModel, x => x.Modifiers, ExtractRelatedPartialConstructorModel, allowedModifiers, model.Constructors);
+                }
+            }
+        }
+
+        private IEnumerable<ClassModel> ExtractClassModels(SyntaxTree tree, SemanticModel semanticModel, IUnitTestGeneratorOptions options)
         {
             var root = tree.GetRoot();
 
@@ -166,7 +215,7 @@
 
             foreach (var syntax in typeList)
             {
-                var model = ExtractClassModel(syntax, options);
+                var model = ExtractClassModel(syntax, semanticModel, options);
 
                 fileUsings.ForEach(model.Usings.Add);
 
@@ -174,53 +223,53 @@
             }
         }
 
-        private ConstructorModel ExtractConstructorModel(ConstructorDeclarationSyntax constructor)
+        private ConstructorModel ExtractConstructorModel(ConstructorDeclarationSyntax constructor, SemanticModel semanticModel)
         {
             var name = constructor.Identifier.ValueText;
 
-            var parameters = ExtractParameters(constructor.ParameterList.Parameters);
+            var parameters = ExtractParameters(constructor.ParameterList.Parameters, semanticModel);
 
             return new ConstructorModel(name, parameters, constructor);
         }
 
-        private IndexerModel ExtractIndexerModel(IndexerDeclarationSyntax indexer)
+        private IndexerModel ExtractIndexerModel(IndexerDeclarationSyntax indexer, SemanticModel semanticModel)
         {
-            var parameters = ExtractParameters(indexer.ParameterList.Parameters);
+            var parameters = ExtractParameters(indexer.ParameterList.Parameters, semanticModel);
 
-            var typeInfo = SemanticModel.GetTypeInfo(indexer.Type);
+            var typeInfo = semanticModel.GetTypeInfo(indexer.Type);
 
             return new IndexerModel("this", parameters, typeInfo, indexer);
         }
 
-        private MethodModel ExtractMethodModel(MethodDeclarationSyntax method)
+        private MethodModel ExtractMethodModel(MethodDeclarationSyntax method, SemanticModel semanticModel)
         {
             var methodName = method.Identifier.ValueText;
 
-            var parameters = ExtractParameters(method.ParameterList.Parameters);
+            var parameters = ExtractParameters(method.ParameterList.Parameters, semanticModel);
 
-            return new MethodModel(methodName, parameters, method, SemanticModel);
+            return new MethodModel(methodName, parameters, method, semanticModel);
         }
 
-        private OperatorModel ExtractOperatorModel(OperatorDeclarationSyntax operatorSyntax)
+        private OperatorModel ExtractOperatorModel(OperatorDeclarationSyntax operatorSyntax, SemanticModel semanticModel)
         {
             var methodName = operatorSyntax.OperatorToken.ValueText;
 
-            var parameters = ExtractParameters(operatorSyntax.ParameterList.Parameters);
+            var parameters = ExtractParameters(operatorSyntax.ParameterList.Parameters, semanticModel);
 
-            return new OperatorModel(methodName, parameters, operatorSyntax, SemanticModel);
+            return new OperatorModel(methodName, parameters, operatorSyntax, semanticModel);
         }
 
-        private List<ParameterModel> ExtractParameters(SeparatedSyntaxList<ParameterSyntax> parameterList)
+        private List<ParameterModel> ExtractParameters(SeparatedSyntaxList<ParameterSyntax> parameterList, SemanticModel semanticModel)
         {
             var parameters = new List<ParameterModel>();
 
             foreach (var parameter in parameterList)
             {
-                var typeModel = SemanticModel.GetDeclaredSymbol(parameter);
+                var typeModel = semanticModel.GetDeclaredSymbol(parameter);
 
                 if (typeModel != null && parameter.Type != null)
                 {
-                    var typeInfo = SemanticModel.GetTypeInfo(parameter.Type);
+                    var typeInfo = semanticModel.GetTypeInfo(parameter.Type);
 
                     parameters.Add(new ParameterModel(typeModel.Name, parameter, typeModel.ToDisplayString(), typeInfo));
                 }
@@ -229,13 +278,13 @@
             return parameters;
         }
 
-        private PropertyModel ExtractPropertyModel(PropertyDeclarationSyntax property)
+        private PropertyModel ExtractPropertyModel(PropertyDeclarationSyntax property, SemanticModel semanticModel)
         {
             var propertyName = property.Identifier.ValueText;
 
-            var typeInfo = SemanticModel.GetTypeInfo(property.Type);
+            var typeInfo = semanticModel.GetTypeInfo(property.Type);
 
-            return new PropertyModel(propertyName, property, typeInfo, SemanticModel, null);
+            return new PropertyModel(propertyName, property, typeInfo, semanticModel, null);
         }
     }
 }
