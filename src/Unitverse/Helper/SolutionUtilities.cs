@@ -42,37 +42,45 @@
             {
 #pragma warning disable VSTHRD010
                 var selectedItemObjects = selectedItems.Cast<UIHierarchyItem>().Select(x => x.Object).ToList();
-                var items = selectedItemObjects.OfType<ProjectItem>().Concat(selectedItemObjects.OfType<Project>().Select(x => x.ProjectItems).SelectMany(x => x.OfType<ProjectItem>()));
+                var project = selectedItemObjects.OfType<Project>().FirstOrDefault();
+                if (project != null)
+                {
+                    // we pass isRoot = false here, because we're already descending into the project
+                    return GetSupportedFiles(project.ProjectItems.OfType<ProjectItem>(), recursive, false);
+                }
+                
+                return GetSupportedFiles(selectedItemObjects.OfType<ProjectItem>(), recursive, true);
 #pragma warning restore VSTHRD010
-
-                return GetSupportedFiles(items, recursive);
             }
 
             return Enumerable.Empty<ProjectItemModel>();
         }
 
-        private static IEnumerable<ProjectItemModel> GetSupportedFiles(IEnumerable<ProjectItem> items, bool recursive)
+        private static IEnumerable<ProjectItemModel> GetSupportedFiles(IEnumerable<ProjectItem> items, bool recursive, bool isRoot)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             foreach (var item in items)
             {
-                if (item.ProjectItems.Count > 0)
+                var model = new ProjectItemModel(item);
+
+                if (model.IsSupported)
                 {
-                    if (recursive)
-                    {
-                        foreach (var projectItemSummary in GetSupportedFiles(item.ProjectItems.OfType<ProjectItem>(), true))
-                        {
-                            yield return projectItemSummary;
-                        }
-                    }
+                    yield return model;
                 }
-                else
+
+                if (item.ProjectItems.Count > 0 && recursive)
                 {
-                    var model = new ProjectItemModel(item);
-                    if (model.IsSupported)
+                    // if it's a supported model, and isRoot = true (i.e. we're not already in a recursive descent) then we just want to return
+                    // the selected model without recursing into any dependent class partials.
+                    if (model.IsSupported && isRoot)
                     {
-                        yield return model;
+                        continue;
+                    }
+
+                    foreach (var projectItemSummary in GetSupportedFiles(item.ProjectItems.OfType<ProjectItem>(), true, false))
+                    {
+                        yield return projectItemSummary;
                     }
                 }
             }

@@ -11,7 +11,7 @@
             ThreadHelper.ThrowIfNotOnUIThread();
 
             Item = projectItem ?? throw new ArgumentNullException(nameof(projectItem));
-            FilePath = projectItem.FileNames[1];
+            FilePath = projectItem.FileCount > 0 ? projectItem.FileNames[1] : string.Empty;
             SourceProjectName = Item.ContainingProject.Name;
         }
 
