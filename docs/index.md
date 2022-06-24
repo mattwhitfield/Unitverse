@@ -44,3 +44,7 @@ If Unitverse finds a test project related to the source project, it will look at
 ## Contributing ✋
 
 Any contributions are welcome. Code. Feedback on what you like or what could be better. Please feel free to fork the repo and make changes, the license is MIT so you're pretty much free to do whatever you like. For more information, please see the [contributing section](contributing.md). You can get started by visiting the [Unitverse GitHub repo](https://github.com/mattwhitfield/Unitverse).
+
+## Support 🤝
+
+If you'd like to support the project but you don't want to contribute code - a really good way to help is spread the word. There isn't a donation or financial option becuase honestly I don't need donations. I am, however, rubbish at 'marketing'. So any help there would be greatly appreciated! Whether it's a blog post, a marketplace review or just telling some folks at the office - every little helps.

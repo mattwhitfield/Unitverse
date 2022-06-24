@@ -22,6 +22,10 @@ The best way to view the documentation is to visit the [documentation on GitHub 
 
 Any contributions are welcome. Code. Feedback on what you like or what could be better. Please feel free to fork the repo and make changes, the license is MIT so you're pretty much free to do whatever you like. For more information, please see the [contributing section](docs/contributing.md).
 
+## Support 🤝
+
+If you'd like to support the project but you don't want to contribute code - a really good way to help is spread the word. There isn't a donation or financial option becuase honestly I don't need donations. I am, however, rubbish at 'marketing'. So any help there would be greatly appreciated! Whether it's a blog post, a marketplace review or just telling some folks at the office - every little helps.
+
 ## History 📅
 
 Unitverse was originally the SentryOne Unit Test Generator, and was written as part of an 'innovation sprint' where we wanted to write something that made our work more efficient. Unitverse is a fork of that project, and is not affiliated with any particular company. The license has also changed from Apache to MIT - please see the [license update notice](LicenseUpdateNotice.md) for details of this change. Thanks to all the original members of the team, as well as people who have submitted code/issues since then.
