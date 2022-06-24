@@ -35,7 +35,6 @@ jobs:
         VsTargetVersion: '${{ matrix.VsTargetVersion }}'
     steps:
     - uses: actions/checkout@v2   
-        if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
       with:
         fetch-depth: '0'
     - name: Setup .NET Core
