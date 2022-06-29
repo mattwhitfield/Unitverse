@@ -31,6 +31,7 @@ namespace Unitverse.Core.Tests.Strategies.ValueGeneration
         [TestCase("System.Single")]
         [TestCase("System.Boolean")]
         [TestCase("System.Guid")]
+        [TestCase("System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
         [TestCase("System.DateTime")]
         [TestCase("System.DateTimeOffset")]
         [TestCase("System.TimeSpan")]
