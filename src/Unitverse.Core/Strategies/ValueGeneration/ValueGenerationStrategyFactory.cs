@@ -61,6 +61,7 @@
                 new TypedValueGenerationStrategy(EnumFactory.Random, "System.Enum"),
                 new SimpleValueGenerationStrategy(() => Generate.ObjectCreation(SyntaxFactory.IdentifierName("DefaultHttpContext")), "Microsoft.AspNetCore.Http.HttpContext"),
                 new SimpleValueGenerationStrategy(() => Generate.ObjectCreation(SyntaxFactory.IdentifierName("MemoryStream")), "System.IO.Stream"),
+                new SimpleValueGenerationStrategy(() => Generate.ObjectCreation(SyntaxFactory.IdentifierName("Uri"), Generate.Literal("https://test.domain" + Random.Next(int.MaxValue) + ".com")), "System.Uri"),
                 new TypedValueGenerationStrategy(ArrayFactory.ImplicitlyTyped, "System.Collections.Generic.IEnumerable"),
                 new TypedValueGenerationStrategy(ArrayFactory.ImplicitlyTyped, "System.Collections.Generic.IList"),
                 new TypedValueGenerationStrategy(ArrayFactory.ImplicitlyTypedArray, "System.Array"),
