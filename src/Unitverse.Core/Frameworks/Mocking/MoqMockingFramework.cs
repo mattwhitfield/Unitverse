@@ -6,7 +6,6 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
-    using Unitverse.Core.Options;
 
     public class MoqMockingFramework : IMockingFramework
     {
@@ -79,7 +78,7 @@
         {
             var methodCall = MockingHelper.GetMethodCall(dependencyMethod, "mock", MockingHelper.TranslateArgumentFunc(GetArgument, parameters), _context);
 
-            var isAsync = dependencyMethod.ReturnType is INamedTypeSymbol namedType && namedType.Name == "Task" && namedType.ContainingNamespace.ToDisplayString() == "System.Threading.Tasks";
+            var isAsync = dependencyMethod.IsAsyncCallable();
             var methodName = isAsync ? "ReturnsAsync" : "Returns";
 
             return Generate.MemberInvocation(Mock("Setup", mockFieldName, methodCall), methodName, expectedReturnValue);

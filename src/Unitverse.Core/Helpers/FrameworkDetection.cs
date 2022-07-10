@@ -54,6 +54,7 @@
             new Matcher<MockingFrameworkType>("NSubstitute", null, MockingFrameworkType.NSubstitute),
             new Matcher<MockingFrameworkType>("Moq.AutoMock", null, MockingFrameworkType.MoqAutoMock),
             new Matcher<MockingFrameworkType>("Moq", null, MockingFrameworkType.Moq),
+            new Matcher<MockingFrameworkType>("JustMock", null, MockingFrameworkType.JustMock),
         };
 
         private static void Resolve<T>(ref T? value, IList<Matcher<T>> matchers, string referenceName, int referenceMajorVersion)

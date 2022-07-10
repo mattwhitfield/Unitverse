@@ -4,11 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
-    using Unitverse.Core.Options;
 
     public class MoqAutoMockMockingFramework : MoqMockingFramework, IClassModelEvaluator
     {

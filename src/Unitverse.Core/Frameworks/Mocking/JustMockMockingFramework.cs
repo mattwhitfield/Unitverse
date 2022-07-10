@@ -6,11 +6,11 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
 
-    public class FakeItEasyMockingFramework : IMockingFramework
+    public class JustMockMockingFramework : IMockingFramework
     {
         private readonly IGenerationContext _context;
 
-        public FakeItEasyMockingFramework(IGenerationContext context)
+        public JustMockMockingFramework(IGenerationContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -27,7 +27,7 @@
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()
         {
-            yield return Generate.UsingDirective("FakeItEasy");
+            yield return Generate.UsingDirective("Telerik.JustMock");
         }
 
         public ExpressionSyntax GetThrowawayReference(TypeSyntax type)
@@ -43,38 +43,43 @@
             }
 
             _context.MocksUsed = true;
-            return Generate.MemberInvocation("A", Generate.GenericName("Fake", type));
+            return Generate.MemberInvocation("Mock", Generate.GenericName("Create", type));
         }
 
         private ExpressionSyntax GetArgument(ITypeSymbol typeSymbol, IGenerationContext context)
         {
-            return Generate.MemberAccess(Generate.GenericName("A", typeSymbol, context), "_");
+            return Generate.MemberInvocation("Arg", Generate.GenericName("IsAny", typeSymbol, context));
         }
 
         public ExpressionSyntax GetSetupFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, ExpressionSyntax expectedReturnValue, IEnumerable<string> parameters)
         {
             var methodCall = MockingHelper.GetMethodCall(dependencyMethod, mockFieldName, MockingHelper.TranslateArgumentFunc(GetArgument, parameters), _context);
 
-            return Generate.MemberInvocation(ACallTo(methodCall), "Returns", expectedReturnValue);
+            if (dependencyMethod.IsAsyncCallable())
+            {
+                expectedReturnValue = Generate.MemberInvocation("Task", "FromResult", expectedReturnValue);
+            }
+
+            return Generate.MemberInvocation(Mock("Arrange", methodCall), "Returns", expectedReturnValue);
         }
 
         public ExpressionSyntax GetSetupFor(IPropertySymbol dependencyProperty, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, ExpressionSyntax expectedReturnValue)
         {
             var propertyAccess = Generate.MemberAccess(mockFieldName, dependencyProperty.Name);
 
-            return Generate.MemberInvocation(ACallTo(propertyAccess), "Returns", expectedReturnValue);
+            return Generate.MemberInvocation(Mock("Arrange", propertyAccess), "Returns", expectedReturnValue);
         }
 
         public ExpressionSyntax GetAssertionFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, IEnumerable<string> parameters)
         {
             var methodCall = MockingHelper.GetMethodCall(dependencyMethod, mockFieldName, MockingHelper.TranslateArgumentFunc(GetArgument, parameters), frameworkSet.Context);
 
-            return Generate.MemberInvocation(ACallTo(methodCall), "MustHaveHappened");
+            return Mock("Assert", methodCall);
         }
 
-        private static ExpressionSyntax ACallTo(ExpressionSyntax methodCall)
+        private static ExpressionSyntax Mock(string methodName, ExpressionSyntax methodCall)
         {
-            return Generate.MemberInvocation("A", "CallTo", Generate.ParenthesizedLambdaExpression(methodCall));
+            return Generate.MemberInvocation("Mock", methodName, Generate.ParenthesizedLambdaExpression(methodCall));
         }
 
         public ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type)

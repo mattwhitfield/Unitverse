@@ -50,7 +50,7 @@
                 }
 
                 var frameworks = new[] { TestFrameworkTypes.MsTest, TestFrameworkTypes.NUnit3, TestFrameworkTypes.XUnit };
-                var mocks = new[] { MockingFrameworkType.Moq, MockingFrameworkType.NSubstitute, MockingFrameworkType.FakeItEasy, MockingFrameworkType.MoqAutoMock };
+                var mocks = new[] { MockingFrameworkType.Moq, MockingFrameworkType.NSubstitute, MockingFrameworkType.FakeItEasy, MockingFrameworkType.MoqAutoMock, MockingFrameworkType.JustMock };
 
                 foreach (var framework in frameworks)
                 {
@@ -296,7 +296,7 @@
                     break;
 
                 case MockingFrameworkType.Moq:
-                    yield return MetadataReference.CreateFromFile(typeof(Mock).Assembly.Location);
+                    yield return MetadataReference.CreateFromFile(typeof(Moq.Mock).Assembly.Location);
                     break;
 
                 case MockingFrameworkType.MoqAutoMock:
@@ -306,6 +306,10 @@
 
                 case MockingFrameworkType.FakeItEasy:
                     yield return MetadataReference.CreateFromFile(typeof(A).Assembly.Location);
+                    break;
+
+                case MockingFrameworkType.JustMock:
+                    yield return MetadataReference.CreateFromFile(typeof(Telerik.JustMock.Mock).Assembly.Location);
                     break;
             }
         }

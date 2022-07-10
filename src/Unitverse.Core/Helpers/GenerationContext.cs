@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
-    using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
     public class GenerationContext : IGenerationContext

@@ -20,7 +20,6 @@ using System.Windows.Markup;
 using NSubstitute;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Moq;
 using FakeItEasy;
 using Xunit;
 using NUnit.Framework;
@@ -258,16 +257,20 @@ namespace Unitverse.ExampleGenerator
                     break;
 
                 case MockingFrameworkType.Moq:
-                    yield return MetadataReference.CreateFromFile(typeof(Mock).Assembly.Location);
+                    yield return MetadataReference.CreateFromFile(typeof(Moq.Mock).Assembly.Location);
                     break;
 
                 case MockingFrameworkType.MoqAutoMock:
                     yield return MetadataReference.CreateFromFile(typeof(AutoMocker).Assembly.Location);
-                    yield return MetadataReference.CreateFromFile(typeof(Mock).Assembly.Location);
+                    yield return MetadataReference.CreateFromFile(typeof(Moq.Mock).Assembly.Location);
                     break;
 
                 case MockingFrameworkType.FakeItEasy:
                     yield return MetadataReference.CreateFromFile(typeof(A).Assembly.Location);
+                    break;
+
+                case MockingFrameworkType.JustMock:
+                    yield return MetadataReference.CreateFromFile(typeof(Telerik.JustMock.Mock).Assembly.Location);
                     break;
             }
         }

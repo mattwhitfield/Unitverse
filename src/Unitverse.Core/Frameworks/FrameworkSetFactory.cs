@@ -31,7 +31,7 @@
 
             // mocking
             var mockingFramework = Create(options.GenerationOptions.MockingFrameworkType, context);
-            if (options.GenerationOptions.UseAutoFixture && options.GenerationOptions.UseAutoFixtureForMocking)
+            if (options.GenerationOptions.CanUseAutoFixtureForMocking())
             {
                 mockingFramework = new AutoFixtureMockingAdaptor(mockingFramework, context);
             }
@@ -54,6 +54,8 @@
                     return new MoqAutoMockMockingFramework(context);
                 case MockingFrameworkType.FakeItEasy:
                     return new FakeItEasyMockingFramework(context);
+                case MockingFrameworkType.JustMock:
+                    return new JustMockMockingFramework(context);
                 default:
                     throw new NotSupportedException(Strings.FrameworkSetFactory_Create_Couldn_t_find_the_required_mocking_framework);
             }
