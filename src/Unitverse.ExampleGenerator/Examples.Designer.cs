@@ -268,8 +268,9 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///    public class TestClass
         ///    {
-        ///        public TestClass(IDependency dependency)
-        ///  [rest of string was truncated]&quot;;.
+        ///        IDependency _dependency;
+        ///
+        ///        public  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksFluentAssertions {
             get {
@@ -293,11 +294,11 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///    public class TestClass
         ///    {
-        ///        public TestClass(IDependency dependency)
-        ///        { }
+        ///        IDependency _dependency;
         ///
-        ///        public void SomeMethod(string methodName, int methodValue)
-        /// [rest of string was truncated]&quot;;.
+        ///        public TestClass(IDependency dependency)
+        ///        { 
+        ///            _dependency = dependenc [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksMsTestMoq {
             get {
@@ -321,10 +322,9 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///    public class TestClass
         ///    {
-        ///        public TestClass(IDependency dependency)
-        ///        { }
+        ///        IDependency _dependency;
         ///
-        /// [rest of string was truncated]&quot;;.
+        ///        public TestClass(IDep [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksMsTestMoqAutoMock {
             get {
@@ -348,10 +348,11 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///    public class TestClass
         ///    {
-        ///        public TestClass(IDependency dependency)
-        ///        { }
+        ///        IDependency _dependency;
         ///
-        ///        public void SomeMethod(string methodN [rest of string was truncated]&quot;;.
+        ///        public TestClass(IDependency dependency)
+        ///        { 
+        ///             [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksNUnitFakeItEasy {
             get {
@@ -403,10 +404,11 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///    public class TestClass
         ///    {
-        ///        public TestClass(IDependency dependency)
-        ///        { }
+        ///        IDependency _dependency;
         ///
-        ///        public void SomeMethod(string methodNam [rest of string was truncated]&quot;;.
+        ///        public TestClass(IDependency dependency)
+        ///        { 
+        ///            _d [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksXUnitNSubstitute {
             get {

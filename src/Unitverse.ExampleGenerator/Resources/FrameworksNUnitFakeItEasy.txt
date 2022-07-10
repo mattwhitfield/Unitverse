@@ -8,7 +8,7 @@ namespace Unitverse.Examples
 {
     public interface IDependency
     {
-        void Method();
+        int Method();
     }
 
     public class TestClass
@@ -22,8 +22,8 @@ namespace Unitverse.Examples
 
         public void SomeMethod(string methodName, int methodValue)
         {
-            _dependency.Method();
-            System.Console.WriteLine("Testing this");
+            var x = _dependency.Method();
+            System.Console.WriteLine("Testing this" + x);
         }
 
         public System.Threading.Tasks.Task<int> SomeAsyncMethod(string methodName, int methodValue)

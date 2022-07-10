@@ -5,7 +5,7 @@ Demonstrates how tests are generated using XUnit for the test framework and Just
 ``` csharp
 public interface IDependency
 {
-    void Method();
+    int Method();
 }
 
 public class TestClass
@@ -19,8 +19,8 @@ public class TestClass
 
     public void SomeMethod(string methodName, int methodValue)
     {
-        _dependency.Method();
-        System.Console.WriteLine("Testing this");
+        var x = _dependency.Method();
+        System.Console.WriteLine("Testing this" + x);
     }
 
     public System.Threading.Tasks.Task<int> SomeAsyncMethod(string methodName, int methodValue)
@@ -65,8 +65,10 @@ public class TestClassTests
     public void CanCallSomeMethod()
     {
         // Arrange
-        var methodName = "TestValue534011718";
-        var methodValue = 237820880;
+        var methodName = "TestValue237820880";
+        var methodValue = 1002897798;
+
+        Mock.Arrange(() => _dependency.Method()).Returns(534011718);
 
         // Act
         _testClass.SomeMethod(methodName, methodValue);
@@ -83,15 +85,15 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotCallSomeMethodWithInvalidMethodName(string value)
     {
-        Assert.Throws<ArgumentNullException>(() => _testClass.SomeMethod(value, 1002897798));
+        Assert.Throws<ArgumentNullException>(() => _testClass.SomeMethod(value, 1657007234));
     }
 
     [Fact]
     public async Task CanCallSomeAsyncMethod()
     {
         // Arrange
-        var methodName = "TestValue1657007234";
-        var methodValue = 1412011072;
+        var methodName = "TestValue1412011072";
+        var methodValue = 929393559;
 
         // Act
         var result = await _testClass.SomeAsyncMethod(methodName, methodValue);
@@ -106,7 +108,7 @@ public class TestClassTests
     [InlineData("   ")]
     public async Task CannotCallSomeAsyncMethodWithInvalidMethodName(string value)
     {
-        await Assert.ThrowsAsync<ArgumentNullException>(() => _testClass.SomeAsyncMethod(value, 929393559));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _testClass.SomeAsyncMethod(value, 760389092));
     }
 }
 
