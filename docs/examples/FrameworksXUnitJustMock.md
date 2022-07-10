@@ -1,5 +1,5 @@
-﻿# Frameworks - NUnit 3 & FakeItEasy
-Demonstrates how tests are generated using NUnit 3 for the test framework and FakeItEasy for the mocking framework
+﻿# Frameworks - XUnit & JustMock
+Demonstrates how tests are generated using XUnit for the test framework and JustMock for the mocking framework
 
 ### Source Type(s)
 ``` csharp
@@ -34,62 +34,61 @@ public class TestClass
 
 ### Generated Tests
 ``` csharp
-[TestFixture]
 public class TestClassTests
 {
     private TestClass _testClass;
     private IDependency _dependency;
 
-    [SetUp]
-    public void SetUp()
+    public TestClassTests()
     {
-        _dependency = A.Fake<IDependency>();
+        _dependency = Mock.Create<IDependency>();
         _testClass = new TestClass(_dependency);
     }
 
-    [Test]
+    [Fact]
     public void CanConstruct()
     {
         // Act
         var instance = new TestClass(_dependency);
 
         // Assert
-        Assert.That(instance, Is.Not.Null);
+        Assert.NotNull(instance);
     }
 
-    [Test]
+    [Fact]
     public void CannotConstructWithNullDependency()
     {
         Assert.Throws<ArgumentNullException>(() => new TestClass(default(IDependency)));
     }
 
-    [Test]
+    [Fact]
     public void CanCallSomeMethod()
     {
         // Arrange
         var methodName = "TestValue237820880";
         var methodValue = 1002897798;
 
-        A.CallTo(() => _dependency.Method()).Returns(534011718);
+        Mock.Arrange(() => _dependency.Method()).Returns(534011718);
 
         // Act
         _testClass.SomeMethod(methodName, methodValue);
 
         // Assert
-        A.CallTo(() => _dependency.Method()).MustHaveHappened();
+        Mock.Assert(() => _dependency.Method());
 
-        Assert.Fail("Create or modify test");
+        throw new NotImplementedException("Create or modify test");
     }
 
-    [TestCase(null)]
-    [TestCase("")]
-    [TestCase("   ")]
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
     public void CannotCallSomeMethodWithInvalidMethodName(string value)
     {
         Assert.Throws<ArgumentNullException>(() => _testClass.SomeMethod(value, 1657007234));
     }
 
-    [Test]
+    [Fact]
     public async Task CanCallSomeAsyncMethod()
     {
         // Arrange
@@ -100,15 +99,16 @@ public class TestClassTests
         var result = await _testClass.SomeAsyncMethod(methodName, methodValue);
 
         // Assert
-        Assert.Fail("Create or modify test");
+        throw new NotImplementedException("Create or modify test");
     }
 
-    [TestCase(null)]
-    [TestCase("")]
-    [TestCase("   ")]
-    public void CannotCallSomeAsyncMethodWithInvalidMethodName(string value)
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task CannotCallSomeAsyncMethodWithInvalidMethodName(string value)
     {
-        Assert.ThrowsAsync<ArgumentNullException>(() => _testClass.SomeAsyncMethod(value, 760389092));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _testClass.SomeAsyncMethod(value, 760389092));
     }
 }
 

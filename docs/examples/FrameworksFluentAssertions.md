@@ -5,18 +5,22 @@ Demonstrates how tests are generated using XUnit for the test framework and NSub
 ``` csharp
 public interface IDependency
 {
-    void Method();
+    int Method();
 }
 
 public class TestClass
 {
+    IDependency _dependency;
+
     public TestClass(IDependency dependency)
-    { }
+    {
+        _dependency = dependency;
+    }
 
     public void SomeMethod(string methodName, int methodValue)
     {
-        System.Console.WriteLine("Testing this");
-        return System.Threading.Tasks.Task.CompletedTask;
+        var x = _dependency.Method();
+        System.Console.WriteLine("Testing this" + x);
     }
 
     public System.Threading.Tasks.Task<int> SomeAsyncMethod(string methodName, int methodValue)
@@ -61,13 +65,17 @@ public class TestClassTests
     public void CanCallSomeMethod()
     {
         // Arrange
-        var methodName = "TestValue534011718";
-        var methodValue = 237820880;
+        var methodName = "TestValue237820880";
+        var methodValue = 1002897798;
+
+        _dependency.Method().Returns(534011718);
 
         // Act
         _testClass.SomeMethod(methodName, methodValue);
 
         // Assert
+        _dependency.Received().Method();
+
         throw new NotImplementedException("Create or modify test");
     }
 
@@ -77,15 +85,15 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotCallSomeMethodWithInvalidMethodName(string value)
     {
-        FluentActions.Invoking(() => _testClass.SomeMethod(value, 1002897798)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.SomeMethod(value, 1657007234)).Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public async Task CanCallSomeAsyncMethod()
     {
         // Arrange
-        var methodName = "TestValue1657007234";
-        var methodValue = 1412011072;
+        var methodName = "TestValue1412011072";
+        var methodValue = 929393559;
 
         // Act
         var result = await _testClass.SomeAsyncMethod(methodName, methodValue);
@@ -100,7 +108,7 @@ public class TestClassTests
     [InlineData("   ")]
     public async Task CannotCallSomeAsyncMethodWithInvalidMethodName(string value)
     {
-        await FluentActions.Invoking(() => _testClass.SomeAsyncMethod(value, 929393559)).Should().ThrowAsync<ArgumentNullException>();
+        await FluentActions.Invoking(() => _testClass.SomeAsyncMethod(value, 760389092)).Should().ThrowAsync<ArgumentNullException>();
     }
 }
 

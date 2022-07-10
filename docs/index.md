@@ -36,6 +36,7 @@ Unitverse can also use AutoFixture for value generation if configured. There are
 * Moq 
 * Moq with Moq.AutoMock
 * FakeItEasy 
+* JustMock
 
 ### Framework Auto-Detection 🔍
 

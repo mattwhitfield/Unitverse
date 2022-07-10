@@ -71,7 +71,7 @@ jobs:
         ./.github/workflows/CheckChanges.ps1
       shell: pwsh 
     - name: Test extension
-      if: needs.pre_job.outputs.should_skip != 'true'
+      if: needs.pre_job.outputs.should_skip != 'true' && github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main'
       run: dotnet test --no-build --verbosity minimal $env:SolutionPath
     - name: Collect artifacts - VSIX
       if: needs.pre_job.outputs.should_skip != 'true'

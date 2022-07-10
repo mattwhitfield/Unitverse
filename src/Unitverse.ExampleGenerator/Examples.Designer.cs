@@ -268,8 +268,9 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///    public class TestClass
         ///    {
-        ///        public TestClass(IDependency dependency)
-        ///  [rest of string was truncated]&quot;;.
+        ///        IDependency _dependency;
+        ///
+        ///        public  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksFluentAssertions {
             get {
@@ -293,11 +294,11 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///    public class TestClass
         ///    {
-        ///        public TestClass(IDependency dependency)
-        ///        { }
+        ///        IDependency _dependency;
         ///
-        ///        public void SomeMethod(string methodName, int methodValue)
-        /// [rest of string was truncated]&quot;;.
+        ///        public TestClass(IDependency dependency)
+        ///        { 
+        ///            _dependency = dependenc [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksMsTestMoq {
             get {
@@ -321,10 +322,9 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///    public class TestClass
         ///    {
-        ///        public TestClass(IDependency dependency)
-        ///        { }
+        ///        IDependency _dependency;
         ///
-        /// [rest of string was truncated]&quot;;.
+        ///        public TestClass(IDep [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksMsTestMoqAutoMock {
             get {
@@ -348,14 +348,43 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///    public class TestClass
         ///    {
-        ///        public TestClass(IDependency dependency)
-        ///        { }
+        ///        IDependency _dependency;
         ///
-        ///        public void SomeMethod(string methodN [rest of string was truncated]&quot;;.
+        ///        public TestClass(IDependency dependency)
+        ///        { 
+        ///             [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksNUnitFakeItEasy {
             get {
                 return ResourceManager.GetString("FrameworksNUnitFakeItEasy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // ! Frameworks - XUnit &amp; JustMock
+        ///// $ Demonstrates how tests are generated using XUnit for the test framework and JustMock for the mocking framework
+        ///// # FrameworkType=XUnit
+        ///// # MockingFrameworkType=JustMock
+        ///// # UseFluentAssertions=false
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///    public interface IDependency
+        ///    {
+        ///        void Method();
+        ///    }
+        ///
+        ///    public class TestClass
+        ///    {
+        ///        IDependency _dependency;
+        ///
+        ///        public TestClass(IDependency dependency)
+        ///        { 
+        ///            _dependency [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FrameworksXUnitJustMock {
+            get {
+                return ResourceManager.GetString("FrameworksXUnitJustMock", resourceCulture);
             }
         }
         
@@ -375,10 +404,11 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///    public class TestClass
         ///    {
-        ///        public TestClass(IDependency dependency)
-        ///        { }
+        ///        IDependency _dependency;
         ///
-        ///        public void SomeMethod(string methodNam [rest of string was truncated]&quot;;.
+        ///        public TestClass(IDependency dependency)
+        ///        { 
+        ///            _d [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksXUnitNSubstitute {
             get {

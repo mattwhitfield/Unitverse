@@ -68,9 +68,7 @@ When the build runs in GitHub Actions, it checks that the examples generated are
 
 ## Areas for tidy up 🧹
 
-There are several things that could be better:
+There are a couple things that could be better:
 
 * Although the existing tests do a really good job of making sure that we produce compilable code, we could always do with more tests
-* We could transition the code base to make use of nullable reference types
-* The `Generate` class isn't universally used - there are some strategies that make heavy use of SyntaxFactory directly
 * We could do with some better test output for specific scenarios - MVC controllers come to mind
