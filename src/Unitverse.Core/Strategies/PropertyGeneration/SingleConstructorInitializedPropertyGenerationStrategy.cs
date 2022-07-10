@@ -41,7 +41,7 @@
                 return false;
             }
 
-            if (_frameworkSet.Options.GenerationOptions.UseAutoFixture && _frameworkSet.Options.GenerationOptions.UseAutoFixtureForMocking)
+            if (_frameworkSet.Options.GenerationOptions.CanUseAutoFixtureForMocking())
             {
                 return false;
             }

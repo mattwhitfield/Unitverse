@@ -11,7 +11,7 @@
         internal static StatementSyntax VariableDeclaration(IGenerationOptions options)
         {
             var creationExpression = CreationExpression;
-            if (options.UseAutoFixtureForMocking)
+            if (options.CanUseAutoFixtureForMocking())
             {
                 ExpressionSyntax? customization = null;
                 switch (options.MockingFrameworkType)

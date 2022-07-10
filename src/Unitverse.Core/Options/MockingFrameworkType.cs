@@ -12,5 +12,7 @@
         FakeItEasy,
         [Description("Moq with AutoMock")]
         MoqAutoMock,
+        [Description("JustMock")]
+        JustMock,
     }
 }

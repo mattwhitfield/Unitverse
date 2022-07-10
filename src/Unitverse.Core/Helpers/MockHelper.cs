@@ -51,7 +51,7 @@
                             if (dependencyMethod.ContainingType == fieldType)
                             {
                                 var returnType = dependencyMethod.ReturnType;
-                                var isAsync = returnType is INamedTypeSymbol namedType && namedType.Name == "Task" && namedType.ContainingNamespace.ToDisplayString() == "System.Threading.Tasks";
+                                var isAsync = dependencyMethod.IsAsyncCallable();
                                 var isPlainTaskReturnType = isAsync && ((INamedTypeSymbol)returnType).TypeArguments.Length == 0;
 
                                 var hasReturnType = !dependencyMethod.ReturnsVoid && !isPlainTaskReturnType;

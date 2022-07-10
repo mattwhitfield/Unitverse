@@ -1,7 +1,6 @@
 ﻿namespace Unitverse.Core.Strategies.ClassDecoration
 {
     using System;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;

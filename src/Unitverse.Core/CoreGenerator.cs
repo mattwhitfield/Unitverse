@@ -248,7 +248,7 @@
             {
                 targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, Helpers.Generate.UsingDirective("AutoFixture"));
 
-                if (frameworkSet.Options.GenerationOptions.UseAutoFixtureForMocking)
+                if (frameworkSet.Options.GenerationOptions.CanUseAutoFixtureForMocking())
                 {
                     switch (frameworkSet.Options.GenerationOptions.MockingFrameworkType)
                     {

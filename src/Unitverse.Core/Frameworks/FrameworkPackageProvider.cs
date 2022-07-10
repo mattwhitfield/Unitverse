@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
@@ -25,7 +26,7 @@
             {
                 yield return new NugetPackageReference("AutoFixture", null);
 
-                if (generationOptions.UseAutoFixtureForMocking)
+                if (generationOptions.CanUseAutoFixtureForMocking())
                 {
                     switch (generationOptions.MockingFrameworkType)
                     {
@@ -77,6 +78,9 @@
                 case MockingFrameworkType.MoqAutoMock:
                     yield return new NugetPackageReference("Moq", null);
                     yield return new NugetPackageReference("Moq.AutoMock", null);
+                    break;
+                case MockingFrameworkType.JustMock:
+                    yield return new NugetPackageReference("JustMock", null);
                     break;
             }
         }
