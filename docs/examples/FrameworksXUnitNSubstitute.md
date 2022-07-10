@@ -10,13 +10,17 @@ public interface IDependency
 
 public class TestClass
 {
+    IDependency _dependency;
+
     public TestClass(IDependency dependency)
-    { }
+    {
+        _dependency = dependency;
+    }
 
     public void SomeMethod(string methodName, int methodValue)
     {
+        _dependency.Method();
         System.Console.WriteLine("Testing this");
-        return System.Threading.Tasks.Task.CompletedTask;
     }
 
     public System.Threading.Tasks.Task<int> SomeAsyncMethod(string methodName, int methodValue)
@@ -68,6 +72,8 @@ public class TestClassTests
         _testClass.SomeMethod(methodName, methodValue);
 
         // Assert
+        _dependency.Received().Method();
+
         throw new NotImplementedException("Create or modify test");
     }
 

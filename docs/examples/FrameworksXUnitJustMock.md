@@ -1,5 +1,5 @@
-﻿# Frameworks - Fluent Assertions
-Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework. Also shows using FluentAssertions for the assertion framework.
+﻿# Frameworks - XUnit & JustMock
+Demonstrates how tests are generated using XUnit for the test framework and JustMock for the mocking framework
 
 ### Source Type(s)
 ``` csharp
@@ -41,7 +41,7 @@ public class TestClassTests
 
     public TestClassTests()
     {
-        _dependency = Substitute.For<IDependency>();
+        _dependency = Mock.Create<IDependency>();
         _testClass = new TestClass(_dependency);
     }
 
@@ -52,13 +52,13 @@ public class TestClassTests
         var instance = new TestClass(_dependency);
 
         // Assert
-        instance.Should().NotBeNull();
+        Assert.NotNull(instance);
     }
 
     [Fact]
     public void CannotConstructWithNullDependency()
     {
-        FluentActions.Invoking(() => new TestClass(default(IDependency))).Should().Throw<ArgumentNullException>();
+        Assert.Throws<ArgumentNullException>(() => new TestClass(default(IDependency)));
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public class TestClassTests
         _testClass.SomeMethod(methodName, methodValue);
 
         // Assert
-        _dependency.Received().Method();
+        Mock.Assert(() => _dependency.Method());
 
         throw new NotImplementedException("Create or modify test");
     }
@@ -83,7 +83,7 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotCallSomeMethodWithInvalidMethodName(string value)
     {
-        FluentActions.Invoking(() => _testClass.SomeMethod(value, 1002897798)).Should().Throw<ArgumentNullException>();
+        Assert.Throws<ArgumentNullException>(() => _testClass.SomeMethod(value, 1002897798));
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public class TestClassTests
     [InlineData("   ")]
     public async Task CannotCallSomeAsyncMethodWithInvalidMethodName(string value)
     {
-        await FluentActions.Invoking(() => _testClass.SomeAsyncMethod(value, 929393559)).Should().ThrowAsync<ArgumentNullException>();
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _testClass.SomeAsyncMethod(value, 929393559));
     }
 }
 

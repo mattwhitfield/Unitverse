@@ -26,12 +26,15 @@ Due to the transition to 64-bit, Visual Studio 2022 introduces some architectura
 
 FluentAssertions can also be used for assertions, replacing the assertions built in to whichever test framework is being used.
 
+Unitverse can also use AutoFixture for value generation if configured. There are examples of [standard value generation](https://mattwhitfield.github.io/Unitverse/examples/ValueGeneration.md) and [value generation with AutoFixture](https://mattwhitfield.github.io/Unitverse/examples/ValueGenerationWithAutoFixture.md).
+
 ### Mocking Frameworks
 
 * NSubstitute 
 * Moq 
 * Moq with Moq.AutoMock
 * FakeItEasy 
+* JustMock
 
 ### Framework Auto-Detection
 

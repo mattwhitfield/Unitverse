@@ -360,6 +360,34 @@ namespace Unitverse.ExampleGenerator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // ! Frameworks - XUnit &amp; JustMock
+        ///// $ Demonstrates how tests are generated using XUnit for the test framework and JustMock for the mocking framework
+        ///// # FrameworkType=XUnit
+        ///// # MockingFrameworkType=JustMock
+        ///// # UseFluentAssertions=false
+        ///
+        ///namespace Unitverse.Examples
+        ///{
+        ///    public interface IDependency
+        ///    {
+        ///        void Method();
+        ///    }
+        ///
+        ///    public class TestClass
+        ///    {
+        ///        IDependency _dependency;
+        ///
+        ///        public TestClass(IDependency dependency)
+        ///        { 
+        ///            _dependency [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FrameworksXUnitJustMock {
+            get {
+                return ResourceManager.GetString("FrameworksXUnitJustMock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to // ! Frameworks - XUnit &amp; NSubstitute
         ///// $ Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework
         ///// # FrameworkType=XUnit

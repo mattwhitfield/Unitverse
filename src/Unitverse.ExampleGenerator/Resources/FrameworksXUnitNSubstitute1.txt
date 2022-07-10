@@ -1,7 +1,7 @@
-// ! Frameworks - XUnit & NSubstitute
-// $ Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework
+// ! Frameworks - XUnit & JustMock
+// $ Demonstrates how tests are generated using XUnit for the test framework and JustMock for the mocking framework
 // # FrameworkType=XUnit
-// # MockingFrameworkType=NSubstitute
+// # MockingFrameworkType=JustMock
 // # UseFluentAssertions=false
 
 namespace Unitverse.Examples
