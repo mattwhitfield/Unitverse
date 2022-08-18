@@ -60,6 +60,10 @@ jobs:
       with:
         version: '${{env.AutoVersion_AssemblySemVer}}'
         vsix-manifest-file: 'src\Unitverse\Manifests\${{ matrix.VsTargetVersion }}\source.extension.vsixmanifest'
+    - name: Set Help/About version
+      run: |
+        ((Get-Content -path src\Unitverse\UnitTestGeneratorPackage.cs -Raw) -replace ', "1.0", ',', "${{env.AutoVersion_Major}}.${{env.AutoVersion_Minor}}", ') | Set-Content -Path src\Unitverse\UnitTestGeneratorPackage.cs        
+      shell: pwsh
     - name: Build extension
       if: needs.pre_job.outputs.should_skip != 'true'
       run: msbuild $env:SolutionPath /t:Rebuild -v:m
