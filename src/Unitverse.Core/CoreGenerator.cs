@@ -8,6 +8,7 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Formatting;
+    using Microsoft.CodeAnalysis.Options;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
@@ -25,7 +26,7 @@
 
     public static class CoreGenerator
     {
-        public static async Task<GenerationResult> Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, SemanticModel targetModel, bool withRegeneration, IUnitTestGeneratorOptions options, Func<string, string> nameSpaceTransform, bool isSingleItemGeneration, IMessageLogger messageLogger)
+        public static async Task<GenerationResult> Generate(SemanticModel sourceModel, SyntaxNode? sourceSymbol, SemanticModel? targetModel, Solution? solution, bool withRegeneration, IUnitTestGeneratorOptions options, Func<string, string> nameSpaceTransform, bool isSingleItemGeneration, IMessageLogger messageLogger)
         {
             if (nameSpaceTransform == null)
             {
@@ -62,7 +63,17 @@
                 targetNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.IdentifierName(targetNameSpace));
             }
 
-            return Generate(sourceModel, sourceSymbol, withRegeneration, options, targetNamespace, usingsEmitted, compilation, originalTargetNamespace, isSingleItemGeneration, messageLogger);
+            DocumentOptionSet? documentOptions = null;
+            if (solution != null)
+            {
+                var document = solution.GetDocument(sourceModel.SyntaxTree);
+                if (document != null)
+                {
+                    documentOptions = await document.GetOptionsAsync();
+                }
+            }
+
+            return Generate(sourceModel, sourceSymbol, documentOptions, withRegeneration, options, targetNamespace, usingsEmitted, compilation, originalTargetNamespace, isSingleItemGeneration, messageLogger);
         }
 
         private static void MarkEmittedItems<T>(ModelGenerationContext generationContext, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector)
@@ -309,11 +320,11 @@
             return targetType;
         }
 
-        private static GenerationResult CreateGenerationResult(CompilationUnitSyntax compilation, List<ClassModel> classModels, bool anyMethodsEmitted, IGenerationStatistics generationStatistics)
+        private static GenerationResult CreateGenerationResult(CompilationUnitSyntax compilation, DocumentOptionSet? documentOptionSet, List<ClassModel> classModels, bool anyMethodsEmitted, IGenerationStatistics generationStatistics)
         {
             using (var workspace = new AdhocWorkspace())
             {
-                compilation = (CompilationUnitSyntax)Formatter.Format(compilation, workspace);
+                compilation = (CompilationUnitSyntax)Formatter.Format(compilation, workspace, documentOptionSet);
 
                 var generationResult = new GenerationResult(compilation.ToFullString(), anyMethodsEmitted, generationStatistics);
                 foreach (var asset in classModels.SelectMany(x => x.RequiredAssets).Distinct())
@@ -481,7 +492,7 @@
             return updatedMethod.WithBody(body.WithStatements(newStatements));
         }
 
-        private static GenerationResult Generate(SemanticModel sourceModel, SyntaxNode sourceSymbol, bool withRegeneration, IUnitTestGeneratorOptions options, NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax? originalTargetNamespace, bool isSingleItemGeneration, IMessageLogger messageLogger)
+        private static GenerationResult Generate(SemanticModel sourceModel, SyntaxNode? sourceSymbol, DocumentOptionSet? documentOptions, bool withRegeneration, IUnitTestGeneratorOptions options, NamespaceDeclarationSyntax targetNamespace, HashSet<string> usingsEmitted, CompilationUnitSyntax compilation, NamespaceDeclarationSyntax? originalTargetNamespace, bool isSingleItemGeneration, IMessageLogger messageLogger)
         {
             var frameworkSet = FrameworkSetFactory.Create(options);
 
@@ -540,7 +551,7 @@
 
             compilation = AddTargetNamespaceToCompilation(originalTargetNamespace, compilation, targetNamespace, options.GenerationOptions);
 
-            var generationResult = CreateGenerationResult(compilation, classModels, anyMethodsEmitted, frameworkSet.Context);
+            var generationResult = CreateGenerationResult(compilation, documentOptions, classModels, anyMethodsEmitted, frameworkSet.Context);
 
             return generationResult;
         }
