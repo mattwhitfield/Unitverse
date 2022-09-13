@@ -228,11 +228,11 @@
 
                     var targetSemanticModel = await targetDocument.GetSemanticModelAsync().ConfigureAwait(true);
 
-                    return await CoreGenerator.Generate(semanticModel, generationItem.SourceNode, targetSemanticModel, withRegeneration, generationItem.Options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
+                    return await CoreGenerator.Generate(semanticModel, generationItem.SourceNode, targetSemanticModel, solution, withRegeneration, generationItem.Options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
                 }
             }
 
-            return await CoreGenerator.Generate(semanticModel, generationItem.SourceNode, null, withRegeneration, generationItem.Options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
+            return await CoreGenerator.Generate(semanticModel, generationItem.SourceNode, null, solution, withRegeneration, generationItem.Options, generationItem.NamespaceTransform, isSingleItemGeneration, messageLogger).ConfigureAwait(true);
         }
     }
 }

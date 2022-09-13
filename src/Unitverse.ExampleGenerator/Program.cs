@@ -166,7 +166,7 @@ namespace Unitverse.ExampleGenerator
             var semanticModel = compilation.GetSemanticModel(tree);
 
             ValueGenerationStrategyFactory.UsePredictableGeneration(1);
-            var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
+            var core = await CoreGenerator.Generate(semanticModel, null, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             var generatedTree = CSharpSyntaxTree.ParseText(core.FileContent, new CSharpParseOptions(LanguageVersion.Latest));
 

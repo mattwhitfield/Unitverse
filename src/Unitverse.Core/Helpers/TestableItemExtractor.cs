@@ -35,7 +35,7 @@
             return typeList;
         }
 
-        public IEnumerable<ClassModel> Extract(SyntaxNode sourceSymbol, IUnitTestGeneratorOptions options)
+        public IEnumerable<ClassModel> Extract(SyntaxNode? sourceSymbol, IUnitTestGeneratorOptions options)
         {
             var models = ExtractClassModels(Tree, _semanticModel, options).ToList();
             if (sourceSymbol != null)

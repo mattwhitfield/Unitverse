@@ -93,7 +93,7 @@
 
             // Compile the first
             UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, options.GenerationOptions.UseAutoFixture, options.GenerationOptions.UseAutoFixtureForMocking, classAsText, out var tree, out var secondTree, out var references, out var externalInitTree, out var semanticModel);
-            var core = await CoreGenerator.Generate(semanticModel, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
+            var core = await CoreGenerator.Generate(semanticModel, null, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             Assert.IsNotNull(core);
             Assert.That(!string.IsNullOrWhiteSpace(core.FileContent));
@@ -123,7 +123,7 @@
 
             // Compile the second, using the output from the first compile
             UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, false, updatedClassAsText, out var updatedTree, out _, out _, out _, out var updatedModel);
-            var core2 = await CoreGenerator.Generate(updatedModel, null, targetCompilation.GetSemanticModel(generatedTree), false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
+            var core2 = await CoreGenerator.Generate(updatedModel, null, targetCompilation.GetSemanticModel(generatedTree), null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
 
             // Check the second generated tree

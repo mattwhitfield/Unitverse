@@ -85,7 +85,7 @@
         public async Task WhenIRegenerateTests()
         {
             var options = GenerationOptions.Get(_context.TargetFramework, _context.MockFramework);
-            var result = await CoreGenerator.Generate(_context.SemanticModel, _context.ClassModel.Constructors.First().Node, _context.TestModel, true, options, x => x + ".Tests", false, new NullMessageLogger());
+            var result = await CoreGenerator.Generate(_context.SemanticModel, _context.ClassModel.Constructors.First().Node, _context.TestModel, null, true, options, x => x + ".Tests", false, new NullMessageLogger());
             var tree = CSharpSyntaxTree.ParseText(result.FileContent, new CSharpParseOptions(LanguageVersion.Latest));
 
             _context.Result = tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().First();
