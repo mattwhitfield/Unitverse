@@ -1374,21 +1374,23 @@ namespace Unitverse.Core.Tests {
         /// <summary>
         ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
         ///{
-        ///
-        ///    public partial class TestClass
-        ///    {
-        ///        public TestClass(string stringProp)
-        ///        {
-        ///
-        ///        }
-        ///    }
-        ///
         ///    public partial class TestClass
         ///    {
         ///	    public void ThisIsAMethod(string methodName, int methodValue)
         ///	    {
         ///		    System.Console.WriteLine(&quot;Testing this&quot;);
         ///	    }
+        ///    }
+        ///}
+        ///-----------------------------------------
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public partial class TestClass
+        ///    {
+        ///        public TestClass(string stringProp)
+        ///        {
+        ///
+        ///        }
         ///    }
         ///}.
         /// </summary>
@@ -1752,6 +1754,30 @@ namespace Unitverse.Core.Tests {
         public static string SampleClassTestFile {
             get {
                 return ResourceManager.GetString("SampleClassTestFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # EmitSubclassForProtectedMethods=true
+        ///namespace TestNamespace
+        ///{
+        ///    public sealed class TestClass
+        ///    {
+        ///	    public string Hello()
+        ///	    {
+        ///		    return &quot;hello&quot;;
+        ///	    }
+        ///
+        ///	    protected string Goodbye()
+        ///	    {
+        ///		    return &quot;goodbye&quot;;
+        ///	    }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string SealedClassWithProtectedMethod {
+            get {
+                return ResourceManager.GetString("SealedClassWithProtectedMethod", resourceCulture);
             }
         }
         
