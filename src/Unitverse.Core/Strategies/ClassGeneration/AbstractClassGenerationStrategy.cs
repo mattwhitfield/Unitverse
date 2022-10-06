@@ -36,7 +36,7 @@
 
             if (_frameworkSet.Options.GenerationOptions.EmitSubclassForProtectedMethods)
             {
-                return model.Methods.Any(x => x.MarkedForGeneration && x.Node.Modifiers.Any(m => m.IsKind(SyntaxKind.ProtectedKeyword))) || model.Properties.Any(x => x.MarkedForGeneration && x.Node.Modifiers.Any(m => m.IsKind(SyntaxKind.ProtectedKeyword)));
+                return !model.Declaration.Modifiers.Any(m => m.IsKind(SyntaxKind.SealedKeyword)) && (model.Methods.Any(x => x.MarkedForGeneration && x.Node.Modifiers.Any(m => m.IsKind(SyntaxKind.ProtectedKeyword))) || model.Properties.Any(x => x.MarkedForGeneration && x.Node.Modifiers.Any(m => m.IsKind(SyntaxKind.ProtectedKeyword))));
             }
 
             return false;

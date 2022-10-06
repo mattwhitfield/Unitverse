@@ -47,17 +47,19 @@
             return models.Where(x => x.ShouldGenerateOrContainsItemThatShouldGenerate());
         }
 
-        private static IList<Func<SyntaxTokenList, bool>> GetAllowedModifiers(IUnitTestGeneratorOptions options)
+        private static IList<Func<SyntaxTokenList, bool>> GetAllowedModifiers(IUnitTestGeneratorOptions options, TypeDeclarationSyntax typeDeclarationSyntax)
         {
             var functionList = new List<Func<SyntaxTokenList, bool>>();
 
             // allow public
             functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.PublicKeyword)));
 
+            var canEmitForProtectedMethods = options.GenerationOptions.EmitSubclassForProtectedMethods && !typeDeclarationSyntax.Modifiers.Any(m => m.IsKind(SyntaxKind.SealedKeyword));
+
             // if we are allowing internals
             if (options.GenerationOptions.EmitTestsForInternals)
             {
-                if (options.GenerationOptions.EmitSubclassForProtectedMethods)
+                if (canEmitForProtectedMethods)
                 {
                     // then we are good for protected, internal & protected internal
                     functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.ProtectedKeyword)));
@@ -69,7 +71,7 @@
                     functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.InternalKeyword)) && !list.Any(modifier => modifier.IsKind(SyntaxKind.ProtectedKeyword)));
                 }
             }
-            else if (options.GenerationOptions.EmitSubclassForProtectedMethods)
+            else if (canEmitForProtectedMethods)
             {
                 // not allowing internals - so just protected and not protected internal
                 functionList.Add(list => list.Any(modifier => modifier.IsKind(SyntaxKind.ProtectedKeyword)) && !list.Any(modifier => modifier.IsKind(SyntaxKind.InternalKeyword)));
@@ -88,7 +90,7 @@
 
         private ClassModel ExtractClassModel(TypeDeclarationSyntax syntax, SemanticModel semanticModel, IUnitTestGeneratorOptions options)
         {
-            var allowedModifiers = GetAllowedModifiers(options);
+            var allowedModifiers = GetAllowedModifiers(options, syntax);
 
             var model = new ClassModel(syntax, semanticModel, false);
 

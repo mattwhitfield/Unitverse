@@ -1,0 +1,16 @@
+// # EmitSubclassForProtectedMethods=true
+namespace TestNamespace
+{
+    public sealed class TestClass
+    {
+	    public string Hello()
+	    {
+		    return "hello";
+	    }
+
+	    protected string Goodbye()
+	    {
+		    return "goodbye";
+	    }
+    }
+}
