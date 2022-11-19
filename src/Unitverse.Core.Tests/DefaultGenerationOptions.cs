@@ -49,5 +49,7 @@
         public bool PrefixFieldReferencesWithThis => false;
 
         public bool EmitXmlDocumentation => false;
+
+        public bool UseMockBehaviorStrict => false;
     }
 }

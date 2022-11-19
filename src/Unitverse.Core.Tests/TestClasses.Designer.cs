@@ -1030,6 +1030,40 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // # MockingFrameworkType=Moq
+        ///// # UseMockBehaviorStrict=True
+        ///using System.Threading.Tasks;
+        ///
+        ///namespace AssemblyCore
+        ///{
+        ///	public interface IDummyService
+        ///	{
+        ///	    void NoReturnMethod();
+        ///
+        ///        int ReturnMetod();
+        ///
+        ///        Task&lt;string&gt; AsyncMethod(); 
+        ///
+        ///        Task  AsyncReturnTaskAsync();
+        ///
+        ///        Task&lt;int&gt; AsyncReturIntAsync();
+        ///
+        ///        Task&lt;string&gt; AsyncReturnStringAsync();
+        ///	}
+        ///
+        ///    public class InterfaceSample
+        ///    {
+        ///        private IDummyService _dummyService;
+        ///
+        ///        public Interfac [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string InterfaceSampleMoqStrict {
+            get {
+                return ResourceManager.GetString("InterfaceSampleMoqStrict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to using System.Threading.Tasks;
         ///
         ///namespace AssemblyCore

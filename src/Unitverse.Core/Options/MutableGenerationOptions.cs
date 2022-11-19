@@ -34,6 +34,7 @@
             FallbackTargetFinding = options.FallbackTargetFinding;
             PrefixFieldReferencesWithThis = options.PrefixFieldReferencesWithThis;
             EmitXmlDocumentation = options.EmitXmlDocumentation;
+            UseMockBehaviorStrict = options.UseMockBehaviorStrict;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -81,5 +82,7 @@
         public bool EmitXmlDocumentation { get; set; }
 
         public bool UseAutoFixtureForMocking { get; set; }
+
+        public bool UseMockBehaviorStrict { get; set; }
     }
 }

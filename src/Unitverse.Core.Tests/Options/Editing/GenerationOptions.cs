@@ -125,5 +125,10 @@
         [DisplayName("Emit XML documentation")]
         [Description("True if XML documentation should be generated for test methods")]
         public bool EmitXmlDocumentation { get; set; } = false;
+
+        [Category("Framework specifics")]
+        [DisplayName("Use MockBehavior.Strict")]
+        [Description("True if Moq mocks should be configured with MockBehavior.Strict")]
+        public bool UseMockBehaviorStrict { get; set; } = false;
     }
 }

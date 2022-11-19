@@ -1,0 +1,57 @@
+// # UseMockBehaviorStrict=True
+using System.Threading.Tasks;
+
+namespace AssemblyCore
+{
+	public interface IDummyService
+	{
+	    void NoReturnMethod();
+
+        int ReturnMetod();
+
+        Task<string> AsyncMethod(); 
+
+        Task  AsyncReturnTaskAsync();
+
+        Task<int> AsyncReturIntAsync();
+
+        Task<string> AsyncReturnStringAsync();
+	}
+
+    public class InterfaceSample
+    {
+        private IDummyService _dummyService;
+
+        public InterfaceSample(IDummyService dummyService)
+        {
+            _dummyService = dummyService;
+        }
+
+        public void SampleNoReturn()
+        {
+            _dummyService.NoReturnMethod();
+        }
+
+
+        public Task SampleAsyncMethod()
+        {
+            return _dummyService.AsyncMethod();
+        }
+
+        public int SampleReturnMethod()
+        {
+            return _dummyService.ReturnMetod();
+        }
+
+        public async Task<int> SampleAsyncIntReturnInt()
+        {
+            return await _dummyService.AsyncReturIntAsync();
+        }
+
+        public async Task<string> SampleAsyncIntReturnString()
+        {
+            return await _dummyService.AsyncReturnStringAsync();
+        }
+
+    }
+}

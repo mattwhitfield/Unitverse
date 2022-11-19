@@ -10,6 +10,7 @@
     {
         public GenerationContext(IGenerationOptions options)
         {
+            Options = options;
             CurrentMethod = new SectionedMethodHandler(SyntaxFactory.MethodDeclaration(SyntaxFactory.IdentifierName("void"), "Dummy"), options);
         }
 
@@ -40,6 +41,8 @@
         public bool CurrentModelIsStatic { get; set; }
 
         public SectionedMethodHandler CurrentMethod { get; set; }
+
+        public IGenerationOptions Options { get; }
 
         public void AddEmittedType(ITypeSymbol typeInfo)
         {
