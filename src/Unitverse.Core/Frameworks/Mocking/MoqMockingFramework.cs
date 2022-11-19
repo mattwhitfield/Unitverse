@@ -66,6 +66,12 @@
         private ExpressionSyntax GetMoqFieldInitializer(TypeSyntax type)
         {
             _context.MocksUsed = true;
+
+            if (_context.Options.UseMockBehaviorStrict)
+            {
+                return Generate.ObjectCreation(Generate.GenericName("Mock", type), Generate.MemberAccess("MockBehavior", "Strict"));
+            }
+
             return Generate.ObjectCreation(Generate.GenericName("Mock", type));
         }
 

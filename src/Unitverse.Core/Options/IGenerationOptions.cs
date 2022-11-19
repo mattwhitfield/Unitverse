@@ -47,5 +47,7 @@
         bool PrefixFieldReferencesWithThis { get; }
 
         bool EmitXmlDocumentation { get; }
+
+        bool UseMockBehaviorStrict { get; }
     }
 }

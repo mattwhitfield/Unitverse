@@ -66,5 +66,7 @@
         public bool PrefixFieldReferencesWithThis => _baseOptions.PrefixFieldReferencesWithThis;
 
         public bool EmitXmlDocumentation => _baseOptions.EmitXmlDocumentation;
+
+        public bool UseMockBehaviorStrict => _baseOptions.UseMockBehaviorStrict;
     }
 }

@@ -2,10 +2,13 @@
 {
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
+    using Unitverse.Core.Options;
 
     public interface IGenerationContext : IGenerationStatistics
     {
         IEnumerable<ITypeSymbol> EmittedTypes { get; }
+
+        IGenerationOptions Options { get; }
 
         IEnumerable<string> GenericTypesVisited { get; }
 
