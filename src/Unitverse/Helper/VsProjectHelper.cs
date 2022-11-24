@@ -5,6 +5,7 @@ namespace Unitverse.Helper
     using System.Linq;
     using EnvDTE;
     using Microsoft.VisualStudio;
+    using Microsoft.VisualStudio.OLE.Interop;
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
     using Unitverse.Core.Helpers;
@@ -66,6 +67,28 @@ namespace Unitverse.Helper
             }
 
             return projectFileName;
+        }
+
+        public static Guid GetProjectId(this Project project)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            var solution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
+            IVsHierarchy hierarchy;
+
+            solution.GetProjectOfUniqueName(project.FullName, out hierarchy);
+
+            if (hierarchy != null)
+            {
+                hierarchy.GetGuidProperty(
+                            VSConstants.VSITEMID_ROOT,
+                            (int)__VSHPROPID.VSHPROPID_ProjectIDGuid,
+                            out var projectGuid);
+
+                return projectGuid;
+            }
+
+            return Guid.Empty;
         }
 
         private static IEnumerable<Project> FindProjects(IEnumerable<Project> currentProjects)
