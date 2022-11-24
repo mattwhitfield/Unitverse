@@ -19,17 +19,19 @@
             ThreadHelper.ThrowIfNotOnUIThread();
             var logger = new AggregateLogger();
 
-            package.JoinableTaskFactory.Run(async () =>
+            var projectGuid = source.GetProjectId();
+
+            _ = package.JoinableTaskFactory.RunAsync(async () =>
             {
                 await WaitableActionHelper.RunWaitableActionAsync(package, logger, "Creating test project", async logMessage =>
                 {
                     logMessage("Waiting for project initialization...");
 
-                    var operationProgressStatusService = package.GetService(typeof(SVsOperationProgressStatusService)) as IVsOperationProgressStatusService;
+                    var operationProgressStatusService = package.GetService(typeof(SVsOperationProgressStatusService)) as IVsOperationProgressStatusService2;
                     Assumes.Present(operationProgressStatusService);
-                    var stageStatus = operationProgressStatusService.GetStageStatus(CommonOperationProgressStageIds.Intellisense);
+                    var stageStatus = operationProgressStatusService.GetProjectStageStatus(projectGuid, CommonOperationProgressStageIds.Intellisense, true);
 
-                    await package.JoinableTaskFactory.RunAsync(stageStatus.WaitForCompletionAsync);
+                    await stageStatus.WaitForCompletionAsync();
 
                     await package.JoinableTaskFactory.SwitchToMainThreadAsync();
 
