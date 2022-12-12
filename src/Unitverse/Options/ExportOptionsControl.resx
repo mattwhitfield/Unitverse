@@ -127,13 +127,13 @@
     <value>False</value>
   </metadata>
   <data name="label.Text" xml:space="preserve">
-    <value>Unitverse can be configured using a .unitTestGeneratorOptions file, in much the same way as a .editorConfig file works.
+    <value>Unitverse can be configured using a .unitTestGeneratorConfig file, in much the same way as a .editorConfig file works.
 
 This allows you to share your configuration with team members, check it into source control etc.
 
-To create a .unitTestGeneratorOptions file that represents the options currently configured in this instance of Visual Studio, click the 'Export' button below.
+To create a .unitTestGeneratorConfig file that represents the options currently configured in this instance of Visual Studio, click the 'Export' button below.
 
-When Unitverse goes to generate tests, it will start in the path where the active solution is, and search all parent folders to find .unitTestGeneratorOptions files from which to load settings. All found files are considered, and settings read from files closer to the solution take precedence.
+When Unitverse goes to generate tests, it will start in the path where the active solution is, and search all parent folders to find .unitTestGeneratorConfig files from which to load settings. All found files are considered, and settings read from files closer to the solution take precedence.
 </value>
   </data>
 </root>
