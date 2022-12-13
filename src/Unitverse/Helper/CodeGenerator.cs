@@ -48,11 +48,14 @@
                     return;
                 }
 
-                messageLogger.LogMessage("Adding required assets to target project...");
                 var mapping = generationItems.FirstOrDefault()?.Mapping;
                 if (mapping != null)
                 {
-                    AddTargetAssets(mapping.Options, mapping.TargetProject, mapping.TargetAssets);
+                    if (!mapping.Options.GenerationOptions.CreateTargetAssets)
+                    {
+                        messageLogger.LogMessage("Adding required assets to target project...");
+                        AddTargetAssets(mapping.Options, mapping.TargetProject, mapping.TargetAssets);
+                    }
                 }
 
                 if (generationItems.All(x => string.IsNullOrWhiteSpace(x.TargetContent)))

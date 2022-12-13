@@ -401,6 +401,73 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // # TestTypeBaseClass=TestBase
+        ///// # TestTypeBaseClassNamespace=MyUtils
+        ///// $ LastOnly
+        ///
+        ///namespace MyUtils
+        ///{
+        ///    public class TestBase
+        ///    { }
+        ///}
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///	using System.Globalization;
+        ///
+        ///    public static class TestClass
+        ///    {
+        ///        public static void ThisIsAMethod(string methodName, CultureInfo methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///        public static string WillReturnAString()
+        ///        {
+        ///            return &quot;Hello&quot;;
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string BaseClassSpecified {
+            get {
+                return ResourceManager.GetString("BaseClassSpecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # TestTypeBaseClass=MyUtils.TestBase
+        ///// $ LastOnly
+        ///
+        ///namespace MyUtils
+        ///{
+        ///    public class TestBase
+        ///    { }
+        ///}
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///	using System.Globalization;
+        ///
+        ///    public static class TestClass
+        ///    {
+        ///        public static void ThisIsAMethod(string methodName, CultureInfo methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///        public static string WillReturnAString()
+        ///        {
+        ///            return &quot;Hello&quot;;
+        ///        }
+        ///
+        ///        public stati [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string BaseClassSpecifiedExplicitly {
+            get {
+                return ResourceManager.GetString("BaseClassSpecifiedExplicitly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to namespace TestNamespace
         ///{
         ///    public class TestClass
@@ -1030,8 +1097,7 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // # MockingFrameworkType=Moq
-        ///// # UseMockBehaviorStrict=True
+        ///   Looks up a localized string similar to // # UseMockBehaviorStrict=True
         ///using System.Threading.Tasks;
         ///
         ///namespace AssemblyCore
@@ -1055,7 +1121,7 @@ namespace Unitverse.Core.Tests {
         ///    {
         ///        private IDummyService _dummyService;
         ///
-        ///        public Interfac [rest of string was truncated]&quot;;.
+        ///        public InterfaceSample(IDummyService dummyServ [rest of string was truncated]&quot;;.
         /// </summary>
         public static string InterfaceSampleMoqStrict {
             get {

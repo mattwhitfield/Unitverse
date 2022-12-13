@@ -68,5 +68,11 @@
         public bool EmitXmlDocumentation => _baseOptions.EmitXmlDocumentation;
 
         public bool UseMockBehaviorStrict => _baseOptions.UseMockBehaviorStrict;
+
+        public bool CreateTargetAssets => _baseOptions.CreateTargetAssets;
+
+        public string TestTypeBaseClass => _baseOptions.TestTypeBaseClass;
+
+        public string TestTypeBaseClassNamespace => _baseOptions.TestTypeBaseClassNamespace;
     }
 }

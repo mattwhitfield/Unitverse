@@ -61,5 +61,11 @@
         public bool EmitXmlDocumentation => false;
 
         public bool UseMockBehaviorStrict => false;
+
+        public bool CreateTargetAssets => true;
+
+        public string TestTypeBaseClass => string.Empty;
+
+        public string TestTypeBaseClassNamespace => string.Empty;
     }
 }

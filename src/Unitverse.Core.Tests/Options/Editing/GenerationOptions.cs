@@ -130,5 +130,20 @@
         [DisplayName("Use MockBehavior.Strict")]
         [Description("True if Moq mocks should be configured with MockBehavior.Strict")]
         public bool UseMockBehaviorStrict { get; set; } = false;
+
+        [Category("Generation")]
+        [DisplayName("Create target assets")]
+        [Description("True if target assets (files that contain supporting functionality in a test project) should be created")]
+        public bool CreateTargetAssets { get; set; } = true;
+
+        [Category("Generation")]
+        [DisplayName("Test type base class")]
+        [Description("The name of the base class from which a test type should derive, or empty for no inheritance - if not a fully qualified name, test type base class namespace should be specified")]
+        public string TestTypeBaseClass { get; set; } = string.Empty;
+
+        [Category("Generation")]
+        [DisplayName("Test type base class namespace")]
+        [Description("The namespace of the base class from which a test type should derive which will be emitted in the list of using statements")]
+        public string TestTypeBaseClassNamespace { get; set; } = string.Empty;
     }
 }

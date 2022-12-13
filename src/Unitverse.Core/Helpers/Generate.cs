@@ -605,5 +605,11 @@
             var separatedSyntaxList = SyntaxFactory.SeparatedList<ArgumentSyntax>(tokens);
             return separatedSyntaxList;
         }
+
+        internal static BaseListSyntax? BaseList(params string[] testTypeBaseClasses)
+        {
+            var baseTypes = testTypeBaseClasses.Select(typeName => SyntaxFactory.SimpleBaseType(SyntaxFactory.IdentifierName(typeName)));
+            return SyntaxFactory.BaseList(SyntaxFactory.SeparatedList<BaseTypeSyntax>(baseTypes));
+        }
     }
 }

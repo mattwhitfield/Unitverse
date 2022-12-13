@@ -1,0 +1,30 @@
+// # TestTypeBaseClass=MyUtils.TestBase
+// $ LastOnly
+
+namespace MyUtils
+{
+    public class TestBase
+    { }
+}
+
+namespace TestNamespace.SubNameSpace
+{
+	using System.Globalization;
+
+    public static class TestClass
+    {
+        public static void ThisIsAMethod(string methodName, CultureInfo methodValue)
+	    {
+		    System.Console.WriteLine("Testing this");
+	    }
+
+        public static string WillReturnAString()
+        {
+            return "Hello";
+        }
+
+        public static int ThisIsAProperty { get; set; }
+
+        public static string GetITest { get; }
+    }
+}

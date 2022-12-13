@@ -41,7 +41,9 @@
             model.TargetInstance = model.TypeSyntax;
 
             classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
-            if (_frameworkSet.TestFramework.SupportsStaticTestClasses)
+
+            if (_frameworkSet.TestFramework.SupportsStaticTestClasses &&
+                string.IsNullOrWhiteSpace(_frameworkSet.Options.GenerationOptions.TestTypeBaseClass))
             {
                 classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.StaticKeyword));
             }

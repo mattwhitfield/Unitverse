@@ -50,6 +50,11 @@
                 classSyntax = classSyntax.WithXmlDocumentation(documentation);
             }
 
+            if (!string.IsNullOrWhiteSpace(_frameworkSet.Options.GenerationOptions.TestTypeBaseClass))
+            {
+                classSyntax = classSyntax.WithBaseList(Generate.BaseList(_frameworkSet.Options.GenerationOptions.TestTypeBaseClass));
+            }
+
             return classSyntax;
         }
     }
