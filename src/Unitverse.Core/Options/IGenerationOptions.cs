@@ -49,5 +49,11 @@
         bool EmitXmlDocumentation { get; }
 
         bool UseMockBehaviorStrict { get; }
+
+        bool CreateTargetAssets { get; }
+
+        string TestTypeBaseClass { get; }
+
+        string TestTypeBaseClassNamespace { get; }
     }
 }

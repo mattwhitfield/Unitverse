@@ -35,6 +35,9 @@
             PrefixFieldReferencesWithThis = options.PrefixFieldReferencesWithThis;
             EmitXmlDocumentation = options.EmitXmlDocumentation;
             UseMockBehaviorStrict = options.UseMockBehaviorStrict;
+            CreateTargetAssets = options.CreateTargetAssets;
+            TestTypeBaseClass = options.TestTypeBaseClass;
+            TestTypeBaseClassNamespace = options.TestTypeBaseClassNamespace;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -84,5 +87,11 @@
         public bool UseAutoFixtureForMocking { get; set; }
 
         public bool UseMockBehaviorStrict { get; set; }
+
+        public bool CreateTargetAssets { get; set; }
+
+        public string TestTypeBaseClass { get; set; }
+
+        public string TestTypeBaseClassNamespace { get; set; }
     }
 }

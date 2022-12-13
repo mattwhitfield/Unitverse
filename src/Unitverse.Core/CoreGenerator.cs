@@ -290,6 +290,12 @@
                 targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, Helpers.Generate.UsingDirective(typeof(Task).Namespace));
             }
 
+            if (!string.IsNullOrWhiteSpace(frameworkSet.Options.GenerationOptions.TestTypeBaseClass) &&
+                !string.IsNullOrWhiteSpace(frameworkSet.Options.GenerationOptions.TestTypeBaseClassNamespace))
+            {
+                targetNamespace = EmitUsingStatements(targetNamespace, usingsEmitted, Helpers.Generate.UsingDirective(frameworkSet.Options.GenerationOptions.TestTypeBaseClassNamespace));
+            }
+
             return targetNamespace;
         }
 
