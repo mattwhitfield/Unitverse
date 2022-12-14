@@ -51,7 +51,7 @@
                 var mapping = generationItems.FirstOrDefault()?.Mapping;
                 if (mapping != null)
                 {
-                    if (!mapping.Options.GenerationOptions.CreateTargetAssets)
+                    if (mapping.Options.GenerationOptions.CreateTargetAssets)
                     {
                         messageLogger.LogMessage("Adding required assets to target project...");
                         AddTargetAssets(mapping.Options, mapping.TargetProject, mapping.TargetAssets);
