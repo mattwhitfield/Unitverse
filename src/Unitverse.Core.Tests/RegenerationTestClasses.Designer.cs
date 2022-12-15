@@ -98,6 +98,40 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(string stringProp)
+        ///        {
+        ///
+        ///        }
+        /// 
+        ///	    public void ThisIsAMethod(string methodName, int methodValue)
+        ///	    {
+        ///		    System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	    }
+        ///
+        ///        public string WillReturnAString()
+        ///        {
+        ///            return &quot;Hello&quot;;
+        ///        }
+        ///    }
+        ///}
+        ///-------------------
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(str [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Regeneration_AdditionalConstructors {
+            get {
+                return ResourceManager.GetString("Regeneration-AdditionalConstructors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to // # UseAutoFixture=true
         ///namespace TestNamespace.SubNameSpace
         ///{
