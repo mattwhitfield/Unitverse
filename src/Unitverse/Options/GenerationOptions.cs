@@ -147,5 +147,12 @@
         [DisplayName("Test type base class namespace")]
         [Description("The namespace of the base class from which a test type should derive which will be emitted in the list of using statements")]
         public string TestTypeBaseClassNamespace { get; set; } = string.Empty;
+
+#if VS2022
+        [Category("Generation")]
+        [DisplayName("Generate file scoped namespaces")]
+        [Description("When generating tests, emit a file that uses file scoped namespaces")]
+        public bool GenerateFileScopedNamespaces { get; set; } = false;
+#endif
     }
 }

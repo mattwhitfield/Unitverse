@@ -12,6 +12,7 @@ namespace Unitverse.Core.Tests.Strategies.ValueGeneration
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.ValueGeneration;
+    using Unitverse.Tests.Common;
 
     [TestFixture]
     public static class ValueGenerationStrategyFactoryTester

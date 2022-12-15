@@ -15,7 +15,6 @@ namespace Unitverse.Core.Tests.Models
         private ClassModel _model;
         private IFrameworkSet _frameworkSet;
         private bool _withRegeneration;
-        private bool _partialGenerationAllowed;
         private NamingContext _baseNamingContext;
 
         [SetUp]
@@ -24,16 +23,15 @@ namespace Unitverse.Core.Tests.Models
             _model = ClassModelProvider.Instance;
             _frameworkSet = A.Fake<IFrameworkSet>();
             _withRegeneration = false;
-            _partialGenerationAllowed = true;
             _baseNamingContext = new NamingContext("TestValue1956429780");
-            _testClass = new ModelGenerationContext(_model, _frameworkSet, _withRegeneration, _partialGenerationAllowed, _baseNamingContext);
+            _testClass = new ModelGenerationContext(_model, _frameworkSet, _withRegeneration, _baseNamingContext);
         }
 
         [Test]
         public void CanConstruct()
         {
             // Act
-            var instance = new ModelGenerationContext(_model, _frameworkSet, _withRegeneration, _partialGenerationAllowed, _baseNamingContext);
+            var instance = new ModelGenerationContext(_model, _frameworkSet, _withRegeneration, _baseNamingContext);
 
             // Assert
             instance.Should().NotBeNull();
@@ -42,19 +40,19 @@ namespace Unitverse.Core.Tests.Models
         [Test]
         public void CannotConstructWithNullModel()
         {
-            FluentActions.Invoking(() => new ModelGenerationContext(default(ClassModel), A.Fake<IFrameworkSet>(), false, false, new NamingContext("TestValue205118814"))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new ModelGenerationContext(default(ClassModel), A.Fake<IFrameworkSet>(), false, new NamingContext("TestValue205118814"))).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullFrameworkSet()
         {
-            FluentActions.Invoking(() => new ModelGenerationContext(ClassModelProvider.Instance, default(IFrameworkSet), true, true, new NamingContext("TestValue1200384518"))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new ModelGenerationContext(ClassModelProvider.Instance, default(IFrameworkSet), true, new NamingContext("TestValue1200384518"))).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullBaseNamingContext()
         {
-            FluentActions.Invoking(() => new ModelGenerationContext(ClassModelProvider.Instance, A.Fake<IFrameworkSet>(), false, true, default(NamingContext))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new ModelGenerationContext(ClassModelProvider.Instance, A.Fake<IFrameworkSet>(), false, default(NamingContext))).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
@@ -73,12 +71,6 @@ namespace Unitverse.Core.Tests.Models
         public void WithRegenerationIsInitializedCorrectly()
         {
             _testClass.WithRegeneration.Should().Be(_withRegeneration);
-        }
-
-        [Test]
-        public void PartialGenerationAllowedIsInitializedCorrectly()
-        {
-            _testClass.PartialGenerationAllowed.Should().Be(_partialGenerationAllowed);
         }
 
         [Test]

@@ -12,6 +12,7 @@ namespace Unitverse.Core.Tests.Helpers
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
+    using Unitverse.Tests.Common;
 
     [TestFixture]
     public static class AssignmentValueHelperTests

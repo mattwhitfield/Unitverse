@@ -9,6 +9,7 @@ namespace Unitverse.Core.Tests.Strategies.InterfaceGeneration
     using Unitverse.Core.Options;
     using Unitverse.Core.Frameworks;
     using Microsoft.CodeAnalysis.CSharp;
+    using Unitverse.Tests.Common;
 
     [TestFixture]
     public class EquatableGenerationStrategyTests

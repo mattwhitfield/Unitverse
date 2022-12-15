@@ -38,6 +38,9 @@
             CreateTargetAssets = options.CreateTargetAssets;
             TestTypeBaseClass = options.TestTypeBaseClass;
             TestTypeBaseClassNamespace = options.TestTypeBaseClassNamespace;
+#if VS2022
+            GenerateFileScopedNamespaces = options.GenerateFileScopedNamespaces;
+#endif
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -93,5 +96,9 @@
         public string TestTypeBaseClass { get; set; }
 
         public string TestTypeBaseClassNamespace { get; set; }
+
+#if VS2022
+        public bool GenerateFileScopedNamespaces { get; set; }
+#endif
     }
 }

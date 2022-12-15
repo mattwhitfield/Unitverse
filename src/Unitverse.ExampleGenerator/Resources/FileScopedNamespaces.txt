@@ -1,0 +1,35 @@
+// ! File Scoped Namespaces
+// $ Demonstrates how tests can be generated with file scoped namespaces
+// # FrameworkType=XUnit
+// # MockingFrameworkType=NSubstitute
+// # GenerateFileScopedNamespaces=true
+
+namespace Unitverse.Examples
+{
+    public interface IDependency
+    {
+        int Method();
+    }
+
+    public class TestClass
+    {
+        IDependency _dependency;
+
+        public TestClass(IDependency dependency)
+        { 
+            _dependency = dependency;
+        }
+
+        public void SomeMethod(string methodName, int methodValue)
+        {
+            var x = _dependency.Method();
+            System.Console.WriteLine("Testing this" + x);
+        }
+
+        public System.Threading.Tasks.Task<int> SomeAsyncMethod(string methodName, int methodValue)
+        {
+            System.Console.WriteLine("Testing this");
+            return System.Threading.Tasks.Task.FromResult(0);
+        }
+    }
+}

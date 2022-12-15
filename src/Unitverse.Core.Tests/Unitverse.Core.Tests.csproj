@@ -11,12 +11,24 @@
     <VsTargetVersion Condition="'$(VsTargetVersion)' == '' and '$(VisualStudioVersion)' == '16.0' ">VS2019</VsTargetVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(VsTargetVersion)' == 'VS2022'">
+    <DefineConstants>$(DefineConstants);VS2022</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(VsTargetVersion)' == 'VS2019'">
+    <DefineConstants>$(DefineConstants);VS2019</DefineConstants>
+  </PropertyGroup>
+  
   <ItemGroup Condition="'$(VsTargetVersion)' == 'VS2022'">
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(VsTargetVersion)' == 'VS2019'">
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Unitverse\Options\GenerationOptions.cs" Link="Options\Editing\GenerationOptions.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +58,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Unitverse.Core\Unitverse.Core.csproj" />
+    <ProjectReference Include="..\Unitverse.Tests.Common\Unitverse.Tests.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,9 +70,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Options\Editing\GenerationOptions.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Update="RegenerationTestClasses.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

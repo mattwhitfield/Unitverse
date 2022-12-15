@@ -838,6 +838,35 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // # GenerateFileScopedNamespaces=true
+        ///namespace TestNamespace.SubNameSpace;
+        ///
+        ///public class TestClass
+        ///{
+        ///    public TestClass(string stringProp)
+        ///    {
+        ///
+        ///    }
+        /// 
+        ///	public void ThisIsAMethod(string methodName, int methodValue)
+        ///	{
+        ///		System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	}
+        ///
+        ///    public string WillReturnAString()
+        ///    {
+        ///        return &quot;Hello&quot;;
+        ///    }
+        ///}
+        ///.
+        /// </summary>
+        public static string FileScopedNamespacesTest {
+            get {
+                return ResourceManager.GetString("FileScopedNamespacesTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to namespace Helpers
         ///{
         ///	using System;

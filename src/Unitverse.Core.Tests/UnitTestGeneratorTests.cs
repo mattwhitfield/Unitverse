@@ -29,6 +29,7 @@
     using Unitverse.Core.Assets;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
+    using Unitverse.Tests.Common;
     using Xunit;
     using Assert = NUnit.Framework.Assert;
     using Expression = System.Linq.Expressions.Expression;
@@ -85,7 +86,8 @@
                 sourceSymbol = tree.GetRoot().DescendantNodesAndSelf().OfType<TypeDeclarationSyntax>().LastOrDefault();
             }
 
-            var core = await CoreGenerator.Generate(semanticModel, sourceSymbol, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
+            var generationItem = new TestGenerationItem(sourceSymbol, options, x => "Tests");
+            var core = await CoreGenerator.Generate(generationItem, semanticModel, null, null, false, true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             Assert.IsNotNull(core);
             Assert.That(!string.IsNullOrWhiteSpace(core.FileContent));

@@ -6,12 +6,12 @@
 
     public class ModelGenerationContext
     {
-        public ModelGenerationContext(ClassModel model, IFrameworkSet frameworkSet, bool withRegeneration, bool partialGenerationAllowed, NamingContext baseNamingContext)
+        public ModelGenerationContext(ClassModel model, IFrameworkSet frameworkSet, bool withRegeneration, NamingContext baseNamingContext)
         {
             Model = model ?? throw new ArgumentNullException(nameof(model));
             FrameworkSet = frameworkSet ?? throw new ArgumentNullException(nameof(frameworkSet));
             WithRegeneration = withRegeneration;
-            PartialGenerationAllowed = partialGenerationAllowed;
+            PartialGenerationAllowed = frameworkSet.Options.GenerationOptions.PartialGenerationAllowed;
             BaseNamingContext = baseNamingContext ?? throw new ArgumentNullException(nameof(baseNamingContext));
 
             FrameworkSet.Context.CurrentModelIsStatic = Model.IsStatic;

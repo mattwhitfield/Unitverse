@@ -132,9 +132,6 @@
             _instance = new GenerateTestForSymbolCommand(package, commandService);
         }
 
-        
-
-#pragma warning disable VSTHRD010 // checks are present in called member
         private void Execute(object sender, EventArgs e)
         {
             Execute(false);
@@ -144,7 +141,6 @@
         {
             Execute(true);
         }
-#pragma warning restore VSTHRD010
 
         private void Execute(bool withRegeneration)
         {

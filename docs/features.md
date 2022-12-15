@@ -57,3 +57,11 @@ Unitverse can generate tests for single members, meaning that you can generate t
 ### 🟠 Test project creation
 
 Unitverse allows you to easily create unit tests projects with the right packages installed by clicking on the 'Create unit test project' option on the project context menu.
+
+### 🟡 File scoped namespace support
+
+Unitverse, in the Visual Studio 2022 build, can generate tests using file scoped namespaces instead of block-scoped namespaces. Because they're the new hotness.
+
+### 🟢 Customizable base class
+
+You can configure a custom base class from which to inherit your test classes, for when you want to have some common functionality specified in a base class. Because this is configurable via the `.unitTestGeneratorConfig` file, you can even do this differently for different areas of your source projects.

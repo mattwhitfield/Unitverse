@@ -10,6 +10,7 @@ namespace Unitverse.Core.Tests.Helpers
     using Microsoft.CodeAnalysis;
     using System.Linq;
     using Microsoft.CodeAnalysis.Formatting;
+    using Unitverse.Tests.Common;
 
     [TestFixture]
     public class SectionedMethodHandlerTests
