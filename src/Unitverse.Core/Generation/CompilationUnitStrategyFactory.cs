@@ -27,10 +27,10 @@
                 }
             }
 
+            ICompilationUnitStrategyBootstrapper strategyBootstrapper;
+
 #if VS2022
             // if there is an existing model, pick the strategy that matches that model (i.e. block scoped if there are any block scoped name spaces)
-            ICompilationUnitStrategy strategy;
-
             bool blockScopedNamespaceExists = false;
             if (targetModel != null)
             {
@@ -43,18 +43,18 @@
 
             if (!generationItem.Options.GenerationOptions.GenerateFileScopedNamespaces || blockScopedNamespaceExists)
             {
-                strategy = new BlockScopedNamespaceStrategy(sourceModel, targetModel, generationItem, solution, documentOptions, sourceNamespace, targetNamespace);
+                strategyBootstrapper = new BlockScopedNamespaceStrategyBootstrapper(sourceModel, targetModel, generationItem, documentOptions, targetNamespace);
             }
             else
             {
-                strategy = new FileScopedNamespaceStrategy(sourceModel, targetModel, generationItem, solution, documentOptions, sourceNamespace, targetNamespace);
+                strategyBootstrapper = new FileScopedNamespaceStrategyBootstrapper(sourceModel, targetModel, generationItem, documentOptions, targetNamespace);
             }
 
 #else
-            var strategy = new BlockScopedNamespaceStrategy(sourceModel, targetModel, generationItem, solution, documentOptions, sourceNamespace, targetNamespace);
+            strategyBootstrapper = new BlockScopedNamespaceStrategyBootstrapper(sourceModel, targetModel, generationItem, documentOptions, targetNamespace);
 #endif
 
-            await strategy.Initialize();
+            var strategy = await strategyBootstrapper.Initialize();
 
             return strategy;
         }

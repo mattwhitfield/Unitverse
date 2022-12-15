@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -13,56 +12,35 @@
 
     public abstract class CompilationUnitStrategy : ICompilationUnitStrategy
     {
-        public CompilationUnitStrategy(SemanticModel sourceModel, SemanticModel? targetModel, IGenerationItem generationItem, Solution? solution, DocumentOptionSet? documentOptions, string sourceNamespaceName, string targetNamespaceName)
+        public CompilationUnitStrategy(SemanticModel sourceModel, SyntaxNode? targetTree, IGenerationItem generationItem, DocumentOptionSet? documentOptions)
         {
             SourceModel = sourceModel;
-            TargetModel = targetModel;
             GenerationItem = generationItem;
-            Solution = solution;
             DocumentOptions = documentOptions;
-            SourceNamespaceName = sourceNamespaceName;
-            TargetNamespaceName = targetNamespaceName;
-        }
 
-        public SemanticModel SourceModel { get; }
-
-        public SemanticModel? TargetModel { get; }
-
-        public IGenerationItem GenerationItem { get; }
-
-        public Solution? Solution { get; }
-
-        public DocumentOptionSet? DocumentOptions { get; }
-
-        public string SourceNamespaceName { get; }
-
-        public string TargetNamespaceName { get; }
-
-        private HashSet<string> _usingsEmitted = new HashSet<string>();
-
-        protected List<UsingDirectiveSyntax> AddedUsings { get; } = new List<UsingDirectiveSyntax>();
-
-        public async Task Initialize()
-        {
-            SyntaxNode? targetTree = null;
-            if (TargetModel != null)
+            if (targetTree != null)
             {
-                targetTree = await TargetModel.SyntaxTree.GetRootAsync();
                 foreach (var syntax in targetTree.DescendantNodes().OfType<UsingDirectiveSyntax>())
                 {
                     _usingsEmitted.Add(syntax.NormalizeWhitespace().ToFullString());
                 }
             }
-
-            InitializeInternal(targetTree);
         }
+
+        public SemanticModel SourceModel { get; }
+
+        public IGenerationItem GenerationItem { get; }
+
+        public DocumentOptionSet? DocumentOptions { get; }
+
+        private HashSet<string> _usingsEmitted = new HashSet<string>();
+
+        private List<UsingDirectiveSyntax> _addedUsings = new List<UsingDirectiveSyntax>();
 
         public void AddUsing(UsingDirectiveSyntax usingDirective)
         {
-            AddedUsings.Add(usingDirective);
+            _addedUsings.Add(usingDirective);
         }
-
-        protected abstract void InitializeInternal(SyntaxNode? targetTree);
 
         public void AddTypeParameterAliases(ClassModel classModel, IGenerationContext context)
         {
@@ -103,7 +81,7 @@
 
         protected void EmitUsingStatements()
         {
-            foreach (var usingDirective in AddedUsings)
+            foreach (var usingDirective in _addedUsings)
             {
                 var fullString = usingDirective.NormalizeWhitespace().ToFullString();
                 if (_usingsEmitted.Add(fullString))
