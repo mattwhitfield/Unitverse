@@ -29,6 +29,7 @@
     using Unitverse.Core.Assets;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
+    using Unitverse.Tests.Common;
     using Xunit;
     using Assert = NUnit.Framework.Assert;
     using Expression = System.Linq.Expressions.Expression;
@@ -58,6 +59,12 @@
                     {
                         foreach (var resourceName in entryKeys)
                         {
+#if VS2019
+                            if (resourceName.StartsWith("FileScopedNamespaces", StringComparison.OrdinalIgnoreCase))
+                            {
+                                continue;
+                            }
+#endif
                             yield return new object[] { resourceName, framework, mock, true, false, false };
                             yield return new object[] { resourceName, framework, mock, false, false, false };
                             yield return new object[] { resourceName, framework, mock, true, true, false };
@@ -85,7 +92,8 @@
                 sourceSymbol = tree.GetRoot().DescendantNodesAndSelf().OfType<TypeDeclarationSyntax>().LastOrDefault();
             }
 
-            var core = await CoreGenerator.Generate(semanticModel, sourceSymbol, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
+            var generationItem = new TestGenerationItem(sourceSymbol, options, x => "Tests");
+            var core = await CoreGenerator.Generate(generationItem, semanticModel, null, null, false, true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             Assert.IsNotNull(core);
             Assert.That(!string.IsNullOrWhiteSpace(core.FileContent));

@@ -152,10 +152,7 @@ namespace Unitverse.Helper
                 testProjectItem.Document.Activate();
             }
 
-            // ReSharper disable once EmptyGeneralCatchClause - extensibility means exception types are unknown
-#pragma warning disable CA1031 // Do not catch general exception types
             catch
-#pragma warning restore CA1031 // Do not catch general exception types
             {
             }
         }

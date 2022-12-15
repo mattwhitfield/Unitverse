@@ -1,0 +1,20 @@
+// # GenerateFileScopedNamespaces=true
+namespace TestNamespace.SubNameSpace;
+
+public class TestClass
+{
+    public TestClass(string stringProp)
+    {
+
+    }
+ 
+	public void ThisIsAMethod(string methodName, int methodValue)
+	{
+		System.Console.WriteLine("Testing this");
+	}
+
+    public string WillReturnAString()
+    {
+        return "Hello";
+    }
+}

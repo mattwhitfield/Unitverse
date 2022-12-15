@@ -38,6 +38,7 @@ This project bears some more explanation as to it's layout - the main folders ar
 | Frameworks\Assertion | Code that supports emitting tests using assertion frameworks |
 | Frameworks\Mocking | Code that supports using different mocking libraries |
 | Frameworks\Test | Code that supports using different test frameworks |
+| Generation | Code that supports the base generation functionality, including namespace handling strategies |
 | Helpers | General helper functions |
 | Models | Models to represent the input types for the generation process |
 | Options | Code to handle options classes, including loading from `.unitTestGeneratorConfig` files |

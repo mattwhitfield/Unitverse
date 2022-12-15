@@ -11,6 +11,7 @@ namespace Unitverse.Core.Tests.Models
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
+    using Unitverse.Tests.Common;
 
     [TestFixture]
     public class ClassModelTests

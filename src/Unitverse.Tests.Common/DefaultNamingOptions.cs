@@ -1,4 +1,4 @@
-﻿namespace Unitverse.ExampleGenerator
+﻿namespace Unitverse.Tests.Common
 {
     using Unitverse.Core.Options;
 

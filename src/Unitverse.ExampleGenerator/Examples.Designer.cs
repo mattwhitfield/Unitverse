@@ -263,14 +263,14 @@ namespace Unitverse.ExampleGenerator {
         ///{
         ///    public interface IDependency
         ///    {
-        ///        void Method();
+        ///        int Method();
         ///    }
         ///
         ///    public class TestClass
         ///    {
         ///        IDependency _dependency;
         ///
-        ///        public  [rest of string was truncated]&quot;;.
+        ///        public T [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksFluentAssertions {
             get {
@@ -289,7 +289,7 @@ namespace Unitverse.ExampleGenerator {
         ///{
         ///    public interface IDependency
         ///    {
-        ///        void Method();
+        ///        int Method();
         ///    }
         ///
         ///    public class TestClass
@@ -298,7 +298,7 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///        public TestClass(IDependency dependency)
         ///        { 
-        ///            _dependency = dependenc [rest of string was truncated]&quot;;.
+        ///            _dependency = dependency [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksMsTestMoq {
             get {
@@ -317,14 +317,14 @@ namespace Unitverse.ExampleGenerator {
         ///{
         ///    public interface IDependency
         ///    {
-        ///        void Method();
+        ///        int Method();
         ///    }
         ///
         ///    public class TestClass
         ///    {
         ///        IDependency _dependency;
         ///
-        ///        public TestClass(IDep [rest of string was truncated]&quot;;.
+        ///        public TestClass(IDepe [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksMsTestMoqAutoMock {
             get {
@@ -343,7 +343,7 @@ namespace Unitverse.ExampleGenerator {
         ///{
         ///    public interface IDependency
         ///    {
-        ///        void Method();
+        ///        int Method();
         ///    }
         ///
         ///    public class TestClass
@@ -352,7 +352,7 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///        public TestClass(IDependency dependency)
         ///        { 
-        ///             [rest of string was truncated]&quot;;.
+        ///            _ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksNUnitFakeItEasy {
             get {
@@ -371,7 +371,7 @@ namespace Unitverse.ExampleGenerator {
         ///{
         ///    public interface IDependency
         ///    {
-        ///        void Method();
+        ///        int Method();
         ///    }
         ///
         ///    public class TestClass
@@ -380,7 +380,7 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///        public TestClass(IDependency dependency)
         ///        { 
-        ///            _dependency [rest of string was truncated]&quot;;.
+        ///            _dependency  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksXUnitJustMock {
             get {
@@ -399,7 +399,7 @@ namespace Unitverse.ExampleGenerator {
         ///{
         ///    public interface IDependency
         ///    {
-        ///        void Method();
+        ///        int Method();
         ///    }
         ///
         ///    public class TestClass
@@ -408,7 +408,7 @@ namespace Unitverse.ExampleGenerator {
         ///
         ///        public TestClass(IDependency dependency)
         ///        { 
-        ///            _d [rest of string was truncated]&quot;;.
+        ///            _de [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FrameworksXUnitNSubstitute {
             get {

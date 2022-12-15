@@ -7,11 +7,12 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.VisualStudio.Shell;
     using Unitverse.Core.Assets;
+    using Unitverse.Core.Generation;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
     using Unitverse.Helper;
 
-    public class GenerationItem
+    public class GenerationItem : IGenerationItem
     {
         private readonly string _targetPath;
 

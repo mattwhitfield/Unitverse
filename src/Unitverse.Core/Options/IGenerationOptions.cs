@@ -55,5 +55,9 @@
         string TestTypeBaseClass { get; }
 
         string TestTypeBaseClassNamespace { get; }
+
+#if VS2022
+        bool GenerateFileScopedNamespaces { get; }
+#endif
     }
 }

@@ -25,6 +25,7 @@ using Xunit;
 using NUnit.Framework;
 using Unitverse.Core.Strategies.ValueGeneration;
 using Moq.AutoMock;
+using Unitverse.Tests.Common;
 
 namespace Unitverse.ExampleGenerator
 {
@@ -166,7 +167,8 @@ namespace Unitverse.ExampleGenerator
             var semanticModel = compilation.GetSemanticModel(tree);
 
             ValueGenerationStrategyFactory.UsePredictableGeneration(1);
-            var core = await CoreGenerator.Generate(semanticModel, null, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
+            var generationItem = new TestGenerationItem(null, options, x => "Tests");
+            var core = await CoreGenerator.Generate(generationItem, semanticModel, null, null, false, true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             var generatedTree = CSharpSyntaxTree.ParseText(core.FileContent, new CSharpParseOptions(LanguageVersion.Latest));
 

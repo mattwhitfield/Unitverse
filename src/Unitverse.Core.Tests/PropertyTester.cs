@@ -8,71 +8,60 @@ namespace Unitverse.Core.Tests
 
     public static class PropertyTester
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Is required.")]
         public static void CheckProperty<TContainer>(this TContainer propertyContainer, Expression<Func<TContainer, string>> property)
             where TContainer : INotifyPropertyChanged
         {
             CheckProperty(propertyContainer, property, "stringValue1", "stringValue2");
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Is required.")]
         public static void CheckProperty<TContainer>(this TContainer propertyContainer, Expression<Func<TContainer, bool>> property)
             where TContainer : INotifyPropertyChanged
         {
             CheckProperty(propertyContainer, property, true, false);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Is required.")]
         public static void CheckProperty<TContainer>(this TContainer propertyContainer, Expression<Func<TContainer, Guid>> property)
             where TContainer : INotifyPropertyChanged
         {
             CheckProperty(propertyContainer, property, new Guid("87B1902E-6CE3-4465-920F-2314F4196534"), new Guid("CC791033-8A6A-47A7-BC3F-ECF397D0977E"));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Is required.")]
         public static void CheckProperty<TContainer>(this TContainer propertyContainer, Expression<Func<TContainer, int>> property)
             where TContainer : INotifyPropertyChanged
         {
             CheckProperty(propertyContainer, property, 64354, 234624476);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Is required.")]
         public static void CheckProperty<TContainer>(this TContainer propertyContainer, Expression<Func<TContainer, short>> property)
             where TContainer : INotifyPropertyChanged
         {
             CheckProperty(propertyContainer, property, (short)1234, (short)3526);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Is required.")]
         public static void CheckProperty<TContainer>(this TContainer propertyContainer, Expression<Func<TContainer, byte>> property)
             where TContainer : INotifyPropertyChanged
         {
             CheckProperty(propertyContainer, property, (byte)12, (byte)53);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Is required.")]
         public static void CheckProperty<TContainer>(this TContainer propertyContainer, Expression<Func<TContainer, decimal>> property)
             where TContainer : INotifyPropertyChanged
         {
             CheckProperty(propertyContainer, property, 12.13m, 53.53m);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Is required.")]
         public static void CheckProperty<TContainer>(this TContainer propertyContainer, Expression<Func<TContainer, long>> property)
             where TContainer : INotifyPropertyChanged
         {
             CheckProperty(propertyContainer, property, 7544563756573356L, 343765427624562L);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Is required.")]
         public static void CheckProperty<TContainer>(this TContainer propertyContainer, Expression<Func<TContainer, DateTime>> property)
             where TContainer : INotifyPropertyChanged
         {
             CheckProperty(propertyContainer, property, new DateTime(2001, 1, 1), new DateTime(2001, 1, 2));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Is required.")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Doesn't allow compiler to infer types.")]
         public static void CheckProperty<TContainer, TProperty>(this TContainer propertyContainer, Expression<Func<TContainer, TProperty>> property, TProperty value1, TProperty value2)
             where TContainer : INotifyPropertyChanged
         {

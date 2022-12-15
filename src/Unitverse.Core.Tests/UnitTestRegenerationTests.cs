@@ -28,6 +28,7 @@
     using Unitverse.Core.Assets;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
+    using Unitverse.Tests.Common;
     using Xunit;
     using Assert = NUnit.Framework.Assert;
     using Expression = System.Linq.Expressions.Expression;
@@ -57,6 +58,12 @@
                     {
                         foreach (var resourceName in entryKeys)
                         {
+#if VS2019
+                            if (resourceName.StartsWith("FileScopedNamespaces", StringComparison.OrdinalIgnoreCase))
+                            {
+                                continue;
+                            }
+#endif
                             yield return new object[] { resourceName, framework, mock, true };
                             yield return new object[] { resourceName, framework, mock, false };
                         }
@@ -93,7 +100,8 @@
 
             // Compile the first
             UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, options.GenerationOptions.UseAutoFixture, options.GenerationOptions.UseAutoFixtureForMocking, classAsText, out var tree, out var secondTree, out var references, out var externalInitTree, out var semanticModel);
-            var core = await CoreGenerator.Generate(semanticModel, null, null, null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
+            var generationItem = new TestGenerationItem(null, options, x => "Tests");
+            var core = await CoreGenerator.Generate(generationItem, semanticModel, null, null, false, true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             Assert.IsNotNull(core);
             Assert.That(!string.IsNullOrWhiteSpace(core.FileContent));
@@ -123,8 +131,8 @@
 
             // Compile the second, using the output from the first compile
             UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, false, updatedClassAsText, out var updatedTree, out _, out _, out _, out var updatedModel);
-            var core2 = await CoreGenerator.Generate(updatedModel, null, targetCompilation.GetSemanticModel(generatedTree), null, false, options, x => "Tests", true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
+            var core2 = await CoreGenerator.Generate(generationItem, updatedModel, targetCompilation.GetSemanticModel(generatedTree), null, false, true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
             // Check the second generated tree
             Assert.IsNotNull(core2);

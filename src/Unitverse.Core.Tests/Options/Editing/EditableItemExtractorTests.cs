@@ -6,6 +6,7 @@ namespace Unitverse.Core.Tests.Options.Editing
     using FluentAssertions;
     using System.Linq;
     using Unitverse.Core.Options;
+    using Unitverse.Options;
 
     [TestFixture]
     public class EditableItemExtractorTests
