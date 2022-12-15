@@ -59,6 +59,12 @@
                     {
                         foreach (var resourceName in entryKeys)
                         {
+#if VS2019
+                            if (resourceName.StartsWith("FileScopedNamespaces", StringComparison.OrdinalIgnoreCase))
+                            {
+                                continue;
+                            }
+#endif
                             yield return new object[] { resourceName, framework, mock, true, false, false };
                             yield return new object[] { resourceName, framework, mock, false, false, false };
                             yield return new object[] { resourceName, framework, mock, true, true, false };
