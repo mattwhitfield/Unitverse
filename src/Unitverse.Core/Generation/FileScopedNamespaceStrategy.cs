@@ -1,4 +1,5 @@
-﻿namespace Unitverse.Core.Generation
+﻿#if VS2022
+namespace Unitverse.Core.Generation
 {
     using System;
     using System.Linq;
@@ -79,3 +80,4 @@
         }
     }
 }
+#endif
