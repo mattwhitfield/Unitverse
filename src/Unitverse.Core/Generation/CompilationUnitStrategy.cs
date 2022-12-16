@@ -12,7 +12,7 @@
 
     public abstract class CompilationUnitStrategy : ICompilationUnitStrategy
     {
-        public CompilationUnitStrategy(SemanticModel sourceModel, SyntaxNode? targetTree, IGenerationItem generationItem, DocumentOptionSet? documentOptions)
+        public CompilationUnitStrategy(SemanticModel sourceModel, SyntaxNode? targetTree, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax compilation, BaseNamespaceDeclarationSyntax targetNamespace, BaseNamespaceDeclarationSyntax? originalTargetNamespace)
         {
             SourceModel = sourceModel;
             GenerationItem = generationItem;
@@ -25,6 +25,10 @@
                     _usingsEmitted.Add(syntax.NormalizeWhitespace().ToFullString());
                 }
             }
+
+            Compilation = compilation;
+            TargetNamespace = targetNamespace;
+            OriginalTargetNamespace = originalTargetNamespace;
         }
 
         public SemanticModel SourceModel { get; }
@@ -32,6 +36,12 @@
         public IGenerationItem GenerationItem { get; }
 
         public DocumentOptionSet? DocumentOptions { get; }
+
+        protected CompilationUnitSyntax Compilation { get; set; }
+
+        protected BaseNamespaceDeclarationSyntax TargetNamespace { get; set; }
+
+        protected BaseNamespaceDeclarationSyntax? OriginalTargetNamespace { get; set; }
 
         private HashSet<string> _usingsEmitted = new HashSet<string>();
 
@@ -96,7 +106,17 @@
             }
         }
 
-        protected abstract void AddUsingToTarget(UsingDirectiveSyntax usingDirective);
+        protected void AddUsingToTarget(UsingDirectiveSyntax usingDirective)
+        {
+            if (GenerationItem.Options.GenerationOptions.EmitUsingsOutsideNamespace)
+            {
+                Compilation = Compilation.AddUsings(usingDirective);
+            }
+            else
+            {
+                TargetNamespace = TargetNamespace.AddUsings(usingDirective);
+            }
+        }
 
         public abstract void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType);
 

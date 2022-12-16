@@ -8,42 +8,47 @@ namespace Unitverse.Core.Generation
 
     public class FileScopedNamespaceStrategy : CompilationUnitStrategy
     {
-        public FileScopedNamespaceStrategy(SemanticModel sourceModel, SyntaxNode? targetTree, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax targetCompilationUnit)
-            : base(sourceModel, targetTree, generationItem, documentOptions)
+        public FileScopedNamespaceStrategy(SemanticModel sourceModel, SyntaxNode? targetTree, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax targetCompilationUnit, FileScopedNamespaceDeclarationSyntax targetNamespace, FileScopedNamespaceDeclarationSyntax? originalTargetNamespace)
+            : base(sourceModel, targetTree, generationItem, documentOptions, targetCompilationUnit, targetNamespace, originalTargetNamespace)
         {
-            _compilation = targetCompilationUnit;
         }
 
-        private CompilationUnitSyntax _compilation;
-
-        public override SyntaxNode TargetRoot => _compilation;
+        public override SyntaxNode TargetRoot => Compilation;
 
         public override void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType)
         {
             if (originalTargetType == null)
             {
-                originalTargetType = _compilation.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault(x => x.Identifier.ValueText == targetType.Identifier.ValueText);
+                originalTargetType = Compilation.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault(x => x.Identifier.ValueText == targetType.Identifier.ValueText);
             }
 
             if (originalTargetType != null)
             {
-                var newCompilation = _compilation.RemoveNode(originalTargetType, SyntaxRemoveOptions.KeepNoTrivia);
-                _compilation = newCompilation ?? _compilation;
+                var newCompilation = Compilation.RemoveNode(originalTargetType, SyntaxRemoveOptions.KeepNoTrivia);
+                Compilation = newCompilation ?? Compilation;
             }
 
-            _compilation = _compilation.AddMembers(targetType);
-        }
-
-        protected override void AddUsingToTarget(UsingDirectiveSyntax usingDirective)
-        {
-            _compilation = _compilation.AddUsings(usingDirective);
+            Compilation = Compilation.AddMembers(targetType);
         }
 
         public override CompilationUnitSyntax RenderCompilationUnit()
         {
             EmitUsingStatements();
 
-            return _compilation;
+            if (OriginalTargetNamespace != null)
+            {
+                return Compilation.ReplaceNode(OriginalTargetNamespace, TargetNamespace);
+            }
+
+            var typeDeclaration = Compilation.ChildNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault();
+            if (typeDeclaration != null)
+            {
+                return Compilation.InsertNodesBefore(typeDeclaration, new[] { TargetNamespace });
+            }
+            else
+            {
+                return Compilation.AddMembers(TargetNamespace);
+            }
         }
     }
 }

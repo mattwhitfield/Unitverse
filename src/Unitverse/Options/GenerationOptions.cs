@@ -63,7 +63,7 @@
 
         [Category("Layout")]
         [DisplayName("Emit using directives outside namespace")]
-        [Description("Whether to place the required using directives outside the namespace declaration")]
+        [Description("Whether to place the required using directives outside the namespace declaration. If using file scoped namespaces, enabling this option causes the using directives to be placed above the file scoped namespace declaration")]
         public bool EmitUsingsOutsideNamespace { get; set; } = false;
 
         [Category("Generation")]
