@@ -10,9 +10,15 @@
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
 
+#if VS2022
+    using BaseNamespace = Microsoft.CodeAnalysis.CSharp.Syntax.BaseNamespaceDeclarationSyntax;
+#else
+    using BaseNamespace = Microsoft.CodeAnalysis.CSharp.Syntax.NamespaceDeclarationSyntax;
+#endif
+
     public abstract class CompilationUnitStrategy : ICompilationUnitStrategy
     {
-        public CompilationUnitStrategy(SemanticModel sourceModel, SyntaxNode? targetTree, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax compilation, BaseNamespaceDeclarationSyntax targetNamespace, BaseNamespaceDeclarationSyntax? originalTargetNamespace)
+        public CompilationUnitStrategy(SemanticModel sourceModel, SyntaxNode? targetTree, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax compilation, BaseNamespace targetNamespace, BaseNamespace? originalTargetNamespace)
         {
             SourceModel = sourceModel;
             GenerationItem = generationItem;
@@ -39,9 +45,9 @@
 
         protected CompilationUnitSyntax Compilation { get; set; }
 
-        protected BaseNamespaceDeclarationSyntax TargetNamespace { get; set; }
+        protected BaseNamespace TargetNamespace { get; set; }
 
-        protected BaseNamespaceDeclarationSyntax? OriginalTargetNamespace { get; set; }
+        protected BaseNamespace? OriginalTargetNamespace { get; set; }
 
         private HashSet<string> _usingsEmitted = new HashSet<string>();
 
