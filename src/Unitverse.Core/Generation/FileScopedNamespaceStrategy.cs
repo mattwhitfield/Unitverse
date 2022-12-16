@@ -24,11 +24,12 @@ namespace Unitverse.Core.Generation
 
             if (originalTargetType != null)
             {
-                var newCompilation = Compilation.RemoveNode(originalTargetType, SyntaxRemoveOptions.KeepNoTrivia);
-                Compilation = newCompilation ?? Compilation;
+                Compilation = Compilation.ReplaceNode(originalTargetType, targetType);
             }
-
-            Compilation = Compilation.AddMembers(targetType);
+            else
+            {
+                Compilation = Compilation.AddMembers(targetType);
+            }
         }
 
         public override CompilationUnitSyntax RenderCompilationUnit()
