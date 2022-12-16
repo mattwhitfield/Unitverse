@@ -170,6 +170,77 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // # EmitUsingsOutsideNamespace=true
+        ///// # GenerateFileScopedNamespaces=true
+        ///namespace TestNamespace.SubNameSpace;
+        ///
+        ///public class TestClass
+        ///{
+        ///    public TestClass(string stringProp)
+        ///    {
+        ///
+        ///    }
+        /// 
+        ///	public void ThisIsAMethod(string methodName, int methodValue)
+        ///	{
+        ///		System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	}
+        ///
+        ///    public string WillReturnAString()
+        ///    {
+        ///        return &quot;Hello&quot;;
+        ///    }
+        ///}
+        ///-------------------
+        ///namespace TestNamespace.SubNameSpace;
+        ///
+        ///public class TestClass
+        ///{
+        ///    public TestCl [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Regeneration_FileScopedUsingsOutside {
+            get {
+                return ResourceManager.GetString("Regeneration-FileScopedUsingsOutside", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # EmitUsingsOutsideNamespace=true
+        ///// # GenerateFileScopedNamespaces=true
+        ///namespace TestNamespace.SubNameSpace;
+        ///
+        ///public class TestClass
+        ///{
+        ///    public TestClass(string stringProp)
+        ///    {
+        ///
+        ///    }
+        /// 
+        ///	public void ThisIsAMethod(string methodName, int methodValue)
+        ///	{
+        ///		System.Console.WriteLine(&quot;Testing this&quot;);
+        ///	}
+        ///
+        ///    public string WillReturnAString()
+        ///    {
+        ///        return &quot;Hello&quot;;
+        ///    }
+        ///}
+        ///
+        ///public class C2
+        ///{
+        ///    public void SomeMethod();
+        ///}
+        ///-------------------
+        ///namespace TestNamespace.SubNa [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Regeneration_FileScopedUsingsOutsideMultipleClasses {
+            get {
+                return ResourceManager.GetString("Regeneration-FileScopedUsingsOutsideMultipleClasses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
         ///{
         ///    public class TestClass
