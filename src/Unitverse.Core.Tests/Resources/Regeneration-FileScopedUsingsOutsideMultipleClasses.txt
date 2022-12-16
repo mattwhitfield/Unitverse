@@ -1,0 +1,58 @@
+// # EmitUsingsOutsideNamespace=true
+// # GenerateFileScopedNamespaces=true
+namespace TestNamespace.SubNameSpace;
+
+public class TestClass
+{
+    public TestClass(string stringProp)
+    {
+
+    }
+ 
+	public void ThisIsAMethod(string methodName, int methodValue)
+	{
+		System.Console.WriteLine("Testing this");
+	}
+
+    public string WillReturnAString()
+    {
+        return "Hello";
+    }
+}
+
+public class C2
+{
+    public void SomeMethod() { }
+}
+-------------------
+namespace TestNamespace.SubNameSpace;
+
+public class TestClass
+{
+    public TestClass(string stringProp)
+    {
+
+    }
+ 
+	public void ThisIsAMethod(string methodName, int methodValue)
+	{
+		System.Console.WriteLine("Testing this");
+	}
+
+    public string WillReturnAString()
+    {
+        return "Hello";
+    }
+
+    public string WillAlsoReturnAString(string input)
+    {
+        return "Hello";
+    }
+}
+
+public class C2
+{
+    public void SomeMethod() { }
+
+    public void SomeOtherMethod() { }
+}

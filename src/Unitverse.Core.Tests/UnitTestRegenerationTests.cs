@@ -59,7 +59,7 @@
                         foreach (var resourceName in entryKeys)
                         {
 #if VS2019
-                            if (resourceName.StartsWith("FileScopedNamespaces", StringComparison.OrdinalIgnoreCase))
+                            if (resourceName.IndexOf("FileScoped", StringComparison.OrdinalIgnoreCase) >= 0)
                             {
                                 continue;
                             }
