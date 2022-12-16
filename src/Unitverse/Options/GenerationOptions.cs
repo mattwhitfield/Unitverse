@@ -149,7 +149,7 @@
         public string TestTypeBaseClassNamespace { get; set; } = string.Empty;
 
 #if VS2022
-        [Category("Generation")]
+        [Category("Layout")]
         [DisplayName("Generate file scoped namespaces")]
         [Description("When generating tests, emit a file that uses file scoped namespaces")]
         public bool GenerateFileScopedNamespaces { get; set; } = false;
