@@ -60,7 +60,7 @@
                         foreach (var resourceName in entryKeys)
                         {
 #if VS2019
-                            if (resourceName.StartsWith("FileScopedNamespaces", StringComparison.OrdinalIgnoreCase))
+                            if (resourceName.Contains("FileScoped", StringComparison.OrdinalIgnoreCase))
                             {
                                 continue;
                             }
