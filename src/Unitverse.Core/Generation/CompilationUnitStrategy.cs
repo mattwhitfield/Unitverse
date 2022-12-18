@@ -47,7 +47,7 @@
             _addedUsings.Add(usingDirective);
         }
 
-        private void UpdateOriginalTargetNamespace()
+        protected void UpdateOriginalTargetNamespace()
         {
             // find the node represented by 'OriginalTargetNamespace' in the current 'Compilation'
             if (OriginalTargetNamespace == null)
@@ -140,18 +140,7 @@
 
         public abstract void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType);
 
-        public CompilationUnitSyntax RenderCompilationUnit()
-        {
-            EmitUsingStatements();
-
-            UpdateOriginalTargetNamespace();
-            if (OriginalTargetNamespace != null)
-            {
-                return Compilation.ReplaceNode(OriginalTargetNamespace, TargetNamespace);
-            }
-
-            return Compilation.AddMembers(TargetNamespace);
-        }
+        public abstract CompilationUnitSyntax RenderCompilationUnit();
 
         public abstract SyntaxNode TargetRoot { get; }
     }

@@ -29,6 +29,27 @@ namespace Unitverse.Core.Generation
                 Compilation = Compilation.AddMembers(targetType);
             }
         }
+
+        public override CompilationUnitSyntax RenderCompilationUnit()
+        {
+            EmitUsingStatements();
+
+            UpdateOriginalTargetNamespace();
+            if (OriginalTargetNamespace != null)
+            {
+                return Compilation.ReplaceNode(OriginalTargetNamespace, TargetNamespace);
+            }
+
+            var typeDeclaration = Compilation.ChildNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault();
+            if (typeDeclaration != null)
+            {
+                return Compilation.InsertNodesBefore(typeDeclaration, new[] { TargetNamespace });
+            }
+            else
+            {
+                return Compilation.AddMembers(TargetNamespace);
+            }
+        }
     }
 }
 #endif

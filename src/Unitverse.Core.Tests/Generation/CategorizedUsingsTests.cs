@@ -22,9 +22,11 @@ namespace Unitverse.Core.Tests.Generation
             _usings = new[] {
                 SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("Microsoft")).WithStaticKeyword(SyntaxFactory.Token(SyntaxKind.StaticKeyword)),
                 SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("System")).WithStaticKeyword(SyntaxFactory.Token(SyntaxKind.StaticKeyword)),
+                SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("Fred")).WithStaticKeyword(SyntaxFactory.Token(SyntaxKind.StaticKeyword)),
                 SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("Microsoft")),
                 SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("Microsoft.Stuff")),
                 SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("System")),
+                SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("Fred")),
                 SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("System.Text")),
                 SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("System")).WithAlias(SyntaxFactory.NameEquals(SyntaxFactory.IdentifierName("A")))
             };
@@ -50,7 +52,7 @@ namespace Unitverse.Core.Tests.Generation
             var result = _testClass.GetResolvedUsingDirectives();
 
             // Assert
-            Check(result, "using Microsoft;", "using Microsoft.Stuff;", "using System;", "using System.Text;", "using A = System;", "using static Microsoft;", "using static System;");
+            Check(result, "using Fred;", "using Microsoft;", "using Microsoft.Stuff;", "using System;", "using System.Text;", "using A = System;", "using static Fred;", "using static Microsoft;", "using static System;");
         }
 
         [Test]
@@ -63,7 +65,7 @@ namespace Unitverse.Core.Tests.Generation
             var result = _testClass.GetResolvedUsingDirectives();
 
             // Assert
-            Check(result, "using System;", "using System.Text;", "using Microsoft;", "using Microsoft.Stuff;", "using A = System;", "using static System;", "using static Microsoft;");
+            Check(result, "using System;", "using System.Text;", "using Fred;", "using Microsoft;", "using Microsoft.Stuff;", "using A = System;", "using static System;", "using static Fred;", "using static Microsoft;");
         }
 
         private void Check(IEnumerable<UsingDirectiveSyntax> usingDirectives, params string[] expected)

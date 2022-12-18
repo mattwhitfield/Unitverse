@@ -27,5 +27,18 @@
                 TargetNamespace = TargetNamespace.AddMembers(targetType);
             }
         }
+
+        public override CompilationUnitSyntax RenderCompilationUnit()
+        {
+            EmitUsingStatements();
+
+            UpdateOriginalTargetNamespace();
+            if (OriginalTargetNamespace != null)
+            {
+                return Compilation.ReplaceNode(OriginalTargetNamespace, TargetNamespace);
+            }
+
+            return Compilation.AddMembers(TargetNamespace);
+        }
     }
 }
