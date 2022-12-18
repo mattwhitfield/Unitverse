@@ -88,22 +88,8 @@
         {
             bool systemUsingsFirst = true;
 
-            while (Compilation.Usings.Any())
-            {
-                var first = Compilation.Usings.First();
-                _addedUsings.Add(first);
-                Compilation = Compilation.RemoveNode(first, SyntaxRemoveOptions.KeepNoTrivia) ?? Compilation;
-            }
-
-            while (TargetNamespace.Usings.Any())
-            {
-                var first = TargetNamespace.Usings.First();
-                _addedUsings.Add(first);
-                TargetNamespace = TargetNamespace.RemoveNode(first, SyntaxRemoveOptions.KeepNoTrivia) ?? TargetNamespace;
-            }
-
-            //_addedUsings.AddRange(Compilation.Usings);
-            //_addedUsings.AddRange(TargetNamespace.Usings);
+            _addedUsings.AddRange(Compilation.Usings);
+            _addedUsings.AddRange(TargetNamespace.Usings);
 
             var categorizedUsings = new CategorizedUsings(_addedUsings, systemUsingsFirst);
             var resolvedUsings = categorizedUsings.GetResolvedUsingDirectives();
