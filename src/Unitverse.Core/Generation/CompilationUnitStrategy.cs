@@ -47,6 +47,33 @@
             _addedUsings.Add(usingDirective);
         }
 
+        private void UpdateOriginalTargetNamespace()
+        {
+            // find the node represented by 'OriginalTargetNamespace' in the current 'Compilation'
+            if (OriginalTargetNamespace == null)
+            {
+                return;
+            }
+
+            if (Compilation.DescendantNodes().Any(x => x == OriginalTargetNamespace))
+            {
+                return;
+            }
+
+            var searchName = OriginalTargetNamespace.Name.ToString();
+            OriginalTargetNamespace = Compilation.DescendantNodes().OfType<BaseNamespace>().FirstOrDefault(x => x.Name.ToString() == searchName);
+        }
+
+        protected TypeDeclarationSyntax? FindTypeNode(SyntaxNode parent, TypeDeclarationSyntax? searchNode)
+        {
+            if (searchNode == null)
+            {
+                return null;
+            }
+
+            return parent.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault(x => x.Identifier.ValueText == searchNode.Identifier.ValueText);
+        }
+
         public void AddTypeParameterAliases(ClassModel classModel, IGenerationContext context)
         {
             foreach (var parameter in classModel.Declaration.TypeParameterList?.Parameters ?? Enumerable.Empty<TypeParameterSyntax>())
@@ -86,7 +113,7 @@
 
         protected void EmitUsingStatements()
         {
-            bool systemUsingsFirst = true;
+            bool systemUsingsFirst = GenerationItem.Options.GenerationOptions.PlaceSystemUsingDirectivesFirst;
 
             _addedUsings.AddRange(Compilation.Usings);
             _addedUsings.AddRange(TargetNamespace.Usings);
@@ -113,7 +140,18 @@
 
         public abstract void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType);
 
-        public abstract CompilationUnitSyntax RenderCompilationUnit();
+        public CompilationUnitSyntax RenderCompilationUnit()
+        {
+            EmitUsingStatements();
+
+            UpdateOriginalTargetNamespace();
+            if (OriginalTargetNamespace != null)
+            {
+                return Compilation.ReplaceNode(OriginalTargetNamespace, TargetNamespace);
+            }
+
+            return Compilation.AddMembers(TargetNamespace);
+        }
 
         public abstract SyntaxNode TargetRoot { get; }
     }

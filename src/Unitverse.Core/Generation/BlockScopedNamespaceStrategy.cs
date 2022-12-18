@@ -1,6 +1,5 @@
 ﻿namespace Unitverse.Core.Generation
 {
-    using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Options;
@@ -16,30 +15,17 @@
 
         public override void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType)
         {
-            if (originalTargetType == null)
+            var replaceableNode = FindTypeNode(TargetNamespace, originalTargetType) ??
+                                  FindTypeNode(TargetNamespace, targetType);
+
+            if (replaceableNode != null)
             {
-                originalTargetType = TargetNamespace.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault(x => x.Identifier.ValueText == targetType.Identifier.ValueText);
+                TargetNamespace = TargetNamespace.ReplaceNode(replaceableNode, targetType);
             }
-
-            if (originalTargetType != null)
+            else
             {
-                var newTargetNamespace = TargetNamespace.RemoveNode(originalTargetType, SyntaxRemoveOptions.KeepNoTrivia);
-                TargetNamespace = newTargetNamespace ?? TargetNamespace;
+                TargetNamespace = TargetNamespace.AddMembers(targetType);
             }
-
-            TargetNamespace = TargetNamespace.AddMembers(targetType);
-        }
-
-        public override CompilationUnitSyntax RenderCompilationUnit()
-        {
-            EmitUsingStatements();
-
-            if (OriginalTargetNamespace != null)
-            {
-                return Compilation.ReplaceNode(OriginalTargetNamespace, TargetNamespace);
-            }
-
-            return Compilation.AddMembers(TargetNamespace);
         }
     }
 }

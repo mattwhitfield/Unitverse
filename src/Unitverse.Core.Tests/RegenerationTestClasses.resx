@@ -136,6 +136,18 @@
   <data name="Regeneration-SampleClass" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Regeneration-SampleClass.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="Regeneration-UsingSortNatural" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Regeneration-UsingSortNatural.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Regeneration-UsingSortNaturalFileScoped" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Regeneration-UsingSortNaturalFileScoped.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Regeneration-UsingSortSystemFirst" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Regeneration-UsingSortSystemFirst.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Regeneration-UsingSortSystemFirstFileScoped" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Regeneration-UsingSortSystemFirstFileScoped.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="Regeneration-UsingsOutsideNamespace" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Regeneration-UsingsOutsideNamespace.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

@@ -17,38 +17,16 @@ namespace Unitverse.Core.Generation
 
         public override void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType)
         {
-            if (originalTargetType == null)
-            {
-                originalTargetType = Compilation.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault(x => x.Identifier.ValueText == targetType.Identifier.ValueText);
-            }
+            var replaceableNode = FindTypeNode(Compilation, originalTargetType) ??
+                                  FindTypeNode(Compilation, targetType);
 
-            if (originalTargetType != null)
+            if (replaceableNode != null)
             {
-                Compilation = Compilation.ReplaceNode(originalTargetType, targetType);
+                Compilation = Compilation.ReplaceNode(replaceableNode, targetType);
             }
             else
             {
                 Compilation = Compilation.AddMembers(targetType);
-            }
-        }
-
-        public override CompilationUnitSyntax RenderCompilationUnit()
-        {
-            EmitUsingStatements();
-
-            if (OriginalTargetNamespace != null)
-            {
-                return Compilation.ReplaceNode(OriginalTargetNamespace, TargetNamespace);
-            }
-
-            var typeDeclaration = Compilation.ChildNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault();
-            if (typeDeclaration != null)
-            {
-                return Compilation.InsertNodesBefore(typeDeclaration, new[] { TargetNamespace });
-            }
-            else
-            {
-                return Compilation.AddMembers(TargetNamespace);
             }
         }
     }
