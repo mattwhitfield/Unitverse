@@ -23,15 +23,6 @@
             SourceModel = sourceModel;
             GenerationItem = generationItem;
             DocumentOptions = documentOptions;
-
-            if (targetTree != null)
-            {
-                foreach (var syntax in targetTree.DescendantNodes().OfType<UsingDirectiveSyntax>())
-                {
-                    _usingsEmitted.Add(syntax.NormalizeWhitespace().ToFullString());
-                }
-            }
-
             Compilation = compilation;
             TargetNamespace = targetNamespace;
             OriginalTargetNamespace = originalTargetNamespace;
@@ -48,8 +39,6 @@
         protected BaseNamespace TargetNamespace { get; set; }
 
         protected BaseNamespace? OriginalTargetNamespace { get; set; }
-
-        private HashSet<string> _usingsEmitted = new HashSet<string>();
 
         private List<UsingDirectiveSyntax> _addedUsings = new List<UsingDirectiveSyntax>();
 
@@ -97,30 +86,42 @@
 
         protected void EmitUsingStatements()
         {
-            foreach (var usingDirective in _addedUsings)
-            {
-                var fullString = usingDirective.NormalizeWhitespace().ToFullString();
-                if (_usingsEmitted.Add(fullString))
-                {
-                    if (usingDirective.Name is IdentifierNameSyntax ins && ins.Identifier.ValueText.StartsWith("<global", StringComparison.OrdinalIgnoreCase))
-                    {
-                        continue;
-                    }
+            bool systemUsingsFirst = true;
 
-                    AddUsingToTarget(usingDirective);
-                }
+            while (Compilation.Usings.Any())
+            {
+                var first = Compilation.Usings.First();
+                _addedUsings.Add(first);
+                Compilation = Compilation.RemoveNode(first, SyntaxRemoveOptions.KeepNoTrivia) ?? Compilation;
             }
+
+            while (TargetNamespace.Usings.Any())
+            {
+                var first = TargetNamespace.Usings.First();
+                _addedUsings.Add(first);
+                TargetNamespace = TargetNamespace.RemoveNode(first, SyntaxRemoveOptions.KeepNoTrivia) ?? TargetNamespace;
+            }
+
+            //_addedUsings.AddRange(Compilation.Usings);
+            //_addedUsings.AddRange(TargetNamespace.Usings);
+
+            var categorizedUsings = new CategorizedUsings(_addedUsings, systemUsingsFirst);
+            var resolvedUsings = categorizedUsings.GetResolvedUsingDirectives();
+
+            AddUsingsToTarget(resolvedUsings);
         }
 
-        protected void AddUsingToTarget(UsingDirectiveSyntax usingDirective)
+        protected void AddUsingsToTarget(IEnumerable<UsingDirectiveSyntax> usingDirectives)
         {
             if (GenerationItem.Options.GenerationOptions.EmitUsingsOutsideNamespace)
             {
-                Compilation = Compilation.AddUsings(usingDirective);
+                Compilation = Compilation.WithUsings(SyntaxFactory.List(usingDirectives));
+                TargetNamespace = TargetNamespace.WithUsings(SyntaxFactory.List<UsingDirectiveSyntax>());
             }
             else
             {
-                TargetNamespace = TargetNamespace.AddUsings(usingDirective);
+                Compilation = Compilation.WithUsings(SyntaxFactory.List<UsingDirectiveSyntax>());
+                TargetNamespace = TargetNamespace.WithUsings(SyntaxFactory.List(usingDirectives));
             }
         }
 
