@@ -7,7 +7,7 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-    internal class CategorizedUsings
+    public class CategorizedUsings
     {
         public CategorizedUsings(IEnumerable<UsingDirectiveSyntax> usings, bool separateSystemUsings)
         {
@@ -25,40 +25,50 @@
 
                     if (usingDirective.StaticKeyword.IsKind(SyntaxKind.StaticKeyword))
                     {
-                        StaticUsings.Add(usingDirective);
+                        if (separateSystemUsings && IsSystemUsing(usingDirective))
+                        {
+                            _staticSystemUsings.Add(usingDirective);
+                        }
+                        else
+                        {
+                            _staticNonSystemUsings.Add(usingDirective);
+                        }
                     }
                     else if (usingDirective.Alias != null)
                     {
-                        AliasUsings.Add(usingDirective);
+                        _aliasUsings.Add(usingDirective);
                     }
                     else if (separateSystemUsings && IsSystemUsing(usingDirective))
                     {
-                        SystemUsings.Add(usingDirective);
+                        _systemUsings.Add(usingDirective);
                     }
                     else
                     {
-                        NonSystemUsings.Add(usingDirective);
+                        _nonSystemUsings.Add(usingDirective);
                     }
                 }
             }
         }
 
-        public List<UsingDirectiveSyntax> StaticUsings { get; } = new List<UsingDirectiveSyntax>();
+        private List<UsingDirectiveSyntax> _staticSystemUsings = new List<UsingDirectiveSyntax>();
 
-        public List<UsingDirectiveSyntax> SystemUsings { get; } = new List<UsingDirectiveSyntax>();
+        private List<UsingDirectiveSyntax> _staticNonSystemUsings = new List<UsingDirectiveSyntax>();
 
-        public List<UsingDirectiveSyntax> AliasUsings { get; } = new List<UsingDirectiveSyntax>();
+        private List<UsingDirectiveSyntax> _systemUsings = new List<UsingDirectiveSyntax>();
 
-        public List<UsingDirectiveSyntax> NonSystemUsings { get; } = new List<UsingDirectiveSyntax>();
+        private List<UsingDirectiveSyntax> _aliasUsings = new List<UsingDirectiveSyntax>();
+
+        private List<UsingDirectiveSyntax> _nonSystemUsings = new List<UsingDirectiveSyntax>();
 
         public List<UsingDirectiveSyntax> GetResolvedUsingDirectives()
         {
             var resolvedUsings = new List<UsingDirectiveSyntax>();
 
-            resolvedUsings.AddRange(SystemUsings.OrderBy(x => x.Name.ToString()));
-            resolvedUsings.AddRange(NonSystemUsings.OrderBy(x => x.Name.ToString()));
-            resolvedUsings.AddRange(AliasUsings.OrderBy(x => x.Alias?.ToString()));
-            resolvedUsings.AddRange(StaticUsings.OrderBy(x => x.Name.ToString()));
+            resolvedUsings.AddRange(_systemUsings.OrderBy(x => x.Name.ToString()));
+            resolvedUsings.AddRange(_nonSystemUsings.OrderBy(x => x.Name.ToString()));
+            resolvedUsings.AddRange(_aliasUsings.OrderBy(x => x.Alias?.ToString()));
+            resolvedUsings.AddRange(_staticSystemUsings.OrderBy(x => x.Name.ToString()));
+            resolvedUsings.AddRange(_staticNonSystemUsings.OrderBy(x => x.Name.ToString()));
 
             return resolvedUsings;
         }
