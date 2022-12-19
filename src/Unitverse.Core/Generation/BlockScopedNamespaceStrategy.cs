@@ -6,8 +6,8 @@
 
     public class BlockScopedNamespaceStrategy : CompilationUnitStrategy
     {
-        public BlockScopedNamespaceStrategy(SemanticModel sourceModel, SyntaxNode? targetNode, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax targetCompilationUnit, NamespaceDeclarationSyntax targetNamespace, NamespaceDeclarationSyntax? originalTargetNamespace)
-            : base(sourceModel, targetNode, generationItem, documentOptions, targetCompilationUnit, targetNamespace, originalTargetNamespace)
+        public BlockScopedNamespaceStrategy(SemanticModel sourceModel, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax targetCompilationUnit, NamespaceDeclarationSyntax targetNamespace, NamespaceDeclarationSyntax? originalTargetNamespace)
+            : base(sourceModel, generationItem, documentOptions, targetCompilationUnit, targetNamespace, originalTargetNamespace)
         {
         }
 

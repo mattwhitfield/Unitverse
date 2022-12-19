@@ -18,7 +18,7 @@
 
     public abstract class CompilationUnitStrategy : ICompilationUnitStrategy
     {
-        public CompilationUnitStrategy(SemanticModel sourceModel, SyntaxNode? targetTree, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax compilation, BaseNamespace targetNamespace, BaseNamespace? originalTargetNamespace)
+        public CompilationUnitStrategy(SemanticModel sourceModel, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax compilation, BaseNamespace targetNamespace, BaseNamespace? originalTargetNamespace)
         {
             SourceModel = sourceModel;
             GenerationItem = generationItem;

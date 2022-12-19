@@ -29,7 +29,7 @@
             CompilationUnitSyntax targetCompilation = compilation ?? SyntaxFactory.CompilationUnit();
             NamespaceDeclarationSyntax resolvedTargetNamespace = targetNamespace ?? SyntaxFactory.NamespaceDeclaration(SyntaxFactory.IdentifierName(TargetNamespaceName));
 
-            return new BlockScopedNamespaceStrategy(SourceModel, targetTree, GenerationItem, DocumentOptions, targetCompilation, resolvedTargetNamespace, originalTargetNamespace);
+            return new BlockScopedNamespaceStrategy(SourceModel, GenerationItem, DocumentOptions, targetCompilation, resolvedTargetNamespace, originalTargetNamespace);
         }
     }
 }

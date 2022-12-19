@@ -19,7 +19,19 @@ namespace Unitverse.Core.Tests.Helpers
 
             // Assert
             result.Should().Be("TestValue186491743\r\n\r\n  someValue\n\nSomeOtherValue\nSomething");
+        }
 
+        [Test]
+        public static void CleanTrimsLeadingWhitespace()
+        {
+            // Arrange
+            var content = "\r\n    \r\n  \r\nTestValue186491743\r\n    \r\n  someValue\n    \nSomeOtherValue\nSomething";
+
+            // Act
+            var result = ContentCleaner.Clean(content);
+
+            // Assert
+            result.Should().Be("TestValue186491743\r\n\r\n  someValue\n\nSomeOtherValue\nSomething");
         }
 
         [TestCase(null)]

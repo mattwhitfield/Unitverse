@@ -30,7 +30,7 @@ namespace Unitverse.Core.Generation
             CompilationUnitSyntax targetCompilation = compilation ?? SyntaxFactory.CompilationUnit();
             FileScopedNamespaceDeclarationSyntax resolvedTargetNamespace = targetNamespace ?? SyntaxFactory.FileScopedNamespaceDeclaration(SyntaxFactory.IdentifierName(TargetNamespaceName));
 
-            return new FileScopedNamespaceStrategy(SourceModel, targetTree, GenerationItem, DocumentOptions, targetCompilation, resolvedTargetNamespace, originalTargetNamespace);
+            return new FileScopedNamespaceStrategy(SourceModel, GenerationItem, DocumentOptions, targetCompilation, resolvedTargetNamespace, originalTargetNamespace);
         }
     }
 }

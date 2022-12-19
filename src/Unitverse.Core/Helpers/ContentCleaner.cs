@@ -14,6 +14,8 @@
             var builder = new StringBuilder();
             var lineBuilder = new StringBuilder();
 
+            var anyLinesEmitted = false;
+
             foreach (char c in content)
             {
                 if (c == '\r' || c == '\n')
@@ -25,10 +27,14 @@
                         if (!string.IsNullOrWhiteSpace(line))
                         {
                             builder.Append(line);
+                            anyLinesEmitted = true;
                         }
                     }
 
-                    builder.Append(c);
+                    if (anyLinesEmitted)
+                    {
+                        builder.Append(c);
+                    }
                 }
                 else
                 {
