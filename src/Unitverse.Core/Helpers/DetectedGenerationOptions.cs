@@ -74,9 +74,11 @@
         public string TestTypeBaseClass => _baseOptions.TestTypeBaseClass;
 
         public string TestTypeBaseClassNamespace => _baseOptions.TestTypeBaseClassNamespace;
-
 #if VS2022
+
         public bool GenerateFileScopedNamespaces => _baseOptions.GenerateFileScopedNamespaces;
 #endif
+
+        public bool PlaceSystemUsingDirectivesFirst => _baseOptions.PlaceSystemUsingDirectivesFirst;
     }
 }

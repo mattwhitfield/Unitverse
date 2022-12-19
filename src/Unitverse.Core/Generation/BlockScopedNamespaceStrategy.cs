@@ -1,14 +1,13 @@
 ﻿namespace Unitverse.Core.Generation
 {
-    using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Options;
 
     public class BlockScopedNamespaceStrategy : CompilationUnitStrategy
     {
-        public BlockScopedNamespaceStrategy(SemanticModel sourceModel, SyntaxNode? targetNode, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax targetCompilationUnit, NamespaceDeclarationSyntax targetNamespace, NamespaceDeclarationSyntax? originalTargetNamespace)
-            : base(sourceModel, targetNode, generationItem, documentOptions, targetCompilationUnit, targetNamespace, originalTargetNamespace)
+        public BlockScopedNamespaceStrategy(SemanticModel sourceModel, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax targetCompilationUnit, NamespaceDeclarationSyntax targetNamespace, NamespaceDeclarationSyntax? originalTargetNamespace)
+            : base(sourceModel, generationItem, documentOptions, targetCompilationUnit, targetNamespace, originalTargetNamespace)
         {
         }
 
@@ -16,24 +15,24 @@
 
         public override void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType)
         {
-            if (originalTargetType == null)
-            {
-                originalTargetType = TargetNamespace.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault(x => x.Identifier.ValueText == targetType.Identifier.ValueText);
-            }
+            var replaceableNode = FindTypeNode(TargetNamespace, originalTargetType) ??
+                                  FindTypeNode(TargetNamespace, targetType);
 
-            if (originalTargetType != null)
+            if (replaceableNode != null)
             {
-                var newTargetNamespace = TargetNamespace.RemoveNode(originalTargetType, SyntaxRemoveOptions.KeepNoTrivia);
-                TargetNamespace = newTargetNamespace ?? TargetNamespace;
+                TargetNamespace = TargetNamespace.ReplaceNode(replaceableNode, targetType);
             }
-
-            TargetNamespace = TargetNamespace.AddMembers(targetType);
+            else
+            {
+                TargetNamespace = TargetNamespace.AddMembers(targetType);
+            }
         }
 
         public override CompilationUnitSyntax RenderCompilationUnit()
         {
             EmitUsingStatements();
 
+            UpdateOriginalTargetNamespace();
             if (OriginalTargetNamespace != null)
             {
                 return Compilation.ReplaceNode(OriginalTargetNamespace, TargetNamespace);

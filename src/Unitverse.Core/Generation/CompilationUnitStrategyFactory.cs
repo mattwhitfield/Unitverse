@@ -31,17 +31,29 @@
 
 #if VS2022
             // if there is an existing model, pick the strategy that matches that model (i.e. block scoped if there are any block scoped name spaces)
-            bool blockScopedNamespaceExists = false;
+            bool blockScopedNamespaceExists = false, fileScopedNamespaceExists = false;
             if (targetModel != null)
             {
                 var targetTree = await targetModel.SyntaxTree.GetRootAsync();
                 if (targetTree != null)
                 {
                     blockScopedNamespaceExists = targetTree.DescendantNodes().OfType<NamespaceDeclarationSyntax>().Any();
+                    fileScopedNamespaceExists = targetTree.DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>().Any();
                 }
             }
 
-            if (!generationItem.Options.GenerationOptions.GenerateFileScopedNamespaces || blockScopedNamespaceExists)
+            bool shouldUseBlockScopedNamespace = false;
+
+            if (fileScopedNamespaceExists || blockScopedNamespaceExists)
+            {
+                shouldUseBlockScopedNamespace = blockScopedNamespaceExists;
+            }
+            else
+            {
+                shouldUseBlockScopedNamespace = !generationItem.Options.GenerationOptions.GenerateFileScopedNamespaces;
+            }
+
+            if (shouldUseBlockScopedNamespace)
             {
                 strategyBootstrapper = new BlockScopedNamespaceStrategyBootstrapper(sourceModel, targetModel, generationItem, documentOptions, targetNamespace);
             }

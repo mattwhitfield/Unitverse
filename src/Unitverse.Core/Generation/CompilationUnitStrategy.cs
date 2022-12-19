@@ -18,20 +18,11 @@
 
     public abstract class CompilationUnitStrategy : ICompilationUnitStrategy
     {
-        public CompilationUnitStrategy(SemanticModel sourceModel, SyntaxNode? targetTree, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax compilation, BaseNamespace targetNamespace, BaseNamespace? originalTargetNamespace)
+        public CompilationUnitStrategy(SemanticModel sourceModel, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax compilation, BaseNamespace targetNamespace, BaseNamespace? originalTargetNamespace)
         {
             SourceModel = sourceModel;
             GenerationItem = generationItem;
             DocumentOptions = documentOptions;
-
-            if (targetTree != null)
-            {
-                foreach (var syntax in targetTree.DescendantNodes().OfType<UsingDirectiveSyntax>())
-                {
-                    _usingsEmitted.Add(syntax.NormalizeWhitespace().ToFullString());
-                }
-            }
-
             Compilation = compilation;
             TargetNamespace = targetNamespace;
             OriginalTargetNamespace = originalTargetNamespace;
@@ -49,13 +40,38 @@
 
         protected BaseNamespace? OriginalTargetNamespace { get; set; }
 
-        private HashSet<string> _usingsEmitted = new HashSet<string>();
-
         private List<UsingDirectiveSyntax> _addedUsings = new List<UsingDirectiveSyntax>();
 
         public void AddUsing(UsingDirectiveSyntax usingDirective)
         {
             _addedUsings.Add(usingDirective);
+        }
+
+        protected void UpdateOriginalTargetNamespace()
+        {
+            // find the node represented by 'OriginalTargetNamespace' in the current 'Compilation'
+            if (OriginalTargetNamespace == null)
+            {
+                return;
+            }
+
+            if (Compilation.DescendantNodes().Any(x => x == OriginalTargetNamespace))
+            {
+                return;
+            }
+
+            var searchName = OriginalTargetNamespace.Name.ToString();
+            OriginalTargetNamespace = Compilation.DescendantNodes().OfType<BaseNamespace>().FirstOrDefault(x => x.Name.ToString() == searchName);
+        }
+
+        protected TypeDeclarationSyntax? FindTypeNode(SyntaxNode parent, TypeDeclarationSyntax? searchNode)
+        {
+            if (searchNode == null)
+            {
+                return null;
+            }
+
+            return parent.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault(x => x.Identifier.ValueText == searchNode.Identifier.ValueText);
         }
 
         public void AddTypeParameterAliases(ClassModel classModel, IGenerationContext context)
@@ -97,30 +113,28 @@
 
         protected void EmitUsingStatements()
         {
-            foreach (var usingDirective in _addedUsings)
-            {
-                var fullString = usingDirective.NormalizeWhitespace().ToFullString();
-                if (_usingsEmitted.Add(fullString))
-                {
-                    if (usingDirective.Name is IdentifierNameSyntax ins && ins.Identifier.ValueText.StartsWith("<global", StringComparison.OrdinalIgnoreCase))
-                    {
-                        continue;
-                    }
+            bool systemUsingsFirst = GenerationItem.Options.GenerationOptions.PlaceSystemUsingDirectivesFirst;
 
-                    AddUsingToTarget(usingDirective);
-                }
-            }
+            _addedUsings.AddRange(Compilation.Usings);
+            _addedUsings.AddRange(TargetNamespace.Usings);
+
+            var categorizedUsings = new CategorizedUsings(_addedUsings, systemUsingsFirst);
+            var resolvedUsings = categorizedUsings.GetResolvedUsingDirectives();
+
+            AddUsingsToTarget(resolvedUsings);
         }
 
-        protected void AddUsingToTarget(UsingDirectiveSyntax usingDirective)
+        protected void AddUsingsToTarget(IEnumerable<UsingDirectiveSyntax> usingDirectives)
         {
             if (GenerationItem.Options.GenerationOptions.EmitUsingsOutsideNamespace)
             {
-                Compilation = Compilation.AddUsings(usingDirective);
+                Compilation = Compilation.WithUsings(SyntaxFactory.List(usingDirectives));
+                TargetNamespace = TargetNamespace.WithUsings(SyntaxFactory.List<UsingDirectiveSyntax>());
             }
             else
             {
-                TargetNamespace = TargetNamespace.AddUsings(usingDirective);
+                Compilation = Compilation.WithUsings(SyntaxFactory.List<UsingDirectiveSyntax>());
+                TargetNamespace = TargetNamespace.WithUsings(SyntaxFactory.List(usingDirectives));
             }
         }
 

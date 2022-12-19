@@ -229,10 +229,10 @@ namespace Unitverse.Core.Tests {
         ///
         ///public class C2
         ///{
-        ///    public void SomeMethod();
+        ///    public void SomeMethod() { }
         ///}
         ///-------------------
-        ///namespace TestNamespace.SubNa [rest of string was truncated]&quot;;.
+        ///namespace TestNamespace.Su [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Regeneration_FileScopedUsingsOutsideMultipleClasses {
             get {
@@ -271,6 +271,131 @@ namespace Unitverse.Core.Tests {
         internal static string Regeneration_SampleClass {
             get {
                 return ResourceManager.GetString("Regeneration-SampleClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace SomeOtherNamespace
+        ///{
+        ///    public interface I1 { }
+        ///}
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(System.Guid guidProp, System.Collections.Generic.List&lt;string&gt; iTest, SomeOtherNamespace.I1 i1)
+        ///        { }
+        /// 
+        ///        public async System.Threading.Tasks.Task WillReturnAString()
+        ///        {
+        ///            
+        ///        }
+        ///    }
+        ///}
+        ///-------------------
+        ///namespace SomeOtherNamespace
+        ///{
+        ///    public interface I1 { }
+        ///}
+        ///
+        ///namespace TestNamespace.SubN [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Regeneration_UsingSortNatural {
+            get {
+                return ResourceManager.GetString("Regeneration-UsingSortNatural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # GenerateFileScopedNamespaces=true
+        ///namespace SomeOtherNamespace
+        ///{
+        ///    public interface I1 { }
+        ///}
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(System.Guid guidProp, System.Collections.Generic.List&lt;string&gt; iTest, SomeOtherNamespace.I1 i1)
+        ///        { }
+        /// 
+        ///        public async System.Threading.Tasks.Task WillReturnAString()
+        ///        {
+        ///            
+        ///        }
+        ///    }
+        ///}
+        ///-------------------
+        ///namespace SomeOtherNamespace
+        ///{
+        ///    public interface I [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Regeneration_UsingSortNaturalFileScoped {
+            get {
+                return ResourceManager.GetString("Regeneration-UsingSortNaturalFileScoped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # PlaceSystemUsingDirectivesFirst=true
+        ///namespace SomeOtherNamespace
+        ///{
+        ///    public interface I1 { }
+        ///}
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(System.Guid guidProp, System.Collections.Generic.List&lt;string&gt; iTest, SomeOtherNamespace.I1 i1)
+        ///        { }
+        /// 
+        ///        public async System.Threading.Tasks.Task WillReturnAString()
+        ///        {
+        ///            
+        ///        }
+        ///    }
+        ///}
+        ///-------------------
+        ///namespace SomeOtherNamespace
+        ///{
+        ///    public interfac [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Regeneration_UsingSortSystemFirst {
+            get {
+                return ResourceManager.GetString("Regeneration-UsingSortSystemFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # GenerateFileScopedNamespaces=true
+        ///// # PlaceSystemUsingDirectivesFirst=true
+        ///namespace SomeOtherNamespace
+        ///{
+        ///    public interface I1 { }
+        ///}
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(System.Guid guidProp, System.Collections.Generic.List&lt;string&gt; iTest, SomeOtherNamespace.I1 i1)
+        ///        { }
+        /// 
+        ///        public async System.Threading.Tasks.Task WillReturnAString()
+        ///        {
+        ///            
+        ///        }
+        ///    }
+        ///}
+        ///-------------------
+        ///namespace So [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Regeneration_UsingSortSystemFirstFileScoped {
+            get {
+                return ResourceManager.GetString("Regeneration-UsingSortSystemFirstFileScoped", resourceCulture);
             }
         }
         

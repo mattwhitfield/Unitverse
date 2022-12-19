@@ -2019,6 +2019,114 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to namespace SomeOtherNamespace
+        ///{
+        ///    public interface I1 { }
+        ///}
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(System.Guid guidProp, System.Collections.Generic.List&lt;string&gt; iTest, SomeOtherNamespace.I1 i1)
+        ///        { }
+        /// 
+        ///        public async System.Threading.Tasks.Task WillReturnAString()
+        ///        {
+        ///            
+        ///        }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string UsingSort_Natural {
+            get {
+                return ResourceManager.GetString("UsingSort-Natural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # GenerateFileScopedNamespaces=true
+        ///namespace SomeOtherNamespace
+        ///{
+        ///    public interface I1 { }
+        ///}
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(System.Guid guidProp, System.Collections.Generic.List&lt;string&gt; iTest, SomeOtherNamespace.I1 i1)
+        ///        { }
+        /// 
+        ///        public async System.Threading.Tasks.Task WillReturnAString()
+        ///        {
+        ///            
+        ///        }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string UsingSort_NaturalFileScoped {
+            get {
+                return ResourceManager.GetString("UsingSort-NaturalFileScoped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # PlaceSystemUsingDirectivesFirst=true
+        ///namespace SomeOtherNamespace
+        ///{
+        ///    public interface I1 { }
+        ///}
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(System.Guid guidProp, System.Collections.Generic.List&lt;string&gt; iTest, SomeOtherNamespace.I1 i1)
+        ///        { }
+        /// 
+        ///        public async System.Threading.Tasks.Task WillReturnAString()
+        ///        {
+        ///            
+        ///        }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string UsingSort_SystemFirst {
+            get {
+                return ResourceManager.GetString("UsingSort-SystemFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # GenerateFileScopedNamespaces=true
+        ///// # PlaceSystemUsingDirectivesFirst=true
+        ///namespace SomeOtherNamespace
+        ///{
+        ///    public interface I1 { }
+        ///}
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///        public TestClass(System.Guid guidProp, System.Collections.Generic.List&lt;string&gt; iTest, SomeOtherNamespace.I1 i1)
+        ///        { }
+        /// 
+        ///        public async System.Threading.Tasks.Task WillReturnAString()
+        ///        {
+        ///            
+        ///        }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string UsingSort_SystemFirstFileScoped {
+            get {
+                return ResourceManager.GetString("UsingSort-SystemFirstFileScoped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to namespace Unitverse.Examples
         ///{
         ///    using System;

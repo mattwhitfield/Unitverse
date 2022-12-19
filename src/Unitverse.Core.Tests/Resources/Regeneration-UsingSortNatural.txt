@@ -1,0 +1,40 @@
+namespace SomeOtherNamespace
+{
+    public interface I1 { }
+}
+
+namespace TestNamespace.SubNameSpace
+{
+    public class TestClass
+    {
+        public TestClass(System.Guid guidProp, System.Collections.Generic.List<string> iTest, SomeOtherNamespace.I1 i1)
+        { }
+ 
+        public async System.Threading.Tasks.Task WillReturnAString()
+        {
+            
+        }
+    }
+}
+-------------------
+namespace SomeOtherNamespace
+{
+    public interface I1 { }
+}
+
+namespace TestNamespace.SubNameSpace
+{
+    public class TestClass
+    {
+        public TestClass(System.Guid guidProp, System.Collections.Generic.List<string> iTest, SomeOtherNamespace.I1 i1)
+        { }
+ 
+        public async System.Threading.Tasks.Task WillReturnAString()
+        {
+            
+        }
+
+        public void SomeMethod(System.Text.RegularExpressions.Regex r)
+        { }
+    }
+}

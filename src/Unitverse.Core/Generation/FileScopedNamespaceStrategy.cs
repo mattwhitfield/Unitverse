@@ -8,8 +8,8 @@ namespace Unitverse.Core.Generation
 
     public class FileScopedNamespaceStrategy : CompilationUnitStrategy
     {
-        public FileScopedNamespaceStrategy(SemanticModel sourceModel, SyntaxNode? targetTree, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax targetCompilationUnit, FileScopedNamespaceDeclarationSyntax targetNamespace, FileScopedNamespaceDeclarationSyntax? originalTargetNamespace)
-            : base(sourceModel, targetTree, generationItem, documentOptions, targetCompilationUnit, targetNamespace, originalTargetNamespace)
+        public FileScopedNamespaceStrategy(SemanticModel sourceModel, IGenerationItem generationItem, DocumentOptionSet? documentOptions, CompilationUnitSyntax targetCompilationUnit, FileScopedNamespaceDeclarationSyntax targetNamespace, FileScopedNamespaceDeclarationSyntax? originalTargetNamespace)
+            : base(sourceModel, generationItem, documentOptions, targetCompilationUnit, targetNamespace, originalTargetNamespace)
         {
         }
 
@@ -17,14 +17,12 @@ namespace Unitverse.Core.Generation
 
         public override void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType)
         {
-            if (originalTargetType == null)
-            {
-                originalTargetType = Compilation.DescendantNodes().OfType<TypeDeclarationSyntax>().FirstOrDefault(x => x.Identifier.ValueText == targetType.Identifier.ValueText);
-            }
+            var replaceableNode = FindTypeNode(Compilation, originalTargetType) ??
+                                  FindTypeNode(Compilation, targetType);
 
-            if (originalTargetType != null)
+            if (replaceableNode != null)
             {
-                Compilation = Compilation.ReplaceNode(originalTargetType, targetType);
+                Compilation = Compilation.ReplaceNode(replaceableNode, targetType);
             }
             else
             {
@@ -36,6 +34,7 @@ namespace Unitverse.Core.Generation
         {
             EmitUsingStatements();
 
+            UpdateOriginalTargetNamespace();
             if (OriginalTargetNamespace != null)
             {
                 return Compilation.ReplaceNode(OriginalTargetNamespace, TargetNamespace);
