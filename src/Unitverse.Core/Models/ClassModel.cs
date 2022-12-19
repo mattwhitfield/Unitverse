@@ -202,7 +202,7 @@
 
             var fieldSyntax = frameworkSet.QualifyFieldReference(identifierName);
 
-            if (typeInfo.IsInterface())
+            if (typeInfo.IsInterface() && !typeInfo.IsWellKnownSequenceInterface())
             {
                 return frameworkSet.MockingFramework.GetFieldReference(fieldSyntax);
             }
