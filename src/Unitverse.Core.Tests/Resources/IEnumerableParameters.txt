@@ -1,0 +1,26 @@
+using System.Collections.Generic;
+
+namespace TestNamespace.SubNameSpace
+{
+    public class TestClass
+    {
+		public TestClass(IEnumerable<C> cList)
+		{
+		}
+
+	    public void ThisIsAMethod(IEnumerable<C> cList)
+	    {
+	    }
+
+	    public void ThisIsAMethod(IEnumerable<string> stringList)
+	    {
+	    }
+
+	    public void ThisIsAMethod(IEnumerable<IList<string>> stringListList)
+	    {
+	    }
+    }
+
+	public class C
+	{ }
+}

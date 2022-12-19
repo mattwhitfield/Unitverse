@@ -1009,6 +1009,29 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to using System.Collections.Generic;
+        ///
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///	    public void ThisIsAMethod(IEnumerable&lt;string&gt; stringList)
+        ///	    {
+        ///	    }
+        ///
+        ///	    public void ThisIsAMethod(IEnumerable&lt;IList&lt;string&gt;&gt; stringListList)
+        ///	    {
+        ///	    }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string IEnumerableParameters {
+            get {
+                return ResourceManager.GetString("IEnumerableParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to using System;
         ///
         ///namespace SomeNamespace

@@ -449,7 +449,7 @@
         {
             var typeSyntax = typeInfo.ToTypeSyntax(frameworkSet.Context);
             ExpressionSyntax defaultExpression;
-            if (typeInfo.IsInterface())
+            if (typeInfo.IsInterface() && !typeInfo.IsWellKnownSequenceInterface())
             {
                 typeSyntax = frameworkSet.MockingFramework.GetFieldType(typeSyntax);
                 frameworkSet.Context.InterfacesMocked++;

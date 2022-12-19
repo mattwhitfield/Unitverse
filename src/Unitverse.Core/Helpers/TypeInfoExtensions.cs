@@ -56,6 +56,18 @@
             return typeInfo.Type != null && typeInfo.Type.TypeKind == TypeKind.Interface;
         }
 
+        public static bool IsWellKnownSequenceInterface(this TypeInfo typeInfo)
+        {
+            if (typeInfo.Type == null)
+            {
+                return false;
+            }
+
+            var name = typeInfo.Type.ToFullName();
+            return name == "System.Collections.Generic.IEnumerable" ||
+                   name == "System.Collections.Generic.IList";
+        }
+
         public static TypeSyntax ToTypeSyntax(this TypeInfo typeInfo, IGenerationContext context)
         {
             return typeInfo.Type?.ToTypeSyntax(context) ?? SyntaxFactory.IdentifierName("UnknownType");
