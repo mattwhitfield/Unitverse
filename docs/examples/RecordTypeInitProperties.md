@@ -46,7 +46,7 @@ public class PersonTests
         _firstName = "TestValue607156385";
         _middleName = "TestValue1321446349";
         _lastName = "TestValue1512368656";
-        _iceCreamFlavours = Substitute.For<IList<string>>();
+        _iceCreamFlavours = new[] { "TestValue1507096884", "TestValue2039633683", "TestValue200550235" };
         _testClass = new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours };
     }
 
