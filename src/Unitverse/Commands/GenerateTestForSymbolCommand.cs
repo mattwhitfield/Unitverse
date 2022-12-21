@@ -3,18 +3,12 @@
     using System;
     using System.ComponentModel.Design;
     using System.Globalization;
-    using System.Linq;
-    using System.Threading.Tasks;
     using System.Windows.Input;
     using EnvDTE;
     using EnvDTE80;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Text;
-    using Microsoft.VisualStudio.ComponentModelHost;
     using Microsoft.VisualStudio.Shell;
-    using Microsoft.VisualStudio.Text.Editor;
-    using Microsoft.VisualStudio.TextManager.Interop;
     using Unitverse.Core.Strategies.InterfaceGeneration;
     using Unitverse.Helper;
     using Task = System.Threading.Tasks.Task;
@@ -134,11 +128,13 @@
 
         private void Execute(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             Execute(false);
         }
 
         private void ExecuteRegeneration(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             Execute(true);
         }
 
