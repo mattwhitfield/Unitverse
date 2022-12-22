@@ -56,7 +56,7 @@ jobs:
       run: nuget restore $env:SolutionPath -Verbosity quiet
     - name: Set version for Visual Studio Extension
       if: needs.pre_job.outputs.should_skip != 'true'
-      uses: cezarypiatek/VsixVersionAction@1.0
+      uses: cezarypiatek/VsixVersionAction@1.1
       with:
         version: '${{env.AutoVersion_AssemblySemVer}}'
         vsix-manifest-file: 'src\Unitverse\Manifests\${{ matrix.VsTargetVersion }}\source.extension.vsixmanifest'
