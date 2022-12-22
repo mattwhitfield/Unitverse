@@ -106,33 +106,18 @@ jobs:
         path: dist/
     - name: Create Github Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{env.AutoVersion_SemVer}}
-        release_name: ${{env.AutoVersion_SemVer}}
+        name: ${{env.AutoVersion_SemVer}}
         body: 'Unitverse v${{env.AutoVersion_SemVer}}'
         draft: false
         prerelease: false
-    - name: Upload Unitverse for Visual Studio 2019 to release assets
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: 'dist/UnitverseVS2019.vsix'
-        asset_name: 'Unitverse.VS2019.vsix'
-        asset_content_type: binary/octet-stream
-    - name: Upload Unitverse for Visual Studio 2019 to release assets
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: 'dist/UnitverseVS2022.vsix'
-        asset_name: 'Unitverse.VS2022.vsix'
-        asset_content_type: binary/octet-stream
+        files: |
+          'dist/UnitverseVS2019.vsix'
+          'dist/UnitverseVS2022.vsix'
     - name: Publish 2022 extension to Marketplace
       if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
       uses: cezarypiatek/VsixPublisherAction@0.2
