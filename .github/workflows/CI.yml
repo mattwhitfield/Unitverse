@@ -116,8 +116,8 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          'dist/UnitverseVS2019.vsix'
-          'dist/UnitverseVS2022.vsix'
+          dist/UnitverseVS2019.vsix
+          dist/UnitverseVS2022.vsix
     - name: Publish 2022 extension to Marketplace
       if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
       uses: cezarypiatek/VsixPublisherAction@0.2
