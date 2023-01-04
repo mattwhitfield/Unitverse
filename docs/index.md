@@ -48,4 +48,4 @@ Any contributions are welcome. Code. Feedback on what you like or what could be 
 
 ## Support 🤝
 
-If you'd like to support the project but you don't want to contribute code - a really good way to help is spread the word. There isn't a donation or financial option becuase honestly I don't need donations. I am, however, rubbish at 'marketing'. So any help there would be greatly appreciated! Whether it's a blog post, a marketplace review or just telling some folks at the office - every little helps.
+If you'd like to support the project but you don't want to contribute code - a really good way to help is spread the word. There isn't a donation or financial option because honestly I don't need donations. I am, however, rubbish at 'marketing'. So any help there would be greatly appreciated! Whether it's a blog post, a marketplace review or just telling some folks at the office - every little helps.
