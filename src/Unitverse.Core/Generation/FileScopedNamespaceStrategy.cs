@@ -15,21 +15,6 @@ namespace Unitverse.Core.Generation
 
         public override SyntaxNode TargetRoot => Compilation;
 
-        public override void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType)
-        {
-            var replaceableNode = FindTypeNode(Compilation, originalTargetType) ??
-                                  FindTypeNode(Compilation, targetType);
-
-            if (replaceableNode != null)
-            {
-                Compilation = Compilation.ReplaceNode(replaceableNode, targetType);
-            }
-            else
-            {
-                Compilation = Compilation.AddMembers(targetType);
-            }
-        }
-
         public override CompilationUnitSyntax RenderCompilationUnit()
         {
             EmitUsingStatements();

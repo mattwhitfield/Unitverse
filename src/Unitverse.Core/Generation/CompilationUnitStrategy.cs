@@ -138,7 +138,20 @@
             }
         }
 
-        public abstract void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType);
+        public void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType)
+        {
+            var replaceableNode = FindTypeNode(TargetNamespace, originalTargetType) ??
+                                    FindTypeNode(TargetNamespace, targetType);
+
+            if (replaceableNode != null)
+            {
+                TargetNamespace = TargetNamespace.ReplaceNode(replaceableNode, targetType);
+            }
+            else
+            {
+                TargetNamespace = TargetNamespace.AddMembers(targetType);
+            }
+        }
 
         public abstract CompilationUnitSyntax RenderCompilationUnit();
 
