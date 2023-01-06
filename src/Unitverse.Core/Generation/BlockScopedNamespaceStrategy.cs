@@ -13,21 +13,6 @@
 
         public override SyntaxNode TargetRoot => TargetNamespace;
 
-        public override void AddTypeToTarget(TypeDeclarationSyntax targetType, TypeDeclarationSyntax? originalTargetType)
-        {
-            var replaceableNode = FindTypeNode(TargetNamespace, originalTargetType) ??
-                                  FindTypeNode(TargetNamespace, targetType);
-
-            if (replaceableNode != null)
-            {
-                TargetNamespace = TargetNamespace.ReplaceNode(replaceableNode, targetType);
-            }
-            else
-            {
-                TargetNamespace = TargetNamespace.AddMembers(targetType);
-            }
-        }
-
         public override CompilationUnitSyntax RenderCompilationUnit()
         {
             EmitUsingStatements();

@@ -167,6 +167,7 @@
 
             Assert.IsTrue(result.Success, "Generated output has errors: " + string.Join(Environment.NewLine, result.Diagnostics.Where(x => x.Location.SourceTree == generatedTree).OrderBy(x => x.Location.GetLineSpan().StartLinePosition.Line).Select(x => x.Location.GetLineSpan().StartLinePosition.Line + ": " + x.GetMessage())));
             Assert.That(streamLength, Is.GreaterThan(0));
+            Assert.That(core2.FileContent.Length, Is.GreaterThan(core.FileContent.Length));
         }
 
         [Test]
