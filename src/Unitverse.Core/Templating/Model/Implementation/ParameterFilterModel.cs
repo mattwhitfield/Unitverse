@@ -13,12 +13,13 @@
         {
             _source = source;
             _semanticModel = semanticModel;
+            Attributes = new LazyEnumerable<IAttribute>(() => _source.Node.GetAttributeModels(_semanticModel));
         }
 
         public string Name => _source.Name;
 
         public IType? Type => _source.Node.Type.GetTypeModel(_semanticModel);
 
-        public IEnumerable<IAttribute> Attributes => _source.Node.GetAttributeModels(_semanticModel);
+        public IEnumerable<IAttribute> Attributes { get; }
     }
 }

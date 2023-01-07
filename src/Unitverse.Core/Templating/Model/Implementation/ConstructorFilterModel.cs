@@ -14,10 +14,12 @@
         {
             _source = source;
             _semanticModel = semanticModel;
+            Parameters = new LazyEnumerable<IParameter>(() => _source.Parameters.Select(x => new ParameterFilterModel(x, _semanticModel)));
+            Attributes = new LazyEnumerable<IAttribute>(() => _source.Node.GetAttributeModels(_semanticModel));
         }
 
-        public IEnumerable<IParameter> Parameters => _source.Parameters.Select(x => new ParameterFilterModel(x, _semanticModel));
+        public IEnumerable<IParameter> Parameters { get; }
 
-        public IEnumerable<IAttribute> Attributes => _source.Node.GetAttributeModels(_semanticModel);
-    }
+        public IEnumerable<IAttribute> Attributes { get; }
+}
 }
