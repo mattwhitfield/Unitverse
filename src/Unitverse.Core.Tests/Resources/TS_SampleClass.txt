@@ -1,0 +1,71 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+
+namespace TestNamespace.SubNameSpace
+{
+    [Serializable]
+    public class TestClass : IEnumerable<string>
+    {
+        [Obsolete]
+        public TestClass(string stringProp)
+        { }
+
+        public TestClass(string stringProp, int intProp)
+        { }
+
+        [STAThread]
+        public void ThisIsAMethod(string methodName, int methodValue)
+        {
+            System.Console.WriteLine("Testing this");
+        }
+
+        public void MethodWithAttributeOnParameter([CallerMemberName]string methodName, int methodValue)
+        {
+            System.Console.WriteLine("Testing this");
+        }
+
+        [Obsolete]
+        [CallerLineNumber, Category("bass")]
+        public string GottaLoveAttributes()
+        {
+            return "Yes mate!";
+        }
+
+        public static string WillReturnAString()
+        {
+            return "Hello";
+        }
+
+        public async Task<string> AsyncMethod()
+        {
+            await Task.Delay(1);
+            return "Dimples";
+        }
+
+        public KeyValuePair<string, string> WillReturnAKeyValuePair()
+        {
+            return new KeyValuePair<string, string>("Hello", "There");
+        }
+
+        public IEnumerator<string> GetEnumerator()
+        {
+            return new List<string> { "Hello" }.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        [Category("fred")]
+        public static string ThisIsAReadOnlyString => "fred";
+
+        public string ThisIsAWriteOnlyString { set { } }
+
+        public string ThisIsAReadWriteString { get; set; }
+    }
+}

@@ -75,6 +75,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>RegenerationTestClasses.resx</DependentUpon>
     </Compile>
+    <Compile Update="Templating\ModelIntegration\TemplateModelSources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TemplateModelSources.resx</DependentUpon>
+    </Compile>
     <Compile Update="TestClasses.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -86,6 +91,10 @@
     <EmbeddedResource Update="RegenerationTestClasses.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>RegenerationTestClasses.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Templating\ModelIntegration\TemplateModelSources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TemplateModelSources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="TestClasses.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
