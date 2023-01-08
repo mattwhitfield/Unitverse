@@ -1,10 +1,21 @@
 ﻿namespace Unitverse.Core.Helpers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CodeAnalysis;
 
     public static class SymbolExtensions
     {
+        public static IEnumerable<INamedTypeSymbol> GetBaseTypes(this INamedTypeSymbol namedTypeSymbol)
+        {
+            while (namedTypeSymbol.BaseType != null)
+            {
+                yield return namedTypeSymbol.BaseType;
+
+                namedTypeSymbol = namedTypeSymbol.BaseType;
+            }
+        }
+
         public static bool IsAwaitableNonDynamic(this IMethodSymbol symbol)
         {
             if (symbol == null)
