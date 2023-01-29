@@ -145,14 +145,14 @@
             return Generate.Statement(AssertCall("NotNull").WithArgs(value));
         }
 
-        public StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall)
+        public StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string? associatedParameterName)
         {
-            return Generate.Statement(AssertThrows(exceptionType, methodCall, "Throws"));
+            return Generate.Statement(AssertThrowsCore(exceptionType, methodCall, "Throws"));
         }
 
-        public StatementSyntax AssertThrowsAsync(TypeSyntax exceptionType, ExpressionSyntax methodCall)
+        public StatementSyntax AssertThrowsAsync(TypeSyntax exceptionType, ExpressionSyntax methodCall, string? associatedParameterName)
         {
-            return Generate.Statement(SyntaxFactory.AwaitExpression(AssertThrows(exceptionType, methodCall, "ThrowsAsync")));
+            return Generate.Statement(SyntaxFactory.AwaitExpression(AssertThrowsCore(exceptionType, methodCall, "ThrowsAsync")));
         }
 
         protected override BaseMethodDeclarationSyntax CreateSetupMethodSyntax(string targetTypeName)
@@ -170,7 +170,7 @@
             return Generate.MemberInvocation("Assert", assertMethod);
         }
 
-        private static InvocationExpressionSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string throws)
+        private static InvocationExpressionSyntax AssertThrowsCore(TypeSyntax exceptionType, ExpressionSyntax methodCall, string throws)
         {
             if (exceptionType == null)
             {

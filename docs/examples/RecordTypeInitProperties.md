@@ -63,7 +63,7 @@ public class PersonTests
     [Fact]
     public void CannotInitializeWithNullIceCreamFlavours()
     {
-        FluentActions.Invoking(() => new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = default(IList<string>) }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = default(IList<string>) }).Should().Throw<ArgumentNullException>().WithParameterName("IceCreamFlavours");
     }
 
     [Theory]
@@ -72,7 +72,7 @@ public class PersonTests
     [InlineData("   ")]
     public void CannotInitializeWithInvalidFirstName(string value)
     {
-        FluentActions.Invoking(() => new Person { Id = _id, FirstName = value, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new Person { Id = _id, FirstName = value, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours }).Should().Throw<ArgumentNullException>().WithParameterName("FirstName");
     }
 
     [Theory]
@@ -80,7 +80,7 @@ public class PersonTests
     [InlineData("   ")]
     public void CannotInitializeWithInvalidMiddleName(string value)
     {
-        FluentActions.Invoking(() => new Person { Id = _id, FirstName = _firstName, MiddleName = value, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new Person { Id = _id, FirstName = _firstName, MiddleName = value, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours }).Should().Throw<ArgumentNullException>().WithParameterName("MiddleName");
     }
 
     [Theory]
@@ -89,7 +89,7 @@ public class PersonTests
     [InlineData("   ")]
     public void CannotInitializeWithInvalidLastName(string value)
     {
-        FluentActions.Invoking(() => new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = value, IceCreamFlavours = _iceCreamFlavours }).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = value, IceCreamFlavours = _iceCreamFlavours }).Should().Throw<ArgumentNullException>().WithParameterName("LastName");
     }
 
     [Fact]

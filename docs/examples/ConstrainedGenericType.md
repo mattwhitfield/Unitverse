@@ -69,13 +69,13 @@ public class TestClass_2Tests
     [Fact]
     public void CannotConstructWithNullInsta()
     {
-        FluentActions.Invoking(() => new TestClass<T, R>(default(T), new TestBoth { ThisIsAProperty = 1657007234, ThisIsAnotherProperty = 1412011072 })).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new TestClass<T, R>(default(T), new TestBoth { ThisIsAProperty = 1657007234, ThisIsAnotherProperty = 1412011072 })).Should().Throw<ArgumentNullException>().WithParameterName("insta");
     }
 
     [Fact]
     public void CannotConstructWithNullInsta2()
     {
-        FluentActions.Invoking(() => new TestClass<T, R>(new Test { ThisIsAProperty = 929393559 }, default(R))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new TestClass<T, R>(new Test { ThisIsAProperty = 929393559 }, default(R))).Should().Throw<ArgumentNullException>().WithParameterName("insta2");
     }
 
     [Fact]

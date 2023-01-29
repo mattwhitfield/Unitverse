@@ -56,7 +56,7 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotCallGetTableNameWithInvalidBaseName(string value)
     {
-        FluentActions.Invoking(() => _testClass.GetTableName(value)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.GetTableName(value)).Should().Throw<ArgumentNullException>().WithParameterName("baseName");
     }
 
     [Fact]

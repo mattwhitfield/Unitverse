@@ -92,7 +92,7 @@
                         SyntaxFactory.SingletonList<StatementSyntax>(
                             Generate.ImplicitlyTypedVariableDeclaration("result", methodCall))));
 
-                generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), assignment));
+                generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), assignment, null));
 
                 yield return generatedMethod;
             }

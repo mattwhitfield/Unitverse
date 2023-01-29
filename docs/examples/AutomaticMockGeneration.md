@@ -101,13 +101,13 @@ public class AutomaticMockGenerationExampleTests
     [Fact]
     public void CannotConstructWithNullDummyService()
     {
-        FluentActions.Invoking(() => new AutomaticMockGenerationExample(default(IDummyService), Substitute.For<IDummyService2>())).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new AutomaticMockGenerationExample(default(IDummyService), Substitute.For<IDummyService2>())).Should().Throw<ArgumentNullException>().WithParameterName("dummyService");
     }
 
     [Fact]
     public void CannotConstructWithNullDummyService2()
     {
-        FluentActions.Invoking(() => new AutomaticMockGenerationExample(Substitute.For<IDummyService>(), default(IDummyService2))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new AutomaticMockGenerationExample(Substitute.For<IDummyService>(), default(IDummyService2))).Should().Throw<ArgumentNullException>().WithParameterName("dummyService2");
     }
 
     [Fact]
@@ -154,7 +154,7 @@ public class AutomaticMockGenerationExampleTests
     [InlineData("   ")]
     public void CannotCallSampleNoReturnWithInvalidSrr(string value)
     {
-        FluentActions.Invoking(() => _testClass.SampleNoReturn(value)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.SampleNoReturn(value)).Should().Throw<ArgumentNullException>().WithParameterName("srr");
     }
 }
 

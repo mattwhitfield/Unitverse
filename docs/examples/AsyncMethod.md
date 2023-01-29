@@ -51,7 +51,7 @@ public class TestClassTests
     [InlineData("   ")]
     public async Task CannotCallThisIsAnAsyncMethodWithInvalidMethodName(string value)
     {
-        await FluentActions.Invoking(() => _testClass.ThisIsAnAsyncMethod(value, 1002897798)).Should().ThrowAsync<ArgumentNullException>();
+        await FluentActions.Invoking(() => _testClass.ThisIsAnAsyncMethod(value, 1002897798)).Should().ThrowAsync<ArgumentNullException>().WithParameterName("methodName");
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public class TestClassTests
     [InlineData("   ")]
     public async Task CannotCallThisIsAnAsyncMethodWithReturnTypeWithInvalidMethodName(string value)
     {
-        await FluentActions.Invoking(() => _testClass.ThisIsAnAsyncMethodWithReturnType(value, 929393559)).Should().ThrowAsync<ArgumentNullException>();
+        await FluentActions.Invoking(() => _testClass.ThisIsAnAsyncMethodWithReturnType(value, 929393559)).Should().ThrowAsync<ArgumentNullException>().WithParameterName("methodName");
     }
 }
 

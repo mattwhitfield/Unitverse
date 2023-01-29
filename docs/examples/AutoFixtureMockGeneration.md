@@ -104,7 +104,7 @@ public class AutomaticMockGenerationExampleTests
     {
         // Arrange
         var fixture = new Fixture().Customize(new AutoNSubstituteCustomization());
-        FluentActions.Invoking(() => new AutomaticMockGenerationExample(default(IDummyService), fixture.Create<IDummyService2>())).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new AutomaticMockGenerationExample(default(IDummyService), fixture.Create<IDummyService2>())).Should().Throw<ArgumentNullException>().WithParameterName("dummyService");
     }
 
     [Fact]
@@ -112,7 +112,7 @@ public class AutomaticMockGenerationExampleTests
     {
         // Arrange
         var fixture = new Fixture().Customize(new AutoNSubstituteCustomization());
-        FluentActions.Invoking(() => new AutomaticMockGenerationExample(fixture.Create<IDummyService>(), default(IDummyService2))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new AutomaticMockGenerationExample(fixture.Create<IDummyService>(), default(IDummyService2))).Should().Throw<ArgumentNullException>().WithParameterName("dummyService2");
     }
 
     [Fact]
@@ -162,7 +162,7 @@ public class AutomaticMockGenerationExampleTests
     [InlineData("   ")]
     public void CannotCallSampleNoReturnWithInvalidSrr(string value)
     {
-        FluentActions.Invoking(() => _testClass.SampleNoReturn(value)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.SampleNoReturn(value)).Should().Throw<ArgumentNullException>().WithParameterName("srr");
     }
 }
 

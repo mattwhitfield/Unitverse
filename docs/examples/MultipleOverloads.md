@@ -44,7 +44,7 @@ public static class FluentFactoryTests
     [Fact]
     public static void CannotCallFollowsWithNullFollowedStages()
     {
-        FluentActions.Invoking(() => Stage.Third.Follows(default(Stage[]))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => Stage.Third.Follows(default(Stage[]))).Should().Throw<ArgumentNullException>().WithParameterName("followedStages");
     }
 
     [Fact]
@@ -64,13 +64,13 @@ public static class FluentFactoryTests
     [Fact]
     public static void CannotCallAndWithFirstConstraintAndSecondConstraintWithNullFirstConstraint()
     {
-        FluentActions.Invoking(() => default(Tuple<Stage, IList<Stage>>).And(new Tuple<Stage, IList<Stage>>(Stage.Fourth, new[] { Stage.Third, Stage.Third, Stage.Second }))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => default(Tuple<Stage, IList<Stage>>).And(new Tuple<Stage, IList<Stage>>(Stage.Fourth, new[] { Stage.Third, Stage.Third, Stage.Second }))).Should().Throw<ArgumentNullException>().WithParameterName("firstConstraint");
     }
 
     [Fact]
     public static void CannotCallAndWithFirstConstraintAndSecondConstraintWithNullSecondConstraint()
     {
-        FluentActions.Invoking(() => new Tuple<Stage, IList<Stage>>(Stage.Third, new[] { Stage.Third, Stage.Third, Stage.Fourth }).And(default(Tuple<Stage, IList<Stage>>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new Tuple<Stage, IList<Stage>>(Stage.Third, new[] { Stage.Third, Stage.Third, Stage.Fourth }).And(default(Tuple<Stage, IList<Stage>>))).Should().Throw<ArgumentNullException>().WithParameterName("secondConstraint");
     }
 
     [Fact]
@@ -90,13 +90,13 @@ public static class FluentFactoryTests
     [Fact]
     public static void CannotCallAndWithConstraintsAndAdditionalConstraintWithNullConstraints()
     {
-        FluentActions.Invoking(() => default(IDictionary<Stage, IList<Stage>>).And(new Tuple<Stage, IList<Stage>>(Stage.First, new[] { Stage.Fourth, Stage.Second, Stage.Fourth }))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => default(IDictionary<Stage, IList<Stage>>).And(new Tuple<Stage, IList<Stage>>(Stage.First, new[] { Stage.Fourth, Stage.Second, Stage.Fourth }))).Should().Throw<ArgumentNullException>().WithParameterName("constraints");
     }
 
     [Fact]
     public static void CannotCallAndWithConstraintsAndAdditionalConstraintWithNullAdditionalConstraint()
     {
-        FluentActions.Invoking(() => Substitute.For<IDictionary<Stage, IList<Stage>>>().And(default(Tuple<Stage, IList<Stage>>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => Substitute.For<IDictionary<Stage, IList<Stage>>>().And(default(Tuple<Stage, IList<Stage>>))).Should().Throw<ArgumentNullException>().WithParameterName("additionalConstraint");
     }
 }
 

@@ -121,7 +121,7 @@ public class TestComparableGenericTests
     [Fact]
     public void CannotCallCompareToWithTestComparableGenericWithNullObj()
     {
-        FluentActions.Invoking(() => _testClass.CompareTo(default(TestComparableGeneric))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.CompareTo(default(TestComparableGeneric))).Should().Throw<ArgumentNullException>().WithParameterName("obj");
     }
 
     [Fact]
@@ -153,7 +153,7 @@ public class TestComparableGenericTests
     [Fact]
     public void CannotCallCompareToWithObjectWithNullObj()
     {
-        FluentActions.Invoking(() => _testClass.CompareTo(default(object))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.CompareTo(default(object))).Should().Throw<ArgumentNullException>().WithParameterName("obj");
     }
 
     [Fact]

@@ -150,14 +150,14 @@
                         AssertThat.WithArgs(value, Generate.MemberAccess(Generate.MemberAccess("Is", "Not"), "Null")));
         }
 
-        public StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall)
+        public StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string? associatedParameterName)
         {
-            return AssertThrows(exceptionType, methodCall, "Throws");
+            return AssertThrowsCore(exceptionType, methodCall, "Throws");
         }
 
-        public StatementSyntax AssertThrowsAsync(TypeSyntax exceptionType, ExpressionSyntax methodCall)
+        public StatementSyntax AssertThrowsAsync(TypeSyntax exceptionType, ExpressionSyntax methodCall, string? associatedParameterName)
         {
-            return AssertThrows(exceptionType, methodCall, "ThrowsAsync");
+            return AssertThrowsCore(exceptionType, methodCall, "ThrowsAsync");
         }
 
         protected override BaseMethodDeclarationSyntax CreateSetupMethodSyntax(string targetTypeName)
@@ -170,7 +170,7 @@
             yield return Generate.UsingDirective("NUnit.Framework");
         }
 
-        private static StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string throws)
+        private static StatementSyntax AssertThrowsCore(TypeSyntax exceptionType, ExpressionSyntax methodCall, string throws)
         {
             if (exceptionType == null)
             {

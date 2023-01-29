@@ -106,7 +106,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethodWithHasOutParamAndReturnTypeWithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOutParamAndReturnType))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOutParamAndReturnType))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethodWithHasAllTheThingsWithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasAllTheThings))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasAllTheThings))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 
     [Fact]
@@ -144,7 +144,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethodWithHasOutParamWithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOutParam))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOutParam))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 
     [Fact]
@@ -163,7 +163,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethodWithHasRefParamWithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasRefParam))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasRefParam))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 
     [Fact]
@@ -182,7 +182,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethodWithHasOnlyOutParamWithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOnlyOutParam))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOnlyOutParam))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 
     [Fact]
@@ -201,7 +201,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethodWithHasOnlyRefParamWithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOnlyRefParam))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(HasOnlyRefParam))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 
     [Fact]
@@ -220,7 +220,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethodWithFuncOfStringWithNullFunc()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(Func<string>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(default(Func<string>))).Should().Throw<ArgumentNullException>().WithParameterName("func");
     }
 
     [Fact]
@@ -239,7 +239,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethod2WithNullFunc()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod2(default(Func<string, SomeClass>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod2(default(Func<string, SomeClass>))).Should().Throw<ArgumentNullException>().WithParameterName("func");
     }
 
     [Fact]
@@ -258,7 +258,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethod3WithNullFunc()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod3(default(Func<int, string, SomeClass>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod3(default(Func<int, string, SomeClass>))).Should().Throw<ArgumentNullException>().WithParameterName("func");
     }
 
     [Fact]
@@ -277,7 +277,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethod4WithNullFunc()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod4(default(Func<int, int, string, SomeClass>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod4(default(Func<int, int, string, SomeClass>))).Should().Throw<ArgumentNullException>().WithParameterName("func");
     }
 
     [Fact]
@@ -296,7 +296,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethod5WithNullFunc()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod5(default(Func<int, int, int, string, SomeClass>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod5(default(Func<int, int, int, string, SomeClass>))).Should().Throw<ArgumentNullException>().WithParameterName("func");
     }
 
     [Fact]
@@ -315,7 +315,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethod6WithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod6(default(Action))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod6(default(Action))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 
     [Fact]
@@ -334,7 +334,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethod7WithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod7(default(Action<SomeClass>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod7(default(Action<SomeClass>))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 
     [Fact]
@@ -353,7 +353,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethod8WithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod8(default(Action<SomeClass, int>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod8(default(Action<SomeClass, int>))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 
     [Fact]
@@ -372,7 +372,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethod9WithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod9(default(Action<SomeClass, int, int>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod9(default(Action<SomeClass, int, int>))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 
     [Fact]
@@ -391,7 +391,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethod10WithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod10(default(Action<SomeClass, int, int, int>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod10(default(Action<SomeClass, int, int, int>))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 
     [Fact]
@@ -410,7 +410,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethod11WithNullAction()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod11(default(Action<SomeClass, int, int, int, int>))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod11(default(Action<SomeClass, int, int, int, int>))).Should().Throw<ArgumentNullException>().WithParameterName("action");
     }
 }
 

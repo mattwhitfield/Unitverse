@@ -54,7 +54,7 @@ public class MappingClassTests
     [Fact]
     public void CannotCallMapWithNullInputClass()
     {
-        FluentActions.Invoking(() => _testClass.Map(default(InputClass))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.Map(default(InputClass))).Should().Throw<ArgumentNullException>().WithParameterName("inputClass");
     }
 
     [Fact]

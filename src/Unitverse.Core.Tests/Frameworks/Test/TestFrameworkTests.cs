@@ -123,7 +123,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
             var testClass = CreateFramework(frameworkTypes);
             var exceptionType = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword));
             var methodCall = Generate.Literal(1);
-            var result = testClass.AssertThrows(exceptionType, methodCall);
+            var result = testClass.AssertThrows(exceptionType, methodCall, null);
             Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 
@@ -136,7 +136,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
             var testClass = CreateFramework(frameworkTypes);
             var exceptionType = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword));
             var methodCall = Generate.Literal(1);
-            var result = testClass.AssertThrowsAsync(exceptionType, methodCall);
+            var result = testClass.AssertThrowsAsync(exceptionType, methodCall, null);
             Assert.That(result.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 
@@ -216,13 +216,13 @@ namespace Unitverse.Core.Tests.Frameworks.Test
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertEqualWithNullActual(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertEqual(default(ExpressionSyntax), Generate.Literal(1), true));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertEqual(default, Generate.Literal(1), true));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertEqualWithNullExpected(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertEqual(Generate.Literal(1), default(ExpressionSyntax), false));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertEqual(Generate.Literal(1), default, false));
         }
 
         [TestCaseSource(nameof(Targets))]
@@ -234,43 +234,43 @@ namespace Unitverse.Core.Tests.Frameworks.Test
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertIsInstanceOfWithNullType(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertIsInstanceOf(Generate.Literal(1), default(TypeSyntax), true));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertIsInstanceOf(Generate.Literal(1), default, true));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertIsInstanceOfWithNullValue(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertIsInstanceOf(default(ExpressionSyntax), SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), true));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertIsInstanceOf(default, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), true));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertNotNullWithNullValue(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertNotNull(default(ExpressionSyntax)));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertNotNull(default));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertThrowsAsyncWithNullExceptionType(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertThrowsAsync(default(TypeSyntax), Generate.Literal(1)));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertThrowsAsync(default, Generate.Literal(1), null));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertThrowsAsyncWithNullMethodCall(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertThrowsAsync(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), default(ExpressionSyntax)));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertThrowsAsync(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), default, null));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertThrowsWithNullExceptionType(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertThrows(default(TypeSyntax), Generate.Literal(1)));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertThrows(default, Generate.Literal(1), null));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallAssertThrowsWithNullMethodCall(ITestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.AssertThrows(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), default(ExpressionSyntax)));
+            Assert.Throws<ArgumentNullException>(() => testClass.AssertThrows(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), default, null));
         }
 
         [TestCaseSource(nameof(Targets))]
@@ -294,7 +294,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
         [TestCaseSource(nameof(Targets))]
         public void CannotCallCreateTestCaseMethodWithNullValueType(IExtendedTestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.CreateTestCaseMethod(new NameResolver("name"), new NamingContext("class"), true, false, default(TypeSyntax), new[] { new object(), new object(), new object() }, ""));
+            Assert.Throws<ArgumentNullException>(() => testClass.CreateTestCaseMethod(new NameResolver("name"), new NamingContext("class"), true, false, default, new[] { new object(), new object(), new object() }, ""));
         }
 
         [TestCaseSource(nameof(Targets))]

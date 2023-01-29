@@ -43,7 +43,7 @@ public static class TestClassTests
     [Fact]
     public static void CannotCallThisIsAMethodWithNullMethodValue()
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod("TestValue1002897798", default(CultureInfo))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod("TestValue1002897798", default(CultureInfo))).Should().Throw<ArgumentNullException>().WithParameterName("methodValue");
     }
 
     [Theory]
@@ -52,7 +52,7 @@ public static class TestClassTests
     [InlineData("   ")]
     public static void CannotCallThisIsAMethodWithInvalidMethodName(string value)
     {
-        FluentActions.Invoking(() => TestClass.ThisIsAMethod(value, CultureInfo.InvariantCulture)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => TestClass.ThisIsAMethod(value, CultureInfo.InvariantCulture)).Should().Throw<ArgumentNullException>().WithParameterName("methodName");
     }
 
     [Fact]
