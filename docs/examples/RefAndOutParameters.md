@@ -60,7 +60,7 @@ public class TestClassTests
     public void CannotCallRefParamMethodStringWithInvalidStringProp(string value)
     {
         var refParam = "TestValue1002897798";
-        FluentActions.Invoking(() => _testClass.RefParamMethodString(value, ref refParam)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.RefParamMethodString(value, ref refParam)).Should().Throw<ArgumentNullException>().WithParameterName("stringProp");
     }
 
     [Theory]
@@ -70,7 +70,7 @@ public class TestClassTests
     public void CannotCallRefParamMethodStringWithInvalidRefParam(string value)
     {
         var refParam = default(string);
-        FluentActions.Invoking(() => _testClass.RefParamMethodString("TestValue1657007234", ref refParam)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.RefParamMethodString("TestValue1657007234", ref refParam)).Should().Throw<ArgumentNullException>().WithParameterName("refParam");
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotCallOutParamMethodStringWithInvalidStringProp(string value)
     {
-        FluentActions.Invoking(() => _testClass.OutParamMethodString(value, out _)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.OutParamMethodString(value, out _)).Should().Throw<ArgumentNullException>().WithParameterName("stringProp");
     }
 
     [Fact]
@@ -113,7 +113,7 @@ public class TestClassTests
     public void CannotCallRefParamMethodClassWithNullRefParam()
     {
         var refParam = default(TestClass);
-        FluentActions.Invoking(() => _testClass.RefParamMethodClass("TestValue2026928803", ref refParam)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.RefParamMethodClass("TestValue2026928803", ref refParam)).Should().Throw<ArgumentNullException>().WithParameterName("refParam");
     }
 
     [Theory]
@@ -123,7 +123,7 @@ public class TestClassTests
     public void CannotCallRefParamMethodClassWithInvalidStringProp(string value)
     {
         var refParam = new TestClass();
-        FluentActions.Invoking(() => _testClass.RefParamMethodClass(value, ref refParam)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.RefParamMethodClass(value, ref refParam)).Should().Throw<ArgumentNullException>().WithParameterName("stringProp");
     }
 
     [Fact]
@@ -145,7 +145,7 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotCallOutParamMethodClassWithInvalidStringProp(string value)
     {
-        FluentActions.Invoking(() => _testClass.OutParamMethodClass(value, out _)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.OutParamMethodClass(value, out _)).Should().Throw<ArgumentNullException>().WithParameterName("stringProp");
     }
 }
 

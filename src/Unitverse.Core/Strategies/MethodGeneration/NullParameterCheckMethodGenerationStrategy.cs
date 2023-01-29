@@ -120,11 +120,11 @@
 
                 if (method.IsAsync)
                 {
-                    generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrowsAsync(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));
+                    generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrowsAsync(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall, currentParam.Name));
                 }
                 else
                 {
-                    generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall));
+                    generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall, currentParam.Name));
                 }
 
                 yield return generatedMethod;

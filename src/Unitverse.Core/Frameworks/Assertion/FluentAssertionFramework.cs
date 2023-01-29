@@ -90,23 +90,34 @@
             return Generate.Statement(Should(value, "NotBeNull"));
         }
 
-        public StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall)
+        public StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string? associatedParameterName)
         {
-            return Generate.Statement(AssertThrows(exceptionType, methodCall, "Throw"));
+            return Generate.Statement(AssertThrows(exceptionType, methodCall, "Throw", associatedParameterName));
         }
 
-        public StatementSyntax AssertThrowsAsync(TypeSyntax exceptionType, ExpressionSyntax methodCall)
+        public StatementSyntax AssertThrowsAsync(TypeSyntax exceptionType, ExpressionSyntax methodCall, string? associatedParameterName)
         {
-            return Generate.Statement(SyntaxFactory.AwaitExpression(AssertThrows(exceptionType, methodCall, "ThrowAsync")));
+            return Generate.Statement(SyntaxFactory.AwaitExpression(AssertThrows(exceptionType, methodCall, "ThrowAsync", associatedParameterName)));
         }
 
-        private ExpressionSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string methodName)
+        private ExpressionSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string methodName, string? associatedParameterName)
         {
+            var coreExpression =
+                Generate.MemberInvocation(
+                    Generate.MemberInvocation(
+                        Generate.MemberInvocation("FluentActions", "Invoking", Generate.ParenthesizedLambdaExpression(methodCall)),
+                        "Should"),
+                    Generate.GenericName(methodName, exceptionType));
+
+            if (string.IsNullOrWhiteSpace(associatedParameterName))
+            {
+                return coreExpression;
+            }
+
             return Generate.MemberInvocation(
-                        Generate.MemberInvocation(
-                            Generate.MemberInvocation("FluentActions", "Invoking", Generate.ParenthesizedLambdaExpression(methodCall)),
-                            "Should"),
-                        Generate.GenericName(methodName, exceptionType));
+                coreExpression,
+                "WithParameterName",
+                Generate.Literal(associatedParameterName));
         }
 
         public IEnumerable<UsingDirectiveSyntax> GetUsings()

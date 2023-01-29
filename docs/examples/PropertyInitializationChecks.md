@@ -52,7 +52,7 @@ public class ExampleClassTests
     [InlineData("   ")]
     public void CannotConstructWithInvalidDescription(string value)
     {
-        FluentActions.Invoking(() => new ExampleClass(1512368656, value, new Guid("4e5b1334-6fa3-a584-4adf-7a0ea09ce3c1"))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new ExampleClass(1512368656, value, new Guid("4e5b1334-6fa3-a584-4adf-7a0ea09ce3c1"))).Should().Throw<ArgumentNullException>().WithParameterName("description");
     }
 
     [Fact]

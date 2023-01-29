@@ -50,7 +50,7 @@ public class ConsumingClassTests
     [Fact]
     public void CannotConstructWithNullPoco()
     {
-        FluentActions.Invoking(() => new ConsumingClass(default(SomePoco))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new ConsumingClass(default(SomePoco))).Should().Throw<ArgumentNullException>().WithParameterName("poco");
     }
 
     [Fact]

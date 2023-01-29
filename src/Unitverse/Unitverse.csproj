@@ -20,6 +20,8 @@
     </NuGetPackageImportStamp>
     <UseCodebase>true</UseCodebase>
     <BranchRoot>..\..\</BranchRoot>
+    <RunSettingsFilePath>
+    </RunSettingsFilePath>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

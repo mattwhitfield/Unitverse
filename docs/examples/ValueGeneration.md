@@ -154,7 +154,7 @@ public class WriterTests
     [InlineData("   ")]
     public void CannotCallWriteWithStringWithInvalidS(string value)
     {
-        FluentActions.Invoking(() => _testClass.Write(value)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.Write(value)).Should().Throw<ArgumentNullException>().WithParameterName("s");
     }
 
     [Fact]

@@ -27,8 +27,8 @@
 
         StatementSyntax AssertNotNull(ExpressionSyntax value);
 
-        StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall);
+        StatementSyntax AssertThrows(TypeSyntax exceptionType, ExpressionSyntax methodCall, string? associatedParameterName);
 
-        StatementSyntax AssertThrowsAsync(TypeSyntax exceptionType, ExpressionSyntax methodCall);
+        StatementSyntax AssertThrowsAsync(TypeSyntax exceptionType, ExpressionSyntax methodCall, string? associatedParameterName);
     }
 }

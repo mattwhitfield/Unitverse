@@ -58,7 +58,7 @@ public class TestClassTests
     [Fact]
     public void CannotConstructWithNullDependency()
     {
-        FluentActions.Invoking(() => new TestClass(default(IDependency))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => new TestClass(default(IDependency))).Should().Throw<ArgumentNullException>().WithParameterName("dependency");
     }
 
     [Fact]
@@ -85,7 +85,7 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotCallSomeMethodWithInvalidMethodName(string value)
     {
-        FluentActions.Invoking(() => _testClass.SomeMethod(value, 1657007234)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.SomeMethod(value, 1657007234)).Should().Throw<ArgumentNullException>().WithParameterName("methodName");
     }
 
     [Fact]
@@ -108,7 +108,7 @@ public class TestClassTests
     [InlineData("   ")]
     public async Task CannotCallSomeAsyncMethodWithInvalidMethodName(string value)
     {
-        await FluentActions.Invoking(() => _testClass.SomeAsyncMethod(value, 760389092)).Should().ThrowAsync<ArgumentNullException>();
+        await FluentActions.Invoking(() => _testClass.SomeAsyncMethod(value, 760389092)).Should().ThrowAsync<ArgumentNullException>().WithParameterName("methodName");
     }
 }
 

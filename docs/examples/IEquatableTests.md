@@ -102,7 +102,7 @@ public class ComplexTests
     [Fact]
     public void CannotCallEqualsWithObjectWithNullOther()
     {
-        FluentActions.Invoking(() => _testClass.Equals(default(object))).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => _testClass.Equals(default(object))).Should().Throw<ArgumentNullException>().WithParameterName("other");
     }
 
     [Fact]

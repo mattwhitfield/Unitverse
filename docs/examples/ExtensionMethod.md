@@ -41,7 +41,7 @@ public static class ExtensionMethodClassTests
     [InlineData("   ")]
     public static void CannotCallToOtherWithStringWithInvalidSource(string value)
     {
-        FluentActions.Invoking(() => value.ToOther()).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => value.ToOther()).Should().Throw<ArgumentNullException>().WithParameterName("source");
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public static class ExtensionMethodClassTests
     [Fact]
     public static void CannotCallToOtherWithListOfTWithNullSource()
     {
-        FluentActions.Invoking(() => default(List<T>).ToOther<T>()).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => default(List<T>).ToOther<T>()).Should().Throw<ArgumentNullException>().WithParameterName("source");
     }
 }
 
