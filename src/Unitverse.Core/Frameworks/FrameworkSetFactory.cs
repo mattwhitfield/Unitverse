@@ -17,7 +17,10 @@
                 throw new ArgumentNullException(nameof(options));
             }
 
-            var context = new GenerationContext(options.GenerationOptions);
+            // naming
+            var namingProvider = new NamingProvider(options.NamingOptions);
+
+            var context = new GenerationContext(options.GenerationOptions, namingProvider);
 
             // test
             var testFramework = CreateTestFramework(options);
@@ -35,9 +38,6 @@
             {
                 mockingFramework = new AutoFixtureMockingAdaptor(mockingFramework, context);
             }
-
-            // naming
-            var namingProvider = new NamingProvider(options.NamingOptions);
 
             return new FrameworkSet(testFramework, mockingFramework, assertionFramework, namingProvider, context, options);
         }

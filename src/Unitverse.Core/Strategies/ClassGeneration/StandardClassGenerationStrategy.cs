@@ -8,6 +8,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class StandardClassGenerationStrategy : IClassGenerationStrategy
     {
@@ -64,6 +65,16 @@
             var fieldDeclaration = SyntaxFactory.FieldDeclaration(variableDeclaration)
                 .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
             classDeclaration = classDeclaration.AddMembers(fieldDeclaration);
+
+            if (_frameworkSet.Options.GenerationOptions.UseFieldForAutoFixture)
+            {
+                var autoFixtureFieldName = _frameworkSet.NamingProvider.AutoFixtureFieldName.Resolve(new NamingContext(model.ClassName));
+                var variable = SyntaxFactory.VariableDeclaration(AutoFixtureHelper.TypeSyntax)
+                            .AddVariables(SyntaxFactory.VariableDeclarator(autoFixtureFieldName));
+                var field = SyntaxFactory.FieldDeclaration(variable)
+                    .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+                classDeclaration = classDeclaration.AddMembers(field);
+            }
 
             var setupMethod = Generate.SetupMethod(model, targetTypeName, _frameworkSet, ref classDeclaration);
 

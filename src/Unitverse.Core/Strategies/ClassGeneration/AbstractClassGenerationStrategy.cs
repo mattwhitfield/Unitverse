@@ -10,10 +10,11 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class AbstractClassGenerationStrategy : IClassGenerationStrategy
     {
-        private readonly IFrameworkSet _frameworkSet;
+        private IFrameworkSet _frameworkSet;
 
         public AbstractClassGenerationStrategy(IFrameworkSet frameworkSet)
         {
@@ -67,6 +68,16 @@
             var fieldDeclaration = SyntaxFactory.FieldDeclaration(variableDeclaration)
                 .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
             classDeclaration = classDeclaration.AddMembers(fieldDeclaration);
+
+            if (_frameworkSet.Options.GenerationOptions.UseFieldForAutoFixture)
+            {
+                var autoFixtureFieldName = _frameworkSet.NamingProvider.AutoFixtureFieldName.Resolve(new NamingContext(model.ClassName));
+                var variable = SyntaxFactory.VariableDeclaration(AutoFixtureHelper.TypeSyntax)
+                            .AddVariables(SyntaxFactory.VariableDeclarator(autoFixtureFieldName));
+                var field = SyntaxFactory.FieldDeclaration(variable)
+                    .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+                classDeclaration = classDeclaration.AddMembers(field);
+            }
 
             var setupMethod = Generate.SetupMethod(model, targetTypeName, _frameworkSet, ref classDeclaration);
 
@@ -276,6 +287,12 @@
 
         private ClassDeclarationSyntax GenerateConcreteInheritor(ClassModel model)
         {
+            var originalFrameworkSet = _frameworkSet;
+
+            // turn off using field for auto fixture while generating for abstracts
+            var newOptions = _frameworkSet.Options.OverrideGenerationOption(x => x.UseFieldForAutoFixture = false);
+            _frameworkSet = FrameworkSetFactory.Create(newOptions);
+
             var className = string.Format(CultureInfo.InvariantCulture, "Test{0}", model.ClassName);
             var classDeclaration = SyntaxFactory.ClassDeclaration(className)
                 .WithBaseList(
@@ -292,6 +309,8 @@
             classDeclaration = InheritProperties(model, classDeclaration);
 
             classDeclaration = ImplementAbstractMethods(model, classDeclaration);
+
+            _frameworkSet = originalFrameworkSet;
 
             return classDeclaration;
         }
@@ -430,7 +449,8 @@
             if (parameter.RefKind == RefKind.Out)
             {
                 syntax = syntax.WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
-                statements.Emit(Generate.Statement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(parameter.Name), AssignmentValueHelper.GetDefaultAssignmentValue(parameter.Type, model, _frameworkSet))));
+                var defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.Type, model, _frameworkSet);
+                statements.Emit(Generate.Statement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(parameter.Name), defaultExpression)));
             }
             else if (parameter.RefKind == RefKind.Ref)
             {

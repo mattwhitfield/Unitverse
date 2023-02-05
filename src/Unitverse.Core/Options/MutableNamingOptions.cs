@@ -32,6 +32,7 @@
             IsInitializedCorrectlyNamingPattern = options.IsInitializedCorrectlyNamingPattern;
             TargetFieldName = options.TargetFieldName;
             DependencyFieldName = options.DependencyFieldName;
+            AutoFixtureFieldName = options.AutoFixtureFieldName;
         }
 
         public string CanCallNamingPattern { get; set; }
@@ -75,5 +76,7 @@
         public string TargetFieldName { get; set; }
 
         public string DependencyFieldName { get; set; }
+
+        public string AutoFixtureFieldName { get; set; }
     }
 }

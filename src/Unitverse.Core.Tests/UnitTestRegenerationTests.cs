@@ -96,7 +96,7 @@
             var updatedClassAsText = second.ToString();
 
             // Extract the options from the first part
-            var options = UnitTestGeneratorTests.ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, false, classAsText, true);
+            var options = UnitTestGeneratorTests.ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, false, false, classAsText, true);
 
             // Compile the first
             UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, options.GenerationOptions.UseAutoFixture, options.GenerationOptions.UseAutoFixtureForMocking, classAsText, out var tree, out var secondTree, out var references, out var externalInitTree, out var semanticModel);

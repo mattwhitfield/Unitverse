@@ -42,6 +42,7 @@
             GenerateFileScopedNamespaces = options.GenerateFileScopedNamespaces;
 #endif
             PlaceSystemUsingDirectivesFirst = options.PlaceSystemUsingDirectivesFirst;
+            UseFieldForAutoFixture = options.UseFieldForAutoFixture;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -103,5 +104,7 @@
 #endif
 
         public bool PlaceSystemUsingDirectivesFirst { get; set; }
+
+        public bool UseFieldForAutoFixture { get; set; }
     }
 }

@@ -65,12 +65,16 @@
                                 continue;
                             }
 #endif
-                            yield return new object[] { resourceName, framework, mock, true, false, false };
-                            yield return new object[] { resourceName, framework, mock, false, false, false };
-                            yield return new object[] { resourceName, framework, mock, true, true, false };
-                            yield return new object[] { resourceName, framework, mock, false, true, false };
-                            yield return new object[] { resourceName, framework, mock, true, true, true };
-                            yield return new object[] { resourceName, framework, mock, false, true, true };
+                            yield return new object[] { resourceName, framework, mock, true, false, false, false };
+                            yield return new object[] { resourceName, framework, mock, false, false, false, false };
+                            yield return new object[] { resourceName, framework, mock, true, true, false, false };
+                            yield return new object[] { resourceName, framework, mock, false, true, false, false };
+                            yield return new object[] { resourceName, framework, mock, true, true, true, false };
+                            yield return new object[] { resourceName, framework, mock, false, true, true, false };
+                            yield return new object[] { resourceName, framework, mock, true, true, false, true };
+                            yield return new object[] { resourceName, framework, mock, false, true, false, true };
+                            yield return new object[] { resourceName, framework, mock, true, true, true, true };
+                            yield return new object[] { resourceName, framework, mock, false, true, true, true };
                         }
                     }
                 }
@@ -78,11 +82,11 @@
         }
 
         [TestCaseSource(nameof(TestClassResourceNames))]
-        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking)
+        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking, bool useFieldForAutoFixture)
         {
             var classAsText = TestClasses.ResourceManager.GetString(resourceName, TestClasses.Culture);
 
-            var options = ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, useAutoFixtureForMocking, classAsText, false);
+            var options = ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, useAutoFixtureForMocking, useFieldForAutoFixture, classAsText, false);
 
             Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, useAutoFixtureForMocking, classAsText, out var tree, out var secondTree, out var references, out var externalInitTree, out var semanticModel);
 
@@ -214,7 +218,7 @@
             semanticModel = compilation.GetSemanticModel(tree);
         }
 
-        public static UnitTestGeneratorOptions ExtractOptions(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking, string classAsText, bool withPartialGeneration)
+        public static UnitTestGeneratorOptions ExtractOptions(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking, bool useFieldForAutoFixture, string classAsText, bool withPartialGeneration)
         {
             var generationOptions = new MutableGenerationOptions(new DefaultGenerationOptions());
             var namingOptions = new MutableNamingOptions(new DefaultNamingOptions());
@@ -227,6 +231,7 @@
             generationOptions.UseFluentAssertions = useFluentAssertions;
             generationOptions.UseAutoFixture = useAutoFixture;
             generationOptions.UseAutoFixtureForMocking = useAutoFixtureForMocking;
+            generationOptions.UseFieldForAutoFixture = useFieldForAutoFixture;
 
             var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false, new Dictionary<string, string>());
 

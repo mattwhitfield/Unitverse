@@ -43,5 +43,7 @@
         string TargetFieldName { get; }
 
         string DependencyFieldName { get; }
+
+        string AutoFixtureFieldName { get; }
     }
 }

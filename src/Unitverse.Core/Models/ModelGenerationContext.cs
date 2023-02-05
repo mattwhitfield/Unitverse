@@ -14,7 +14,7 @@
             PartialGenerationAllowed = frameworkSet.Options.GenerationOptions.PartialGenerationAllowed;
             BaseNamingContext = baseNamingContext ?? throw new ArgumentNullException(nameof(baseNamingContext));
 
-            FrameworkSet.Context.CurrentModelIsStatic = Model.IsStatic;
+            FrameworkSet.Context.CurrentModel = Model;
         }
 
         public ClassModel Model { get; }

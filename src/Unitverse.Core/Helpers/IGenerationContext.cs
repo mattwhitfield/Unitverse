@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
+    using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
     public interface IGenerationContext : IGenerationStatistics
@@ -9,6 +10,8 @@
         IEnumerable<ITypeSymbol> EmittedTypes { get; }
 
         IGenerationOptions Options { get; }
+
+        INamingProvider NamingProvider { get; }
 
         IEnumerable<string> GenericTypesVisited { get; }
 
@@ -20,7 +23,7 @@
 
         void AddVisitedGenericType(string identifier);
 
-        bool CurrentModelIsStatic { get; set; }
+        ClassModel? CurrentModel { get; set; }
 
         SectionedMethodHandler CurrentMethod { get; set; }
     }

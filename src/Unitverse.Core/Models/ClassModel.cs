@@ -127,41 +127,52 @@
                 Indexers.Any(x => x.ShouldGenerate);
         }
 
-        public string GetConstructorParameterFieldName(ParameterModel model, INamingProvider namingProvider)
+        public string GetConstructorParameterFieldName(ParameterModel model, IFrameworkSet frameworkSet)
         {
             if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return GetConstructorParameterFieldName(model.Name, model.TypeInfo, namingProvider);
+            if (frameworkSet is null)
+            {
+                throw new ArgumentNullException(nameof(frameworkSet));
+            }
+
+            return GetConstructorParameterFieldName(model.Name, model.TypeInfo, frameworkSet);
         }
 
-        public string GetConstructorParameterFieldName(IPropertyModel model, INamingProvider namingProvider)
+        public string GetConstructorParameterFieldName(IPropertyModel model, IFrameworkSet frameworkSet)
         {
             if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return GetConstructorParameterFieldName(model.Name, model.TypeInfo, namingProvider);
+            return GetConstructorParameterFieldName(model.Name, model.TypeInfo, frameworkSet);
         }
 
-        private string GetConstructorParameterFieldName(string parameterName, TypeInfo typeInfo, INamingProvider namingProvider)
+        private string GetConstructorParameterFieldName(string parameterName, TypeInfo typeInfo, IFrameworkSet frameworkSet)
         {
             if (string.IsNullOrWhiteSpace(parameterName))
             {
                 throw new ArgumentNullException(nameof(parameterName));
             }
 
-            if (namingProvider is null)
+            var baseNamingContext = new NamingContext(ClassName);
+
+            var namingContext = baseNamingContext.WithParameterName(parameterName);
+
+            var baseFieldName = frameworkSet.NamingProvider.DependencyFieldName.Resolve(namingContext);
+            if (frameworkSet.Options.GenerationOptions.UseFieldForAutoFixture)
             {
-                throw new ArgumentNullException(nameof(namingProvider));
+                var autoFixtureFieldName = frameworkSet.NamingProvider.AutoFixtureFieldName.Resolve(baseNamingContext);
+                if (string.Equals(baseFieldName, autoFixtureFieldName, StringComparison.Ordinal))
+                {
+                    var changedNamingContext = baseNamingContext.WithParameterName(parameterName + "Param");
+                    baseFieldName = frameworkSet.NamingProvider.DependencyFieldName.Resolve(changedNamingContext);
+                }
             }
-
-            var namingContext = new NamingContext(ClassName).WithParameterName(parameterName);
-
-            var baseFieldName = namingProvider.DependencyFieldName.Resolve(namingContext);
 
             if (Constructors.SelectMany(x => x.Parameters).Where(x => string.Equals(x.Name, parameterName, StringComparison.OrdinalIgnoreCase)).Select(x => x.Type).Distinct().Count() < 2)
             {
@@ -198,7 +209,7 @@
 
         private ExpressionSyntax GetConstructorFieldReference(string name, TypeInfo typeInfo, IFrameworkSet frameworkSet)
         {
-            var identifierName = SyntaxFactory.IdentifierName(GetConstructorParameterFieldName(name, typeInfo, frameworkSet.NamingProvider));
+            var identifierName = SyntaxFactory.IdentifierName(GetConstructorParameterFieldName(name, typeInfo, frameworkSet));
 
             var fieldSyntax = frameworkSet.QualifyFieldReference(identifierName);
 

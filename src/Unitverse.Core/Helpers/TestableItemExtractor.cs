@@ -106,7 +106,7 @@
             {
                 if (record.ParameterList != null)
                 {
-                    var dummyContext = new GenerationContext(options.GenerationOptions);
+                    var dummyContext = new GenerationContext(options.GenerationOptions, new NamingProvider(options.NamingOptions));
                     foreach (var recordContstructor in model.TypeSymbol.Constructors.Where(x => x.IsImplicitlyDeclared && !model.Constructors.Any(c => c == x)))
                     {
                         var constructor = SyntaxFactory.ConstructorDeclaration(model.ClassName);

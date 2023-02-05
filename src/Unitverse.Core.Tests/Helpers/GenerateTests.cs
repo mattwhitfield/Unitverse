@@ -231,6 +231,7 @@ namespace Unitverse.Core.Tests.Helpers
             var targetTypeName = "TestValue1540739065";
             var options = Substitute.For<IUnitTestGeneratorOptions>();
             options.NamingOptions.TargetFieldName.Returns("_testClass");
+            options.NamingOptions.AutoFixtureFieldName.Returns("_fixture");
             options.NamingOptions.DependencyFieldName.Returns("_{parameterName:camel}");
             options.GenerationOptions.TestTypeNaming.Returns("{0}Tests");
             options.GenerationOptions.FrameworkType.Returns(TestFrameworkTypes.NUnit3);

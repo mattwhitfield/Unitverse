@@ -64,5 +64,7 @@
 #endif
 
         public bool PlaceSystemUsingDirectivesFirst { get; set; } = false;
+
+        public bool UseFieldForAutoFixture { get; set; } = false;
     }
 }

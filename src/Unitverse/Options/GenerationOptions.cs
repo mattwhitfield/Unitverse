@@ -61,6 +61,11 @@
         [Description("Whether to use AutoFixture when generating mocks ('Use AutoFixture' must be enabled)")]
         public bool UseAutoFixtureForMocking { get; set; } = false;
 
+        [Category("Frameworks")]
+        [DisplayName("Use field for AutoFixture")]
+        [Description("Whether to use a class-level field for AutoFixture ('Use AutoFixture' must be enabled)")]
+        public bool UseFieldForAutoFixture { get; set; } = false;
+
         [Category("Layout")]
         [DisplayName("Emit using directives outside namespace")]
         [Description("Whether to place the required using directives outside the namespace declaration. If using file scoped namespaces, enabling this option causes the using directives to be placed above the file scoped namespace declaration")]

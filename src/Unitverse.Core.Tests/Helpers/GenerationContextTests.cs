@@ -17,13 +17,13 @@ namespace Unitverse.Core.Tests.Helpers
         [SetUp]
         public void SetUp()
         {
-            _testClass = new GenerationContext(Substitute.For<IGenerationOptions>());
+            _testClass = new GenerationContext(Substitute.For<IGenerationOptions>(), Substitute.For<INamingProvider>());
         }
 
         [Test]
         public void CanConstruct()
         {
-            var instance = new GenerationContext(Substitute.For<IGenerationOptions>());
+            var instance = new GenerationContext(Substitute.For<IGenerationOptions>(), Substitute.For<INamingProvider>());
             Assert.That(instance, Is.Not.Null);
         }
 

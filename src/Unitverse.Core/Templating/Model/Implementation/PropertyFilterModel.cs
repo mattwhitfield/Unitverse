@@ -1,7 +1,7 @@
 ﻿namespace Unitverse.Core.Templating.Model.Implementation
 {
-    using Microsoft.CodeAnalysis;
     using System.Collections.Generic;
+    using Microsoft.CodeAnalysis;
     using Unitverse.Core.Models;
 
     public class PropertyFilterModel : IProperty

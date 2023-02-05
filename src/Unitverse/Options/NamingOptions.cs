@@ -107,11 +107,14 @@ namespace Unitverse.Options
         [Description("Naming format for the field name used for the instance being tested")]
         public string TargetFieldName { get; set; } = "_testClass";
 
-
         [Category("Fields")]
         [DisplayName("Dependency Field Name")]
         [Description("Naming format for the field name used for dependencies")]
         public string DependencyFieldName { get; set; } = "_{parameterName:camel}";
 
+        [Category("Fields")]
+        [DisplayName("AutoFixture Field Name")]
+        [Description("Naming format for the field name used for auto fixture")]
+        public string AutoFixtureFieldName { get; set; } = "_fixture";
     }
 }

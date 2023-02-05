@@ -45,5 +45,7 @@
         public string TargetFieldName { get; set; } = "_testClass";
 
         public string DependencyFieldName { get; set; } = "_{parameterName:camel}";
+
+        public string AutoFixtureFieldName { get; set; } = "_fixture";
     }
 }
