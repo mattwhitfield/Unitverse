@@ -41,5 +41,12 @@
 
             return null;
         }
+
+        public IUnitTestGeneratorOptions OverrideGenerationOption(Action<MutableGenerationOptions> configure)
+        {
+            var mutable = new MutableGenerationOptions(GenerationOptions);
+            configure(mutable);
+            return new UnitTestGeneratorOptions(mutable, NamingOptions, StrategyOptions, StatisticsCollectionEnabled, _membersSetByFilename);
+        }
     }
 }

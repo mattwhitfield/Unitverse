@@ -7,6 +7,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class StaticClassGenerationStrategy : IClassGenerationStrategy
     {
@@ -42,10 +43,30 @@
 
             classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
 
+            var isStatic = false;
             if (_frameworkSet.TestFramework.SupportsStaticTestClasses &&
                 string.IsNullOrWhiteSpace(_frameworkSet.Options.GenerationOptions.TestTypeBaseClass))
             {
                 classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.StaticKeyword));
+                isStatic = true;
+            }
+
+            if (_frameworkSet.Options.GenerationOptions.UseFieldForAutoFixture)
+            {
+                var autoFixtureFieldName = _frameworkSet.NamingProvider.AutoFixtureFieldName.Resolve(new NamingContext(model.ClassName));
+                var defaultExpression = AutoFixtureHelper.GetCreationExpression(_frameworkSet.Options.GenerationOptions);
+                var variable = SyntaxFactory.VariableDeclaration(AutoFixtureHelper.TypeSyntax)
+                            .AddVariables(SyntaxFactory.VariableDeclarator(autoFixtureFieldName)
+                                                       .WithInitializer(SyntaxFactory.EqualsValueClause(defaultExpression)));
+                var field = SyntaxFactory.FieldDeclaration(variable)
+                    .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+
+                if (isStatic)
+                {
+                    field = field.AddModifiers(SyntaxFactory.Token(SyntaxKind.StaticKeyword));
+                }
+
+                classDeclaration = classDeclaration.AddMembers(field);
             }
 
             if (!string.IsNullOrWhiteSpace(_frameworkSet.TestFramework.TestClassAttribute))

@@ -74,7 +74,7 @@
             return new SectionedMethodHandler(method, Options.GenerationOptions);
         }
 
-        public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, string description)
+        public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, IGenerationContext generationContext, bool isAsync, bool isStatic, string description)
         {
             if (nameResolver is null)
             {
@@ -86,7 +86,8 @@
                 throw new ArgumentNullException(nameof(namingContext));
             }
 
-            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic && SupportsStaticTestClasses)
+            bool canBeStatic = TestCanBeStatic(generationContext, isStatic);
+            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, canBeStatic)
                                  .AddAttributeLists(Generate.Attribute(TestAttributeName).AsList());
 
             method = AddXmlCommentsIfConfigured(method, description);
@@ -94,7 +95,7 @@
             return new SectionedMethodHandler(method, Options.GenerationOptions, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
         }
 
-        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object?> testValues, string description)
+        public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, IGenerationContext generationContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object?> testValues, string description)
         {
             if (valueType == null)
             {
@@ -116,7 +117,8 @@
                 throw new ArgumentNullException(nameof(namingContext));
             }
 
-            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, isStatic && SupportsStaticTestClasses);
+            bool canBeStatic = TestCanBeStatic(generationContext, isStatic);
+            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, canBeStatic);
 
             method = method.AddParameterListParameters(Generate.Parameter("value").WithType(valueType));
             if (!string.IsNullOrWhiteSpace(TestCaseMethodAttributeName))
@@ -132,6 +134,26 @@
             method = AddXmlCommentsIfConfigured(method, description, "value", "The parameter that receives the test case values.");
 
             return new SectionedMethodHandler(method, Options.GenerationOptions, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
+        }
+
+        private bool TestCanBeStatic(IGenerationContext generationContext, bool isStatic)
+        {
+            var canBeStatic = isStatic && SupportsStaticTestClasses;
+            if (Options.GenerationOptions.UseFieldForAutoFixture)
+            {
+                var modelIsStatic = generationContext.CurrentModel?.IsStatic ?? false;
+                if (!modelIsStatic)
+                {
+                    canBeStatic = false;
+                }
+
+                if (!string.IsNullOrWhiteSpace(Options.GenerationOptions.TestTypeBaseClass))
+                {
+                    canBeStatic = false;
+                }
+            }
+
+            return canBeStatic;
         }
     }
 }

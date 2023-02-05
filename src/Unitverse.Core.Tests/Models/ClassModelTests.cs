@@ -53,14 +53,14 @@ namespace Unitverse.Core.Tests.Models
         public void CanCallGetConstructorParameterFieldName()
         {
             var parameter = new ParameterModel("param", TestSemanticModelFactory.Parameter, "int", default(TypeInfo));
-            var result = _testClass.GetConstructorParameterFieldName(parameter, new NamingProvider(new DefaultNamingOptions()));
+            var result = _testClass.GetConstructorParameterFieldName(parameter, DefaultFrameworkSet.Create());
             Assert.That(result, Is.EqualTo("_param"));
         }
 
         [Test]
         public void CannotCallGetConstructorParameterFieldNameWithNullParameter()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.GetConstructorParameterFieldName(default(ParameterModel), new NamingProvider(new DefaultNamingOptions())));
+            Assert.Throws<ArgumentNullException>(() => _testClass.GetConstructorParameterFieldName(default(ParameterModel), DefaultFrameworkSet.Create()));
         }
 
         [Test]

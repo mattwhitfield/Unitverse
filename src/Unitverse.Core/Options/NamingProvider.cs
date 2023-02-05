@@ -57,5 +57,7 @@
         public NameResolver TargetFieldName => new NameResolver(_namingOptions.TargetFieldName);
 
         public NameResolver DependencyFieldName => new NameResolver(_namingOptions.DependencyFieldName);
+
+        public NameResolver AutoFixtureFieldName => new NameResolver(_namingOptions.AutoFixtureFieldName);
     }
 }

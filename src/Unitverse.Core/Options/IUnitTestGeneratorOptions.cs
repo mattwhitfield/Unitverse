@@ -1,5 +1,6 @@
 ﻿namespace Unitverse.Core.Options
 {
+    using System;
     using System.Collections.Generic;
 
     public interface IUnitTestGeneratorOptions
@@ -15,5 +16,7 @@
         IStrategyOptions StrategyOptions { get; }
 
         IEnumerable<KeyValuePair<string, int>> SourceCounts { get; }
+
+        IUnitTestGeneratorOptions OverrideGenerationOption(Action<MutableGenerationOptions> configure);
     }
 }

@@ -9,6 +9,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Strategies.ClassGeneration;
 
     internal static class TypeDeclarationFactory
@@ -62,7 +63,16 @@
                 var fields = new List<FieldDeclarationSyntax>();
                 foreach (var parameterModel in classModel.Constructors.SelectMany(x => x.Parameters))
                 {
-                    allFields.Add(classModel.GetConstructorParameterFieldName(parameterModel, frameworkSet.NamingProvider));
+                    allFields.Add(classModel.GetConstructorParameterFieldName(parameterModel, frameworkSet));
+                }
+
+                var autoFixtureFieldName = frameworkSet.NamingProvider.AutoFixtureFieldName.Resolve(new NamingContext(classModel.ClassName));
+                var autoFixtureFieldExists = targetType.Members.OfType<FieldDeclarationSyntax>().Any(x => x.Declaration.Variables.Any(v => v.Identifier.Text == autoFixtureFieldName));
+
+                if (!autoFixtureFieldExists)
+                {
+                    var defaultExpression = AutoFixtureHelper.GetCreationExpression(frameworkSet.Options.GenerationOptions);
+                    updatedMethod = UpdateMethod(updatedMethod, allFields, fields, autoFixtureFieldName, AutoFixtureHelper.TypeSyntax, defaultExpression);
                 }
 
                 // generate fields for each constructor parameter that doesn't have an existing field
@@ -73,7 +83,7 @@
                         continue;
                     }
 
-                    var fieldName = classModel.GetConstructorParameterFieldName(parameterModel, frameworkSet.NamingProvider);
+                    var fieldName = classModel.GetConstructorParameterFieldName(parameterModel, frameworkSet);
 
                     var fieldExists = targetType.Members.OfType<FieldDeclarationSyntax>().Any(x => x.Declaration.Variables.Any(v => v.Identifier.Text == fieldName));
 
@@ -99,7 +109,7 @@
 
                 if (fields.Any())
                 {
-                    if (frameworkSet.Options.GenerationOptions.UseAutoFixture)
+                    if (frameworkSet.Options.GenerationOptions.UseAutoFixture && !frameworkSet.Options.GenerationOptions.UseFieldForAutoFixture)
                     {
                         var fixtureAssignment = foundMethod.Body?.Statements.OfType<LocalDeclarationStatementSyntax>().FirstOrDefault(x => x.Declaration.Variables.Any(v => v.Identifier.Text == "fixture"));
                         if (fixtureAssignment == null)

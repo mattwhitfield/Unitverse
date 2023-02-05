@@ -12,6 +12,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
     using Unitverse.Core.Frameworks.Test;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
+    using Unitverse.Tests.Common;
 
     [TestFixture]
     public class TestFrameworkTests
@@ -164,7 +165,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
             var isStatic = false;
             var valueType = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword));
             var testValues = new object[] { 1, 2 };
-            var result = testClass.CreateTestCaseMethod(new NameResolver(name), new NamingContext("class"), isAsync, isStatic, valueType, testValues, "");
+            var result = testClass.CreateTestCaseMethod(new NameResolver(name), new NamingContext("class"), DefaultGenerationContext.Create(), isAsync, isStatic, valueType, testValues, "");
             Assert.That(result.Method.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 
@@ -178,7 +179,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
             var name = "TestValue1606901338";
             var isAsync = false;
             var isStatic = true;
-            var result = testClass.CreateTestMethod(new NameResolver(name), new NamingContext("class"), isAsync, isStatic, "");
+            var result = testClass.CreateTestMethod(new NameResolver(name), new NamingContext("class"), DefaultGenerationContext.Create(), isAsync, isStatic, "");
             Assert.That(result.Method.NormalizeWhitespace().ToFullString(), Is.EqualTo(expectedOutput));
         }
 
@@ -282,25 +283,25 @@ namespace Unitverse.Core.Tests.Frameworks.Test
         [TestCaseSource(nameof(Targets))]
         public void CannotCallCreateTestCaseMethodWithNullName(IExtendedTestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.CreateTestCaseMethod(null, new NamingContext("class"), true, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), new[] { new object(), new object(), new object() }, ""));
+            Assert.Throws<ArgumentNullException>(() => testClass.CreateTestCaseMethod(null, new NamingContext("class"), DefaultGenerationContext.Create(), true, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), new[] { new object(), new object(), new object() }, ""));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallCreateTestCaseMethodWithNullTestValues(IExtendedTestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.CreateTestCaseMethod(new NameResolver("name"), new NamingContext("class"), false, true, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), default(IEnumerable<object>), ""));
+            Assert.Throws<ArgumentNullException>(() => testClass.CreateTestCaseMethod(new NameResolver("name"), new NamingContext("class"), DefaultGenerationContext.Create(), false, true, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.IntKeyword)), default(IEnumerable<object>), ""));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallCreateTestCaseMethodWithNullValueType(IExtendedTestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.CreateTestCaseMethod(new NameResolver("name"), new NamingContext("class"), true, false, default, new[] { new object(), new object(), new object() }, ""));
+            Assert.Throws<ArgumentNullException>(() => testClass.CreateTestCaseMethod(new NameResolver("name"), new NamingContext("class"), DefaultGenerationContext.Create(), true, false, default, new[] { new object(), new object(), new object() }, ""));
         }
 
         [TestCaseSource(nameof(Targets))]
         public void CannotCallCreateTestMethodWithInvalidName(IExtendedTestFramework testClass)
         {
-            Assert.Throws<ArgumentNullException>(() => testClass.CreateTestMethod(null, new NamingContext("class"), true, false, ""));
+            Assert.Throws<ArgumentNullException>(() => testClass.CreateTestMethod(null, new NamingContext("class"), DefaultGenerationContext.Create(), true, false, ""));
         }
 
         private static IExtendedTestFramework CreateFramework(TestFrameworkTypes frameworkTypes)

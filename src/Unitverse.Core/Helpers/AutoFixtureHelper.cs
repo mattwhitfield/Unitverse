@@ -1,6 +1,7 @@
 ﻿namespace Unitverse.Core.Helpers
 {
     using System;
+    using System.Reflection;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,6 +10,13 @@
     internal static class AutoFixtureHelper
     {
         internal static StatementSyntax VariableDeclaration(IGenerationOptions options)
+        {
+            ExpressionSyntax creationExpression = GetCreationExpression(options);
+
+            return Generate.VariableDeclarator("fixture", creationExpression).AsLocal(SyntaxFactory.IdentifierName("var"));
+        }
+
+        internal static ExpressionSyntax GetCreationExpression(IGenerationOptions options)
         {
             var creationExpression = CreationExpression;
             if (options.CanUseAutoFixtureForMocking())
@@ -34,14 +42,14 @@
                 }
             }
 
-            return Generate.VariableDeclarator("fixture", creationExpression).AsLocal(SyntaxFactory.IdentifierName("var"));
+            return creationExpression;
         }
 
         internal static IdentifierNameSyntax VariableReference => SyntaxFactory.IdentifierName("fixture");
 
-        internal static TypeSyntax TypeSyntax => SyntaxFactory.IdentifierName("Fixture");
+        internal static TypeSyntax TypeSyntax => SyntaxFactory.IdentifierName("IFixture");
 
-        internal static ExpressionSyntax CreationExpression => Generate.ObjectCreation(TypeSyntax);
+        internal static ExpressionSyntax CreationExpression => Generate.ObjectCreation(SyntaxFactory.IdentifierName("Fixture"));
 
         internal static ExpressionSyntax Create(ITypeSymbol typeSymbol, IGenerationContext context)
         {
@@ -92,6 +100,14 @@
         {
             context.CurrentMethod?.AddRequirement(Requirements.AutoFixture);
             var method = Generate.GenericName(methodName, typeSyntax);
+
+            if (context.Options.UseFieldForAutoFixture)
+            {
+                var namingContext = new NamingContext(context.CurrentModel?.ClassName ?? "Default");
+                var autoFixtureFieldName = context.NamingProvider.AutoFixtureFieldName.Resolve(namingContext);
+                return Generate.MemberInvocation(SyntaxFactory.IdentifierName(autoFixtureFieldName), method);
+            }
+
             return Generate.MemberInvocation(VariableReference, method);
         }
     }

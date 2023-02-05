@@ -4,13 +4,15 @@
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
+    using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
     public class GenerationContext : IGenerationContext
     {
-        public GenerationContext(IGenerationOptions options)
+        public GenerationContext(IGenerationOptions options, INamingProvider namingProvider)
         {
             Options = options;
+            NamingProvider = namingProvider;
             CurrentMethod = new SectionedMethodHandler(SyntaxFactory.MethodDeclaration(SyntaxFactory.IdentifierName("void"), "Dummy"), options);
         }
 
@@ -38,11 +40,13 @@
 
         public long TestMethodsRegenerated { get; set; }
 
-        public bool CurrentModelIsStatic { get; set; }
+        public ClassModel? CurrentModel { get; set; }
 
         public SectionedMethodHandler CurrentMethod { get; set; }
 
         public IGenerationOptions Options { get; }
+
+        public INamingProvider NamingProvider { get; }
 
         public void AddEmittedType(ITypeSymbol typeInfo)
         {

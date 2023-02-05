@@ -19,7 +19,7 @@
                 throw new ArgumentNullException(nameof(nameSyntax));
             }
 
-            var isStatic = frameworkSet.Context.CurrentModelIsStatic;
+            var isStatic = frameworkSet.Context.CurrentModel?.IsStatic ?? false;
             var testClassIsStatic = isStatic && frameworkSet.TestFramework.SupportsStaticTestClasses;
             if (frameworkSet.Options.GenerationOptions.PrefixFieldReferencesWithThis && !testClassIsStatic)
             {

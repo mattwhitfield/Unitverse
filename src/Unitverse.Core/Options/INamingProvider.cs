@@ -43,5 +43,7 @@
         NameResolver TargetFieldName { get; }
 
         NameResolver DependencyFieldName { get; }
+
+        NameResolver AutoFixtureFieldName { get; }
     }
 }

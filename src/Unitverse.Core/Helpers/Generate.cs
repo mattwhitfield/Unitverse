@@ -9,6 +9,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
     using Unitverse.Core.Resources;
 
     public static class Generate
@@ -417,6 +418,16 @@
 
             var parametersEmitted = new HashSet<ParameterModel>(new ParameterModelComparer());
 
+            if (frameworkSet.Options.GenerationOptions.UseFieldForAutoFixture)
+            {
+                var namingContext = new NamingContext(targetTypeName);
+                var autoFixtureFieldName = frameworkSet.NamingProvider.AutoFixtureFieldName.Resolve(namingContext);
+
+                var creationExpression = AutoFixtureHelper.GetCreationExpression(frameworkSet.Options.GenerationOptions);
+
+                setupMethod.Emit(Statement(Assignment(autoFixtureFieldName, creationExpression)));
+            }
+
             // generate fields for each constructor parameter
             foreach (var parameterModel in model.Constructors.SelectMany(x => x.Parameters))
             {
@@ -425,7 +436,7 @@
                     continue;
                 }
 
-                var fieldName = model.GetConstructorParameterFieldName(parameterModel, frameworkSet.NamingProvider);
+                var fieldName = model.GetConstructorParameterFieldName(parameterModel, frameworkSet);
                 var typeInfo = parameterModel.TypeInfo;
 
                 AddConstructorField(model, frameworkSet, ref classDeclaration, setupMethod, fieldName, typeInfo);
@@ -435,7 +446,7 @@
             {
                 foreach (var propertyModel in model.Properties.Where(x => x.HasInit))
                 {
-                    var fieldName = model.GetConstructorParameterFieldName(propertyModel, frameworkSet.NamingProvider);
+                    var fieldName = model.GetConstructorParameterFieldName(propertyModel, frameworkSet);
                     var typeInfo = propertyModel.TypeInfo;
 
                     AddConstructorField(model, frameworkSet, ref classDeclaration, setupMethod, fieldName, typeInfo);

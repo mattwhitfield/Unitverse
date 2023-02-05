@@ -31,6 +31,8 @@
 
         public bool UseAutoFixtureForMocking => _useAutoFixtureForMocking ?? _baseOptions.UseAutoFixtureForMocking;
 
+        public bool UseFieldForAutoFixture => _baseOptions.UseFieldForAutoFixture;
+
         public bool AutoDetectFrameworkTypes => _baseOptions.AutoDetectFrameworkTypes;
 
         public bool AllowGenerationWithoutTargetProject => _baseOptions.AllowGenerationWithoutTargetProject;

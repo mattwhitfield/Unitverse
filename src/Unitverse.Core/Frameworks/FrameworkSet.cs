@@ -11,9 +11,11 @@
     {
         private ITestMethodFactory _testMethodFactory;
 
+        private IExtendedTestFramework _testFramework;
+
         public FrameworkSet(IExtendedTestFramework testFramework, IMockingFramework mockingFramework, IAssertionFramework assertionFramework, INamingProvider namingProvider, IGenerationContext context, IUnitTestGeneratorOptions options)
         {
-            TestFramework = testFramework ?? throw new ArgumentNullException(nameof(testFramework));
+            _testFramework = testFramework ?? throw new ArgumentNullException(nameof(testFramework));
             _testMethodFactory = testFramework;
             MockingFramework = mockingFramework ?? throw new ArgumentNullException(nameof(mockingFramework));
             AssertionFramework = assertionFramework ?? throw new ArgumentNullException(nameof(assertionFramework));
@@ -22,7 +24,7 @@
             Options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public ITestFramework TestFramework { get; }
+        public ITestFramework TestFramework => _testFramework;
 
         public IMockingFramework MockingFramework { get; }
 
@@ -43,14 +45,14 @@
 
         public SectionedMethodHandler CreateTestCaseMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, TypeSyntax valueType, IEnumerable<object?> testValues, string description)
         {
-            var methodHandler = _testMethodFactory.CreateTestCaseMethod(nameResolver, namingContext, isAsync, isStatic, valueType, testValues, description);
+            var methodHandler = _testMethodFactory.CreateTestCaseMethod(nameResolver, namingContext, Context, isAsync, isStatic, valueType, testValues, description);
             Context.CurrentMethod = methodHandler;
             return methodHandler;
         }
 
         public SectionedMethodHandler CreateTestMethod(NameResolver nameResolver, NamingContext namingContext, bool isAsync, bool isStatic, string description)
         {
-            var methodHandler = _testMethodFactory.CreateTestMethod(nameResolver, namingContext, isAsync, isStatic, description);
+            var methodHandler = _testMethodFactory.CreateTestMethod(nameResolver, namingContext, Context, isAsync, isStatic, description);
             Context.CurrentMethod = methodHandler;
             return methodHandler;
         }

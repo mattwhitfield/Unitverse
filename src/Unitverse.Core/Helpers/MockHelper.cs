@@ -33,7 +33,7 @@
                     var constructorParameters = model.DependencyMap.GetConstructorParametersFor(field).ToList();
                     foreach (var constructorParameter in constructorParameters)
                     {
-                        var mockFieldName = model.GetConstructorParameterFieldName(constructorParameter, frameworkSet.NamingProvider);
+                        var mockFieldName = model.GetConstructorParameterFieldName(constructorParameter, frameworkSet);
                         var accessedMethodSymbols = dependencyMap.GetAccessedMethodSymbolsFor(field).ToList();
 
                         // plain interface redirection effectively means that we are in a call where there is only one statement inside, and that
