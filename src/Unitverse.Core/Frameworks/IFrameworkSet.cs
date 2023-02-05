@@ -1,7 +1,7 @@
 ﻿namespace Unitverse.Core.Frameworks
 {
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using System.Collections.Generic;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
 

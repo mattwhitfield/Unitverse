@@ -420,7 +420,7 @@
 
             if (frameworkSet.Options.GenerationOptions.UseFieldForAutoFixture)
             {
-                var namingContext = new NamingContext(targetTypeName);
+                var namingContext = new NamingContext(model.ClassName);
                 var autoFixtureFieldName = frameworkSet.NamingProvider.AutoFixtureFieldName.Resolve(namingContext);
 
                 var creationExpression = AutoFixtureHelper.GetCreationExpression(frameworkSet.Options.GenerationOptions);
