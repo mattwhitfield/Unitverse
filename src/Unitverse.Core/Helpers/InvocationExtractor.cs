@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,13 +11,14 @@
 
     public class InvocationExtractor : CSharpSyntaxWalker
     {
-        private InvocationExtractor(SemanticModel semanticModel, IEnumerable<string> targetFields)
+        private InvocationExtractor(SemanticModel semanticModel, IEnumerable<string> targetFields, IDictionary<string, MethodDeclarationSyntax> privateMethods)
         {
             _semanticModel = semanticModel;
             _targetFields = new HashSet<string>(targetFields);
+            _privateMethods = privateMethods;
         }
 
-        public static DependencyAccessMap ExtractFrom(CSharpSyntaxNode node, SemanticModel semanticModel, IEnumerable<string> targetFields)
+        public static DependencyAccessMap ExtractFrom(CSharpSyntaxNode node, SemanticModel semanticModel, IEnumerable<string> targetFields, IDictionary<string, MethodDeclarationSyntax> privateMethods)
         {
             if (node is null)
             {
@@ -32,7 +35,7 @@
                 throw new ArgumentNullException(nameof(targetFields));
             }
 
-            var extractor = new InvocationExtractor(semanticModel, targetFields);
+            var extractor = new InvocationExtractor(semanticModel, targetFields, privateMethods);
             node.Accept(extractor);
 
             return new DependencyAccessMap(extractor._methodCalls, extractor._propertyCalls, extractor._invocationCount, extractor._memberAccessCount);
@@ -42,6 +45,7 @@
         private readonly List<Tuple<IPropertySymbol, string>> _propertyCalls = new List<Tuple<IPropertySymbol, string>>();
         private readonly SemanticModel _semanticModel;
         private readonly HashSet<string> _targetFields;
+        private readonly IDictionary<string, MethodDeclarationSyntax> _privateMethods;
         private int _invocationCount;
         private int _memberAccessCount;
 
@@ -92,6 +96,17 @@
                             }
                         }
                     }
+                }
+            }
+            else if (node.Expression is IdentifierNameSyntax identifierName)
+            {
+                if (_privateMethods.TryGetValue(identifierName.Identifier.ValueText, out var node2))
+                {
+                    var privateMethodsToVisit = new Dictionary<string, MethodDeclarationSyntax>(_privateMethods);
+                    privateMethodsToVisit.Remove(identifierName.Identifier.ValueText); // prevent infinite recursion by removing visited method
+                    var extractor = new InvocationExtractor(_semanticModel, _targetFields, privateMethodsToVisit);
+                    node2.Accept(extractor);
+                    _methodCalls.AddRange(extractor._methodCalls);
                 }
             }
         }

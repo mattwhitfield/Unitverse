@@ -91,6 +91,10 @@
         private ClassModel ExtractClassModel(TypeDeclarationSyntax syntax, SemanticModel semanticModel, IUnitTestGeneratorOptions options)
         {
             var allowedModifiers = GetAllowedModifiers(options, syntax);
+            var privateMethodModifiers = new List<Func<SyntaxTokenList, bool>>
+            {
+                list => list.Any(modifier => modifier.IsKind(SyntaxKind.PrivateKeyword)),
+            };
 
             var model = new ClassModel(syntax, semanticModel, false);
 
@@ -101,6 +105,7 @@
             AddModels<MethodDeclarationSyntax, IMethodModel>(syntax, semanticModel, x => x.Modifiers, ExtractMethodModel, allowedModifiers, model.Methods);
             AddModels<PropertyDeclarationSyntax, IPropertyModel>(syntax, semanticModel, x => x.Modifiers, ExtractPropertyModel, allowedModifiers, model.Properties);
             AddModels<IndexerDeclarationSyntax, IIndexerModel>(syntax, semanticModel, x => x.Modifiers, ExtractIndexerModel, allowedModifiers, model.Indexers);
+            AddModels<MethodDeclarationSyntax, IMethodModel>(syntax, semanticModel, x => x.Modifiers, ExtractPrivateMethodModel, privateMethodModifiers, model.PrivateMethods);
 
             if (syntax is RecordDeclarationSyntax record)
             {
@@ -249,6 +254,12 @@
             var parameters = ExtractParameters(method.ParameterList.Parameters, semanticModel);
 
             return new MethodModel(methodName, parameters, method, semanticModel);
+        }
+
+        private MethodModel ExtractPrivateMethodModel(MethodDeclarationSyntax method, SemanticModel semanticModel)
+        {
+            var methodName = method.Identifier.ValueText;
+            return new MethodModel(methodName, new List<ParameterModel>(), method, semanticModel);
         }
 
         private OperatorModel ExtractOperatorModel(OperatorDeclarationSyntax operatorSyntax, SemanticModel semanticModel)

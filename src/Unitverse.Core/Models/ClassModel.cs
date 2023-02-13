@@ -79,6 +79,8 @@
 
         public IList<IMethodModel> Methods { get; } = new List<IMethodModel>();
 
+        public IList<IMethodModel> PrivateMethods { get; } = new List<IMethodModel>();
+
         public IList<IOperatorModel> Operators { get; } = new List<IOperatorModel>();
 
         public IList<IPropertyModel> Properties { get; } = new List<IPropertyModel>();

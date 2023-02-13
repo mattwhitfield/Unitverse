@@ -2,7 +2,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
         <Identity Id="Unitverse.c983573f-62aa-4c3d-8192-5d3190f9ee22" Version="1.0.35" Language="en-US" Publisher="mattwhitfield" />
-        <DisplayName>Unitverse C# Unit Test Generator (VS2022)</DisplayName>
+        <DisplayName>Unitverse - Mapiq C# Unit Test Generator (VS2022)</DisplayName>
         <Description xml:space="preserve">Unitverse is a unit test generator that generates better boiler plate unit test code for existing classes.</Description>
         <Icon>Resources\UnitTestGeneratorPackage.png</Icon>
         <PreviewImage>Resources\UnitTestGeneratorPackage.png</PreviewImage>
