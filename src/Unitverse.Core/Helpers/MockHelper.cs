@@ -25,9 +25,7 @@
 
             var mappedInterfaceFields = model.DependencyMap.MappedInterfaceFields.ToList();
 
-            Dictionary<string, MethodDeclarationSyntax> privateMethods = model.PrivateMethods.ToDictionary(x => x.Name, x => x.Node);
-
-            var dependencyMap = InvocationExtractor.ExtractFrom(targetBody, model.SemanticModel, mappedInterfaceFields, privateMethods);
+            var dependencyMap = InvocationExtractor.ExtractFrom(targetBody, model.SemanticModel, mappedInterfaceFields);
 
             foreach (var field in mappedInterfaceFields)
             {

@@ -105,7 +105,6 @@
             AddModels<MethodDeclarationSyntax, IMethodModel>(syntax, semanticModel, x => x.Modifiers, ExtractMethodModel, allowedModifiers, model.Methods);
             AddModels<PropertyDeclarationSyntax, IPropertyModel>(syntax, semanticModel, x => x.Modifiers, ExtractPropertyModel, allowedModifiers, model.Properties);
             AddModels<IndexerDeclarationSyntax, IIndexerModel>(syntax, semanticModel, x => x.Modifiers, ExtractIndexerModel, allowedModifiers, model.Indexers);
-            AddModels<MethodDeclarationSyntax, IMethodModel>(syntax, semanticModel, x => x.Modifiers, ExtractPrivateMethodModel, privateMethodModifiers, model.PrivateMethods);
 
             if (syntax is RecordDeclarationSyntax record)
             {
@@ -254,12 +253,6 @@
             var parameters = ExtractParameters(method.ParameterList.Parameters, semanticModel);
 
             return new MethodModel(methodName, parameters, method, semanticModel);
-        }
-
-        private MethodModel ExtractPrivateMethodModel(MethodDeclarationSyntax method, SemanticModel semanticModel)
-        {
-            var methodName = method.Identifier.ValueText;
-            return new MethodModel(methodName, new List<ParameterModel>(), method, semanticModel);
         }
 
         private OperatorModel ExtractOperatorModel(OperatorDeclarationSyntax operatorSyntax, SemanticModel semanticModel)

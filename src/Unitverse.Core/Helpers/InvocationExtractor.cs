@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,14 +9,19 @@
 
     public class InvocationExtractor : CSharpSyntaxWalker
     {
-        private InvocationExtractor(SemanticModel semanticModel, IEnumerable<string> targetFields, IDictionary<string, MethodDeclarationSyntax> privateMethods)
+        private InvocationExtractor(SemanticModel semanticModel, IEnumerable<string> targetFields)
+            : this(semanticModel, targetFields, new HashSet<MethodDeclarationSyntax>())
+        {
+        }
+
+        private InvocationExtractor(SemanticModel semanticModel, IEnumerable<string> targetFields, ISet<MethodDeclarationSyntax> visitedMethods)
         {
             _semanticModel = semanticModel;
             _targetFields = new HashSet<string>(targetFields);
-            _privateMethods = privateMethods;
+            _visitedMethods = visitedMethods;
         }
 
-        public static DependencyAccessMap ExtractFrom(CSharpSyntaxNode node, SemanticModel semanticModel, IEnumerable<string> targetFields, IDictionary<string, MethodDeclarationSyntax> privateMethods)
+        public static DependencyAccessMap ExtractFrom(CSharpSyntaxNode node, SemanticModel semanticModel, IEnumerable<string> targetFields)
         {
             if (node is null)
             {
@@ -35,7 +38,7 @@
                 throw new ArgumentNullException(nameof(targetFields));
             }
 
-            var extractor = new InvocationExtractor(semanticModel, targetFields, privateMethods);
+            var extractor = new InvocationExtractor(semanticModel, targetFields);
             node.Accept(extractor);
 
             return new DependencyAccessMap(extractor._methodCalls, extractor._propertyCalls, extractor._invocationCount, extractor._memberAccessCount);
@@ -45,7 +48,7 @@
         private readonly List<Tuple<IPropertySymbol, string>> _propertyCalls = new List<Tuple<IPropertySymbol, string>>();
         private readonly SemanticModel _semanticModel;
         private readonly HashSet<string> _targetFields;
-        private readonly IDictionary<string, MethodDeclarationSyntax> _privateMethods;
+        private readonly ISet<MethodDeclarationSyntax> _visitedMethods;
         private int _invocationCount;
         private int _memberAccessCount;
 
@@ -98,17 +101,36 @@
                     }
                 }
             }
-            else if (node.Expression is IdentifierNameSyntax identifierName)
+            else if (node.Expression is IdentifierNameSyntax)
             {
-                if (_privateMethods.TryGetValue(identifierName.Identifier.ValueText, out var node2))
+                var privateMethodDeclaration = GetPrivateMethodDeclaration(node, _semanticModel);
+                if (privateMethodDeclaration is null || _visitedMethods.Contains(privateMethodDeclaration))
                 {
-                    var privateMethodsToVisit = new Dictionary<string, MethodDeclarationSyntax>(_privateMethods);
-                    privateMethodsToVisit.Remove(identifierName.Identifier.ValueText); // prevent infinite recursion by removing visited method
-                    var extractor = new InvocationExtractor(_semanticModel, _targetFields, privateMethodsToVisit);
-                    node2.Accept(extractor);
-                    _methodCalls.AddRange(extractor._methodCalls);
+                    return;
                 }
+
+                _visitedMethods.Add(privateMethodDeclaration);
+                var extractor = new InvocationExtractor(_semanticModel, _targetFields, _visitedMethods);
+                privateMethodDeclaration?.Accept(extractor);
+                _methodCalls.AddRange(extractor._methodCalls);
             }
+        }
+
+        private MethodDeclarationSyntax? GetPrivateMethodDeclaration(InvocationExpressionSyntax invocationExpression, SemanticModel semanticModel)
+        {
+            var symbol = semanticModel.GetSymbolInfo(invocationExpression).Symbol;
+            if (symbol == null || symbol.Kind != SymbolKind.Method)
+            {
+                return null;
+            }
+
+            var methodSymbol = (IMethodSymbol)symbol;
+            if (methodSymbol.DeclaredAccessibility != Accessibility.Private)
+            {
+                return null;
+            }
+
+            return methodSymbol.DeclaringSyntaxReferences[0].GetSyntax() as MethodDeclarationSyntax;
         }
     }
 }
