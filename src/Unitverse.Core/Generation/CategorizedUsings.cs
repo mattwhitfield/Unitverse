@@ -15,10 +15,10 @@
 
             foreach (var usingDirective in usings)
             {
-                var fullString = usingDirective.NormalizeWhitespace().ToFullString();
+                var fullString = usingDirective.ToFullString().Replace(" ", string.Empty);
                 if (usingsEmitted.Add(fullString))
                 {
-                    if (usingDirective.Name is IdentifierNameSyntax ins && ins.Identifier.ValueText.StartsWith("<global", StringComparison.OrdinalIgnoreCase))
+                    if (fullString.IndexOf("<global", StringComparison.OrdinalIgnoreCase) >= 0)
                     {
                         continue;
                     }
