@@ -1015,6 +1015,14 @@ namespace Unitverse.Core.Tests {
         ///{
         ///    public class TestClass
         ///    {
+        ///		public TestClass(IEnumerable&lt;C&gt; cList)
+        ///		{
+        ///		}
+        ///
+        ///	    public void ThisIsAMethod(IEnumerable&lt;C&gt; cList)
+        ///	    {
+        ///	    }
+        ///
         ///	    public void ThisIsAMethod(IEnumerable&lt;string&gt; stringList)
         ///	    {
         ///	    }
@@ -1023,6 +1031,9 @@ namespace Unitverse.Core.Tests {
         ///	    {
         ///	    }
         ///    }
+        ///
+        ///	public class C
+        ///	{ }
         ///}.
         /// </summary>
         public static string IEnumerableParameters {
@@ -1327,6 +1338,22 @@ namespace Unitverse.Core.Tests {
         public static string MethodWithReservedParamName {
             get {
                 return ResourceManager.GetString("MethodWithReservedParamName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to public class PredictedConsumption
+        ///{
+        ///    public PredictedConsumption(IEnumerable&lt;int&gt; sources)
+        ///    { }
+        ///
+        ///    public PredictedConsumption(IEnumerable&lt;string&gt; sources, DateTime date)
+        ///    { }
+        ///}.
+        /// </summary>
+        public static string MultipleGenericDisambiguation {
+            get {
+                return ResourceManager.GetString("MultipleGenericDisambiguation", resourceCulture);
             }
         }
         

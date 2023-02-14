@@ -1,0 +1,11 @@
+using System;
+using System.Collections.Generic;
+
+public class PredictedConsumption
+{
+    public PredictedConsumption(IEnumerable<int> sources)
+    { }
+
+    public PredictedConsumption(IEnumerable<string> sources, DateTime date)
+    { }
+}
