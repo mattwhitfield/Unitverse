@@ -54,6 +54,11 @@ public class AutomaticMockGenerationExample
     public async Task SampleAsyncMethod()
     {
         await _dummyService.AsyncMethod();
+        await SamplePrivateMethod();
+    }
+
+    private async Task SamplePrivateMethod()
+    {
         await _dummyService2.AsyncMethod("foo");
     }
 

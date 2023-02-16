@@ -103,34 +103,43 @@
             }
             else if (node.Expression is IdentifierNameSyntax)
             {
-                var privateMethodDeclaration = GetPrivateMethodDeclaration(node, _semanticModel);
-                if (privateMethodDeclaration is null || _visitedMethods.Contains(privateMethodDeclaration))
+                var methodDeclaration = GetInvokedMethodDeclaration(node);
+                if (methodDeclaration is null || _visitedMethods.Contains(methodDeclaration))
                 {
                     return;
                 }
 
-                _visitedMethods.Add(privateMethodDeclaration);
+                _visitedMethods.Add(methodDeclaration);
                 var extractor = new InvocationExtractor(_semanticModel, _targetFields, _visitedMethods);
-                privateMethodDeclaration?.Accept(extractor);
+                methodDeclaration?.Accept(extractor);
                 _methodCalls.AddRange(extractor._methodCalls);
             }
         }
 
-        private MethodDeclarationSyntax? GetPrivateMethodDeclaration(InvocationExpressionSyntax invocationExpression, SemanticModel semanticModel)
+        private MethodDeclarationSyntax? GetInvokedMethodDeclaration(InvocationExpressionSyntax invocationExpression)
         {
-            var symbol = semanticModel.GetSymbolInfo(invocationExpression).Symbol;
-            if (symbol == null || symbol.Kind != SymbolKind.Method)
+            var symbol = _semanticModel.GetSymbolInfo(invocationExpression).Symbol;
+
+            if (symbol == null
+                || symbol.Kind != SymbolKind.Method
+                || !IsMethodInTheSameClass(symbol, invocationExpression))
             {
                 return null;
             }
 
-            var methodSymbol = (IMethodSymbol)symbol;
-            if (methodSymbol.DeclaredAccessibility != Accessibility.Private)
+            return symbol.DeclaringSyntaxReferences[0].GetSyntax() as MethodDeclarationSyntax;
+        }
+
+        private bool IsMethodInTheSameClass(ISymbol methodSymbol, InvocationExpressionSyntax invocationExpression)
+        {
+            // private methods can only be invoked from inside the class
+            if (methodSymbol.DeclaredAccessibility == Accessibility.Private)
             {
-                return null;
+                return true;
             }
 
-            return methodSymbol.DeclaringSyntaxReferences[0].GetSyntax() as MethodDeclarationSyntax;
+            var invocationContainingType = _semanticModel.GetEnclosingSymbol(invocationExpression.SpanStart)?.ContainingType;
+            return methodSymbol.ContainingType == invocationContainingType;
         }
     }
 }

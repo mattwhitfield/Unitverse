@@ -56,8 +56,13 @@ namespace Unitverse.Examples
         public async Task SampleAsyncMethod()
         {
             await _dummyService.AsyncMethod();
-            await _dummyService2.AsyncMethod("foo");
+            await SamplePrivateMethod();
         }
+
+        private async Task SamplePrivateMethod()
+		{
+			await _dummyService2.AsyncMethod("foo");
+		}
 
         public void SampleNoReturn(string srr)
         {

@@ -27,6 +27,17 @@ namespace Unitverse.Core.Tests.Helpers
         }
 
         [Test]
+        public void ExtractFrom_DependencyCalledInsidePrivateMethod_ReturnsCalledMethods()
+        {
+            var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
+
+            var targetFields = new[] { "_dummyService", "_dummyService2" };
+            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleAsyncMethod").Node, classModel.SemanticModel, targetFields);
+            result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+            result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+        }
+
+        [Test]
         public void CannotCallExtractFromWithNullNode()
         {
             FluentActions.Invoking(() => InvocationExtractor.ExtractFrom(default(CSharpSyntaxNode), Substitute.For<SemanticModel>(), new[] { "TestValue1478414786", "TestValue1253389239", "TestValue1543172025" })).Should().Throw<ArgumentNullException>();
