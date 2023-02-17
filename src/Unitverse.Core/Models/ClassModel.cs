@@ -179,7 +179,23 @@
                 return baseFieldName;
             }
 
-            return baseFieldName + typeInfo.Type?.Name ?? "UnknownType";
+            if (typeInfo.Type is INamedTypeSymbol namedType)
+            {
+                return baseFieldName + GetFormattedName(namedType);
+            }
+
+            return baseFieldName + "UnknownType";
+        }
+
+        private static string GetFormattedName(ITypeSymbol type)
+        {
+            if (type is INamedTypeSymbol namedType && namedType.IsGenericType)
+            {
+                var genericArguments = namedType.TypeArguments.Select(x => GetFormattedName(x)).Aggregate((x, y) => $"{x}{y}");
+                return string.Concat(namedType.Name, genericArguments);
+            }
+
+            return type.Name;
         }
 
         public string GetIndexerName(IIndexerModel indexer)
