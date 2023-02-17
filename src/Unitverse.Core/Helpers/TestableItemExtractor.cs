@@ -91,10 +91,6 @@
         private ClassModel ExtractClassModel(TypeDeclarationSyntax syntax, SemanticModel semanticModel, IUnitTestGeneratorOptions options)
         {
             var allowedModifiers = GetAllowedModifiers(options, syntax);
-            var privateMethodModifiers = new List<Func<SyntaxTokenList, bool>>
-            {
-                list => list.Any(modifier => modifier.IsKind(SyntaxKind.PrivateKeyword)),
-            };
 
             var model = new ClassModel(syntax, semanticModel, false);
 

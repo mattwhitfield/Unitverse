@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net.Mail;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -24,7 +23,6 @@
             }
 
             var mappedInterfaceFields = model.DependencyMap.MappedInterfaceFields.ToList();
-
             var dependencyMap = InvocationExtractor.ExtractFrom(targetBody, model.SemanticModel, mappedInterfaceFields);
 
             foreach (var field in mappedInterfaceFields)
