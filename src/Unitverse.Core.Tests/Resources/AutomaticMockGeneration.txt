@@ -34,6 +34,8 @@ namespace AssemblyCore
         private IDummyService2 _dummyService2;
         private int _someIntField;
 
+        delegate void SampleDelegate();
+
         public InterfaceSample(IDummyService dummyService, IDummyService2 dummyService2)
         {
             _dummyService = dummyService ?? throw new System.ArgumentNullException(nameof(dummyService));
@@ -45,6 +47,62 @@ namespace AssemblyCore
         public async Task SampleAsyncMethod()
         {
             await _dummyService.AsyncMethod();
+            await _dummyService2.AsyncMethod("foo");
+        }
+
+                public async Task SampleDependencyCalledInsidePrivateMethod()
+        {
+            await _dummyService.AsyncMethod();
+            await PrivateMethod();
+        }
+
+        public async Task SampleDeeperNestedDependencyCall()
+        {
+            await _dummyService.AsyncMethod();
+            await PrivateMethodWrapper();
+        }
+
+        public async Task SampleDependencyCalledInsidePublicMethod()
+        {
+            await _dummyService.AsyncMethod();
+            await PublicMethod();
+        }
+
+        public async Task SampleDependencyCalledAsADelegateMethod()
+        {
+            await _dummyService.AsyncMethod();
+            SampleDelegate myDelegate = async () => await PrivateMethod();
+            myDelegate();
+        }
+
+        public async Task SampleDependencyCalledAsALambdaMethod()
+        {
+            await _dummyService.AsyncMethod();
+
+            Func<Task> myLambda = async () => await PrivateMethod();
+            await myLambda();
+        }
+
+        public async Task SampleDependencyCalledAsAActionMethod()
+        {
+            await _dummyService.AsyncMethod();
+
+            Func<Task> myLambda = async () => await PrivateMethod();
+            await myLambda();
+        }
+
+        private async Task PublicMethod()
+        {
+            await _dummyService2.AsyncMethod("foo");
+        }
+
+        private async Task PrivateMethodWrapper()
+        {
+            await PrivateMethod();
+        }
+
+        private async Task PrivateMethod()
+        {
             await _dummyService2.AsyncMethod("foo");
         }
 

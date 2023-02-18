@@ -9,7 +9,6 @@ namespace Unitverse.Core.Tests.Helpers
     using Microsoft.CodeAnalysis.CSharp;
     using System.Linq;
     using NSubstitute;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     [TestFixture]
     public class InvocationExtractorTests
@@ -33,6 +32,61 @@ namespace Unitverse.Core.Tests.Helpers
 
             var targetFields = new[] { "_dummyService", "_dummyService2" };
             var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleAsyncMethod").Node, classModel.SemanticModel, targetFields);
+            result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+            result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+        }
+
+        [Test]
+        public void ExtractFrom_DependencyCalledInsidePublicMethod_ReturnsCalledMethods()
+        {
+            var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
+
+            var targetFields = new[] { "_dummyService", "_dummyService2" };
+            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleDependencyCalledInsidePublicMethod").Node, classModel.SemanticModel, targetFields);
+            result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+            result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+        }
+
+        [Test]
+        public void ExtractFrom_DeeperNestedDependencyCall_ReturnsCalledMethods()
+        {
+            var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
+
+            var targetFields = new[] { "_dummyService", "_dummyService2" };
+            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleDeeperNestedDependencyCall").Node, classModel.SemanticModel, targetFields);
+            result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+            result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+        }
+
+        [Test]
+        public void ExtractFrom_DependencyCalledWithDelegate_ReturnsCalledMethods()
+        {
+            var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
+
+            var targetFields = new[] { "_dummyService", "_dummyService2" };
+            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleDependencyCalledAsADelegateMethod").Node, classModel.SemanticModel, targetFields);
+            result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+            result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+        }
+
+        [Test]
+        public void ExtractFrom_DependencyCalledWithLambda_ReturnsCalledMethods()
+        {
+            var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
+
+            var targetFields = new[] { "_dummyService", "_dummyService2" };
+            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleDependencyCalledAsALambdaMethod").Node, classModel.SemanticModel, targetFields);
+            result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+            result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
+        }
+
+        [Test]
+        public void ExtractFrom_DependencyCalledWithAction_ReturnsCalledMethods()
+        {
+            var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
+
+            var targetFields = new[] { "_dummyService", "_dummyService2" };
+            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleDependencyCalledAsAActionMethod").Node, classModel.SemanticModel, targetFields);
             result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
             result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
         }
