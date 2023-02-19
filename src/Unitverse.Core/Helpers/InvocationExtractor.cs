@@ -10,9 +10,15 @@
     public class InvocationExtractor : CSharpSyntaxWalker
     {
         private InvocationExtractor(SemanticModel semanticModel, IEnumerable<string> targetFields)
+            : this(semanticModel, targetFields, new HashSet<MethodDeclarationSyntax>())
+        {
+        }
+
+        private InvocationExtractor(SemanticModel semanticModel, IEnumerable<string> targetFields, ISet<MethodDeclarationSyntax> visitedMethods)
         {
             _semanticModel = semanticModel;
             _targetFields = new HashSet<string>(targetFields);
+            _visitedMethods = visitedMethods;
         }
 
         public static DependencyAccessMap ExtractFrom(CSharpSyntaxNode node, SemanticModel semanticModel, IEnumerable<string> targetFields)
@@ -42,6 +48,7 @@
         private readonly List<Tuple<IPropertySymbol, string>> _propertyCalls = new List<Tuple<IPropertySymbol, string>>();
         private readonly SemanticModel _semanticModel;
         private readonly HashSet<string> _targetFields;
+        private readonly ISet<MethodDeclarationSyntax> _visitedMethods;
         private int _invocationCount;
         private int _memberAccessCount;
 
@@ -94,6 +101,45 @@
                     }
                 }
             }
+            else if (node.Expression is IdentifierNameSyntax)
+            {
+                var methodDeclaration = GetInvokedMethodDeclaration(node);
+                if (methodDeclaration is null || _visitedMethods.Contains(methodDeclaration))
+                {
+                    return;
+                }
+
+                _visitedMethods.Add(methodDeclaration);
+                var extractor = new InvocationExtractor(_semanticModel, _targetFields, _visitedMethods);
+                methodDeclaration?.Accept(extractor);
+                _methodCalls.AddRange(extractor._methodCalls);
+            }
+        }
+
+        private MethodDeclarationSyntax? GetInvokedMethodDeclaration(InvocationExpressionSyntax invocationExpression)
+        {
+            var symbol = _semanticModel.GetSymbolInfo(invocationExpression).Symbol;
+
+            if (symbol == null
+                || symbol.Kind != SymbolKind.Method
+                || !IsMethodInTheSameClass(symbol, invocationExpression))
+            {
+                return null;
+            }
+
+            return symbol.DeclaringSyntaxReferences[0].GetSyntax() as MethodDeclarationSyntax;
+        }
+
+        private bool IsMethodInTheSameClass(ISymbol methodSymbol, InvocationExpressionSyntax invocationExpression)
+        {
+            // private methods can only be invoked from inside the class
+            if (methodSymbol.DeclaredAccessibility == Accessibility.Private)
+            {
+                return true;
+            }
+
+            var invocationContainingType = _semanticModel.GetEnclosingSymbol(invocationExpression.SpanStart)?.ContainingType;
+            return methodSymbol.ContainingType == invocationContainingType;
         }
     }
 }
