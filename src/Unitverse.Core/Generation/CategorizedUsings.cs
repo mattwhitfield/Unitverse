@@ -15,7 +15,7 @@
 
             foreach (var usingDirective in usings)
             {
-                var fullString = usingDirective.ToFullString().Replace(" ", string.Empty);
+                var fullString = usingDirective.NormalizeWhitespace(string.Empty, string.Empty, false).ToFullString().Replace(" ", string.Empty);
                 if (usingsEmitted.Add(fullString))
                 {
                     if (fullString.IndexOf("<global", StringComparison.OrdinalIgnoreCase) >= 0)

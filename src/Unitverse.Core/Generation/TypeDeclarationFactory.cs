@@ -66,13 +66,16 @@
                     allFields.Add(classModel.GetConstructorParameterFieldName(parameterModel, frameworkSet));
                 }
 
-                var autoFixtureFieldName = frameworkSet.NamingProvider.AutoFixtureFieldName.Resolve(new NamingContext(classModel.ClassName));
-                var autoFixtureFieldExists = targetType.Members.OfType<FieldDeclarationSyntax>().Any(x => x.Declaration.Variables.Any(v => v.Identifier.Text == autoFixtureFieldName));
-
-                if (!autoFixtureFieldExists)
+                if (frameworkSet.Options.GenerationOptions.UseAutoFixture && frameworkSet.Options.GenerationOptions.UseFieldForAutoFixture)
                 {
-                    var defaultExpression = AutoFixtureHelper.GetCreationExpression(frameworkSet.Options.GenerationOptions);
-                    updatedMethod = UpdateMethod(updatedMethod, allFields, fields, autoFixtureFieldName, AutoFixtureHelper.TypeSyntax, defaultExpression);
+                    var autoFixtureFieldName = frameworkSet.NamingProvider.AutoFixtureFieldName.Resolve(new NamingContext(classModel.ClassName));
+                    var autoFixtureFieldExists = targetType.Members.OfType<FieldDeclarationSyntax>().Any(x => x.Declaration.Variables.Any(v => v.Identifier.Text == autoFixtureFieldName));
+
+                    if (!autoFixtureFieldExists)
+                    {
+                        var defaultExpression = AutoFixtureHelper.GetCreationExpression(frameworkSet.Options.GenerationOptions);
+                        updatedMethod = UpdateMethod(updatedMethod, allFields, fields, autoFixtureFieldName, AutoFixtureHelper.TypeSyntax, defaultExpression);
+                    }
                 }
 
                 // generate fields for each constructor parameter that doesn't have an existing field
