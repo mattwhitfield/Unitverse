@@ -39,7 +39,7 @@
             }
 
             // now resolve the frameworks in use by the target project (if target project is not null and options allow)
-            var generationOptions = OptionsResolver.DetectFrameworks(targetProject, projectOptions.GenerationOptions);
+            var generationOptions = OptionsResolver.DetectFrameworks(targetProject, projectOptions.GenerationOptions, logger);
 
             // now create the final options, including resolved frameworks
             var finalOptions = new UnitTestGeneratorOptions(generationOptions, projectOptions.NamingOptions, projectOptions.StrategyOptions, projectOptions.StatisticsCollectionEnabled, new Dictionary<string, string>());

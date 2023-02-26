@@ -10,7 +10,10 @@ It is worth noting that these options apply in slightly different scopes.
 
 * Options configured in the Visual Studio Options dialog apply to all solutions
 * Options configured in a `.unitTestGeneratorConfig` file apply to all solutions at the same level or a child level on disk
+* Options that are detected from the selected target project apply to that individual generation (if 'Detect target frameworks' is set to true).
 * Options configured in the per-generation UI only apply to that individual generation (with the exception of the selection of target project, which persists until you close Visual Studio).
+
+If you are not sure how a particular option has been configured, you can open up the per-generation UI, which has a small icon next to each option which you can hover to find out where a configuration value came from. Also, options that are detected from a target project that differ from the options loaded from Visual Studio / config files will cause a message to be logged to the Output window in Visual Studio.
 
 You can create a `.unitTestGeneratorConfig` file which contains the options you currently have configured in Visual Studio by going to the 'Export' options page. For more information on this, see the 'Setting options per-project' section below.
 
