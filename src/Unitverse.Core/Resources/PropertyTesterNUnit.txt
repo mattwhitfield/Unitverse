@@ -96,12 +96,17 @@ namespace %targetNamespace%
             // check we found the property and that it's the right type
             Assert.That(propertyInfo.PropertyType, Is.EqualTo(typeof(TProperty)));
 
-            var getMethod = propertyInfo.GetGetMethod();
-            var setMethod = propertyInfo.GetSetMethod();
+            var getMethod = propertyInfo.GetMethod;
+            var setMethod = propertyInfo.SetMethod;
 
             if (getMethod == null || setMethod == null)
             {
                 throw new ArgumentException("The lambda expression 'property' should point to a valid property that contains a getter and setter");
+            }
+
+            if (getMethod.IsPrivate || setMethod.IsPrivate)
+            {
+                throw new ArgumentException("Usage of private setters or getters is not allowed");  
             }
 
             // check can get and set
