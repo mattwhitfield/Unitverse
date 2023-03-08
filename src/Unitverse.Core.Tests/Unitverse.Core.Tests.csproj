@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <IsPackable>false</IsPackable>
-    <RunSettingsFilePath>C:\Code\unittestgenerator\src\Unitverse.Core.Tests\bin\Debug\net472\fine-code-coverage\coverage-tool-output\Unitverse.Core.Tests-fcc-mscodecoverage-generated.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
