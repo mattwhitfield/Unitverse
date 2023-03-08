@@ -309,7 +309,8 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using System.Threading.Tasks;
+        ///   Looks up a localized string similar to using System;
+        ///using System.Threading.Tasks;
         ///
         ///namespace AssemblyCore
         ///{
@@ -334,7 +335,7 @@ namespace Unitverse.Core.Tests {
         ///
         ///        int ReturnMethod(string s);
         ///        int ReturnMethod(string s, string s2);
-        ///        int ReturnMethod(string s,  [rest of string was truncated]&quot;;.
+        ///        int ReturnMe [rest of string was truncated]&quot;;.
         /// </summary>
         public static string AutomaticMockGeneration {
             get {
@@ -397,6 +398,41 @@ namespace Unitverse.Core.Tests {
         public static string AutomaticMockingMixedDependencies {
             get {
                 return ResourceManager.GetString("AutomaticMockingMixedDependencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///using System.Threading.Tasks;
+        ///
+        ///namespace AssemblyCore
+        ///{
+        ///	public interface IDummyService
+        ///	{
+        ///        string SomeProp { get; set; }
+        ///
+        ///	    void NoReturnMethod();
+        ///
+        ///        int ReturnMethod();
+        ///
+        ///	    T GenericMethod&lt;T&gt;(T val);
+        ///
+        ///        Task&lt;string&gt; AsyncMethod(); 
+        ///	}
+        ///
+        ///	public interface IDummyService2
+        ///	{
+        ///        string SomeProp { get; }
+        ///
+        ///	    void NoReturnMethod(string s);
+        ///
+        ///        int ReturnMethod(string s);
+        ///        int ReturnMethod(string s, string s2);
+        ///        int ReturnMe [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string AutomaticMockThis {
+            get {
+                return ResourceManager.GetString("AutomaticMockThis", resourceCulture);
             }
         }
         
@@ -1342,7 +1378,10 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to public class PredictedConsumption
+        ///   Looks up a localized string similar to using System;
+        ///using System.Collections.Generic;
+        ///
+        ///public class PredictedConsumption
         ///{
         ///    public PredictedConsumption(IEnumerable&lt;int&gt; sources)
         ///    { }

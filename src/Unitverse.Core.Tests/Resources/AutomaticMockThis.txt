@@ -1,0 +1,89 @@
+using System;
+using System.Threading.Tasks;
+
+namespace AssemblyCore
+{
+	public interface IDummyService
+	{
+        string SomeProp { get; set; }
+
+	    void NoReturnMethod();
+
+        int ReturnMethod();
+
+	    T GenericMethod<T>(T val);
+
+        Task<string> AsyncMethod(); 
+	}
+
+	public interface IDummyService2
+	{
+        string SomeProp { get; }
+
+	    void NoReturnMethod(string s);
+
+        int ReturnMethod(string s);
+        int ReturnMethod(string s, string s2);
+        int ReturnMethod(string s, object o);
+
+        Task<string> AsyncMethod(string s); 
+	}
+
+    public class InterfaceSample
+    {
+        private IDummyService _dummyService, _otherDummyService;
+        private IDummyService2 _dummyService2;
+        private int _someIntField;
+
+        delegate void SampleDelegate();
+
+        public InterfaceSample(IDummyService dummyService, IDummyService2 dummyService2)
+        {
+            this._dummyService = dummyService ?? throw new System.ArgumentNullException(nameof(dummyService));
+            this._dummyService2 = dummyService2;
+            this._someIntField = dummyService.ReturnMethod();
+        }
+
+        public async Task SampleAsyncMethod()
+        {
+            await this._dummyService.AsyncMethod();
+            var s = await this.PrivateMethodWrapper();
+        }
+
+        private Task<string> PrivateMethodWrapper()
+        {
+            return this.PrivateMethod();
+        }
+
+        private Task<string> PrivateMethod()
+        {
+            return this._dummyService2.AsyncMethod("foo");
+        }
+
+        public async Task SampleNoReturn(string srr)
+        {
+            this._dummyService.NoReturnMethod();
+            this._dummyService.NoReturnMethod();
+            this._dummyService.NoReturnMethod();
+            var s = this._dummyService.GenericMethod(srr);
+
+            this._dummyService.SomeProp += _dummyService2.SomeProp;
+            
+            var value2 = this._dummyService2.ReturnMethod("sds", "s", "s3");
+            var value4 = await this._dummyService2.ReturnAsync("sds", "s", "s3");
+        }
+
+    }
+
+    public static class DummyExt
+    {
+        public static int ReturnMethod(this IDummyService2 d, string s, string s2, string s3)
+        {
+            return 0;
+        }
+        public static Task<int> ReturnAsync(this IDummyService2 d, string s, string s2, string s3)
+        {
+            return Task.FromResult(0);
+        }
+    }
+}
