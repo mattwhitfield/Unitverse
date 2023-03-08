@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Xml.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -62,16 +63,16 @@
             }
 
             _memberAccessCount++;
-            if (node.Expression is IdentifierNameSyntax identifierName)
+            if (GetFieldTarget(node.Expression, out var fieldTarget))
             {
-                if (_targetFields.Contains(identifierName.Identifier.Text))
+                if (_targetFields.Contains(fieldTarget))
                 {
                     var symbolInfo = _semanticModel.GetSymbolInfo(node);
                     if (symbolInfo.Symbol is IPropertySymbol propertySymbol)
                     {
                         if (!(node.Parent is AssignmentExpressionSyntax assignment) || node != assignment.Left)
                         {
-                            _propertyCalls.Add(Tuple.Create(propertySymbol, identifierName.Identifier.Text));
+                            _propertyCalls.Add(Tuple.Create(propertySymbol, fieldTarget));
                         }
                     }
                 }
@@ -85,9 +86,9 @@
 
             if (node.Expression is MemberAccessExpressionSyntax memberAccessExpression)
             {
-                if (memberAccessExpression.Expression is IdentifierNameSyntax identifierName)
+                if (GetFieldTarget(memberAccessExpression.Expression, out var fieldTarget))
                 {
-                    if (_targetFields.Contains(identifierName.Identifier.Text))
+                    if (_targetFields.Contains(fieldTarget))
                     {
                         var symbolInfo = _semanticModel.GetSymbolInfo(node);
                         if (symbolInfo.Symbol is IMethodSymbol methodSymbol)
@@ -95,28 +96,56 @@
                             // if ReducedFrom is non-null, this is actually an extension method call
                             if (methodSymbol.ReducedFrom is null)
                             {
-                                _methodCalls.Add(Tuple.Create(methodSymbol, identifierName.Identifier.Text));
+                                _methodCalls.Add(Tuple.Create(methodSymbol, fieldTarget));
                             }
                         }
                     }
                 }
+                else
+                {
+                    Descend(node.Expression);
+                }
             }
             else if (node.Expression is IdentifierNameSyntax)
             {
-                var methodDeclaration = GetInvokedMethodDeclaration(node);
-                if (methodDeclaration is null || _visitedMethods.Contains(methodDeclaration))
-                {
-                    return;
-                }
-
-                _visitedMethods.Add(methodDeclaration);
-                var extractor = new InvocationExtractor(_semanticModel, _targetFields, _visitedMethods);
-                methodDeclaration?.Accept(extractor);
-                _methodCalls.AddRange(extractor._methodCalls);
+                Descend(node);
             }
         }
 
-        private MethodDeclarationSyntax? GetInvokedMethodDeclaration(InvocationExpressionSyntax invocationExpression)
+        private void Descend(ExpressionSyntax node)
+        {
+            var methodDeclaration = GetInvokedMethodDeclaration(node);
+            if (methodDeclaration is null || _visitedMethods.Contains(methodDeclaration))
+            {
+                return;
+            }
+
+            _visitedMethods.Add(methodDeclaration);
+            var extractor = new InvocationExtractor(_semanticModel, _targetFields, _visitedMethods);
+            methodDeclaration?.Accept(extractor);
+            _methodCalls.AddRange(extractor._methodCalls);
+        }
+
+        private bool GetFieldTarget(ExpressionSyntax expressionSyntax, out string fieldTarget)
+        {
+            if (expressionSyntax is IdentifierNameSyntax identifierName)
+            {
+                fieldTarget = identifierName.Identifier.Text;
+                return true;
+            }
+            else if (expressionSyntax is MemberAccessExpressionSyntax memberAccess && (memberAccess.Expression is ThisExpressionSyntax || memberAccess.Expression is BaseExpressionSyntax))
+            {
+                fieldTarget = memberAccess.Name.ToString();
+                return true;
+            }
+            else
+            {
+                fieldTarget = string.Empty;
+                return false;
+            }
+        }
+
+        private MethodDeclarationSyntax? GetInvokedMethodDeclaration(ExpressionSyntax invocationExpression)
         {
             var symbol = _semanticModel.GetSymbolInfo(invocationExpression).Symbol;
 
@@ -130,7 +159,7 @@
             return symbol.DeclaringSyntaxReferences[0].GetSyntax() as MethodDeclarationSyntax;
         }
 
-        private bool IsMethodInTheSameClass(ISymbol methodSymbol, InvocationExpressionSyntax invocationExpression)
+        private bool IsMethodInTheSameClass(ISymbol methodSymbol, ExpressionSyntax invocationExpression)
         {
             // private methods can only be invoked from inside the class
             if (methodSymbol.DeclaredAccessibility == Accessibility.Private)
