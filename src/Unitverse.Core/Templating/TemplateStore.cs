@@ -76,6 +76,11 @@
         private const string Include = "Include";
         private const string Exclude = "Exclude";
 
+        // TODO
+        private const string IsExclusive = "IsExclusive"; // can only be matched if no other templates have been matched for the current item
+        private const string StopMatching = "StopMatching"; // should stop looking for templates that apply to the current item after this is matched
+        private const string Priority = "Priority"; // numeric priority - 1 comes first
+
         public static ITemplate ReadFrom(string fileName)
         {
             var lines = File.ReadAllLines(fileName);
@@ -88,6 +93,8 @@
             }
 
             string testMethodName = null, target = null;
+            int priority = 10;
+            bool stopMatching = false, isExclusive = false;
             var includes = new List<string>();
             var excludes = new List<string>();
 
@@ -108,6 +115,25 @@
                 else if (string.Equals(header.name, Exclude, StringComparison.OrdinalIgnoreCase))
                 {
                     excludes.Add(header.value);
+                }
+                else if (string.Equals(header.name, Priority, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (int.TryParse(header.value, out var parsedValue))
+                    {
+                        priority = parsedValue;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException($"While reading '{fileName}': Could not parse {Priority} value ('{header.value}') as an integer");
+                    }
+                }
+                else if (string.Equals(header.name, StopMatching, StringComparison.OrdinalIgnoreCase))
+                {
+                    stopMatching = string.Equals(header.value, "true", StringComparison.OrdinalIgnoreCase);
+                }
+                else if (string.Equals(header.name, IsExclusive, StringComparison.OrdinalIgnoreCase))
+                {
+                    isExclusive = string.Equals(header.value, "true", StringComparison.OrdinalIgnoreCase);
                 }
             }
 
@@ -154,7 +180,7 @@
         private static void ParseContent(string[] lines, out List<(string name, string value)> headers, out string content)
         {
             headers = new List<(string name, string value)>();
-            content = new StringBuilder();
+            var contentBuilder = new StringBuilder();
 
             var pastSplit = false;
             foreach (var line in lines)
@@ -163,12 +189,12 @@
                 pastSplit |= isBlank;
                 if (pastSplit)
                 {
-                    if (isBlank && content.Length == 0)
+                    if (isBlank && contentBuilder.Length == 0)
                     {
                         continue;
                     }
 
-                    content.AppendLine(line);
+                    contentBuilder.AppendLine(line);
                 }
                 else if (!isBlank)
                 {
@@ -179,6 +205,8 @@
                     }
                 }
             }
+
+            content = contentBuilder.ToString();
         }
     }
 
@@ -186,6 +214,6 @@
     {
         bool AppliesTo(IConstructor testableModel);
 
-        IEnumerable<SectionedMethodHandler> Create(IPropertyModel property, ClassModel model, NamingContext namingContext);
+        IEnumerable<SectionedMethodHandler> Create(IProperty property, ClassModel model, NamingContext namingContext);
     }
 }
