@@ -77,6 +77,11 @@
             return null;
         }
 
+        public ExpressionSyntax? GetVoidSetupFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, IEnumerable<string> parameters)
+        {
+            return null;
+        }
+
         public bool AwaitAsyncAssertions => true;
     }
 }

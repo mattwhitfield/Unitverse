@@ -71,6 +71,14 @@
 
                                     mockSetupStatements.Add(Generate.Statement(frameworkSet.MockingFramework.GetSetupFor(dependencyMethod, mockFieldName, model.SemanticModel, frameworkSet, expectedReturnValue, parameters)));
                                 }
+                                else
+                                {
+                                    var voidSetup = frameworkSet.MockingFramework.GetVoidSetupFor(dependencyMethod, mockFieldName, model.SemanticModel, frameworkSet, parameters);
+                                    if (voidSetup != null)
+                                    {
+                                        mockSetupStatements.Add(Generate.Statement(voidSetup));
+                                    }
+                                }
 
                                 var assertion = frameworkSet.MockingFramework.GetAssertionFor(dependencyMethod, mockFieldName, model.SemanticModel, frameworkSet, parameters);
                                 if (isAsync && frameworkSet.MockingFramework.AwaitAsyncAssertions)

@@ -90,6 +90,15 @@
             return Generate.MemberInvocation(Mock("Setup", mockFieldName, methodCall), methodName, expectedReturnValue);
         }
 
+        public ExpressionSyntax? GetVoidSetupFor(IMethodSymbol dependencyMethod, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, IEnumerable<string> parameters)
+        {
+            var methodCall = MockingHelper.GetMethodCall(dependencyMethod, "mock", MockingHelper.TranslateArgumentFunc(GetArgument, parameters), _context);
+
+            var methodName = "Verifiable";
+
+            return Generate.MemberInvocation(Mock("Setup", mockFieldName, methodCall), methodName);
+        }
+
         public ExpressionSyntax GetSetupFor(IPropertySymbol dependencyProperty, string mockFieldName, SemanticModel model, IFrameworkSet frameworkSet, ExpressionSyntax expectedReturnValue)
         {
             var propertyAccess = Generate.MemberAccess("mock", dependencyProperty.Name);
