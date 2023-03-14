@@ -2,10 +2,8 @@
 {
     using System.Collections.Generic;
 
-    public interface IMethod
+    public interface IMethod : ITemplateTarget
     {
-        IEnumerable<IAttribute> Attributes { get; }
-
         bool IsAsync { get; }
 
         bool IsStatic { get; }

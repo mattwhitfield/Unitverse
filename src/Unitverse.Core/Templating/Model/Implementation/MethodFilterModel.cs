@@ -32,5 +32,7 @@
         public IEnumerable<IParameter> Parameters { get; }
 
         public IEnumerable<IAttribute> Attributes { get; }
+
+        public string TemplateType => "Method";
     }
 }

@@ -29,5 +29,7 @@
         public IType? Type => _source.Node.Type.GetTypeModel(_semanticModel);
 
         public IEnumerable<IAttribute> Attributes { get; }
+
+        public string TemplateType => "Property";
     }
 }

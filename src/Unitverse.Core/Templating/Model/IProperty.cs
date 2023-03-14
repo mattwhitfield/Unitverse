@@ -1,8 +1,6 @@
 ﻿namespace Unitverse.Core.Templating.Model
 {
-    using System.Collections.Generic;
-
-    public interface IProperty
+    public interface IProperty : ITemplateTarget
     {
         bool HasGet { get; }
 
@@ -15,7 +13,5 @@
         string Name { get; }
 
         IType? Type { get; }
-
-        IEnumerable<IAttribute> Attributes { get; }
     }
 }
