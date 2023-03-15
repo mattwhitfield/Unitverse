@@ -3,30 +3,15 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using SequelFilter;
 
     public static class TemplateReader
     {
-        private const string TestMethodName = "TestMethodName";
-        private const string Target = "Target";
-        private const string Include = "Include";
-        private const string Exclude = "Exclude";
-        private const string IsAsync = "IsAsync";
-        private const string IsStatic = "IsStatic";
-        private const string Description = "Description";
-
-        private const string IsExclusive = "IsExclusive"; // can only be matched if no other templates have been matched for the current item
-        private const string StopMatching = "StopMatching"; // should stop looking for templates that apply to the current item after this is matched
-        private const string Priority = "Priority"; // numeric priority - 1 comes first
-
         public static ITemplate ReadFrom(string fileName)
         {
-            return ReadFrom(File.ReadAllLines(fileName), fileName);
-        }
-
-        public static ITemplate ReadFrom(string[] lines, string fileName)
-        {
+            var lines = File.ReadAllLines(fileName);
             ParseContent(lines, out var headers, out var content);
 
             if (string.IsNullOrWhiteSpace(content))
@@ -42,27 +27,27 @@
 
             foreach (var header in headers)
             {
-                if (string.Equals(header.name, TestMethodName, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(header.name, TemplateHeaders.TestMethodName, StringComparison.OrdinalIgnoreCase))
                 {
                     testMethodName = header.value;
                 }
-                else if (string.Equals(header.name, Target, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(header.name, TemplateHeaders.Target, StringComparison.OrdinalIgnoreCase))
                 {
                     target = header.value;
                 }
-                else if (string.Equals(header.name, Description, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(header.name, TemplateHeaders.Description, StringComparison.OrdinalIgnoreCase))
                 {
                     description = header.value;
                 }
-                else if (string.Equals(header.name, Include, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(header.name, TemplateHeaders.Include, StringComparison.OrdinalIgnoreCase))
                 {
                     includes.Add(header.value);
                 }
-                else if (string.Equals(header.name, Exclude, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(header.name, TemplateHeaders.Exclude, StringComparison.OrdinalIgnoreCase))
                 {
                     excludes.Add(header.value);
                 }
-                else if (string.Equals(header.name, Priority, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(header.name, TemplateHeaders.Priority, StringComparison.OrdinalIgnoreCase))
                 {
                     if (int.TryParse(header.value, out var parsedValue))
                     {
@@ -70,22 +55,22 @@
                     }
                     else
                     {
-                        throw new InvalidOperationException($"While reading '{fileName}': Could not parse {Priority} value ('{header.value}') as an integer");
+                        throw new InvalidOperationException($"While reading '{fileName}': Could not parse {TemplateHeaders.Priority} value ('{header.value}') as an integer");
                     }
                 }
-                else if (string.Equals(header.name, StopMatching, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(header.name, TemplateHeaders.StopMatching, StringComparison.OrdinalIgnoreCase))
                 {
                     stopMatching = IsTrue(header.value);
                 }
-                else if (string.Equals(header.name, IsExclusive, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(header.name, TemplateHeaders.IsExclusive, StringComparison.OrdinalIgnoreCase))
                 {
                     isExclusive = IsTrue(header.value);
                 }
-                else if (string.Equals(header.name, IsAsync, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(header.name, TemplateHeaders.IsAsync, StringComparison.OrdinalIgnoreCase))
                 {
                     isAsync = IsTrue(header.value);
                 }
-                else if (string.Equals(header.name, IsStatic, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(header.name, TemplateHeaders.IsStatic, StringComparison.OrdinalIgnoreCase))
                 {
                     isStatic = IsTrue(header.value);
                 }
@@ -93,12 +78,17 @@
 
             if (string.IsNullOrWhiteSpace(testMethodName))
             {
-                throw new InvalidOperationException($"While reading '{fileName}': No '{TestMethodName}' header found");
+                throw new InvalidOperationException($"While reading '{fileName}': No '{TemplateHeaders.TestMethodName}' header found");
             }
 
             if (string.IsNullOrWhiteSpace(target))
             {
-                throw new InvalidOperationException($"While reading '{fileName}': No '{Target}' header found");
+                throw new InvalidOperationException($"While reading '{fileName}': No '{TemplateHeaders.Target}' header found");
+            }
+
+            if (!includes.Any())
+            {
+                throw new InvalidOperationException($"While reading '{fileName}': No {TemplateHeaders.Include} values specified");
             }
 
             var compiledIncludes = new List<ExecutableExpression>();
@@ -112,7 +102,7 @@
                 }
                 catch (Exception ex)
                 {
-                    throw new InvalidOperationException($"While reading '{fileName}': Could not parse {Include} value - {ex.Message}");
+                    throw new InvalidOperationException($"While reading '{fileName}': Could not parse {TemplateHeaders.Include} value - {ex.Message}");
                 }
             }
 
@@ -124,7 +114,7 @@
                 }
                 catch (Exception ex)
                 {
-                    throw new InvalidOperationException($"While reading '{fileName}': Could not parse {Exclude} value - {ex.Message}");
+                    throw new InvalidOperationException($"While reading '{fileName}': Could not parse {TemplateHeaders.Exclude} value - {ex.Message}");
                 }
             }
 

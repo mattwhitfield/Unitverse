@@ -15,12 +15,12 @@ namespace Unitverse.Core.Tests.Templating
         public static void CanCallLoadTemplatesFor()
         {
             // Arrange
-            var fixture = new Fixture().Customize(new AutoMoqCustomization());
-            var folder = fixture.Create<string>();
-            var messageLogger = fixture.Create<IMessageLogger>();
+            //var fixture = new Fixture().Customize(new AutoMoqCustomization());
+            //var folder = fixture.Create<string>();
+            //var messageLogger = fixture.Create<IMessageLogger>();
 
             // Act
-            var result = TemplateStore.LoadTemplatesFor(folder, messageLogger);
+            //var result = TemplateStore.LoadTemplatesFor(folder, messageLogger);
 
             // Assert
             Assert.Fail("Create or modify test");

@@ -11,7 +11,7 @@
     {
         private static readonly Dictionary<string, ITemplate> _cache = new Dictionary<string, ITemplate>(StringComparer.OrdinalIgnoreCase);
 
-        public static IList<ITemplate> LoadTemplatesFor(IFrameworkSet frameworkSet, string folder, IMessageLogger messageLogger)
+        public static IList<ITemplate> LoadTemplatesFor(string folder, IMessageLogger messageLogger)
         {
             //// TODO - add option to see if templating is enabled, if not - return
 
