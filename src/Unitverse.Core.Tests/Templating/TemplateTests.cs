@@ -1,15 +1,17 @@
 namespace Unitverse.Core.Tests.Templating
 {
     using System.Collections.Generic;
-    using AutoFixture;
-    using AutoFixture.AutoMoq;
+    using System.Linq;
     using FluentAssertions;
+    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
     using SequelFilter;
-    using Unitverse.Core.Frameworks;
     using Unitverse.Core.Options;
     using Unitverse.Core.Templating;
-    using Unitverse.Core.Templating.Model;
+    using Unitverse.Core.Templating.Model.Implementation;
+    using Unitverse.Core.Tests.Templating.ModelIntegration;
+    using Unitverse.Tests.Common;
+    using Microsoft.CodeAnalysis.Formatting;
 
     [TestFixture]
     public class TemplateTests
@@ -30,19 +32,18 @@ namespace Unitverse.Core.Tests.Templating
         [SetUp]
         public void SetUp()
         {
-            var fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _content = fixture.Create<string>();
-            _testMethodName = fixture.Create<string>();
-            _target = fixture.Create<string>();
-            _includeExpressions = fixture.Create<IList<ExecutableExpression>>();
-            _excludeExpressions = fixture.Create<IList<ExecutableExpression>>();
-            _isExclusive = fixture.Create<bool>();
-            _stopMatching = fixture.Create<bool>();
-            _priority = fixture.Create<int>();
-            _isAsync = fixture.Create<bool>();
-            _isStatic = fixture.Create<bool>();
-            _description = fixture.Create<string>();
-            _testClass = fixture.Create<Template>();
+            _content = "string s = string.Empty;";
+            _testMethodName = "testname";
+            _target = "Property";
+            _includeExpressions = new[] { SequelFilterParser.Parse("owningType.Type.Name == 'TestClass' && model.Name == 'ThisIsAReadWriteString'") };
+            _excludeExpressions = new List<ExecutableExpression>();
+            _isExclusive = false;
+            _stopMatching = false;
+            _priority = 1;
+            _isAsync = false;
+            _isStatic = false;
+            _description = "description of the test method";
+            _testClass = new Template(_content, _testMethodName, _target, _includeExpressions, _excludeExpressions, _isExclusive, _stopMatching, _priority, _isAsync, _isStatic, _description);
         }
 
         [Test]
@@ -58,33 +59,72 @@ namespace Unitverse.Core.Tests.Templating
         [Test]
         public void CanCallAppliesTo()
         {
-            // Arrange
-            var fixture = new Fixture().Customize(new AutoMoqCustomization());
-            var model = fixture.Create<ITemplateTarget>();
-            var owningType = fixture.Create<IClass>();
+            var model = ClassModelProvider.CreateModel(TemplateModelSources.TS_SampleClass);
+            var owningType = new ClassFilterModel(model);
 
             // Act
-            var result = _testClass.AppliesTo(model, owningType);
+            var result = owningType.Properties.FirstOrDefault(x => _testClass.AppliesTo(x, owningType));
 
             // Assert
-            Assert.Fail("Create or modify test");
+            result.Should().NotBeNull();
+            result.Name.Should().Be("ThisIsAReadWriteString");
+        }
+
+        [Test]
+        public void AppliesToWillNotMatchIncorrectModelTypes()
+        {
+            _testClass = new Template(_content, _testMethodName, _target, new List<ExecutableExpression>(), _excludeExpressions, _isExclusive, _stopMatching, _priority, _isAsync, _isStatic, _description);
+
+            var model = ClassModelProvider.CreateModel(TemplateModelSources.TS_SampleClass);
+            var owningType = new ClassFilterModel(model);
+
+            // Act
+            var result = owningType.Methods.FirstOrDefault(x => _testClass.AppliesTo(x, owningType));
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [Test]
+        public void AppliesToWillNotMatchExcludedItems()
+        {
+            var includes = new[] { SequelFilterParser.Parse("model.Name == 'ThisIsAReadWriteString'") };
+            var excludes = new[] { SequelFilterParser.Parse("owningType.Type.Name == 'TestClass'") };
+
+            _testClass = new Template(_content, _testMethodName, _target, includes, excludes, _isExclusive, _stopMatching, _priority, _isAsync, _isStatic, _description);
+
+            var model = ClassModelProvider.CreateModel(TemplateModelSources.TS_SampleClass);
+            var owningType = new ClassFilterModel(model);
+
+            // Act
+            var result = owningType.Properties.FirstOrDefault(x => _testClass.AppliesTo(x, owningType));
+
+            // Assert
+            result.Should().BeNull();
         }
 
         [Test]
         public void CanCallCreate()
         {
             // Arrange
-            var fixture = new Fixture().Customize(new AutoMoqCustomization());
-            var frameworkSet = fixture.Create<IFrameworkSet>();
-            var model = fixture.Create<ITemplateTarget>();
-            var owningType = fixture.Create<IClass>();
-            var namingContext = fixture.Create<NamingContext>();
+            var frameworkSet = DefaultFrameworkSet.Create();
+
+            var model = ClassModelProvider.CreateModel(TemplateModelSources.TS_SampleClass);
+            var owningType = new ClassFilterModel(model);
+            var property = owningType.Properties.FirstOrDefault(x => x.Name == "ThisIsAReadWriteString");
+
+            var namingContext = new NamingContext("TestClass");
 
             // Act
-            var result = _testClass.Create(frameworkSet, model, owningType, namingContext);
+            var result = _testClass.Create(frameworkSet, property, owningType, namingContext);
 
             // Assert
-            Assert.Fail("Create or modify test");
+            using (var workspace = new AdhocWorkspace())
+            {
+                var node = Formatter.Format(result, workspace).NormalizeWhitespace();
+
+                node.ToFullString().Should().Be("[Fact]\r\npublic void testname()\r\n{\r\n    string s = string.Empty;\r\n}");
+            }
         }
     }
 }

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using SequelFilter;
@@ -91,7 +92,7 @@
             var content = new ObjectPathResolver(Content).Resolve(fieldReferenceResolver);
 
             var methodHandler = frameworkSet.CreateTestMethod(TestMethodName, namingContext, IsAsync, IsStatic, Description);
-            var body = (BlockSyntax)SyntaxFactory.ParseStatement("{" + content + "}");
+            var body = (BlockSyntax)SyntaxFactory.ParseStatement("{\n" + content + "\n}");
 
             return (MethodDeclarationSyntax)methodHandler.Method.WithBody(body);
         }
