@@ -1,9 +1,8 @@
 namespace Unitverse.Core.Tests.Templating
 {
-    using AutoFixture;
-    using AutoFixture.AutoMoq;
     using FluentAssertions;
     using NUnit.Framework;
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using Unitverse.Core.Options;
@@ -48,8 +47,7 @@ namespace Unitverse.Core.Tests.Templating
             bool stopMatching,
             int priority)
         {
-            var testFile = Path.GetTempFileName();
-            try
+            RunOnFile(testFile =>
             {
                 // Arrange
                 using (var writer = new StreamWriter(testFile))
@@ -85,6 +83,149 @@ namespace Unitverse.Core.Tests.Templating
                 result.StopMatching.Should().Be(stopMatching);
                 result.Priority.Should().Be(priority);
                 result.Content.Should().StartWith("// test method content");
+            });
+        }
+
+        [Test]
+        public static void InvalidIncludeWillNotPass()
+        {
+            RunOnFile(testFile =>
+            {
+                // Arrange
+                using (var writer = new StreamWriter(testFile))
+                {
+                    writer.WriteLine(TemplateHeaders.TestMethodName + ": testName");
+                    writer.WriteLine(TemplateHeaders.Target + ": Property");
+                    writer.WriteLine(TemplateHeaders.Include + ": this probably won't be happy");
+                    writer.WriteLine();
+                    writer.WriteLine();
+                    writer.WriteLine("// test method content");
+                }
+
+                // Act
+                FluentActions.Invoking(() => TemplateReader.ReadFrom(testFile)).Should().Throw<InvalidOperationException>();
+            });
+        }
+
+        [Test]
+        public static void InvalidExcludeWillNotPass()
+        {
+            RunOnFile(testFile =>
+            {
+                // Arrange
+                using (var writer = new StreamWriter(testFile))
+                {
+                    writer.WriteLine(TemplateHeaders.TestMethodName + ": testName");
+                    writer.WriteLine(TemplateHeaders.Target + ": Property");
+                    writer.WriteLine(TemplateHeaders.Include + ": class.Name == 'fred'");
+                    writer.WriteLine(TemplateHeaders.Exclude + ": this probably won't be happy");
+                    writer.WriteLine();
+                    writer.WriteLine();
+                    writer.WriteLine("// test method content");
+                }
+
+                // Act
+                FluentActions.Invoking(() => TemplateReader.ReadFrom(testFile)).Should().Throw<InvalidOperationException>();
+            });
+        }
+
+        [Test]
+        public static void MissingContentWillNotPass()
+        {
+            RunOnFile(testFile =>
+            {
+                // Arrange
+                using (var writer = new StreamWriter(testFile))
+                {
+                    writer.WriteLine(TemplateHeaders.TestMethodName + ": testName");
+                    writer.WriteLine();
+                }
+
+                // Act
+                FluentActions.Invoking(() => TemplateReader.ReadFrom(testFile)).Should().Throw<InvalidOperationException>();
+            });
+        }
+
+        [Test]
+        public static void InvalidPriorityWillNotPass()
+        {
+            RunOnFile(testFile =>
+            {
+                // Arrange
+                using (var writer = new StreamWriter(testFile))
+                {
+                    writer.WriteLine(TemplateHeaders.Priority + ": dave");
+                    writer.WriteLine();
+                    writer.WriteLine("// test method content");
+                }
+
+                // Act
+                FluentActions.Invoking(() => TemplateReader.ReadFrom(testFile)).Should().Throw<InvalidOperationException>();
+            });
+        }
+
+        [Test]
+        public static void MissingTestNameWillNotPass()
+        {
+            RunOnFile(testFile =>
+            {
+                // Arrange
+                using (var writer = new StreamWriter(testFile))
+                {
+                    writer.WriteLine(TemplateHeaders.Priority + ": 1");
+                    writer.WriteLine();
+                    writer.WriteLine("// test method content");
+                }
+
+                // Act
+                FluentActions.Invoking(() => TemplateReader.ReadFrom(testFile)).Should().Throw<InvalidOperationException>();
+            });
+        }
+
+        [Test]
+        public static void MissingTargetWillNotPass()
+        {
+            RunOnFile(testFile =>
+            {
+                // Arrange
+                using (var writer = new StreamWriter(testFile))
+                {
+                    writer.WriteLine(TemplateHeaders.TestMethodName + ": testName");
+                    writer.WriteLine(TemplateHeaders.Priority + ": 1");
+                    writer.WriteLine();
+                    writer.WriteLine("// test method content");
+                }
+
+                // Act
+                FluentActions.Invoking(() => TemplateReader.ReadFrom(testFile)).Should().Throw<InvalidOperationException>();
+            });
+        }
+
+        [Test]
+        public static void MissingIncludesWillNotPass()
+        {
+            RunOnFile(testFile =>
+            {
+                // Arrange
+                using (var writer = new StreamWriter(testFile))
+                {
+                    writer.WriteLine(TemplateHeaders.TestMethodName + ": testName");
+                    writer.WriteLine(TemplateHeaders.Target + ": Property");
+                    writer.WriteLine();
+                    writer.WriteLine("// test method content");
+                }
+
+                // Act
+                FluentActions.Invoking(() => TemplateReader.ReadFrom(testFile)).Should().Throw<InvalidOperationException>();
+            });
+        }
+
+        private static void RunOnFile(Action<string> action)
+        {
+            var testFile = Path.GetTempFileName();
+            try
+            {
+                action(testFile);
             }
             finally
             {
