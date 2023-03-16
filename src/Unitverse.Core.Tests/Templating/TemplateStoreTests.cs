@@ -14,6 +14,10 @@ namespace Unitverse.Core.Tests.Templating
     [TestFixture]
     public static class TemplateStoreTests
     {
+        private static readonly string OneSub = "sub";
+        private static readonly string TwoSubs = Path.Combine("sub", "sub");
+        private static readonly string ThreeSubs = Path.Combine("sub", "sub", "sub");
+
         [Test]
         public static void CanCallLoadTemplatesFor()
         {
@@ -21,13 +25,13 @@ namespace Unitverse.Core.Tests.Templating
             var context = new NamingContext("dummy");
             RunOnDirectory(dir =>
             {
-                WriteTemplateTo(dir, "sub", "testMethod1");
-                WriteTemplateTo(dir, "sub\\sub", "testMethod2");
-                WriteTemplateTo(dir, "sub\\sub\\sub", "testMethod3");
+                WriteTemplateTo(dir, OneSub, "testMethod1");
+                WriteTemplateTo(dir, TwoSubs, "testMethod2");
+                WriteTemplateTo(dir, ThreeSubs, "testMethod3");
 
-                TemplateStore.LoadTemplatesFor(Path.Combine(dir, "sub\\sub\\sub"), logger).Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1", "testMethod2", "testMethod3");
-                TemplateStore.LoadTemplatesFor(Path.Combine(dir, "sub\\sub"), logger).Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1", "testMethod2");
-                TemplateStore.LoadTemplatesFor(Path.Combine(dir, "sub"), logger).Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1");
+                TemplateStore.LoadTemplatesFor(Path.Combine(dir, ThreeSubs), logger).Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1", "testMethod2", "testMethod3");
+                TemplateStore.LoadTemplatesFor(Path.Combine(dir, TwoSubs), logger).Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1", "testMethod2");
+                TemplateStore.LoadTemplatesFor(Path.Combine(dir, OneSub), logger).Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1");
             });
         }
 
@@ -38,12 +42,12 @@ namespace Unitverse.Core.Tests.Templating
             var context = new NamingContext("dummy");
             RunOnDirectory(dir =>
             {
-                WriteTemplateTo(dir, "sub", "testMethod1");
-                WriteTemplateTo(dir, "sub\\sub", "testMethod2");
-                WriteTemplateTo(dir, "sub\\sub\\sub", "testMethod3");
-                WriteTemplateTo(dir, "sub\\sub\\sub", "testMethod4", true);
+                WriteTemplateTo(dir, OneSub, "testMethod1");
+                WriteTemplateTo(dir, TwoSubs, "testMethod2");
+                WriteTemplateTo(dir, ThreeSubs, "testMethod3");
+                WriteTemplateTo(dir, ThreeSubs, "testMethod4", true);
 
-                TemplateStore.LoadTemplatesFor(Path.Combine(dir, "sub\\sub\\sub"), logger).Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1", "testMethod2", "testMethod3");
+                TemplateStore.LoadTemplatesFor(Path.Combine(dir, ThreeSubs), logger).Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1", "testMethod2", "testMethod3");
 
                 logger.ReceivedWithAnyArgs().LogMessage("message");
             });
@@ -56,16 +60,16 @@ namespace Unitverse.Core.Tests.Templating
             var context = new NamingContext("dummy");
             RunOnDirectory(dir =>
             {
-                WriteTemplateTo(dir, "sub", "testMethod1");
-                WriteTemplateTo(dir, "sub\\sub", "testMethod2");
-                WriteTemplateTo(dir, "sub\\sub\\sub", "testMethod3");
+                WriteTemplateTo(dir, OneSub, "testMethod1");
+                WriteTemplateTo(dir, TwoSubs, "testMethod2");
+                WriteTemplateTo(dir, ThreeSubs, "testMethod3");
 
-                var originalTemplates = TemplateStore.LoadTemplatesFor(Path.Combine(dir, "sub\\sub\\sub"), logger);
+                var originalTemplates = TemplateStore.LoadTemplatesFor(Path.Combine(dir, ThreeSubs), logger);
                 originalTemplates.Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1", "testMethod2", "testMethod3");
 
-                WriteTemplateTo(dir, "sub\\sub\\sub", "testMethod3");
+                WriteTemplateTo(dir, ThreeSubs, "testMethod3");
 
-                var updatedTemplates = TemplateStore.LoadTemplatesFor(Path.Combine(dir, "sub\\sub\\sub"), logger);
+                var updatedTemplates = TemplateStore.LoadTemplatesFor(Path.Combine(dir, ThreeSubs), logger);
                 updatedTemplates.Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1", "testMethod2", "testMethod3");
 
                 ITemplate GetTemplate(IList<ITemplate> templates, string name)
