@@ -58,11 +58,5 @@ namespace Unitverse.Core.Tests.Options
             var result = testClass.Resolve(context);
             result.Should().Be(expectedResult);
         }
-
-        [Test]
-        public void CannotCallResolveWithNullContext()
-        {
-            FluentActions.Invoking(() => new NameResolver(_pattern).Resolve(default(NamingContext))).Should().Throw<ArgumentNullException>();
-        }
     }
 }

@@ -2,10 +2,8 @@
 {
     using System.Collections.Generic;
 
-    public interface IConstructor
+    public interface IConstructor : ITemplateTarget
     {
-        IEnumerable<IAttribute> Attributes { get; }
-
         IEnumerable<IParameter> Parameters { get; }
     }
 }
