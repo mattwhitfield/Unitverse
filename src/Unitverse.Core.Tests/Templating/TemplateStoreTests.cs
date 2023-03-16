@@ -4,6 +4,7 @@ namespace Unitverse.Core.Tests.Templating
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using FluentAssertions;
     using NSubstitute;
     using NUnit.Framework;
@@ -67,7 +68,15 @@ namespace Unitverse.Core.Tests.Templating
                 var originalTemplates = TemplateStore.LoadTemplatesFor(Path.Combine(dir, ThreeSubs), logger);
                 originalTemplates.Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1", "testMethod2", "testMethod3");
 
-                WriteTemplateTo(dir, ThreeSubs, "testMethod3");
+                FileInfo original = new FileInfo(Path.Combine(dir, ThreeSubs, TemplateStore.TemplateFolderName, "testMethod3" + TemplateStore.TemplateFileExtension));
+                FileInfo updated = original;
+
+                while (updated.LastWriteTimeUtc.ToString("O") == original.LastWriteTimeUtc.ToString("O"))
+                {
+                    WriteTemplateTo(dir, ThreeSubs, "testMethod3");
+                    updated = new FileInfo(Path.Combine(dir, ThreeSubs, TemplateStore.TemplateFolderName, "testMethod3" + TemplateStore.TemplateFileExtension));
+                    Thread.Sleep(100);
+                }
 
                 var updatedTemplates = TemplateStore.LoadTemplatesFor(Path.Combine(dir, ThreeSubs), logger);
                 updatedTemplates.Select(x => x.TestMethodName.Resolve(context)).Should().BeEquivalentTo("testMethod1", "testMethod2", "testMethod3");
