@@ -90,28 +90,6 @@
                     var autoFixtureValues = AutoFixtureVariations[autoFixtureRow % AutoFixtureVariations.Count];
                     yield return row.Concat(autoFixtureValues).ToArray();
                 }
-
-                //foreach (var framework in frameworks)
-                //{
-                //    foreach (var mock in mocks)
-                //    {
-                //        foreach (var resourceName in entryKeys)
-                //        {
-
-                //            yield return new object[] { resourceName, framework, mock, true, false, false, false, false };
-                //            yield return new object[] { resourceName, framework, mock, false, true, false, false, false };
-                //            yield return new object[] { resourceName, framework, mock, false, false, false, false, false };
-                //            yield return new object[] { resourceName, framework, mock, true, false, true, false, false };
-                //            yield return new object[] { resourceName, framework, mock, false, false, true, false, false };
-                //            yield return new object[] { resourceName, framework, mock, true, false, true, true, false };
-                //            yield return new object[] { resourceName, framework, mock, false, false, true, true, false };
-                //            yield return new object[] { resourceName, framework, mock, true, false, true, false, true };
-                //            yield return new object[] { resourceName, framework, mock, false, false, true, false, true };
-                //            yield return new object[] { resourceName, framework, mock, true, false, true, true, true };
-                //            yield return new object[] { resourceName, framework, mock, false, false, true, true, true };
-                //        }
-                //    }
-                //}
             }
         }
 

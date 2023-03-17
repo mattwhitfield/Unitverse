@@ -58,6 +58,8 @@
 
         public NameResolver DependencyFieldName => new NameResolver(_namingOptions.DependencyFieldName);
 
+        public NameResolver MockDependencyFieldName => new NameResolver(string.IsNullOrWhiteSpace(_namingOptions.MockDependencyFieldName) ? _namingOptions.DependencyFieldName : _namingOptions.MockDependencyFieldName);
+
         public NameResolver AutoFixtureFieldName => new NameResolver(_namingOptions.AutoFixtureFieldName);
     }
 }

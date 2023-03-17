@@ -32,6 +32,7 @@
             IsInitializedCorrectlyNamingPattern = options.IsInitializedCorrectlyNamingPattern;
             TargetFieldName = options.TargetFieldName;
             DependencyFieldName = options.DependencyFieldName;
+            MockDependencyFieldName = options.MockDependencyFieldName;
             AutoFixtureFieldName = options.AutoFixtureFieldName;
         }
 
@@ -76,6 +77,8 @@
         public string TargetFieldName { get; set; }
 
         public string DependencyFieldName { get; set; }
+
+        public string MockDependencyFieldName { get; set; }
 
         public string AutoFixtureFieldName { get; set; }
     }

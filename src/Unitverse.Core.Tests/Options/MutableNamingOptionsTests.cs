@@ -34,6 +34,7 @@ namespace Unitverse.Core.Tests.Options
             _options.IsInitializedCorrectlyNamingPattern.Returns("IsInitializedCorrectlyNamingPattern");
             _options.TargetFieldName.Returns("TargetFieldName");
             _options.DependencyFieldName.Returns("DependencyFieldName");
+            _options.MockDependencyFieldName.Returns("MockDependencyFieldName");
             _options.AutoFixtureFieldName.Returns("AutoFixtureFieldName");
 
             _testClass = new MutableNamingOptions(_options);
@@ -62,6 +63,7 @@ namespace Unitverse.Core.Tests.Options
             instance.IsInitializedCorrectlyNamingPattern.Should().Be("IsInitializedCorrectlyNamingPattern");
             instance.TargetFieldName.Should().Be("TargetFieldName");
             instance.DependencyFieldName.Should().Be("DependencyFieldName");
+            instance.MockDependencyFieldName.Should().Be("MockDependencyFieldName");
             instance.AutoFixtureFieldName.Should().Be("AutoFixtureFieldName");
         }
 
@@ -207,7 +209,13 @@ namespace Unitverse.Core.Tests.Options
             _testClass.DependencyFieldName.Should().BeSameAs(testValue);
         }
 
-
+        [Test]
+        public void CanSetAndGetMockDependencyFieldName()
+        {
+            var testValue = "TestValue1221049630";
+            _testClass.MockDependencyFieldName = testValue;
+            _testClass.MockDependencyFieldName.Should().BeSameAs(testValue);
+        }
 
         [Test]
         public void CanSetAndGetAutoFixtureFieldName()

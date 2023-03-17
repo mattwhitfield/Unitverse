@@ -95,7 +95,7 @@
                         var fieldTypeSyntax = parameterModel.TypeInfo.ToTypeSyntax(frameworkSet.Context);
                         ExpressionSyntax defaultExpression;
 
-                        if (parameterModel.TypeInfo.IsInterface() && !parameterModel.TypeInfo.IsWellKnownSequenceInterface())
+                        if (parameterModel.TypeInfo.ShouldUseMock())
                         {
                             frameworkSet.Context.InterfacesMocked++;
                             fieldTypeSyntax = frameworkSet.MockingFramework.GetFieldType(fieldTypeSyntax);

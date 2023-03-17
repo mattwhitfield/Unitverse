@@ -54,6 +54,8 @@
 
         public static ParameterSyntax Parameter => GetNode<ParameterSyntax>();
 
+        public static ParameterSyntax InterfaceParameter => GetNode<ParameterSyntax>(x => x.Identifier.Text == "interfaceParam");
+
         public static PropertyDeclarationSyntax Property => GetNode<PropertyDeclarationSyntax>();
 
         public static SyntaxTree Tree => LazyTree.Value;
@@ -78,13 +80,18 @@
 
         private static SyntaxTree CreateTree()
         {
-            var classAsText = "namespace Test{  using System.Threading.Tasks;  class ModelSource    {        public string Param { get; }        public ModelSource(string param)        {            Param = param;        }        public int Method(string param)        {            return 1;        }   public async Task<int> AsyncMethod(string param)        {            return Task.FromResult(1);        }     public int this[int index]        {            get { return 123; }        }    }}";
+            var classAsText = "namespace Test{ using System; using System.Threading.Tasks;  class ModelSource    {        public string Param { get; }        public ModelSource(string param)        {            Param = param;        }  public ModelSource(ICloneable interfaceParam) { Param = interfaceParam.ToString(); }        public int Method(string param)        {            return 1;        }   public async Task<int> AsyncMethod(string param)        {            return Task.FromResult(1);        }     public int this[int index]        {            get { return 123; }        }    }}";
             return CreateTree(classAsText);
         }
 
         private static T GetNode<T>()
         {
             return Tree.GetRoot().DescendantNodes().OfType<T>().First();
+        }
+
+        private static T GetNode<T>(Func<T, bool> filter)
+        {
+            return Tree.GetRoot().DescendantNodes().OfType<T>().First(filter);
         }
     }
 }
