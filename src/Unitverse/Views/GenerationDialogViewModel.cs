@@ -226,6 +226,13 @@ namespace Unitverse.Views
                 fluentAssertionsItem.Value = resolvedOptions.UseFluentAssertions;
                 fluentAssertionsItem.SetSourceState(resolvedOptions.UseFluentAssertions != _originalGenerationOptions.UseFluentAssertions, isFromVs);
             }
+            var shouldlyItem = GenerationOptionsItems.OfType<BooleanEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.UseShouldly), StringComparison.OrdinalIgnoreCase));
+            if (shouldlyItem != null)
+            {
+                var isFromVs = string.IsNullOrWhiteSpace(_projectOptions.GetFieldSourceFileName(nameof(IGenerationOptions.UseShouldly)));
+                shouldlyItem.Value = resolvedOptions.UseShouldly;
+                shouldlyItem.SetSourceState(resolvedOptions.UseShouldly != _originalGenerationOptions.UseShouldly, isFromVs);
+            }
             var autoFixtureItem = GenerationOptionsItems.OfType<BooleanEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.UseAutoFixture), StringComparison.OrdinalIgnoreCase));
             if (autoFixtureItem != null)
             {

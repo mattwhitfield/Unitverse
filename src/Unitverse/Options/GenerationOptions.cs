@@ -52,6 +52,11 @@
         public bool UseFluentAssertions { get; set; } = false;
 
         [Category("Frameworks")]
+        [DisplayName("Use Shouldly")]
+        [Description("Whether to use Shouldly in preference to the test framework's built in assertion capabilities")]
+        public bool UseShouldly { get; set; } = false;
+
+        [Category("Frameworks")]
         [DisplayName("Use AutoFixture")]
         [Description("Whether to use AutoFixture when generating scalar values")]
         public bool UseAutoFixture { get; set; } = false;

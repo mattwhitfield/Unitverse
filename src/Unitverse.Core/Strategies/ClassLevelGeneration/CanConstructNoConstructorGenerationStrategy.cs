@@ -56,7 +56,10 @@
 
             generatedMethod.Act(Generate.ImplicitlyTypedVariableDeclaration("instance", Generate.ObjectCreation(model.TypeSyntax)));
 
-            generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));
+            if (!model.TypeSymbol.IsValueType || !_frameworkSet.AssertionFramework.SkipValueTypeNotNull)
+            {
+                generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));
+            }
 
             yield return generatedMethod;
         }

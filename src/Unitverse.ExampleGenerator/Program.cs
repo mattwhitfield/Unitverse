@@ -159,6 +159,11 @@ namespace Unitverse.ExampleGenerator
                 references.Add(MetadataReference.CreateFromFile(typeof(IQueryAmbient).Assembly.Location));
             }
 
+            if (options.GenerationOptions.UseShouldly)
+            {
+                references.Add(MetadataReference.CreateFromFile(typeof(Shouldly.Should).Assembly.Location));
+            }
+
             var compilation = CSharpCompilation.Create(
                 "MyTest",
                 syntaxTrees: new[] { tree },

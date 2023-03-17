@@ -1,8 +1,8 @@
 ﻿namespace Unitverse.Core.Templating
 {
+    using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using SequelFilter;
-    using System.Collections.Generic;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Options;
     using Unitverse.Core.Templating.Model;

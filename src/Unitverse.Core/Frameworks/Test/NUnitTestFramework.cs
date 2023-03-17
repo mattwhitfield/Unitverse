@@ -28,6 +28,8 @@
 
         protected override string TestCaseAttributeName => "TestCase";
 
+        public bool SkipValueTypeNotNull => false;
+
         private static InvocationExpressionSyntax AssertThat => Generate.MemberInvocation("Assert", "That");
 
         public StatementSyntax AssertEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)

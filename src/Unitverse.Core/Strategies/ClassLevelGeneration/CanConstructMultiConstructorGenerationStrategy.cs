@@ -72,7 +72,11 @@
                     generatedMethod.Act(Generate.Statement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("instance"), creationExpression)));
                 }
 
-                generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));
+                if (!model.TypeSymbol.IsValueType || !_frameworkSet.AssertionFramework.SkipValueTypeNotNull)
+                {
+                    generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertNotNull(SyntaxFactory.IdentifierName("instance")));
+                }
+
                 generatedMethod.BlankLine();
             }
 

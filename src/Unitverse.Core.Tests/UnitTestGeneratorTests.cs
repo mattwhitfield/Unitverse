@@ -9,6 +9,7 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
@@ -37,6 +38,26 @@
     [TestFixture]
     public class UnitTestGeneratorTests
     {
+        // useAutoFixture, useAutoFixtureForMocking, useFieldForAutoFixture
+        private static IList<object[]> AutoFixtureVariations =>
+            new[]
+            {
+                new object[] { false, false, false },
+                new object[] { true, false, false },
+                new object[] { true, false, true },
+                new object[] { true, true, false },
+                new object[] { true, true, true },
+            };
+
+        // useFluentAssertions, useShouldly
+        private static IList<object[]> AssertionFrameworkVariations =>
+            new[]
+            {
+                new object[] { false, false },
+                new object[] { true, false },
+                new object[] { false, true },
+            };
+
         // ReSharper disable once MemberCanBePrivate.Global - is the test case source
         public static IEnumerable<object[]> TestClassResourceNames
         {
@@ -50,45 +71,58 @@
                     entryKeys.Add(entry.Key.ToString());
                 }
 
-                var frameworks = new[] { TestFrameworkTypes.MsTest, TestFrameworkTypes.NUnit3, TestFrameworkTypes.XUnit };
-                var mocks = new[] { MockingFrameworkType.Moq, MockingFrameworkType.NSubstitute, MockingFrameworkType.FakeItEasy, MockingFrameworkType.MoqAutoMock, MockingFrameworkType.JustMock };
+                var frameworks = new object[] { TestFrameworkTypes.MsTest, TestFrameworkTypes.NUnit3, TestFrameworkTypes.XUnit };
+                var mocks = new object[] { MockingFrameworkType.Moq, MockingFrameworkType.NSubstitute, MockingFrameworkType.FakeItEasy, MockingFrameworkType.MoqAutoMock, MockingFrameworkType.JustMock };
 
-                foreach (var framework in frameworks)
-                {
-                    foreach (var mock in mocks)
-                    {
-                        foreach (var resourceName in entryKeys)
-                        {
 #if VS2019
-                            if (resourceName.IndexOf("FileScoped", StringComparison.OrdinalIgnoreCase) >= 0)
-                            {
-                                continue;
-                            }
+                entryKeys = entryKeys.Where(x => x.IndexOf("FileScoped", StringComparison.OrdinalIgnoreCase) < 0).ToList();
 #endif
-                            yield return new object[] { resourceName, framework, mock, true, false, false, false };
-                            yield return new object[] { resourceName, framework, mock, false, false, false, false };
-                            yield return new object[] { resourceName, framework, mock, true, true, false, false };
-                            yield return new object[] { resourceName, framework, mock, false, true, false, false };
-                            yield return new object[] { resourceName, framework, mock, true, true, true, false };
-                            yield return new object[] { resourceName, framework, mock, false, true, true, false };
-                            yield return new object[] { resourceName, framework, mock, true, true, false, true };
-                            yield return new object[] { resourceName, framework, mock, false, true, false, true };
-                            yield return new object[] { resourceName, framework, mock, true, true, true, true };
-                            yield return new object[] { resourceName, framework, mock, false, true, true, true };
-                        }
-                    }
+
+                var baseSet = entryKeys.Cast<object>().ToArray()
+                    .CrossJoin(frameworks)
+                    .CrossJoin(mocks)
+                    .CrossJoin(AssertionFrameworkVariations);
+
+                int autoFixtureRow = 0;
+                foreach (var row in baseSet)
+                {
+                    autoFixtureRow++;
+                    var autoFixtureValues = AutoFixtureVariations[autoFixtureRow % AutoFixtureVariations.Count];
+                    yield return row.Concat(autoFixtureValues).ToArray();
                 }
+
+                //foreach (var framework in frameworks)
+                //{
+                //    foreach (var mock in mocks)
+                //    {
+                //        foreach (var resourceName in entryKeys)
+                //        {
+
+                //            yield return new object[] { resourceName, framework, mock, true, false, false, false, false };
+                //            yield return new object[] { resourceName, framework, mock, false, true, false, false, false };
+                //            yield return new object[] { resourceName, framework, mock, false, false, false, false, false };
+                //            yield return new object[] { resourceName, framework, mock, true, false, true, false, false };
+                //            yield return new object[] { resourceName, framework, mock, false, false, true, false, false };
+                //            yield return new object[] { resourceName, framework, mock, true, false, true, true, false };
+                //            yield return new object[] { resourceName, framework, mock, false, false, true, true, false };
+                //            yield return new object[] { resourceName, framework, mock, true, false, true, false, true };
+                //            yield return new object[] { resourceName, framework, mock, false, false, true, false, true };
+                //            yield return new object[] { resourceName, framework, mock, true, false, true, true, true };
+                //            yield return new object[] { resourceName, framework, mock, false, false, true, true, true };
+                //        }
+                //    }
+                //}
             }
         }
 
         [TestCaseSource(nameof(TestClassResourceNames))]
-        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking, bool useFieldForAutoFixture)
+        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useShouldly, bool useAutoFixture, bool useAutoFixtureForMocking, bool useFieldForAutoFixture)
         {
             var classAsText = TestClasses.ResourceManager.GetString(resourceName, TestClasses.Culture);
 
-            var options = ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, useAutoFixtureForMocking, useFieldForAutoFixture, classAsText, false);
+            var options = ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useShouldly, useAutoFixture, useAutoFixtureForMocking, useFieldForAutoFixture, classAsText, false);
 
-            Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useAutoFixture, useAutoFixtureForMocking, classAsText, out var tree, out var secondTree, out var references, out var externalInitTree, out var semanticModel);
+            Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useShouldly, useAutoFixture, useAutoFixtureForMocking, classAsText, out var tree, out var secondTree, out var references, out var externalInitTree, out var semanticModel);
 
             SyntaxNode sourceSymbol = null;
             if (classAsText.IndexOf("// $ LastOnly", StringComparison.OrdinalIgnoreCase) >= 0)
@@ -138,7 +172,7 @@
             Assert.That(streamLength, Is.GreaterThan(0));
         }
 
-        public static void Compile(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking, string classAsText, out SyntaxTree tree, out SyntaxTree secondTree, out List<MetadataReference> references, out SyntaxTree externalInitTree, out SemanticModel semanticModel)
+        public static void Compile(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useShouldly, bool useAutoFixture, bool useAutoFixtureForMocking, string classAsText, out SyntaxTree tree, out SyntaxTree secondTree, out List<MetadataReference> references, out SyntaxTree externalInitTree, out SemanticModel semanticModel)
         {
             StringBuilder first = new StringBuilder(), second = new StringBuilder();
             var current = first;
@@ -188,6 +222,14 @@
                 references.Add(MetadataReference.CreateFromFile(typeof(IQueryAmbient).Assembly.Location));
             }
 
+            if (useShouldly)
+            {
+                references.Add(MetadataReference.CreateFromFile(typeof(Shouldly.Should).Assembly.Location));
+                references.Add(MetadataReference.CreateFromFile(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "netstandard.dll")));
+                
+
+            }
+
             if (useAutoFixture)
             {
                 references.Add(MetadataReference.CreateFromFile(typeof(Fixture).Assembly.Location));
@@ -218,7 +260,7 @@
             semanticModel = compilation.GetSemanticModel(tree);
         }
 
-        public static UnitTestGeneratorOptions ExtractOptions(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useAutoFixture, bool useAutoFixtureForMocking, bool useFieldForAutoFixture, string classAsText, bool withPartialGeneration)
+        public static UnitTestGeneratorOptions ExtractOptions(TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useShouldly, bool useAutoFixture, bool useAutoFixtureForMocking, bool useFieldForAutoFixture, string classAsText, bool withPartialGeneration)
         {
             var generationOptions = new MutableGenerationOptions(new DefaultGenerationOptions());
             var namingOptions = new MutableNamingOptions(new DefaultNamingOptions());
@@ -229,6 +271,7 @@
             generationOptions.FrameworkType = testFrameworkTypes;
             generationOptions.MockingFrameworkType = mockingFrameworkType;
             generationOptions.UseFluentAssertions = useFluentAssertions;
+            generationOptions.UseShouldly = useShouldly;
             generationOptions.UseAutoFixture = useAutoFixture;
             generationOptions.UseAutoFixtureForMocking = useAutoFixtureForMocking;
             generationOptions.UseFieldForAutoFixture = useFieldForAutoFixture;

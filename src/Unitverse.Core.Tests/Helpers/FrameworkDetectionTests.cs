@@ -46,15 +46,29 @@ namespace Unitverse.Core.Tests.Helpers
         [TestCase("FluentAssertions", false, true)]
         [TestCase("fred", false, false)]
         [TestCase("fred", true, true)]
-        public static void ResolveTargetFrameworksIdentifiesMockingFrameworks(string assemblyName, bool baseShouldUse, bool detectedShouldUse)
+        public static void ResolveTargetFrameworksIdentifiesMockingFrameworks(string assemblyName, bool baseShouldUse, bool detectedShouldUseFluentAssertions)
         {
             var referencedAssemblies = new[] { new ReferencedAssembly(assemblyName, 1), new ReferencedAssembly("TestValue297538669", 369638268), new ReferencedAssembly("TestValue542242818", 1475656439) };
             var baseOptions = Substitute.For<IGenerationOptions>();
             baseOptions.UseFluentAssertions.Returns(baseShouldUse);
             baseOptions.AutoDetectFrameworkTypes.Returns(true);
             var result = FrameworkDetection.ResolveTargetFrameworks(referencedAssemblies, baseOptions);
-            Assert.That(result.UseFluentAssertions, Is.EqualTo(detectedShouldUse));
+            Assert.That(result.UseFluentAssertions, Is.EqualTo(detectedShouldUseFluentAssertions));
         }
+
+        [TestCase("Shouldly", false, true)]
+        [TestCase("fred", false, false)]
+        [TestCase("fred", true, true)]
+        public static void ResolveTargetFrameworksIdentifiesMockingFrameworksWithShouldly(string assemblyName, bool baseShouldUse, bool detectedShouldUseShouldly)
+        {
+            var referencedAssemblies = new[] { new ReferencedAssembly(assemblyName, 1), new ReferencedAssembly("TestValue297538669", 369638268), new ReferencedAssembly("TestValue542242818", 1475656439) };
+            var baseOptions = Substitute.For<IGenerationOptions>();
+            baseOptions.UseShouldly.Returns(baseShouldUse);
+            baseOptions.AutoDetectFrameworkTypes.Returns(true);
+            var result = FrameworkDetection.ResolveTargetFrameworks(referencedAssemblies, baseOptions);
+            Assert.That(result.UseShouldly, Is.EqualTo(detectedShouldUseShouldly));
+        }
+
 
         [Test]
         public static void ResolveTargetFrameworksReturnsBaseOptionsIfAutoDetectionDisabled()

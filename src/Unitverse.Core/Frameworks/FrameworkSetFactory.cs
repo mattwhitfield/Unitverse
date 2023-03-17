@@ -31,6 +31,10 @@
             {
                 assertionFramework = new FluentAssertionFramework(assertionFramework);
             }
+            else if (options.GenerationOptions.UseShouldly)
+            {
+                assertionFramework = new ShouldlyAssertionFramework(assertionFramework);
+            }
 
             // mocking
             var mockingFramework = Create(options.GenerationOptions.MockingFrameworkType, context);
