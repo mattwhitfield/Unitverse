@@ -44,6 +44,8 @@
 
         string DependencyFieldName { get; }
 
+        string MockDependencyFieldName { get; }
+
         string AutoFixtureFieldName { get; }
     }
 }

@@ -25,7 +25,7 @@
             // activate if the class model primary constructor takes all interface params, or there is no primary constructor
             IsActive =
                 classModel.DefaultConstructor == null ||
-                classModel.DefaultConstructor.Parameters.All(x => x.TypeInfo.IsInterface() && !x.TypeInfo.IsWellKnownSequenceInterface());
+                classModel.DefaultConstructor.Parameters.All(x => x.TypeInfo.ShouldUseMock());
         }
 
         public override IEnumerable<UsingDirectiveSyntax> GetUsings()

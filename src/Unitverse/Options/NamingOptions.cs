@@ -113,6 +113,11 @@ namespace Unitverse.Options
         public string DependencyFieldName { get; set; } = "_{parameterName:camel}";
 
         [Category("Fields")]
+        [DisplayName("Mock Dependency Field Name")]
+        [Description("Naming format for the field name used for dependencies that are mocks. If left blank, will use the value of 'Dependency Field Name'.")]
+        public string MockDependencyFieldName { get; set; } = string.Empty;
+
+        [Category("Fields")]
         [DisplayName("AutoFixture Field Name")]
         [Description("Naming format for the field name used for auto fixture")]
         public string AutoFixtureFieldName { get; set; } = "_fixture";

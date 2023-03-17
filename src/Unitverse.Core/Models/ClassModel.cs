@@ -163,14 +163,18 @@
 
             var namingContext = baseNamingContext.WithParameterName(parameterName);
 
-            var baseFieldName = frameworkSet.NamingProvider.DependencyFieldName.Resolve(namingContext);
+            var nameResolver = typeInfo.ShouldUseMock() ?
+                frameworkSet.NamingProvider.MockDependencyFieldName :
+                frameworkSet.NamingProvider.DependencyFieldName;
+
+            var baseFieldName = nameResolver.Resolve(namingContext);
             if (frameworkSet.Options.GenerationOptions.UseFieldForAutoFixture)
             {
                 var autoFixtureFieldName = frameworkSet.NamingProvider.AutoFixtureFieldName.Resolve(baseNamingContext);
                 if (string.Equals(baseFieldName, autoFixtureFieldName, StringComparison.Ordinal))
                 {
                     var changedNamingContext = baseNamingContext.WithParameterName(parameterName + "Param");
-                    baseFieldName = frameworkSet.NamingProvider.DependencyFieldName.Resolve(changedNamingContext);
+                    baseFieldName = nameResolver.Resolve(changedNamingContext);
                 }
             }
 
@@ -229,7 +233,7 @@
 
             var fieldSyntax = frameworkSet.QualifyFieldReference(identifierName);
 
-            if (typeInfo.IsInterface() && !typeInfo.IsWellKnownSequenceInterface())
+            if (typeInfo.ShouldUseMock())
             {
                 return frameworkSet.MockingFramework.GetFieldReference(fieldSyntax);
             }

@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Unitverse.Core.Models;
 
     public static class TypeInfoExtensions
     {
@@ -66,6 +67,11 @@
             var name = typeInfo.Type.ToFullName();
             return name == "System.Collections.Generic.IEnumerable" ||
                    name == "System.Collections.Generic.IList";
+        }
+
+        public static bool ShouldUseMock(this TypeInfo typeInfo)
+        {
+            return typeInfo.IsInterface() && !typeInfo.IsWellKnownSequenceInterface();
         }
 
         public static TypeSyntax ToTypeSyntax(this TypeInfo typeInfo, IGenerationContext context)

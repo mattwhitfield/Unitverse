@@ -44,6 +44,8 @@
 
         NameResolver DependencyFieldName { get; }
 
+        NameResolver MockDependencyFieldName { get; }
+
         NameResolver AutoFixtureFieldName { get; }
     }
 }

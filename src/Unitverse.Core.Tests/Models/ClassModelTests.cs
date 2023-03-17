@@ -40,21 +40,32 @@ namespace Unitverse.Core.Tests.Models
         [Test]
         public void CannotConstructWithNullDeclaration()
         {
-            Assert.Throws<ArgumentNullException>(() => new ClassModel(default(TypeDeclarationSyntax), TestSemanticModelFactory.Model, true));
+            Assert.Throws<ArgumentNullException>(() => new ClassModel(default, TestSemanticModelFactory.Model, true));
         }
 
         [Test]
         public void CannotConstructWithNullSemanticModel()
         {
-            Assert.Throws<ArgumentNullException>(() => new ClassModel(TestSemanticModelFactory.Class, default(SemanticModel), true));
+            Assert.Throws<ArgumentNullException>(() => new ClassModel(TestSemanticModelFactory.Class, default, true));
         }
 
         [Test]
         public void CanCallGetConstructorParameterFieldName()
         {
-            var parameter = new ParameterModel("param", TestSemanticModelFactory.Parameter, "int", default(TypeInfo));
+            var parameter = new ParameterModel("param", TestSemanticModelFactory.Parameter, "int", default);
             var result = _testClass.GetConstructorParameterFieldName(parameter, DefaultFrameworkSet.Create());
             Assert.That(result, Is.EqualTo("_param"));
+        }
+
+        [Test]
+        public void CanCallGetConstructorParameterFieldNameForMock()
+        {
+            var parameter = new ParameterModel("interfaceParam", TestSemanticModelFactory.InterfaceParameter, "ICloneable", _semanticModel.GetTypeInfo(TestSemanticModelFactory.InterfaceParameter.Type));
+            var framework = DefaultFrameworkSet.CreateWithNamingOptions(x => x.MockDependencyFieldName = "_mockery{parameterName:pascal}");
+            var result = _testClass.GetConstructorParameterFieldName(parameter, DefaultFrameworkSet.Create());
+            var result2 = _testClass.GetConstructorParameterFieldName(parameter, framework);
+            Assert.That(result, Is.EqualTo("_interfaceParam"));
+            Assert.That(result2, Is.EqualTo("_mockeryInterfaceParam"));
         }
 
         [Test]
@@ -66,7 +77,7 @@ namespace Unitverse.Core.Tests.Models
         [Test]
         public void CannotCallGetConstructorParameterFieldNameWithNullNamingProvider()
         {
-            var parameter = new ParameterModel("param", TestSemanticModelFactory.Parameter, "int", default(TypeInfo));
+            var parameter = new ParameterModel("param", TestSemanticModelFactory.Parameter, "int", default);
             Assert.Throws<ArgumentNullException>(() => _testClass.GetConstructorParameterFieldName(parameter, null));
         }
 
@@ -81,7 +92,7 @@ namespace Unitverse.Core.Tests.Models
         [Test]
         public void CannotCallGetIndexerNameWithNullIndexer()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.GetIndexerName(default(IIndexerModel)));
+            Assert.Throws<ArgumentNullException>(() => _testClass.GetIndexerName(default));
         }
 
         [Test]
@@ -95,7 +106,7 @@ namespace Unitverse.Core.Tests.Models
         [Test]
         public void CannotCallGetObjectCreationExpressionWithNullFrameworkSet()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.GetObjectCreationExpression(default(IFrameworkSet), false));
+            Assert.Throws<ArgumentNullException>(() => _testClass.GetObjectCreationExpression(default, false));
         }
 
         [Test]
