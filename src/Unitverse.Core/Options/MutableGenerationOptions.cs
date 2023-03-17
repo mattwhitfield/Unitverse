@@ -18,6 +18,7 @@
             TestFileNaming = options.TestFileNaming;
             TestTypeNaming = options.TestTypeNaming;
             UseFluentAssertions = options.UseFluentAssertions;
+            UseShouldly = options.UseShouldly;
             UseAutoFixture = options.UseAutoFixture;
             UseAutoFixtureForMocking = options.UseAutoFixtureForMocking;
             AutoDetectFrameworkTypes = options.AutoDetectFrameworkTypes;
@@ -58,6 +59,8 @@
         public string TestTypeNaming { get; set; }
 
         public bool UseFluentAssertions { get; set; }
+
+        public bool UseShouldly { get; set; }
 
         public bool UseAutoFixture { get; set; }
 

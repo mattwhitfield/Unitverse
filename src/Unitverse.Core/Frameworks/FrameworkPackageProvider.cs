@@ -21,6 +21,10 @@
             {
                 yield return new NugetPackageReference("FluentAssertions", null);
             }
+            else if (generationOptions.UseShouldly)
+            {
+                yield return new NugetPackageReference("Shouldly", null);
+            }
 
             if (generationOptions.UseAutoFixture)
             {

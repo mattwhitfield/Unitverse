@@ -11,6 +11,8 @@
 
         public bool UseFluentAssertions { get; set; } = true;
 
+        public bool UseShouldly { get; set; } = false;
+
         public bool UseAutoFixture { get; set; } = false;
 
         public bool UseAutoFixtureForMocking { get; set; } = false;

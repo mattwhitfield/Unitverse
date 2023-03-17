@@ -42,6 +42,10 @@
                 {
                     messageLogger.LogMessage("Fluent assertions detected for project '" + targetProject.Name + "'.");
                 }
+                if (modifiedOptions.UseShouldly != baseOptions.UseShouldly)
+                {
+                    messageLogger.LogMessage("Shouldly detected for project '" + targetProject.Name + "'.");
+                }
                 if (modifiedOptions.UseAutoFixture != baseOptions.UseAutoFixture)
                 {
                     messageLogger.LogMessage("AutoFixture detected for project '" + targetProject.Name + "'.");

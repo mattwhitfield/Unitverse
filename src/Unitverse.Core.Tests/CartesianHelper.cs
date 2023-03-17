@@ -30,5 +30,20 @@ namespace Unitverse.Core.Tests
             }
             return output;
         }
+
+
+        public static IList<object[]> CrossJoin(this IList<object[]> input, IList<object[]> newDimensions)
+        {
+            List<object[]> output = new List<object[]>();
+            foreach (var newRow in newDimensions)
+            {
+                foreach (var row in input)
+                {
+                    output.Add(row.Concat(newRow).ToArray());
+                }
+            }
+            return output;
+        }
+
     }
 }

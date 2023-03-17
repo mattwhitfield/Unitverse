@@ -64,8 +64,9 @@
                                 continue;
                             }
 #endif
-                            yield return new object[] { resourceName, framework, mock, true };
-                            yield return new object[] { resourceName, framework, mock, false };
+                            yield return new object[] { resourceName, framework, mock, false, true };
+                            yield return new object[] { resourceName, framework, mock, true, false };
+                            yield return new object[] { resourceName, framework, mock, false, false };
                         }
                     }
                 }
@@ -73,7 +74,7 @@
         }
 
         [TestCaseSource(nameof(TestClassResourceNames))]
-        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions)
+        public static async Task AssertTestGeneration(string resourceName, TestFrameworkTypes testFrameworkTypes, MockingFrameworkType mockingFrameworkType, bool useFluentAssertions, bool useShouldly)
         {
             // Get the source and split it
             var source = RegenerationTestClasses.ResourceManager.GetString(resourceName, TestClasses.Culture);
@@ -96,10 +97,10 @@
             var updatedClassAsText = second.ToString();
 
             // Extract the options from the first part
-            var options = UnitTestGeneratorTests.ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, false, false, classAsText, true);
+            var options = UnitTestGeneratorTests.ExtractOptions(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useShouldly, false, false, false, classAsText, true);
 
             // Compile the first
-            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, options.GenerationOptions.UseAutoFixture, options.GenerationOptions.UseAutoFixtureForMocking, classAsText, out var tree, out var secondTree, out var references, out var externalInitTree, out var semanticModel);
+            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useShouldly, options.GenerationOptions.UseAutoFixture, options.GenerationOptions.UseAutoFixtureForMocking, classAsText, out var tree, out var secondTree, out var references, out var externalInitTree, out var semanticModel);
             var generationItem = new TestGenerationItem(null, options, x => "Tests");
             var core = await CoreGenerator.Generate(generationItem, semanticModel, null, null, false, true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 
@@ -130,7 +131,7 @@
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
             // Compile the second, using the output from the first compile
-            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, false, false, updatedClassAsText, out var updatedTree, out _, out _, out _, out var updatedModel);
+            UnitTestGeneratorTests.Compile(testFrameworkTypes, mockingFrameworkType, useFluentAssertions, useShouldly, false, false, updatedClassAsText, out var updatedTree, out _, out _, out _, out var updatedModel);
 
             var core2 = await CoreGenerator.Generate(generationItem, updatedModel, targetCompilation.GetSemanticModel(generatedTree), null, false, true, Substitute.For<IMessageLogger>()).ConfigureAwait(true);
 

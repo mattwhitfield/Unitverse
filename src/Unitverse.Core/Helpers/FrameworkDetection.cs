@@ -31,6 +31,8 @@
 
         private static readonly IList<Matcher<bool>> FluentAssertionsMatchers = new[] { new Matcher<bool>("FluentAssertions", null, true) };
 
+        private static readonly IList<Matcher<bool>> ShouldlyMatchers = new[] { new Matcher<bool>("Shouldly", null, true) };
+
         private static readonly IList<Matcher<bool>> AutoFixtureMatchers = new[] { new Matcher<bool>("AutoFixture", null, true) };
 
         private static readonly IList<Matcher<bool>> AutoFixtureMockingMatchers = new[]
@@ -88,6 +90,7 @@
             }
 
             bool? fluentAssertionsPresent = null;
+            bool? shouldlyPresent = null;
             bool? autoFixturePresent = null;
             bool? autoFixtureMockingPresent = null;
             TestFrameworkTypes? detectedTestFramework = null;
@@ -96,6 +99,7 @@
             foreach (var reference in referencedAssemblies)
             {
                 Resolve(ref fluentAssertionsPresent, FluentAssertionsMatchers, reference.AssemblyName, reference.MajorVersion);
+                Resolve(ref shouldlyPresent, ShouldlyMatchers, reference.AssemblyName, reference.MajorVersion);
                 Resolve(ref autoFixturePresent, AutoFixtureMatchers, reference.AssemblyName, reference.MajorVersion);
                 Resolve(ref autoFixtureMockingPresent, AutoFixtureMockingMatchers, reference.AssemblyName, reference.MajorVersion);
                 Resolve(ref detectedTestFramework, TestFrameworkMatchers, reference.AssemblyName, reference.MajorVersion);
@@ -107,7 +111,7 @@
                 }
             }
 
-            return new DetectedGenerationOptions(baseOptions, fluentAssertionsPresent, autoFixturePresent, autoFixtureMockingPresent, detectedTestFramework, detectedMockingFramework);
+            return new DetectedGenerationOptions(baseOptions, fluentAssertionsPresent, shouldlyPresent, autoFixturePresent, autoFixtureMockingPresent, detectedTestFramework, detectedMockingFramework);
         }
     }
 }

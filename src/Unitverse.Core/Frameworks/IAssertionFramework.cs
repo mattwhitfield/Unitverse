@@ -7,6 +7,8 @@
     {
         bool AssertThrowsAsyncIsAwaitable { get; }
 
+        bool SkipValueTypeNotNull { get; }
+
         IEnumerable<UsingDirectiveSyntax> GetUsings();
 
         StatementSyntax AssertTrue(ExpressionSyntax actual);

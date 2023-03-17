@@ -28,6 +28,8 @@
 
         protected override string TestCaseAttributeName => "DataRow";
 
+        public bool SkipValueTypeNotNull => false;
+
         public StatementSyntax AssertEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)
         {
             if (actual == null)

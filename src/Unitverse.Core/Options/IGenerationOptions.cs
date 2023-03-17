@@ -8,6 +8,8 @@
 
         bool UseFluentAssertions { get; }
 
+        bool UseShouldly { get; }
+
         bool UseAutoFixture { get; }
 
         bool UseAutoFixtureForMocking { get; }

@@ -30,6 +30,7 @@ namespace Unitverse.Core.Tests.Frameworks
             // Assert
             result.Should().Contain(x => x.Name == "coverlet.collector");
             result.Should().Contain(x => x.Name == "FluentAssertions");
+            result.Should().NotContain(x => x.Name == "Shouldly");
             result.Should().Contain(x => x.Name + ":" + (string.IsNullOrWhiteSpace(x.Version) ? "*" : x.Version) == expected);
             result.Should().Contain(x => x.Name + ":" + (string.IsNullOrWhiteSpace(x.Version) ? "*" : x.Version) == expected2);
         }
@@ -44,6 +45,7 @@ namespace Unitverse.Core.Tests.Frameworks
             var generationOptions = Substitute.For<IGenerationOptions>();
 
             generationOptions.UseFluentAssertions.Returns(false);
+            generationOptions.UseShouldly.Returns(true);
             generationOptions.MockingFrameworkType.Returns(type);
 
             // Act
@@ -52,6 +54,7 @@ namespace Unitverse.Core.Tests.Frameworks
             // Assert
             result.Should().Contain(x => x.Name == "coverlet.collector");
             result.Should().NotContain(x => x.Name == "FluentAssertions");
+            result.Should().Contain(x => x.Name == "Shouldly");
             result.Should().Contain(x => x.Name + ":" + (string.IsNullOrWhiteSpace(x.Version) ? "*" : x.Version) == expected);
             if (!string.IsNullOrEmpty(expected2))
             {

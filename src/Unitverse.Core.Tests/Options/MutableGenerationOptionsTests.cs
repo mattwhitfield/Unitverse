@@ -29,6 +29,7 @@ namespace Unitverse.Core.Tests.Options
             _options.TestFileNaming.Returns("tfn");
             _options.TestTypeNaming.Returns("ttn");
             _options.UseFluentAssertions.Returns(true);
+            _options.UseShouldly.Returns(true);
             _options.EmitUsingsOutsideNamespace.Returns(true);
             _options.AutoDetectFrameworkTypes.Returns(false);
             _options.PartialGenerationAllowed.Returns(true);
@@ -50,6 +51,7 @@ namespace Unitverse.Core.Tests.Options
             Assert.That(_testClass.TestFileNaming, Is.EqualTo(_options.TestFileNaming));
             Assert.That(_testClass.TestTypeNaming, Is.EqualTo(_options.TestTypeNaming));
             Assert.That(_testClass.UseFluentAssertions, Is.EqualTo(_options.UseFluentAssertions));
+            Assert.That(_testClass.UseShouldly, Is.EqualTo(_options.UseShouldly));
             Assert.That(_testClass.EmitUsingsOutsideNamespace, Is.EqualTo(_options.EmitUsingsOutsideNamespace));
             Assert.That(_testClass.AutoDetectFrameworkTypes, Is.EqualTo(_options.AutoDetectFrameworkTypes));
             Assert.That(_testClass.PartialGenerationAllowed, Is.EqualTo(_options.PartialGenerationAllowed));
@@ -124,6 +126,14 @@ namespace Unitverse.Core.Tests.Options
             var testValue = false;
             _testClass.UseFluentAssertions = testValue;
             _testClass.UseFluentAssertions.Should().Be(testValue);
+        }
+
+        [Test]
+        public void CanSetAndGetUseShouldly()
+        {
+            var testValue = false;
+            _testClass.UseShouldly = testValue;
+            _testClass.UseShouldly.Should().Be(testValue);
         }
 
         [Test]
