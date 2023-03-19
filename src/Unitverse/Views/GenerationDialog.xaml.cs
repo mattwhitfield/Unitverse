@@ -1,6 +1,7 @@
 ﻿using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -27,6 +28,7 @@ namespace Unitverse.Views
 
             _scale = ZoomTracker.Get();
             RootScale.ScaleY = RootScale.ScaleX = 1 + (_scale / 100.0);
+            _projectOptions = projectOptions;
         }
 
         private void GenerationDialog_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
@@ -43,6 +45,7 @@ namespace Unitverse.Views
         }
 
         private GenerationDialogViewModel _viewModel;
+        private readonly IUnitTestGeneratorOptions _projectOptions;
 
         public ProjectMapping ResultingMapping => _viewModel.ResultingMapping;
 
@@ -55,6 +58,7 @@ namespace Unitverse.Views
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
+            // TODO - take action on 'save settings' - should persist to VS settings / file / session settings store
             if (ResultingMapping.TargetProject == null)
             {
                 if (_viewModel.SelectedProject == null)
@@ -67,6 +71,34 @@ namespace Unitverse.Views
             {
                 TargetSelectionRegister.Instance.SetTargetFor(ResultingMapping.SourceProject.UniqueName, ResultingMapping.TargetProjectName);
             }
+
+            var saveOption = (SaveOption)_viewModel.SelectedSaveOption.Value;
+            switch (saveOption)
+            {
+                case SaveOption.ThisSession:
+                    SessionConfigStore.StoreSettings(ResultingMapping.Options.GenerationOptions, _projectOptions.GenerationOptions);
+                    SessionConfigStore.StoreSettings(ResultingMapping.Options.StrategyOptions, _projectOptions.StrategyOptions);
+                    SessionConfigStore.StoreSettings(ResultingMapping.Options.NamingOptions, _projectOptions.NamingOptions);
+                    // TODO - mappings
+                    break;
+                case SaveOption.ConfigurationFile:
+                case SaveOption.VisualStudioConfiguration:
+                    var modifiedSettings = new Dictionary<string, string>();
+                    SessionConfigStore.AddModifiedValuesToDictionary(ResultingMapping.Options.GenerationOptions, _projectOptions.GenerationOptions, modifiedSettings);
+                    SessionConfigStore.AddModifiedValuesToDictionary(ResultingMapping.Options.StrategyOptions, _projectOptions.StrategyOptions, modifiedSettings);
+                    SessionConfigStore.AddModifiedValuesToDictionary(ResultingMapping.Options.NamingOptions, _projectOptions.NamingOptions, modifiedSettings);
+                    // TODO - mappings
+                    if (saveOption == SaveOption.ConfigurationFile)
+                    {
+                        // TODO - write to file
+                    }
+                    else
+                    {
+                        // TODO - write back to VS config
+                    }
+                    break;
+            }
+
 
             DialogResult = true;
         }

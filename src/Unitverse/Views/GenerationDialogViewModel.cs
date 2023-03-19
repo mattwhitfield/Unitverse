@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using Unitverse.Core.Helpers;
 using Unitverse.Core.Options;
 using Unitverse.Core.Options.Editing;
 using Unitverse.Helper;
@@ -44,6 +43,15 @@ namespace Unitverse.Views
             GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), _generationOptions, true, projectOptions.GetFieldSourceFileName).ToList();
             StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions, true, projectOptions.GetFieldSourceFileName).ToList();
             NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions, true, projectOptions.GetFieldSourceFileName).ToList();
+
+            SaveOptionItems = new[]
+            {
+                new ObjectItem("This generation only", SaveOption.ThisGeneration),
+                new ObjectItem("This session", SaveOption.ThisSession),
+                new ObjectItem("Configuration file", SaveOption.ConfigurationFile),
+                new ObjectItem("Visual studio settings", SaveOption.VisualStudioConfiguration),
+            };
+            _selectedSaveOption = SaveOptionItems.First();
 
             Projects.Add(new ObjectItem("Generate detached test class(es)", null));
 #pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
@@ -154,6 +162,21 @@ namespace Unitverse.Views
             }
         }
 
+        public IList<ObjectItem> SaveOptionItems { get; }
+
+        public ObjectItem SelectedSaveOption
+        {
+            get { return _selectedSaveOption; }
+            set
+            {
+                if (_selectedSaveOption != value)
+                {
+                    _selectedSaveOption = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedSaveOption)));
+                }
+            }
+        }
+
         public IList<DisplayItem> GenerationOptionsItems { get; }
 
         public IList<DisplayItem> StrategyOptionsItems { get; }
@@ -165,6 +188,7 @@ namespace Unitverse.Views
         public List<ObjectItem> Projects { get; } = new List<ObjectItem>();
 
         private ObjectItem _selectedProject;
+        private ObjectItem _selectedSaveOption;
 
         public ObjectItem SelectedProject
         {

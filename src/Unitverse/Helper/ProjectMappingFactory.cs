@@ -50,6 +50,8 @@
 
         private static bool HandleUserInterface(Project sourceProject, IUnitTestGeneratorOptions baseOptions, IUnitTestGeneratorOptions projectOptions, string resolvedTarget, Project targetProject, out ProjectMapping resultingMapping)
         {
+            // todo - do we need baseOptions here?
+
             ThreadHelper.ThrowIfNotOnUIThread();
 
             resultingMapping = null;

@@ -150,6 +150,7 @@
     <Compile Include="Views\ConfigEditorControlViewModel.cs" />
     <Compile Include="Views\GenerationDialogViewModel.cs" />
     <Compile Include="Views\ObjectItemTemplateSelector.cs" />
+    <Compile Include="Views\SaveOption.cs" />
     <Compile Include="Views\TabItemTypeVisibilityConverter.cs" />
   </ItemGroup>
   <ItemGroup>

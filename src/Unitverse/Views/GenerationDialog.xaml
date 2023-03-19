@@ -234,6 +234,29 @@
                     Margin="10"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="0,4,6,0"
+                        HorizontalAlignment="Right"
+                        Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                        Text="Apply to:" />
+                    <ComboBox
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Width="145"
+                        Margin="0,0,12,0"
+                        ItemsSource="{Binding SaveOptionItems}"
+                        SelectedItem="{Binding SelectedSaveOption}"
+                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogComboBoxStyleKey}}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}" Text="{Binding Text}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
                     <Button
                         Margin="6,0"
                         Click="OnOK"
