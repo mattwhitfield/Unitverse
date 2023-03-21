@@ -8,20 +8,30 @@
     public static class SessionConfigStore
     {
         private static readonly Dictionary<string, string> SettingStore = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, string> TargetProjects = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        public static void StoreSettings<T>(T baseSettings, T modifiedSettings)
-            where T : class
+        public static void StoreSettings(Dictionary<string, string> settings)
         {
-            AddModifiedValuesToDictionary(baseSettings, modifiedSettings, SettingStore);
+            foreach (var pair in settings)
+            {
+                SettingStore[pair.Key] = pair.Value;
+            }
         }
 
-        public static void RestoreSettings<T>(T target)
+        public static void RestoreSettings<T>(T target, Action<string> onMemberSet)
             where T : class
         {
-            SettingStore.ApplyTo(target);
+            SettingStore.ApplyTo(target, onMemberSet);
         }
 
-        public static void AddModifiedValuesToDictionary<T>(T baseSettings, T modifiedSettings, Dictionary<string, string> target)
+        public static Dictionary<string, string> ProjectMappings => TargetProjects;
+
+        public static void SetTargetFor(string sourceProjectName, string targetProjectName)
+        {
+            TargetProjects[sourceProjectName] = targetProjectName;
+        }
+
+        public static void AddModifiedValuesToDictionary<T>(T modifiedSettings, T baseSettings, Dictionary<string, string> target)
             where T : class
         {
             foreach (var member in typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanRead))

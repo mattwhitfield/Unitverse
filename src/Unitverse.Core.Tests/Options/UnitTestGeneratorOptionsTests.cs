@@ -16,7 +16,7 @@ namespace Unitverse.Core.Tests.Options
         private INamingOptions _namingOptions;
         private IStrategyOptions _strategyOptions;
         private bool _statisticsCollectionEnabled;
-        private Dictionary<string, string> _membersSetByFilename;
+        private Dictionary<string, ConfigurationSource> _membersSetByFilename;
 
         [SetUp]
         public void SetUp()
@@ -25,10 +25,10 @@ namespace Unitverse.Core.Tests.Options
             _namingOptions = Substitute.For<INamingOptions>();
             _strategyOptions = Substitute.For<IStrategyOptions>();
             _statisticsCollectionEnabled = true;
-            _membersSetByFilename = new Dictionary<string, string>();
-            _membersSetByFilename["A"] = "A.File";
-            _membersSetByFilename["B"] = "B.File";
-            _membersSetByFilename["Other"] = "A.File";
+            _membersSetByFilename = new Dictionary<string, ConfigurationSource>();
+            _membersSetByFilename["A"] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "A.File");
+            _membersSetByFilename["B"] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "B.File");
+            _membersSetByFilename["Other"] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "A.File");
             _testClass = new UnitTestGeneratorOptions(_generationOptions, _namingOptions, _strategyOptions, _statisticsCollectionEnabled, _membersSetByFilename);
         }
 
@@ -45,19 +45,19 @@ namespace Unitverse.Core.Tests.Options
         [Test]
         public void CannotConstructWithNullGenerationOptions()
         {
-            FluentActions.Invoking(() => new UnitTestGeneratorOptions(default(IGenerationOptions), Substitute.For<INamingOptions>(), Substitute.For<IStrategyOptions>(), false, new Dictionary<string, string>())).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new UnitTestGeneratorOptions(default(IGenerationOptions), Substitute.For<INamingOptions>(), Substitute.For<IStrategyOptions>(), false, new Dictionary<string, ConfigurationSource>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullNamingOptions()
         {
-            FluentActions.Invoking(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), default(INamingOptions), Substitute.For<IStrategyOptions>(), true, new Dictionary<string, string>())).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), default(INamingOptions), Substitute.For<IStrategyOptions>(), true, new Dictionary<string, ConfigurationSource>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullStrategyOptions()
         {
-            FluentActions.Invoking(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), Substitute.For<INamingOptions>(), default(IStrategyOptions), false, new Dictionary<string, string>())).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), Substitute.For<INamingOptions>(), default(IStrategyOptions), false, new Dictionary<string, ConfigurationSource>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
@@ -87,24 +87,16 @@ namespace Unitverse.Core.Tests.Options
         [Test]
         public void CannotConstructWithNullMembersSetByFilename()
         {
-            FluentActions.Invoking(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), Substitute.For<INamingOptions>(), Substitute.For<IStrategyOptions>(), false, default(Dictionary<string, string>))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), Substitute.For<INamingOptions>(), Substitute.For<IStrategyOptions>(), false, default(Dictionary<string, ConfigurationSource>))).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CanCallGetFieldSourceFileName()
         {
             // Assert
-            _testClass.GetFieldSourceFileName("A").Should().Be("A.File");
-            _testClass.GetFieldSourceFileName("B").Should().Be("B.File");
-            _testClass.GetFieldSourceFileName("C").Should().Be(null);
-        }
-
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase("   ")]
-        public void CannotCallGetFieldSourceFileNameWithInvalidFieldName(string value)
-        {
-            FluentActions.Invoking(() => _testClass.GetFieldSourceFileName(value)).Should().Throw<ArgumentNullException>();
+            _testClass.GetFieldSource("A").FileName.Should().Be("A.File");
+            _testClass.GetFieldSource("B").FileName.Should().Be("B.File");
+            _testClass.GetFieldSource("C").FileName.Should().Be(null);
         }
 
         [Test]

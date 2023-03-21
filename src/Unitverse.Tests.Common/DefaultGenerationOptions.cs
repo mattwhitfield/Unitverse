@@ -45,8 +45,6 @@
 
         public UserInterfaceModes UserInterfaceMode { get; set; } = UserInterfaceModes.OnlyWhenControlPressed;
 
-        public bool RememberManuallySelectedTargetProjectByDefault { get; set; } = true;
-
         public FallbackTargetFindingMethod FallbackTargetFinding { get; set; } = FallbackTargetFindingMethod.None;
 
         public bool PrefixFieldReferencesWithThis { get; set; } = false;

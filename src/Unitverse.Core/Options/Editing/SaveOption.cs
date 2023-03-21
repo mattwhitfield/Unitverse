@@ -1,10 +1,10 @@
-﻿namespace Unitverse.Views
+﻿namespace Unitverse.Core.Options.Editing
 {
     public enum SaveOption
     {
         ThisGeneration,
         ThisSession,
         ConfigurationFile,
-        VisualStudioConfiguration
+        VisualStudioConfiguration,
     }
 }

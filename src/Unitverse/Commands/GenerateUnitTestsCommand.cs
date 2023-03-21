@@ -132,7 +132,7 @@
                     throw new InvalidOperationException("Cannot generate unit tests for multiple projects at the same time, please select a single project");
                 }
 
-                var mapping = ProjectMappingFactory.CreateMappingFor(sourceProjects.Single(), baseOptions, true, false, messageLogger);
+                var mapping = ProjectMappingFactory.CreateMappingFor(sourceProjects.Single(), baseOptions, true, false, messageLogger, _package);
                 if (mapping == null)
                 {
                     return;

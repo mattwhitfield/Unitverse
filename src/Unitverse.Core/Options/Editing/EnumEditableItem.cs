@@ -6,8 +6,8 @@
 
     public class EnumEditableItem : EditableItem
     {
-        public EnumEditableItem(string text, string description, string fieldName, object value, Action<object> setValue, Type enumerationType, bool showSourceIcon, string? sourceFileName)
-            : base(text, description, fieldName, showSourceIcon, sourceFileName)
+        public EnumEditableItem(string text, string description, string fieldName, object value, Action<object> setValue, Type enumerationType, bool showSourceIcon, ConfigurationSource? source)
+            : base(text, description, fieldName, showSourceIcon, source)
         {
             var selectedValueName = value.ToString();
 

@@ -4,8 +4,8 @@
 
     public abstract class EditableItem : DisplayItem
     {
-        public EditableItem(string text, string description, string fieldName, bool showSourceIcon, string? sourceFileName)
-            : base(text, showSourceIcon, sourceFileName)
+        public EditableItem(string text, string description, string fieldName, bool showSourceIcon, ConfigurationSource? source)
+            : base(text, showSourceIcon, source)
         {
             if (string.IsNullOrWhiteSpace(description))
             {

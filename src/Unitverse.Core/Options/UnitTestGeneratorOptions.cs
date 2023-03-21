@@ -6,15 +6,22 @@
 
     public class UnitTestGeneratorOptions : IUnitTestGeneratorOptions
     {
-        private readonly Dictionary<string, string> _membersSetByFilename;
+        private readonly Dictionary<string, ConfigurationSource> _configurationSources;
 
-        public UnitTestGeneratorOptions(IGenerationOptions generationOptions, INamingOptions namingOptions, IStrategyOptions strategyOptions, bool statisticsCollectionEnabled, Dictionary<string, string> membersSetByFilename)
+        public UnitTestGeneratorOptions(
+            IGenerationOptions generationOptions,
+            INamingOptions namingOptions,
+            IStrategyOptions strategyOptions,
+            bool statisticsCollectionEnabled,
+            Dictionary<string, ConfigurationSource> configurationSources,
+            Dictionary<string, string>? projectMappings = null)
         {
             GenerationOptions = generationOptions ?? throw new ArgumentNullException(nameof(generationOptions));
             NamingOptions = namingOptions ?? throw new ArgumentNullException(nameof(namingOptions));
             StrategyOptions = strategyOptions ?? throw new ArgumentNullException(nameof(strategyOptions));
             StatisticsCollectionEnabled = statisticsCollectionEnabled;
-            _membersSetByFilename = membersSetByFilename ?? throw new ArgumentNullException(nameof(membersSetByFilename));
+            _configurationSources = configurationSources ?? throw new ArgumentNullException(nameof(configurationSources));
+            ProjectMappings = projectMappings ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
         public IGenerationOptions GenerationOptions { get; }
@@ -25,28 +32,25 @@
 
         public bool StatisticsCollectionEnabled { get; }
 
-        public IEnumerable<KeyValuePair<string, int>> SourceCounts => _membersSetByFilename.GroupBy(x => x.Value).Select(x => new KeyValuePair<string, int>(x.Key, x.Count()));
+        public IEnumerable<KeyValuePair<string, int>> SourceCounts => _configurationSources.Where(x => x.Value.SourceType == ConfigurationSourceType.ConfigurationFile).GroupBy(x => x.Value.FileName).Select(x => new KeyValuePair<string, int>(x.Key ?? string.Empty, x.Count()));
 
-        public string? GetFieldSourceFileName(string fieldName)
+        public Dictionary<string, string> ProjectMappings { get; }
+
+        public ConfigurationSource GetFieldSource(string fieldName)
         {
-            if (string.IsNullOrWhiteSpace(fieldName))
-            {
-                throw new ArgumentNullException(nameof(fieldName));
-            }
-
-            if (_membersSetByFilename.TryGetValue(fieldName, out var value))
+            if (_configurationSources.TryGetValue(fieldName, out var value))
             {
                 return value;
             }
 
-            return null;
+            return new ConfigurationSource(ConfigurationSourceType.VisualStudio);
         }
 
         public IUnitTestGeneratorOptions OverrideGenerationOption(Action<MutableGenerationOptions> configure)
         {
             var mutable = new MutableGenerationOptions(GenerationOptions);
             configure(mutable);
-            return new UnitTestGeneratorOptions(mutable, NamingOptions, StrategyOptions, StatisticsCollectionEnabled, _membersSetByFilename);
+            return new UnitTestGeneratorOptions(mutable, NamingOptions, StrategyOptions, StatisticsCollectionEnabled, _configurationSources);
         }
     }
 }

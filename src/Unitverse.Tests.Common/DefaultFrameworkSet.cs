@@ -8,7 +8,7 @@
     public static class DefaultFrameworkSet
     {
         private static IUnitTestGeneratorOptions Options { get; } =
-            new UnitTestGeneratorOptions(new DefaultGenerationOptions(), new DefaultNamingOptions(), new DefaultStrategyOptions(), true, new Dictionary<string, string>());
+            new UnitTestGeneratorOptions(new DefaultGenerationOptions(), new DefaultNamingOptions(), new DefaultStrategyOptions(), true, new Dictionary<string, ConfigurationSource>());
 
         public static IFrameworkSet Create()
         {
@@ -20,7 +20,7 @@
             var namingOptions = new DefaultNamingOptions();
             mutator(namingOptions);
 
-            var options = new UnitTestGeneratorOptions(new DefaultGenerationOptions(), namingOptions, new DefaultStrategyOptions(), true, new Dictionary<string, string>());
+            var options = new UnitTestGeneratorOptions(new DefaultGenerationOptions(), namingOptions, new DefaultStrategyOptions(), true, new Dictionary<string, ConfigurationSource>());
 
             return FrameworkSetFactory.Create(options);
         }

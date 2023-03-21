@@ -28,7 +28,7 @@
             return mutatorSet;
         }
 
-        public static void ApplyTo<T>(this Dictionary<string, string> values, T instance)
+        public static bool ApplyTo<T>(this Dictionary<string, string> values, T instance, Action<string>? onMemberSet = null)
             where T : class
         {
             if (values is null)
@@ -41,6 +41,8 @@
                 throw new ArgumentNullException(nameof(instance));
             }
 
+            var anySet = false;
+
             var mutatorSet = CreateMutatorSet<T>();
             foreach (var valuePair in values)
             {
@@ -48,8 +50,13 @@
                 if (mutatorSet.TryGetValue(cleanFieldName, out var mutator))
                 {
                     mutator(instance, valuePair.Value);
+                    anySet = true;
+
+                    onMemberSet?.Invoke(cleanFieldName);
                 }
             }
+
+            return anySet;
         }
     }
 }

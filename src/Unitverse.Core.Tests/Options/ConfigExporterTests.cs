@@ -1,11 +1,11 @@
 namespace Unitverse.Core.Tests.Options
 {
-    using Unitverse.Core.Options;
     using System;
-    using NUnit.Framework;
-    using FluentAssertions;
     using System.Collections.Generic;
     using System.IO;
+    using FluentAssertions;
+    using NUnit.Framework;
+    using Unitverse.Core.Options;
 
     [TestFixture]
     public static class ConfigExporterTests
@@ -57,6 +57,22 @@ namespace Unitverse.Core.Tests.Options
         public static void CannotCallWriteToWithInvalidTargetFileName(string value)
         {
             FluentActions.Invoking(() => ConfigExporter.WriteTo(value, new[] { new object(), new object(), new object() })).Should().Throw<ArgumentNullException>();
+        }
+
+        [Test]
+        public static void CanCallWriteSettings()
+        {
+            // Arrange
+            var fileName = "TestValue1600843455";
+            var settings = new Dictionary<string, string>();
+            var sourceProjectName = "TestValue1054864886";
+            var targetProjectName = "TestValue1677848185";
+
+            // Act
+            ConfigExporter.WriteSettings(fileName, settings, sourceProjectName, targetProjectName);
+
+            // Assert
+            Assert.Fail("Create or modify test");
         }
     }
 }

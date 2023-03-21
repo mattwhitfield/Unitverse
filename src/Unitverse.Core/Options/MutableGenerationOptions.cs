@@ -31,7 +31,6 @@
             ActComment = options.ActComment;
             AssertComment = options.AssertComment;
             UserInterfaceMode = options.UserInterfaceMode;
-            RememberManuallySelectedTargetProjectByDefault = options.RememberManuallySelectedTargetProjectByDefault;
             FallbackTargetFinding = options.FallbackTargetFinding;
             PrefixFieldReferencesWithThis = options.PrefixFieldReferencesWithThis;
             EmitXmlDocumentation = options.EmitXmlDocumentation;
@@ -83,8 +82,6 @@
         public string AssertComment { get; set; }
 
         public UserInterfaceModes UserInterfaceMode { get; set; }
-
-        public bool RememberManuallySelectedTargetProjectByDefault { get; set; }
 
         public FallbackTargetFindingMethod FallbackTargetFinding { get; set; }
 

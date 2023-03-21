@@ -9,6 +9,23 @@
 
     public static class ConfigExporter
     {
+        private static readonly Dictionary<string, string> Categories = new Dictionary<string, string>();
+
+        static ConfigExporter()
+        {
+            AddToCategories(typeof(IGenerationOptions), "GenerationOptions");
+            AddToCategories(typeof(INamingOptions), "NamingOptions");
+            AddToCategories(typeof(IStrategyOptions), "StrategyOptions");
+        }
+
+        private static void AddToCategories(Type type, string name)
+        {
+            foreach (var property in type.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.CanRead))
+            {
+                Categories[property.Name] = name;
+            }
+        }
+
         public static void WriteTo(string targetFileName, IUnitTestGeneratorOptions options)
         {
             var objects = new[]
@@ -65,6 +82,60 @@
 
                         writer.WriteLine(propertyName + "=" + propertyValue);
                     }
+                }
+            }
+        }
+
+        public static void WriteSettings(string fileName, Dictionary<string, string> settings, string sourceProjectName, string targetProjectName)
+        {
+            var categorisedSettings = new Dictionary<string, Dictionary<string, string>>();
+            foreach (var setting in settings)
+            {
+                if (!Categories.TryGetValue(setting.Key, out var categoryName))
+                {
+                    categoryName = string.Empty;
+                }
+
+                if (!categorisedSettings.TryGetValue(categoryName, out var category))
+                {
+                    categorisedSettings[categoryName] = category = new Dictionary<string, string>();
+                }
+
+                category[setting.Key] = setting.Value;
+            }
+
+            var first = true;
+            using (var writer = new StreamWriter(fileName, false, Encoding.UTF8))
+            {
+                foreach (var category in categorisedSettings.OrderBy(x => x.Key))
+                {
+                    if (!first)
+                    {
+                        writer.WriteLine();
+                    }
+
+                    first = false;
+
+                    if (!string.IsNullOrWhiteSpace(category.Key))
+                    {
+                        writer.WriteLine("[" + category.Key + "]");
+                    }
+
+                    foreach (var pair in category.Value.OrderBy(x => x.Key))
+                    {
+                        writer.WriteLine(pair.Key + "=" + pair.Value);
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(sourceProjectName) && !string.IsNullOrWhiteSpace(targetProjectName))
+                {
+                    if (!first)
+                    {
+                        writer.WriteLine();
+                    }
+
+                    writer.WriteLine("[Mappings]");
+                    writer.WriteLine("Map=" + sourceProjectName + "->" + targetProjectName);
                 }
             }
         }

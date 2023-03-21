@@ -40,7 +40,6 @@ namespace Unitverse.Core.Tests.Options
             _options.ActComment.Returns("Act");
             _options.AssertComment.Returns("Assert");
             _options.UserInterfaceMode.Returns(UserInterfaceModes.Always);
-            _options.RememberManuallySelectedTargetProjectByDefault.Returns(true);
             _options.FallbackTargetFinding.Returns(FallbackTargetFindingMethod.TypeInAnyNamespace);
 
             _testClass = new MutableGenerationOptions(_options);
@@ -62,7 +61,6 @@ namespace Unitverse.Core.Tests.Options
             Assert.That(_testClass.ActComment, Is.EqualTo(_options.ActComment));
             Assert.That(_testClass.AssertComment, Is.EqualTo(_options.AssertComment));
             Assert.That(_testClass.UserInterfaceMode, Is.EqualTo(_options.UserInterfaceMode));
-            Assert.That(_testClass.RememberManuallySelectedTargetProjectByDefault, Is.EqualTo(_options.RememberManuallySelectedTargetProjectByDefault));
             Assert.That(_testClass.FallbackTargetFinding, Is.EqualTo(_options.FallbackTargetFinding));
         }
 

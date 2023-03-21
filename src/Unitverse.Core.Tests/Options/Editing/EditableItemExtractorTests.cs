@@ -21,7 +21,7 @@ namespace Unitverse.Core.Tests.Options.Editing
             var modifiableSource = new MutableGenerationOptions(source);
 
             // Act
-            var result = EditableItemExtractor.ExtractFrom(source, modifiableSource, withSkipping, str => str == nameof(IGenerationOptions.ArrangeComment) ? "file" : null).ToList();
+            var result = EditableItemExtractor.ExtractFrom(source, modifiableSource, withSkipping, str => str == nameof(IGenerationOptions.ArrangeComment) ? new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "file") : null).ToList();
 
             // Assert
             result.Should().Contain(x => x.ItemType == EditableItemType.String && x.Text == "Act block comment" && x is StringEditableItem && ((StringEditableItem)x).Description == "The comment to leave before any act statements (leave blank to suppress)" && ((StringEditableItem)x).Value == "freddo");
@@ -33,7 +33,6 @@ namespace Unitverse.Core.Tests.Options.Editing
                     if (property.Name == nameof(IGenerationOptions.AllowGenerationWithoutTargetProject) ||
                         property.Name == nameof(IGenerationOptions.AutoDetectFrameworkTypes) ||
                         property.Name == nameof(IGenerationOptions.TestProjectNaming) ||
-                        property.Name == nameof(IGenerationOptions.RememberManuallySelectedTargetProjectByDefault) ||
                         property.Name == nameof(IGenerationOptions.UserInterfaceMode))
                     {
                         // ignore properties that are excluded from the UI
@@ -67,7 +66,6 @@ namespace Unitverse.Core.Tests.Options.Editing
                 {
                     result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.AllowGenerationWithoutTargetProject));
                     result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.AutoDetectFrameworkTypes));
-                    result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.RememberManuallySelectedTargetProjectByDefault));
                     result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.UserInterfaceMode));
                     result.Should().NotContain(x => x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.TestProjectNaming));
                 }
@@ -83,7 +81,7 @@ namespace Unitverse.Core.Tests.Options.Editing
             var modifiableSource = new MutableGenerationOptions(source);
 
             // Act
-            var result = EditableItemExtractor.ExtractFrom(source, modifiableSource, false, str => str == nameof(IGenerationOptions.ArrangeComment) ? "file" : null, x => x == nameof(IGenerationOptions.AllowGenerationWithoutTargetProject)).ToList();
+            var result = EditableItemExtractor.ExtractFrom(source, modifiableSource, false, str => str == nameof(IGenerationOptions.ArrangeComment) ? new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "file") : null, x => x == nameof(IGenerationOptions.AllowGenerationWithoutTargetProject)).ToList();
 
             // Assert
             result.Should().Contain(x => x.ItemType == EditableItemType.Boolean && x is EditableItem && ((EditableItem)x).FieldName == nameof(IGenerationOptions.AllowGenerationWithoutTargetProject), nameof(IGenerationOptions.AllowGenerationWithoutTargetProject));

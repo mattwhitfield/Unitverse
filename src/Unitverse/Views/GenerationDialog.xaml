@@ -119,7 +119,6 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Path
                             Grid.Column="1"
@@ -163,18 +162,6 @@
                             SelectedItem="{Binding SelectedProject}"
                             Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogListBoxStyleKey}}" />
                     </ScrollViewer>
-                    <CheckBox
-                        Grid.Row="2"
-                        Margin="4"
-                        IsChecked="{Binding RememberProjectSelection}"
-                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogCheckBoxStyleKey}}"
-                        Visibility="{Binding CanRememberSelectedProject, Converter={StaticResource VisibilityConverter}}">
-                        <TextBlock
-                            Margin="0,-1,0,4"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
-                            Text="Remember target project selection for this session" />
-                    </CheckBox>
                 </Grid>
                 <Grid HorizontalAlignment="Stretch" Visibility="{Binding SelectedTab.ItemType, Converter={StaticResource TabVisibilityConverter}, ConverterParameter={x:Static editing:TabItemType.GenerationOptions}}">
                     <ScrollViewer

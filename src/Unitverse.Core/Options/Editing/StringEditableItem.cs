@@ -4,8 +4,8 @@
 
     public class StringEditableItem : EditableItem
     {
-        public StringEditableItem(string text, string description, string fieldName, string value, Action<string> setValue, bool showSourceIcon, string? sourceFileName)
-            : base(text, description, fieldName, showSourceIcon, sourceFileName)
+        public StringEditableItem(string text, string description, string fieldName, string value, Action<string> setValue, bool showSourceIcon, ConfigurationSource? source)
+            : base(text, description, fieldName, showSourceIcon, source)
         {
             _value = value;
             _setValue = setValue ?? throw new ArgumentNullException(nameof(setValue));

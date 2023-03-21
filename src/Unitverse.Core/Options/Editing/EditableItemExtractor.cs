@@ -8,7 +8,7 @@
 
     public static class EditableItemExtractor
     {
-        public static IEnumerable<DisplayItem> ExtractFrom(object source, object modifiableInstance, bool skipExcluded, Func<string, string>? sourceFileExtractor = null, Func<string, bool>? propertySelector = null)
+        public static IEnumerable<DisplayItem> ExtractFrom(object source, object modifiableInstance, bool skipExcluded, Func<string, ConfigurationSource>? sourceFileExtractor = null, Func<string, bool>? propertySelector = null)
         {
             if (source is null)
             {
