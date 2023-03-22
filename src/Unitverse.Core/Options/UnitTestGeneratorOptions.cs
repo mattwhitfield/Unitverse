@@ -50,7 +50,7 @@
         {
             var mutable = new MutableGenerationOptions(GenerationOptions);
             configure(mutable);
-            return new UnitTestGeneratorOptions(mutable, NamingOptions, StrategyOptions, StatisticsCollectionEnabled, _configurationSources);
+            return new UnitTestGeneratorOptions(mutable, NamingOptions, StrategyOptions, StatisticsCollectionEnabled, _configurationSources, ProjectMappings);
         }
     }
 }
