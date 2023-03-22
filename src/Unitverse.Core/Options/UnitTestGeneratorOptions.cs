@@ -21,7 +21,7 @@
             StrategyOptions = strategyOptions ?? throw new ArgumentNullException(nameof(strategyOptions));
             StatisticsCollectionEnabled = statisticsCollectionEnabled;
             _configurationSources = configurationSources ?? throw new ArgumentNullException(nameof(configurationSources));
-            ProjectMappings = projectMappings ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            ProjectMappings = new Dictionary<string, string>(projectMappings ?? new Dictionary<string, string>(), StringComparer.OrdinalIgnoreCase);
         }
 
         public IGenerationOptions GenerationOptions { get; }

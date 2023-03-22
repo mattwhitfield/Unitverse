@@ -4,6 +4,7 @@ namespace Unitverse.Core.Tests.Options
     using System.Collections.Generic;
     using System.IO;
     using FluentAssertions;
+    using Irony;
     using NUnit.Framework;
     using Unitverse.Core.Options;
 
@@ -63,16 +64,24 @@ namespace Unitverse.Core.Tests.Options
         public static void CanCallWriteSettings()
         {
             // Arrange
-            var fileName = "TestValue1600843455";
             var settings = new Dictionary<string, string>();
+            settings[nameof(IGenerationOptions.ActComment)] = "get the stuff set up";
             var sourceProjectName = "TestValue1054864886";
             var targetProjectName = "TestValue1677848185";
 
             // Act
-            ConfigExporter.WriteSettings(fileName, settings, sourceProjectName, targetProjectName);
+            var tempFile = Path.GetTempFileName();
+            ConfigExporter.WriteSettings(tempFile, settings, sourceProjectName, targetProjectName);
+            var text = File.ReadAllText(tempFile);
+            File.Delete(tempFile);
 
             // Assert
-            Assert.Fail("Create or modify test");
+            text.Should().Be(
+                "[GenerationOptions]\r\n" +
+                "ActComment=get the stuff set up\r\n" +
+                "\r\n" +
+                "[Mappings]\r\n" +
+                "TestValue1054864886=TestValue1677848185\r\n");
         }
     }
 }

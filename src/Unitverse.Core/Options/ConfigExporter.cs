@@ -135,7 +135,7 @@
                     }
 
                     writer.WriteLine("[Mappings]");
-                    writer.WriteLine("Map=" + sourceProjectName + "->" + targetProjectName);
+                    writer.WriteLine(sourceProjectName + "=" + targetProjectName);
                 }
             }
         }

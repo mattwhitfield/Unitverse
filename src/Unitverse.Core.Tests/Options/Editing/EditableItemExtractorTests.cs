@@ -50,7 +50,7 @@ namespace Unitverse.Core.Tests.Options.Editing
                     }
                     else
                     {
-                        result.OfType<StringEditableItem>().First(x => x.FieldName == propertyName).SourceFileName.Should().BeNull();
+                        result.OfType<StringEditableItem>().First(x => x.FieldName == propertyName).SourceFileName.Should().BeEmpty();
                     }
                 }
                 else if (property.PropertyType == typeof(bool))

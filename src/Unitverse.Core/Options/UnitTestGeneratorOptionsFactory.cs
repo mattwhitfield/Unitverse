@@ -32,26 +32,27 @@
                 {
                     foreach (var section in file.Sections)
                     {
-                        foreach (var pair in section)
+                        if (section.Glob.EndsWith("/Mappings", StringComparison.OrdinalIgnoreCase))
                         {
-                            if (string.Equals(pair.Key, "Map", StringComparison.OrdinalIgnoreCase))
+                            foreach (var pair in section)
                             {
-                                var mapping = pair.Value.Split(new[] { "->" }, StringSplitOptions.RemoveEmptyEntries);
-                                if (mapping.Length >= 2)
-                                {
-                                    projectMappings[mapping[0].Trim()] = mapping[1].Trim();
-                                }
+                                projectMappings[pair.Key] = pair.Value;
                             }
-
-                            string? memberName;
-                            var applied = Apply(mutableGenerationOptions, pair, generationOptionsMutators, out memberName) ||
-                                          Apply(mutableNamingOptions, pair, namingOptionsMutators, out memberName) ||
-                                          Apply(mutableStrategyOptions, pair, strategyOptionsMutators, out memberName);
-
-                            if (applied && memberName != null)
+                        }
+                        else
+                        {
+                            foreach (var pair in section)
                             {
-                                // record
-                                fieldSources[memberName] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, Path.Combine(file.Directory, CoreConstants.ConfigFileName));
+                                string? memberName;
+                                var applied = Apply(mutableGenerationOptions, pair, generationOptionsMutators, out memberName) ||
+                                              Apply(mutableNamingOptions, pair, namingOptionsMutators, out memberName) ||
+                                              Apply(mutableStrategyOptions, pair, strategyOptionsMutators, out memberName);
+
+                                if (applied && memberName != null)
+                                {
+                                    // record
+                                    fieldSources[memberName] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, Path.Combine(file.Directory, CoreConstants.ConfigFileName));
+                                }
                             }
                         }
                     }

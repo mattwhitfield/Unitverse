@@ -5,41 +5,34 @@ namespace Unitverse.Core.Tests.Options
     using FluentAssertions;
     using NUnit.Framework;
     using Unitverse.Core.Options;
-    using T = System.String;
+    using Unitverse.Options;
 
     [TestFixture]
     public static class SessionConfigStoreTests
     {
         [Test]
-        public static void CanCallStoreSettings()
+        public static void CanCallStoreSettingsAndRestoreSettings()
         {
             // Arrange
             var settings = new Dictionary<string, string>();
+            settings[nameof(IGenerationOptions.ArrangeComment)] = "some other thing";
+            var mutated = new List<string>();
+            var test = new GenerationOptions();
 
             // Act
             SessionConfigStore.StoreSettings(settings);
+            SessionConfigStore.RestoreSettings(test, setting => mutated.Add(setting));
 
             // Assert
-            Assert.Fail("Create or modify test");
-        }
-
-        [Test]
-        public static void CanCallRestoreSettings()
-        {
-            // Arrange
-            var target = "TestValue2116604866";
-            Action<string> onMemberSet = x => { };
-
-            // Act
-            SessionConfigStore.RestoreSettings<T>(target, onMemberSet);
-
-            // Assert
-            Assert.Fail("Create or modify test");
+            mutated.Should().Contain(nameof(IGenerationOptions.ArrangeComment));
+            test.ArrangeComment.Should().Be("some other thing");
         }
 
         [Test]
         public static void CanCallSetTargetFor()
         {
+            SessionConfigStore.ProjectMappings.Clear();
+
             // Arrange
             var sourceProjectName = "TestValue2121102834";
             var targetProjectName = "TestValue1116763453";
@@ -48,31 +41,23 @@ namespace Unitverse.Core.Tests.Options
             SessionConfigStore.SetTargetFor(sourceProjectName, targetProjectName);
 
             // Assert
-            Assert.Fail("Create or modify test");
+            SessionConfigStore.ProjectMappings.Should().Contain(new KeyValuePair<string, string>(sourceProjectName, targetProjectName));
         }
 
         [Test]
         public static void CanCallAddModifiedValuesToDictionary()
         {
             // Arrange
-            var modifiedSettings = "TestValue1003885563";
-            var baseSettings = "TestValue251107448";
+            var modifiedSettings = new GenerationOptions() { ArrangeComment = "some stuff" };
+            var baseSettings = new GenerationOptions() { ActComment = "some other stuff" };
             var target = new Dictionary<string, string>();
 
             // Act
-            SessionConfigStore.AddModifiedValuesToDictionary<T>(modifiedSettings, baseSettings, target);
+            SessionConfigStore.AddModifiedValuesToDictionary(modifiedSettings, baseSettings, target);
 
             // Assert
-            Assert.Fail("Create or modify test");
-        }
-
-        [Test]
-        public static void CanGetProjectMappings()
-        {
-            // Assert
-            SessionConfigStore.ProjectMappings.Should().BeAssignableTo<Dictionary<string, string>>();
-
-            Assert.Fail("Create or modify test");
+            target.Should().Contain(new KeyValuePair<string, string>(nameof(IGenerationOptions.ActComment), modifiedSettings.ActComment));
+            target.Should().Contain(new KeyValuePair<string, string>(nameof(IGenerationOptions.ArrangeComment), modifiedSettings.ArrangeComment));
         }
     }
 }
