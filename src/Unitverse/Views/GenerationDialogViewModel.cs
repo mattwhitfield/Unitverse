@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using Unitverse.Core.Helpers;
 using Unitverse.Core.Options;
 using Unitverse.Core.Options.Editing;
 using Unitverse.Helper;
@@ -41,9 +40,18 @@ namespace Unitverse.Views
             _originalGenerationOptions = new MutableGenerationOptions(_generationOptions);
             _allowDetachedGeneration = _originalGenerationOptions.AllowGenerationWithoutTargetProject;
 
-            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), _generationOptions, true, projectOptions.GetFieldSourceFileName).ToList();
-            StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions, true, projectOptions.GetFieldSourceFileName).ToList();
-            NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions, true, projectOptions.GetFieldSourceFileName).ToList();
+            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), _generationOptions, true, projectOptions.GetFieldSource).ToList();
+            StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions, true, projectOptions.GetFieldSource).ToList();
+            NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions, true, projectOptions.GetFieldSource).ToList();
+
+            SaveOptionItems = new[]
+            {
+                new ObjectItem("This generation only", SaveOption.ThisGeneration),
+                new ObjectItem("This session", SaveOption.ThisSession),
+                new ObjectItem("Configuration file", SaveOption.ConfigurationFile),
+                new ObjectItem("Visual studio settings", SaveOption.VisualStudioConfiguration),
+            };
+            _selectedSaveOption = SaveOptionItems.First();
 
             Projects.Add(new ObjectItem("Generate detached test class(es)", null));
 #pragma warning disable VSTHRD010 // Invoke single-threaded types on Main thread
@@ -56,9 +64,7 @@ namespace Unitverse.Views
             _selectedProject = Projects.FirstOrDefault(x => string.Equals(x.Text, resolvedTargetProjectName, StringComparison.OrdinalIgnoreCase));
             var selectedProject = _selectedProject?.Value as Project;
 
-            _rememberProjectSelection = projectOptions.GenerationOptions.RememberManuallySelectedTargetProjectByDefault;
-
-            ResultingMapping = new ProjectMapping(sourceProject, selectedProject, selectedProject?.Name, new UnitTestGeneratorOptions(_generationOptions, namingOptions, strategyOptions, projectOptions.StatisticsCollectionEnabled, new Dictionary<string, string>()));
+            ResultingMapping = new ProjectMapping(sourceProject, selectedProject, selectedProject?.Name, new UnitTestGeneratorOptions(_generationOptions, namingOptions, strategyOptions, projectOptions.StatisticsCollectionEnabled, new Dictionary<string, ConfigurationSource>()));
 
             ApplyTargetProjectFramework();
         }
@@ -139,17 +145,17 @@ namespace Unitverse.Views
             }
         }
 
-        private bool _rememberProjectSelection;
+        public IList<ObjectItem> SaveOptionItems { get; }
 
-        public bool RememberProjectSelection
+        public ObjectItem SelectedSaveOption
         {
-            get { return _rememberProjectSelection; }
+            get { return _selectedSaveOption; }
             set
             {
-                if (_rememberProjectSelection != value)
+                if (_selectedSaveOption != value)
                 {
-                    _rememberProjectSelection = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RememberProjectSelection)));
+                    _selectedSaveOption = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedSaveOption)));
                 }
             }
         }
@@ -165,6 +171,7 @@ namespace Unitverse.Views
         public List<ObjectItem> Projects { get; } = new List<ObjectItem>();
 
         private ObjectItem _selectedProject;
+        private ObjectItem _selectedSaveOption;
 
         public ObjectItem SelectedProject
         {
@@ -205,47 +212,52 @@ namespace Unitverse.Views
                 resolvedOptions = _originalGenerationOptions;
             }
 
-            var testFrameworkItem = GenerationOptionsItems.OfType<EnumEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.FrameworkType), StringComparison.OrdinalIgnoreCase));
-            if (testFrameworkItem != null)
+            ApplyEnumOption(nameof(IGenerationOptions.FrameworkType), o => o.FrameworkType, _projectOptions, resolvedOptions);
+            ApplyEnumOption(nameof(IGenerationOptions.MockingFrameworkType), o => o.MockingFrameworkType, _projectOptions, resolvedOptions);
+
+            ApplyBoolOption(nameof(IGenerationOptions.UseFluentAssertions), o => o.UseFluentAssertions, _projectOptions, resolvedOptions);
+            ApplyBoolOption(nameof(IGenerationOptions.UseShouldly), o => o.UseShouldly, _projectOptions, resolvedOptions);
+            ApplyBoolOption(nameof(IGenerationOptions.UseAutoFixture), o => o.UseAutoFixture, _projectOptions, resolvedOptions);
+            ApplyBoolOption(nameof(IGenerationOptions.UseAutoFixtureForMocking), o => o.UseAutoFixtureForMocking, _projectOptions, resolvedOptions);
+        }
+
+        private void ApplyEnumOption(string fieldName, Func<IGenerationOptions, object> getValue, IUnitTestGeneratorOptions options, IGenerationOptions resolvedOptions)
+        {
+            ApplyOption<EnumEditableItem>(fieldName, getValue, options, resolvedOptions, (item, resolvedValue) =>
             {
-                var isFromVs = string.IsNullOrWhiteSpace(_projectOptions.GetFieldSourceFileName(nameof(IGenerationOptions.FrameworkType)));
-                testFrameworkItem.SelectedItem = testFrameworkItem.Items.FirstOrDefault(x => x.Value.ToString() == resolvedOptions.FrameworkType.ToString());
-                testFrameworkItem.SetSourceState(resolvedOptions.FrameworkType != _originalGenerationOptions.FrameworkType, isFromVs);
-            }
-            var mockingFrameworkItem = GenerationOptionsItems.OfType<EnumEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.MockingFrameworkType), StringComparison.OrdinalIgnoreCase));
-            if (mockingFrameworkItem != null)
+                item.SelectedItem = item.Items.FirstOrDefault(x => x.Value.ToString() == resolvedValue.ToString());
+            });
+        }
+
+        private void ApplyBoolOption(string fieldName, Func<IGenerationOptions, object> getValue, IUnitTestGeneratorOptions options, IGenerationOptions resolvedOptions)
+        {
+            ApplyOption<BooleanEditableItem>(fieldName, getValue, options, resolvedOptions, (item, resolvedValue) =>
             {
-                var isFromVs = string.IsNullOrWhiteSpace(_projectOptions.GetFieldSourceFileName(nameof(IGenerationOptions.MockingFrameworkType)));
-                mockingFrameworkItem.SelectedItem = mockingFrameworkItem.Items.FirstOrDefault(x => x.Value.ToString() == resolvedOptions.MockingFrameworkType.ToString());
-                mockingFrameworkItem.SetSourceState(resolvedOptions.MockingFrameworkType != _originalGenerationOptions.MockingFrameworkType, isFromVs);
-            }
-            var fluentAssertionsItem = GenerationOptionsItems.OfType<BooleanEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.UseFluentAssertions), StringComparison.OrdinalIgnoreCase));
-            if (fluentAssertionsItem != null)
+                if (resolvedValue is bool b)
+                {
+                    item.Value = b;
+                }
+            });
+        }
+
+        private void ApplyOption<T>(string fieldName, Func<IGenerationOptions, object> getValue, IUnitTestGeneratorOptions options, IGenerationOptions resolvedOptions, Action<T, object> configure)
+           where T : EditableItem
+        {
+            var item = GenerationOptionsItems.OfType<T>().FirstOrDefault(x => string.Equals(x.FieldName, fieldName, StringComparison.OrdinalIgnoreCase));
+            if (item != null)
             {
-                var isFromVs = string.IsNullOrWhiteSpace(_projectOptions.GetFieldSourceFileName(nameof(IGenerationOptions.UseFluentAssertions)));
-                fluentAssertionsItem.Value = resolvedOptions.UseFluentAssertions;
-                fluentAssertionsItem.SetSourceState(resolvedOptions.UseFluentAssertions != _originalGenerationOptions.UseFluentAssertions, isFromVs);
-            }
-            var shouldlyItem = GenerationOptionsItems.OfType<BooleanEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.UseShouldly), StringComparison.OrdinalIgnoreCase));
-            if (shouldlyItem != null)
-            {
-                var isFromVs = string.IsNullOrWhiteSpace(_projectOptions.GetFieldSourceFileName(nameof(IGenerationOptions.UseShouldly)));
-                shouldlyItem.Value = resolvedOptions.UseShouldly;
-                shouldlyItem.SetSourceState(resolvedOptions.UseShouldly != _originalGenerationOptions.UseShouldly, isFromVs);
-            }
-            var autoFixtureItem = GenerationOptionsItems.OfType<BooleanEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.UseAutoFixture), StringComparison.OrdinalIgnoreCase));
-            if (autoFixtureItem != null)
-            {
-                var isFromVs = string.IsNullOrWhiteSpace(_projectOptions.GetFieldSourceFileName(nameof(IGenerationOptions.UseAutoFixture)));
-                autoFixtureItem.Value = resolvedOptions.UseAutoFixture;
-                autoFixtureItem.SetSourceState(resolvedOptions.UseAutoFixture != _originalGenerationOptions.UseAutoFixture, isFromVs);
-            }
-            var autoFixtureForMockingItem = GenerationOptionsItems.OfType<BooleanEditableItem>().FirstOrDefault(x => string.Equals(x.FieldName, nameof(IGenerationOptions.UseAutoFixtureForMocking), StringComparison.OrdinalIgnoreCase));
-            if (autoFixtureForMockingItem != null)
-            {
-                var isFromVs = string.IsNullOrWhiteSpace(_projectOptions.GetFieldSourceFileName(nameof(IGenerationOptions.UseAutoFixtureForMocking)));
-                autoFixtureItem.Value = resolvedOptions.UseAutoFixtureForMocking;
-                autoFixtureItem.SetSourceState(resolvedOptions.UseAutoFixtureForMocking != _originalGenerationOptions.UseAutoFixtureForMocking, isFromVs);
+                var resolvedValue = getValue(resolvedOptions);
+
+                configure(item, resolvedValue);
+
+                if (resolvedValue.ToString() != getValue(options.GenerationOptions).ToString())
+                {
+                    item.SetSourceState(new ConfigurationSource(ConfigurationSourceType.AutoDetection));
+                }
+                else
+                {
+                    item.SetSourceState(options.GetFieldSource(fieldName));
+                }
             }
         }
 

@@ -5,7 +5,7 @@
 
     public interface IUnitTestGeneratorOptions
     {
-        string? GetFieldSourceFileName(string fieldName);
+        ConfigurationSource GetFieldSource(string fieldName);
 
         bool StatisticsCollectionEnabled { get; }
 
@@ -14,6 +14,8 @@
         INamingOptions NamingOptions { get; }
 
         IStrategyOptions StrategyOptions { get; }
+
+        Dictionary<string, string> ProjectMappings { get; }
 
         IEnumerable<KeyValuePair<string, int>> SourceCounts { get; }
 

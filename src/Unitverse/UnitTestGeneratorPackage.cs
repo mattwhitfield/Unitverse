@@ -2,8 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
     using System.Runtime.InteropServices;
+    using System.Text;
     using System.Threading;
+    using System.Windows.Media.Animation;
     using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.ComponentModelHost;
     using Microsoft.VisualStudio.LanguageServices;
@@ -27,6 +31,7 @@
     [ProvideOptionPage(typeof(StrategyOptions), "Unitverse", "Strategy Options", 0, 0, true)]
     [ProvideOptionPage(typeof(ExportOptions), "Unitverse", "Options Export", 0, 0, true)]
     [ProvideOptionPage(typeof(StatisticsOptions), "Unitverse", "Statistics", 0, 0, true)]
+    [ProvideOptionPage(typeof(ProjectMappingOptions), "Unitverse", "Project Mappings", 0, 0, true)]
     [ProvideEditorExtension(typeof(ConfigEditorFactory), CoreConstants.ConfigFileName, 50, NameResourceID = 110)]
     [ProvideEditorLogicalView(typeof(ConfigEditorFactory), VSConstants.LOGVIEWID.TextView_string, IsTrusted = true)]
     public sealed class UnitTestGeneratorPackage : AsyncPackage, IUnitTestGeneratorPackage
@@ -46,11 +51,69 @@
             get
             {
                 var statisticsOptions = (StatisticsOptions)GetDialogPage(typeof(StatisticsOptions));
-                return new UnitTestGeneratorOptions(GenerationOptions, NamingOptions, StrategyOptions, statisticsOptions.Enabled, new Dictionary<string, string>());
+                return new UnitTestGeneratorOptions(GenerationOptions, NamingOptions, StrategyOptions, statisticsOptions.Enabled, new Dictionary<string, ConfigurationSource>());
             }
         }
 
         public VisualStudioWorkspace Workspace { get; private set; }
+
+        public IDictionary<string, string> ManualProjectMappings
+        {
+            get
+            {
+                var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+                var mappings = ((ProjectMappingOptions)GetDialogPage(typeof(ProjectMappingOptions))).ProjectMappings;
+                if (mappings == null)
+                {
+                    return result;
+                }
+
+                foreach (var mapping in mappings )
+                {
+                    result[mapping.SourceProject.Trim()] = mapping.TargetProject.Trim();
+                }
+
+                return result;
+            }
+        }
+
+        private void WriteSettings<T>(Dictionary<string, string> settings)
+            where T : DialogPage
+        {
+            var options = (T)GetDialogPage(typeof(T));
+            if (settings.ApplyTo(options))
+            {
+                options.SaveSettingsToStorage();
+            }
+        }
+
+        public void WriteSettings(Dictionary<string, string> settings, string sourceProjectName, string targetProjectName)
+        {
+            WriteSettings<GenerationOptions>(settings);
+            WriteSettings<NamingOptions>(settings);
+            WriteSettings<StrategyOptions>(settings);
+
+            if (!string.IsNullOrWhiteSpace(sourceProjectName) && !string.IsNullOrWhiteSpace(targetProjectName))
+            {
+                var mappingOptions = (ProjectMappingOptions)GetDialogPage(typeof(ProjectMappingOptions));
+                if (mappingOptions.ProjectMappings == null)
+                {
+                    mappingOptions.ProjectMappings = new List<ProjectMappingOption>();
+                }
+
+                var existing = mappingOptions.ProjectMappings.FirstOrDefault(x => string.Equals(x.SourceProject, sourceProjectName));
+                if (existing != null)
+                {
+                    existing.TargetProject = targetProjectName;
+                }
+                else
+                {
+                    mappingOptions.ProjectMappings.Add(new ProjectMappingOption { SourceProject = sourceProjectName, TargetProject = targetProjectName });
+                }
+                mappingOptions.SaveSettingsToStorage();
+            }
+        }
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place

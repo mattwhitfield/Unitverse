@@ -1,6 +1,9 @@
 ﻿using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using SequelFilter;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -17,7 +20,7 @@ namespace Unitverse.Views
     {
         int _scale;
 
-        public GenerationDialog(Project sourceProject, IUnitTestGeneratorOptions projectOptions, string resolvedTargetProjectName)
+        public GenerationDialog(Project sourceProject, IUnitTestGeneratorOptions projectOptions, string resolvedTargetProjectName, IConfigurationWriterFactory configurationWriterFactory)
         {
             InitializeComponent();
             DataContext = _viewModel = new GenerationDialogViewModel(sourceProject, projectOptions, resolvedTargetProjectName);
@@ -27,9 +30,12 @@ namespace Unitverse.Views
 
             _scale = ZoomTracker.Get();
             RootScale.ScaleY = RootScale.ScaleX = 1 + (_scale / 100.0);
+            _projectOptions = projectOptions;
+            _resolvedTargetProjectName = resolvedTargetProjectName;
+            _configurationWriterFactory = configurationWriterFactory;
         }
 
-        private void GenerationDialog_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        private void GenerationDialog_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control)
             {
@@ -43,6 +49,9 @@ namespace Unitverse.Views
         }
 
         private GenerationDialogViewModel _viewModel;
+        private readonly IUnitTestGeneratorOptions _projectOptions;
+        private readonly string _resolvedTargetProjectName;
+        private readonly IConfigurationWriterFactory _configurationWriterFactory;
 
         public ProjectMapping ResultingMapping => _viewModel.ResultingMapping;
 
@@ -63,11 +72,33 @@ namespace Unitverse.Views
                     return;
                 }
             }
-            else if (_viewModel.RememberProjectSelection)
+            else
             {
-                TargetSelectionRegister.Instance.SetTargetFor(ResultingMapping.SourceProject.UniqueName, ResultingMapping.TargetProjectName);
-            }
+                var saveOption = (SaveOption)_viewModel.SelectedSaveOption.Value;
+                var writer = _configurationWriterFactory.CreateWriterFor(saveOption);
+                if (writer != null)
+                {
+                    var modifiedSettings = new Dictionary<string, string>();
 
+                    SessionConfigStore.AddModifiedValuesToDictionary(ResultingMapping.Options.GenerationOptions, _projectOptions.GenerationOptions, modifiedSettings);
+                    SessionConfigStore.AddModifiedValuesToDictionary(ResultingMapping.Options.StrategyOptions, _projectOptions.StrategyOptions, modifiedSettings);
+                    SessionConfigStore.AddModifiedValuesToDictionary(ResultingMapping.Options.NamingOptions, _projectOptions.NamingOptions, modifiedSettings);
+
+                    // need to exclude any items that were set via framework auto-detection
+                    foreach (var configItem in _viewModel.GenerationOptionsItems.OfType<EditableItem>().Where(x => x.ShowAutoDetectionSource))
+                    {
+                        modifiedSettings.Remove(configItem.FieldName);
+                    }
+
+                    var sourceProjectName = ResultingMapping.SourceProject.Name;
+                    var targetProjectName =
+                        string.Equals(_resolvedTargetProjectName, ResultingMapping.TargetProjectName, StringComparison.OrdinalIgnoreCase) ?
+                        null : 
+                        ResultingMapping.TargetProjectName;
+
+                    writer.WriteSettings(modifiedSettings, sourceProjectName, targetProjectName);
+                }
+            }
             DialogResult = true;
         }
 

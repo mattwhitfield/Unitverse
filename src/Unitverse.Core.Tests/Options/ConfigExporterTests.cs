@@ -1,11 +1,12 @@
 namespace Unitverse.Core.Tests.Options
 {
-    using Unitverse.Core.Options;
     using System;
-    using NUnit.Framework;
-    using FluentAssertions;
     using System.Collections.Generic;
     using System.IO;
+    using FluentAssertions;
+    using Irony;
+    using NUnit.Framework;
+    using Unitverse.Core.Options;
 
     [TestFixture]
     public static class ConfigExporterTests
@@ -57,6 +58,30 @@ namespace Unitverse.Core.Tests.Options
         public static void CannotCallWriteToWithInvalidTargetFileName(string value)
         {
             FluentActions.Invoking(() => ConfigExporter.WriteTo(value, new[] { new object(), new object(), new object() })).Should().Throw<ArgumentNullException>();
+        }
+
+        [Test]
+        public static void CanCallWriteSettings()
+        {
+            // Arrange
+            var settings = new Dictionary<string, string>();
+            settings[nameof(IGenerationOptions.ActComment)] = "get the stuff set up";
+            var sourceProjectName = "TestValue1054864886";
+            var targetProjectName = "TestValue1677848185";
+
+            // Act
+            var tempFile = Path.GetTempFileName();
+            ConfigExporter.WriteSettings(tempFile, settings, sourceProjectName, targetProjectName);
+            var text = File.ReadAllText(tempFile);
+            File.Delete(tempFile);
+
+            // Assert
+            text.Should().Be(
+                "[GenerationOptions]\r\n" +
+                "ActComment=get the stuff set up\r\n" +
+                "\r\n" +
+                "[Mappings]\r\n" +
+                "TestValue1054864886=TestValue1677848185\r\n");
         }
     }
 }

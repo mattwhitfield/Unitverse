@@ -9,10 +9,10 @@
     {
         public static IUnitTestGeneratorOptions Create(string projectFilePath, IUnitTestGeneratorOptions options)
         {
-            return Create(projectFilePath, options.GenerationOptions, options.NamingOptions, options.StrategyOptions, options.StatisticsCollectionEnabled);
+            return Create(projectFilePath, options.GenerationOptions, options.NamingOptions, options.StrategyOptions, options.StatisticsCollectionEnabled, options.ProjectMappings);
         }
 
-        public static IUnitTestGeneratorOptions Create(string projectFilePath, IGenerationOptions generationOptions, INamingOptions namingOptions, IStrategyOptions strategyOptions, bool statisticsGenerationEnabled)
+        public static IUnitTestGeneratorOptions Create(string projectFilePath, IGenerationOptions generationOptions, INamingOptions namingOptions, IStrategyOptions strategyOptions, bool statisticsGenerationEnabled, Dictionary<string, string> projectMappings)
         {
             var mutableGenerationOptions = new MutableGenerationOptions(generationOptions);
             var mutableNamingOptions = new MutableNamingOptions(namingOptions);
@@ -22,7 +22,7 @@
             var namingOptionsMutators = EditorConfigFieldMapper.CreateMutatorSet<MutableNamingOptions>();
             var strategyOptionsMutators = EditorConfigFieldMapper.CreateMutatorSet<MutableStrategyOptions>();
 
-            var membersSetByFilename = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var fieldSources = new Dictionary<string, ConfigurationSource>(StringComparer.OrdinalIgnoreCase);
 
             if (!string.IsNullOrWhiteSpace(projectFilePath))
             {
@@ -32,24 +32,43 @@
                 {
                     foreach (var section in file.Sections)
                     {
-                        foreach (var pair in section)
+                        if (section.Glob.EndsWith("/Mappings", StringComparison.OrdinalIgnoreCase))
                         {
-                            string? memberName;
-                            var applied = Apply(mutableGenerationOptions, pair, generationOptionsMutators, out memberName) ||
-                                          Apply(mutableNamingOptions, pair, namingOptionsMutators, out memberName) ||
-                                          Apply(mutableStrategyOptions, pair, strategyOptionsMutators, out memberName);
-
-                            if (applied && memberName != null)
+                            foreach (var pair in section)
                             {
-                                // record
-                                membersSetByFilename[memberName] = Path.Combine(file.Directory, CoreConstants.ConfigFileName);
+                                projectMappings[pair.Key] = pair.Value;
+                            }
+                        }
+                        else
+                        {
+                            foreach (var pair in section)
+                            {
+                                string? memberName;
+                                var applied = Apply(mutableGenerationOptions, pair, generationOptionsMutators, out memberName) ||
+                                              Apply(mutableNamingOptions, pair, namingOptionsMutators, out memberName) ||
+                                              Apply(mutableStrategyOptions, pair, strategyOptionsMutators, out memberName);
+
+                                if (applied && memberName != null)
+                                {
+                                    // record
+                                    fieldSources[memberName] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, Path.Combine(file.Directory, CoreConstants.ConfigFileName));
+                                }
                             }
                         }
                     }
                 }
             }
 
-            return new UnitTestGeneratorOptions(mutableGenerationOptions, mutableNamingOptions, mutableStrategyOptions, statisticsGenerationEnabled, membersSetByFilename);
+            SessionConfigStore.RestoreSettings(mutableGenerationOptions, field => fieldSources[field] = new ConfigurationSource(ConfigurationSourceType.Session));
+            SessionConfigStore.RestoreSettings(mutableNamingOptions, field => fieldSources[field] = new ConfigurationSource(ConfigurationSourceType.Session));
+            SessionConfigStore.RestoreSettings(mutableStrategyOptions, field => fieldSources[field] = new ConfigurationSource(ConfigurationSourceType.Session));
+
+            foreach (var pair in SessionConfigStore.ProjectMappings)
+            {
+                projectMappings[pair.Key] = pair.Value;
+            }
+
+            return new UnitTestGeneratorOptions(mutableGenerationOptions, mutableNamingOptions, mutableStrategyOptions, statisticsGenerationEnabled, fieldSources, projectMappings);
         }
 
         private static bool Apply(object instance, KeyValuePair<string, string> valuePair, Dictionary<string, TypeMemberSetter> mutatorSet, out string? memberName)

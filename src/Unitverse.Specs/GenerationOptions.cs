@@ -16,7 +16,7 @@
                 UseFluentAssertions = false,
             };
 
-            return new UnitTestGeneratorOptions(generationOptions, new DefaultNamingOptions(), new DefaultStrategyOptions(), false, new Dictionary<string, string>());
+            return new UnitTestGeneratorOptions(generationOptions, new DefaultNamingOptions(), new DefaultStrategyOptions(), false, new Dictionary<string, ConfigurationSource>());
         }
     }
 }

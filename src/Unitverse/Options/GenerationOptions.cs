@@ -117,12 +117,6 @@
         [ExcludedFromUserInterface]
         public UserInterfaceModes UserInterfaceMode { get; set; } = UserInterfaceModes.WhenTargetNotFound;
 
-        [Category("User Interface")]
-        [DisplayName("Remember selected target by default")]
-        [Description("Whether to pre-select the check box in the user interface that controls whether the target project should be remembered for the session")]
-        [ExcludedFromUserInterface]
-        public bool RememberManuallySelectedTargetProjectByDefault { get; set; } = true;
-
         [Category("Naming")]
         [DisplayName("Fallback type finding method")]
         [Description("The method to use when finding tests by the file name does not work")]

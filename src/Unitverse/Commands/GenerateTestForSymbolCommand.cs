@@ -158,7 +158,7 @@
                 messageLogger.Initialize();
 
                 var source = new ProjectItemModel(VsProjectHelper.GetProjectItem(document.FilePath));
-                var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options, true, false, messageLogger);
+                var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options, true, false, messageLogger, _package);
                 if (mapping == null)
                 {
                     return;

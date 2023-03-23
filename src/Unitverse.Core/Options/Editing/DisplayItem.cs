@@ -5,7 +5,9 @@
 
     public abstract class DisplayItem : INotifyPropertyChanged
     {
-        protected DisplayItem(string text, bool showSourceIcon, string? sourceFileName)
+        private readonly bool _showSourceIcon;
+
+        protected DisplayItem(string text, bool showSourceIcon, ConfigurationSource? configurationSource)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -13,28 +15,30 @@
             }
 
             Text = text.Replace("&&", "&");
-            SourceFileName = sourceFileName;
-            if (showSourceIcon)
-            {
-                ShowVsConfigSource = string.IsNullOrWhiteSpace(sourceFileName);
-                ShowFileConfigSource = !ShowVsConfigSource;
-            }
+            SourceFileName = configurationSource?.FileName ?? string.Empty;
+            _showSourceIcon = showSourceIcon;
+            SetSourceState(configurationSource);
         }
 
-        public void SetSourceState(bool showAutoDetectionSource, bool showVsConfigSource)
+        public void SetSourceState(ConfigurationSource? source)
         {
-            if (ShowVsConfigSource || ShowFileConfigSource || ShowAutoDetectionSource)
+            if (_showSourceIcon)
             {
-                ShowAutoDetectionSource = showAutoDetectionSource;
-                ShowVsConfigSource = showVsConfigSource && !showAutoDetectionSource;
-                ShowFileConfigSource = !showVsConfigSource && !showAutoDetectionSource;
-                RaisePropertyChanged(nameof(ShowAutoDetectionSource));
+                ShowVsConfigSource = source?.SourceType == ConfigurationSourceType.VisualStudio;
+                ShowSessionConfigSource = source?.SourceType == ConfigurationSourceType.Session;
+                ShowFileConfigSource = source?.SourceType == ConfigurationSourceType.ConfigurationFile;
+                ShowAutoDetectionSource = source?.SourceType == ConfigurationSourceType.AutoDetection;
+
                 RaisePropertyChanged(nameof(ShowVsConfigSource));
+                RaisePropertyChanged(nameof(ShowSessionConfigSource));
                 RaisePropertyChanged(nameof(ShowFileConfigSource));
+                RaisePropertyChanged(nameof(ShowAutoDetectionSource));
             }
         }
 
         public bool ShowVsConfigSource { get; private set; }
+
+        public bool ShowSessionConfigSource { get; private set; }
 
         public bool ShowFileConfigSource { get; private set; }
 

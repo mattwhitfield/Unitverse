@@ -222,16 +222,6 @@ namespace Unitverse.Core.Tests.Helpers
         }
 
         [Test]
-        public void CanGetRememberManuallySelectedTargetProjectByDefault()
-        {
-            var instance = new DetectedGenerationOptions(_baseOptions, null, null, null, null, null, null);
-            _baseOptions.RememberManuallySelectedTargetProjectByDefault.Returns(true);
-            Assert.That(instance.RememberManuallySelectedTargetProjectByDefault, Is.EqualTo(true));
-            _baseOptions.RememberManuallySelectedTargetProjectByDefault.Returns(false);
-            Assert.That(instance.RememberManuallySelectedTargetProjectByDefault, Is.EqualTo(false));
-        }
-
-        [Test]
         public void CanGetFallbackTargetFinding()
         {
             var instance = new DetectedGenerationOptions(_baseOptions, null, null, null, null, null, null);

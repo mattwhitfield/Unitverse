@@ -38,7 +38,7 @@ namespace Unitverse.Views
                        string.Equals(propertyName, nameof(IGenerationOptions.UseAutoFixtureForMocking), StringComparison.OrdinalIgnoreCase);
             }
 
-            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), _generationOptions, true, projectOptions.GetFieldSourceFileName, IsValidProperty).ToList();
+            GenerationOptionsItems = EditableItemExtractor.ExtractFrom(new GenerationOptions(), _generationOptions, true, projectOptions.GetFieldSource, IsValidProperty).ToList();
         }
 
         internal void CreateManifest()

@@ -4,13 +4,14 @@ namespace Unitverse.Core.Tests.Options.Editing
     using System;
     using NUnit.Framework;
     using FluentAssertions;
+    using Unitverse.Core.Options;
 
     [TestFixture]
     public class DisplayItemTests
     {
         private class TestDisplayItem : DisplayItem
         {
-            public TestDisplayItem(string text, bool showSourceIcon, string sourceFileName) : base(text, showSourceIcon, sourceFileName)
+            public TestDisplayItem(string text, bool showSourceIcon, ConfigurationSource source) : base(text, showSourceIcon, source)
             {
             }
 
@@ -84,20 +85,32 @@ namespace Unitverse.Core.Tests.Options.Editing
         public void ShowVsConfigSourceIsInitializedCorrectly()
         {
             _testClass.ShowVsConfigSource.Should().Be(false);
-            _testClass = new TestDisplayItem(_text, true, null);
+            _testClass = new TestDisplayItem(_text, true, new ConfigurationSource(ConfigurationSourceType.VisualStudio));
             _testClass.ShowVsConfigSource.Should().Be(true);
-            _testClass = new TestDisplayItem(_text, true, "someFile.Dat");
-            _testClass.ShowVsConfigSource.Should().Be(false);
         }
 
         [Test]
         public void ShowFileConfigSourceeIsInitializedCorrectly()
         {
             _testClass.ShowFileConfigSource.Should().Be(false);
-            _testClass = new TestDisplayItem(_text, true, null);
-            _testClass.ShowFileConfigSource.Should().Be(false);
-            _testClass = new TestDisplayItem(_text, true, "someFile.Dat");
+            _testClass = new TestDisplayItem(_text, true, new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "some.file"));
             _testClass.ShowFileConfigSource.Should().Be(true);
+        }
+
+        [Test]
+        public void ShowAutoDetectionSourceIsInitializedCorrectly()
+        {
+            _testClass.ShowAutoDetectionSource.Should().Be(false);
+            _testClass = new TestDisplayItem(_text, true, new ConfigurationSource(ConfigurationSourceType.AutoDetection));
+            _testClass.ShowAutoDetectionSource.Should().Be(true);
+        }
+
+        [Test]
+        public void ShowSessionConfigSourceIsInitializedCorrectly()
+        {
+            _testClass.ShowSessionConfigSource.Should().Be(false);
+            _testClass = new TestDisplayItem(_text, true, new ConfigurationSource(ConfigurationSourceType.Session));
+            _testClass.ShowSessionConfigSource.Should().Be(true);
         }
 
         [Test]
