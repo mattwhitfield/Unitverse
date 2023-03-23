@@ -10,14 +10,32 @@ It is worth noting that these options apply in slightly different scopes.
 
 * Options configured in the Visual Studio Options dialog apply to all solutions
 * Options configured in a `.unitTestGeneratorConfig` file apply to all solutions at the same level or a child level on disk
+* Options that are applied to the session using the per-generation user interface persist until you close Visual Studio.
 * Options that are detected from the selected target project apply to that individual generation (if 'Detect target frameworks' is set to true).
-* Options configured in the per-generation UI only apply to that individual generation (with the exception of the selection of target project, which persists until you close Visual Studio).
-
-If you are not sure how a particular option has been configured, you can open up the per-generation UI, which has a small icon next to each option which you can hover to find out where a configuration value came from. Also, options that are detected from a target project that differ from the options loaded from Visual Studio / config files will cause a message to be logged to the Output window in Visual Studio.
 
 You can create a `.unitTestGeneratorConfig` file which contains the options you currently have configured in Visual Studio by going to the 'Export' options page. For more information on this, see the 'Setting options per-project' section below.
 
 The per-generation user interace is, by default, set to show only when a target project can not be automatically matched. You can change this by going to Tools->Options->Unitverse or by setting the relevant option in a `.unitTestGeneratorConfig` file, or by holding the Control key while selecting any 'Generate tests...' menu item. This user interface also allows you to override the target project selection, if you want to generate tests in a different project or because your naming format isn't consistent. To see what the user interface looks like, please see the 'Per-generation user interface' section below.
+
+### Options layers
+
+The options are also layered - configuration files and session settings are not a complete set of settings - just what is configured in the file or dialog. The layers are loaded in order:
+
+1. Visual studio settings
+2. Configuration files
+3. Session settings
+4. Framework auto-detection
+
+If you are not sure how a particular option has been configured, you can open up the per-generation UI, which has a small icon next to each option which you can hover to find out where a configuration value came from. Also, options that are detected from a target project that differ from the options loaded from Visual Studio / config files will cause a message to be logged to the Output window in Visual Studio.
+
+The source icons are as follows:
+
+![Options icons](assets/Options-Icons.png)
+
+* The file icon is for settings loaded from a configuration file, and hovering the file icon with your mouse will tell you which configuration file the option was loaded from.
+* The clock icon is for settings that were previously selected in the per-generation UI and 'This session' was selected next to 'Apply to'.
+* The Visual Studio icon is for settings configured in the Options dialog.
+* The magnifying glass icon is for settings that have been automatically detected from the selected target project.
 
 ## Generation Options ⚙
 
@@ -35,6 +53,18 @@ The per-generation user interace is, by default, set to show only when a target 
 The default for project naming is `{0}.Tests`. For example, a project named `MyProject` would be associated with a test project called `MyProject.Tests`.
 
 You can specify multiple patterns in the 'Project naming convention' option by separating them with a semicolon. So for example, if the naming pattern was set to `{0}.Tests;{0}.UnitTests;{0}.Cheese` then it would first look for `MyProject.Tests`, then `MyProject.UnitTests` and finally `MyProject.Cheese`.
+
+#### Manual Project Mapping
+
+You can override the default naming behaviour by going to Tools->Options->Unitverse->Project Mappings and entering the source and target project. Alternatively, you can set these in a `.unitTestGeneratorConfig` file with a `[Mappings]` section:
+
+```
+[Mappings]
+SourceProject=TargetProject
+OtherSourceProject=OtherTargetProject
+```
+
+In this scenario, tests for types in the SourceProject project would be created in the TargetProject project. Note that when adding mappings in `.unitTestGeneratorConfig` files, the changes are additive. So any extra mappings defined in configuration files defined closer to the project will add to the list of mappings already defined, not replace them.
 
 ### Default Class/File Naming
 
@@ -110,7 +140,12 @@ You can also use a UI to modify a `.unitTestGeneratorConfig` file by double-clic
 
 ## Per-generation user interface 🖥
 
-If you are using the per-generation user interface (either because you have configured it in Tools->Options->Unitverse or because you are holding Control while selecting a 'Generate tests...' menu item), then a dialog is shown before each generation. The dialog is organised into four tabs as shown in the following images:
+If you are using the per-generation user interface (either because you have configured it in Tools->Options->Unitverse or because you are holding Control while selecting a 'Generate tests...' menu item), then a dialog is shown before each generation. The dialog is organised into four tabs as shown in the below images. At the bottom is a drop-down labeled 'Apply to:' - this allows you to save the options that you have selected. The options are:
+
+* This generation only - the options selected are not saved, and apply to the current generation only
+* This session - the options are persisted until Visual Studio closes.
+* Configuration file - you are able to choose a folder in which to save a `.unitTestGeneratorConfig`. Note that this will overwrite any existing file.
+* Visual studio settings - the options will be persisted to the Visual Studio options
 
 Setting the target project in which tests will be generated:
 
