@@ -90,7 +90,7 @@
                     writer.WriteLine();
                     writer.WriteLine("[Mappings]");
 
-                    foreach (var pair in mappings)
+                    foreach (var pair in mappings.OrderBy(x => x.Key))
                     {
                         writer.WriteLine(pair.Key + "=" + pair.Value);
                     }
