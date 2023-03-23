@@ -1,5 +1,6 @@
 ﻿namespace Unitverse.Core.Options
 {
+    using Irony.Parsing.Construction;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -35,15 +36,15 @@
                 Tuple.Create<object, string>(options.StrategyOptions, "StrategyOptions"),
             };
 
-            Write(targetFileName, objects);
+            Write(targetFileName, objects, null);
         }
 
-        public static void WriteTo(string targetFileName, IEnumerable<object> sources)
+        public static void WriteTo(string targetFileName, IEnumerable<object> sources, IDictionary<string, string> mappings)
         {
-            Write(targetFileName, sources.Select(x => Tuple.Create(x, x.GetType().Name)));
+            Write(targetFileName, sources.Select(x => Tuple.Create(x, x.GetType().Name)), mappings);
         }
 
-        private static void Write(string targetFileName, IEnumerable<Tuple<object, string>> sources)
+        private static void Write(string targetFileName, IEnumerable<Tuple<object, string>> sources, IDictionary<string, string>? mappings)
         {
             if (string.IsNullOrWhiteSpace(targetFileName))
             {
@@ -81,6 +82,17 @@
                         var propertyName = property.Name;
 
                         writer.WriteLine(propertyName + "=" + propertyValue);
+                    }
+                }
+
+                if (mappings != null && mappings.Any())
+                {
+                    writer.WriteLine();
+                    writer.WriteLine("[Mappings]");
+
+                    foreach (var pair in mappings)
+                    {
+                        writer.WriteLine(pair.Key + "=" + pair.Value);
                     }
                 }
             }

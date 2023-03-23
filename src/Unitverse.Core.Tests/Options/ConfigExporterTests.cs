@@ -32,7 +32,7 @@ namespace Unitverse.Core.Tests.Options
             var testObject2 = new TestObject2 { Prop2 = "prop2", ThisIsAnotherProp = 52332 };
             var sources = new object[] { testObject1, testObject2 };
             var tempFile = Path.GetTempFileName();
-            ConfigExporter.WriteTo(tempFile, sources);
+            ConfigExporter.WriteTo(tempFile, sources, null);
             var text = File.ReadAllText(tempFile);
             File.Delete(tempFile);
 
@@ -46,10 +46,37 @@ namespace Unitverse.Core.Tests.Options
                 "ThisIsAnotherProp=52332\r\n");
         }
 
+
+        [Test]
+        public static void CanCallWriteToWithMappings()
+        {
+            var testObject1 = new TestObject1 { Prop1 = "prop1", ThisIsAProp = true };
+            var testObject2 = new TestObject2 { Prop2 = "prop2", ThisIsAnotherProp = 52332 };
+            var mappings = new Dictionary<string, string> { { "A", "B" }, { "C", "D" } };
+            var sources = new object[] { testObject1, testObject2 };
+            var tempFile = Path.GetTempFileName();
+            ConfigExporter.WriteTo(tempFile, sources, mappings);
+            var text = File.ReadAllText(tempFile);
+            File.Delete(tempFile);
+
+            text.Should().Be(
+                "[TestObject1]\r\n" +
+                "Prop1=prop1\r\n" +
+                "ThisIsAProp=True\r\n" +
+                "\r\n" +
+                "[TestObject2]\r\n" +
+                "Prop2=prop2\r\n" +
+                "ThisIsAnotherProp=52332\r\n" +
+                "\r\n" +
+                "[Mappings]\r\n" +
+                "A=B\r\n" +
+                "C=D\r\n");
+        }
+
         [Test]
         public static void CannotCallWriteToWithNullSources()
         {
-            FluentActions.Invoking(() => ConfigExporter.WriteTo("TestValue525457552", default(IEnumerable<object>))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => ConfigExporter.WriteTo("TestValue525457552", default(IEnumerable<object>), null)).Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(null)]
@@ -57,7 +84,7 @@ namespace Unitverse.Core.Tests.Options
         [TestCase("   ")]
         public static void CannotCallWriteToWithInvalidTargetFileName(string value)
         {
-            FluentActions.Invoking(() => ConfigExporter.WriteTo(value, new[] { new object(), new object(), new object() })).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => ConfigExporter.WriteTo(value, new[] { new object(), new object(), new object() }, null)).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
