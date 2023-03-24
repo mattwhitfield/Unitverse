@@ -4,6 +4,7 @@
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class ConstructorFilterModel : IConstructor
     {
@@ -22,6 +23,13 @@
 
         public IEnumerable<IAttribute> Attributes { get; }
 
+        public bool ShouldGenerate => _source.ShouldGenerate;
+
         public string TemplateType => "Constructor";
+
+        public NamingContext CreateNamingContext(NamingContext baseNamingContext, ModelGenerationContext generationContext)
+        {
+            return baseNamingContext.WithMemberName(_source.Name);
+        }
     }
 }

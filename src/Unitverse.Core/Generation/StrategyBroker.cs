@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -16,6 +17,8 @@
     using Unitverse.Core.Strategies.OperatorGeneration;
     using Unitverse.Core.Strategies.PropertyGeneration;
     using Unitverse.Core.Templating;
+    using Unitverse.Core.Templating.Model;
+    using Unitverse.Core.Templating.Model.Implementation;
 
     internal static class StrategyBroker
     {
@@ -35,19 +38,67 @@
             targetType = AddGeneratedItems(generationContext, targetType, new PropertyGenerationStrategyFactory(generationContext.FrameworkSet), x => x.Properties, x => x.ShouldGenerate, (c, x) => c.WithMemberName(x.Name));
             targetType = AddGeneratedItems(generationContext, targetType, new IndexerGenerationStrategyFactory(generationContext.FrameworkSet), x => x.Indexers, x => x.ShouldGenerate, (c, x) => c.WithMemberName(generationContext.Model.GetIndexerName(x)));
 
-            //// TODO - scan for templates, if there are any then construct the template model and evaluate
-            //// TODO - add option to see if templating is enabled, if not - return
-            ////if (generationContext.FrameworkSet.Options.GenerationOptions.UseTemplating)
-            ////{
-            ////    var templates = TemplateStore.LoadTemplatesFor(sourceFolder);
-            ////    if (templates.Any())
-            ////    { }
-            ////}
+            var path =
+                generationContext.FrameworkSet.Options.SourceProjectPath ??
+                generationContext.FrameworkSet.Options.SolutionPath;
+
+            if (File.Exists(path))
+            {
+                path = Path.GetDirectoryName(path);
+            }
+
+            if (Directory.Exists(path))
+            {
+                // scan for templates, if there are any then construct the template model and evaluate
+                var templates = TemplateStore.LoadTemplatesFor(path, generationContext.MessageLogger);
+                if (templates.Any())
+                {
+                    var classModel = new ClassFilterModel(generationContext.Model);
+                    var semanticModel = generationContext.Model.SemanticModel;
+                    foreach (var template in templates)
+                    {
+                        targetType = AddGeneratedTemplates(generationContext, targetType, template, classModel, x => x.Constructors);
+                        targetType = AddGeneratedTemplates(generationContext, targetType, template, classModel, x => x.Methods);
+                        targetType = AddGeneratedTemplates(generationContext, targetType, template, classModel, x => x.Properties);
+                    }
+                }
+            }
 
             return targetType;
         }
 
-        private static TypeDeclarationSyntax AddGeneratedItems<T>(ModelGenerationContext generationContext, TypeDeclarationSyntax declaration, ItemGenerationStrategyFactory<T> factory, Func<ClassModel, IEnumerable<T>> selector, Func<T, bool> shouldGenerate, Func<NamingContext, T, NamingContext> nameDecorator)
+        private static TypeDeclarationSyntax AddGeneratedTemplates<T>(
+            ModelGenerationContext generationContext,
+            TypeDeclarationSyntax declaration,
+            ITemplate template,
+            IClass classModel,
+            Func<IClass, IEnumerable<T>> selector)
+            where T : ITemplateTarget
+        {
+            foreach (var model in selector(classModel))
+            {
+                if (model.ShouldGenerate)
+                {
+                    if (template.AppliesTo(model, classModel))
+                    {
+                        var namingContext = model.CreateNamingContext(generationContext.BaseNamingContext, generationContext);
+                        var method = template.Create(generationContext.FrameworkSet, model, classModel, namingContext);
+
+                        declaration = EmitMethod(generationContext, declaration, method);
+                    }
+                }
+            }
+
+            return declaration;
+        }
+
+        private static TypeDeclarationSyntax AddGeneratedItems<T>(
+            ModelGenerationContext generationContext,
+            TypeDeclarationSyntax declaration,
+            ItemGenerationStrategyFactory<T> factory,
+            Func<ClassModel, IEnumerable<T>> selector,
+            Func<T, bool> shouldGenerate,
+            Func<NamingContext, T, NamingContext> nameDecorator)
         {
             foreach (var member in selector(generationContext.Model))
             {

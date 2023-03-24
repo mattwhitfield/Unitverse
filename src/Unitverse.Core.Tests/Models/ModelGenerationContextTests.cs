@@ -7,6 +7,7 @@ namespace Unitverse.Core.Tests.Models
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Options;
     using NUnit.Framework;
+    using Unitverse.Core.Helpers;
 
     [TestFixture]
     public class ModelGenerationContextTests
@@ -16,6 +17,7 @@ namespace Unitverse.Core.Tests.Models
         private IFrameworkSet _frameworkSet;
         private bool _withRegeneration;
         private NamingContext _baseNamingContext;
+        private IMessageLogger _messageLogger;
 
         [SetUp]
         public void SetUp()
@@ -24,14 +26,15 @@ namespace Unitverse.Core.Tests.Models
             _frameworkSet = A.Fake<IFrameworkSet>();
             _withRegeneration = false;
             _baseNamingContext = new NamingContext("TestValue1956429780");
-            _testClass = new ModelGenerationContext(_model, _frameworkSet, _withRegeneration, _baseNamingContext);
+            _messageLogger = A.Fake<IMessageLogger>();
+            _testClass = new ModelGenerationContext(_model, _frameworkSet, _withRegeneration, _baseNamingContext, _messageLogger);
         }
 
         [Test]
         public void CanConstruct()
         {
             // Act
-            var instance = new ModelGenerationContext(_model, _frameworkSet, _withRegeneration, _baseNamingContext);
+            var instance = new ModelGenerationContext(_model, _frameworkSet, _withRegeneration, _baseNamingContext, _messageLogger);
 
             // Assert
             instance.Should().NotBeNull();
@@ -40,19 +43,19 @@ namespace Unitverse.Core.Tests.Models
         [Test]
         public void CannotConstructWithNullModel()
         {
-            FluentActions.Invoking(() => new ModelGenerationContext(default(ClassModel), A.Fake<IFrameworkSet>(), false, new NamingContext("TestValue205118814"))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new ModelGenerationContext(default(ClassModel), A.Fake<IFrameworkSet>(), false, new NamingContext("TestValue205118814"), A.Fake<IMessageLogger>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullFrameworkSet()
         {
-            FluentActions.Invoking(() => new ModelGenerationContext(ClassModelProvider.Instance, default(IFrameworkSet), true, new NamingContext("TestValue1200384518"))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new ModelGenerationContext(ClassModelProvider.Instance, default(IFrameworkSet), true, new NamingContext("TestValue1200384518"), A.Fake<IMessageLogger>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotConstructWithNullBaseNamingContext()
         {
-            FluentActions.Invoking(() => new ModelGenerationContext(ClassModelProvider.Instance, A.Fake<IFrameworkSet>(), false, default(NamingContext))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => new ModelGenerationContext(ClassModelProvider.Instance, A.Fake<IFrameworkSet>(), false, default(NamingContext), A.Fake<IMessageLogger>())).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
@@ -77,6 +80,12 @@ namespace Unitverse.Core.Tests.Models
         public void BaseNamingContextIsInitializedCorrectly()
         {
             _testClass.BaseNamingContext.Should().BeSameAs(_baseNamingContext);
+        }
+
+        [Test]
+        public void MessageLoggerIsInitializedCorrectly()
+        {
+            _testClass.MessageLogger.Should().BeSameAs(_messageLogger);
         }
 
         [Test]

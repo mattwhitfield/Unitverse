@@ -254,7 +254,7 @@
             generationOptions.UseAutoFixtureForMocking = useAutoFixtureForMocking;
             generationOptions.UseFieldForAutoFixture = useFieldForAutoFixture;
 
-            var options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false, new Dictionary<string, ConfigurationSource>());
+            var options = new TestGeneratorOptions(generationOptions, namingOptions, strategyOptions);
 
             var lines = classAsText.Lines().Where(x => x.StartsWith("// #", StringComparison.Ordinal)).Select(x => x.Substring(4).Trim()).ToList();
             if (lines.Any())

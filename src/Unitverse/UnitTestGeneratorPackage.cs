@@ -51,7 +51,7 @@
             get
             {
                 var statisticsOptions = (StatisticsOptions)GetDialogPage(typeof(StatisticsOptions));
-                return new UnitTestGeneratorOptions(GenerationOptions, NamingOptions, StrategyOptions, statisticsOptions.Enabled, new Dictionary<string, ConfigurationSource>());
+                return new UnitTestGeneratorOptions(GenerationOptions, NamingOptions, StrategyOptions, statisticsOptions.Enabled, null, null, Workspace?.CurrentSolution?.FilePath ?? string.Empty, string.Empty);
             }
         }
 
