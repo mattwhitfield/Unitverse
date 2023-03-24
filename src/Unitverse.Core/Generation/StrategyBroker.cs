@@ -55,12 +55,10 @@
                 {
                     var classModel = new ClassFilterModel(generationContext.Model);
                     var semanticModel = generationContext.Model.SemanticModel;
-                    foreach (var template in templates)
-                    {
-                        targetType = AddGeneratedTemplates(generationContext, targetType, template, classModel, x => x.Constructors);
-                        targetType = AddGeneratedTemplates(generationContext, targetType, template, classModel, x => x.Methods);
-                        targetType = AddGeneratedTemplates(generationContext, targetType, template, classModel, x => x.Properties);
-                    }
+
+                    targetType = AddGeneratedTemplates(generationContext, targetType, templates, classModel, x => x.Constructors);
+                    targetType = AddGeneratedTemplates(generationContext, targetType, templates, classModel, x => x.Methods);
+                    targetType = AddGeneratedTemplates(generationContext, targetType, templates, classModel, x => x.Properties);
                 }
             }
 
@@ -70,14 +68,20 @@
         private static TypeDeclarationSyntax AddGeneratedTemplates<T>(
             ModelGenerationContext generationContext,
             TypeDeclarationSyntax declaration,
-            ITemplate template,
+            IEnumerable<ITemplate> templates,
             IClass classModel,
             Func<IClass, IEnumerable<T>> selector)
             where T : ITemplateTarget
         {
-            foreach (var model in selector(classModel))
+            var anyMatched = false;
+            foreach (var template in templates.OrderBy(x => x.Priority))
             {
-                if (model.ShouldGenerate)
+                if (anyMatched && template.IsExclusive)
+                {
+                    continue;
+                }
+
+                foreach (var model in selector(classModel).Where(x => x.ShouldGenerate))
                 {
                     if (template.AppliesTo(model, classModel))
                     {
@@ -85,6 +89,12 @@
                         var method = template.Create(generationContext.FrameworkSet, model, classModel, namingContext);
 
                         declaration = EmitMethod(generationContext, declaration, method);
+                        if (template.StopMatching)
+                        {
+                            return declaration;
+                        }
+
+                        anyMatched = true;
                     }
                 }
             }
