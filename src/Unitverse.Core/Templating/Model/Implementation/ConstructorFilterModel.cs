@@ -25,7 +25,9 @@
 
         public bool ShouldGenerate => _source.ShouldGenerate;
 
-        public string TemplateType => "Constructor";
+        public const string Target = "Constructor";
+
+        public string TemplateType => Target;
 
         public NamingContext CreateNamingContext(NamingContext baseNamingContext, ModelGenerationContext generationContext)
         {

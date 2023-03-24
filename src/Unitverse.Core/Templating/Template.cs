@@ -71,7 +71,7 @@
 
             var fieldReferenceResolver = new MultiObjectResolver(new Dictionary<string, object> { { "model", model }, { "owningType", owningType } });
 
-            var included = !IncludeExpressions.Any() || IncludeExpressions.Any(expr => expr(fieldReferenceResolver));
+            var included = !IncludeExpressions.Any() || IncludeExpressions.All(expr => expr(fieldReferenceResolver));
             if (!included)
             {
                 return false;
@@ -88,11 +88,14 @@
 
         public MethodDeclarationSyntax Create(IFrameworkSet frameworkSet, ITemplateTarget model, IClass owningType, NamingContext namingContext)
         {
-            var fieldReferenceResolver = new MultiObjectResolver(new Dictionary<string, object> { { "model", model }, { "owningType", owningType } });
+            var targets = new Dictionary<string, object> { { "model", model }, { "owningType", owningType } };
+            namingContext.AddToDictionary(targets);
+
+            var fieldReferenceResolver = new MultiObjectResolver(targets);
             var content = new ObjectPathResolver(Content).Resolve(fieldReferenceResolver);
 
             var methodHandler = frameworkSet.CreateTestMethod(TestMethodName, namingContext, IsAsync, IsStatic, Description);
-            var body = (BlockSyntax)SyntaxFactory.ParseStatement("{\n" + content + "\n}");
+            var body = (BlockSyntax)SyntaxFactory.ParseStatement("{\n" + content.TrimEnd('\r', '\n') + "\n}").NormalizeWhitespace();
 
             return (MethodDeclarationSyntax)methodHandler.Method.WithBody(body);
         }

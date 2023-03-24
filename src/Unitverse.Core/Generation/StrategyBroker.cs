@@ -56,9 +56,14 @@
                     var classModel = new ClassFilterModel(generationContext.Model);
                     var semanticModel = generationContext.Model.SemanticModel;
 
-                    targetType = AddGeneratedTemplates(generationContext, targetType, templates, classModel, x => x.Constructors);
-                    targetType = AddGeneratedTemplates(generationContext, targetType, templates, classModel, x => x.Methods);
-                    targetType = AddGeneratedTemplates(generationContext, targetType, templates, classModel, x => x.Properties);
+                    var constructorTemplates = templates.ForConstructors();
+                    targetType = AddGeneratedTemplates(generationContext, targetType, constructorTemplates, classModel, x => x.Constructors);
+
+                    var methodTemplates = templates.ForMethods();
+                    targetType = AddGeneratedTemplates(generationContext, targetType, methodTemplates, classModel, x => x.Methods);
+
+                    var propertyTemplates = templates.ForProperties();
+                    targetType = AddGeneratedTemplates(generationContext, targetType, propertyTemplates, classModel, x => x.Properties);
                 }
             }
 

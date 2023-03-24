@@ -37,7 +37,9 @@
 
         public bool ShouldGenerate => _source.ShouldGenerate;
 
-        public string TemplateType => "Method";
+        public const string Target = "Method";
+
+        public string TemplateType => Target;
 
         public NamingContext CreateNamingContext(NamingContext baseNamingContext, ModelGenerationContext generationContext)
         {

@@ -33,7 +33,9 @@
 
         public bool ShouldGenerate => _source.ShouldGenerate;
 
-        public string TemplateType => "Property";
+        public const string Target = "Property";
+
+        public string TemplateType => Target;
 
         public NamingContext CreateNamingContext(NamingContext baseNamingContext, ModelGenerationContext generationContext)
         {
