@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class IndexerGenerationStrategyFactory : ItemGenerationStrategyFactory<IIndexerModel>
     {
@@ -20,5 +21,20 @@
             new ReadWriteIndexerGenerationStrategy(_frameworkSet),
             new WriteOnlyIndexerGenerationStrategy(_frameworkSet),
         };
+
+        public override NamingContext DecorateNamingContext(NamingContext baseContext, ClassModel classModel, IIndexerModel item)
+        {
+            return baseContext.WithMemberName(classModel.GetIndexerName(item));
+        }
+
+        public override IEnumerable<IIndexerModel> GetItems(ClassModel model)
+        {
+            return model.Indexers;
+        }
+
+        public override bool ShouldGenerate(IIndexerModel item)
+        {
+            return item.ShouldGenerate;
+        }
     }
 }

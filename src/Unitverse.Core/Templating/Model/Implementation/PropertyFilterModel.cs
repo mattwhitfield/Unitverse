@@ -37,9 +37,9 @@
 
         public string TemplateType => Target;
 
-        public NamingContext CreateNamingContext(NamingContext baseNamingContext, ModelGenerationContext generationContext)
+        public NamingContext CreateNamingContext(ITemplatingContext templatingContext)
         {
-            return baseNamingContext.WithMemberName(Name);
+            return templatingContext.ModelGenerationContext.BaseNamingContext.WithMemberName(Name);
         }
     }
 }

@@ -11,9 +11,12 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Options;
     using Unitverse.Core.Templating.Model;
+    using LiquidTemplate = DotLiquid.Template;
 
     public class Template : ITemplate
     {
+        private LiquidTemplate _liquidTemplate;
+
         public Template(
             string content,
             string testMethodName,
@@ -38,6 +41,8 @@
             IsAsync = isAsync;
             IsStatic = isStatic;
             Description = description;
+
+            _liquidTemplate = LiquidTemplate.Parse(content);
         }
 
         public string Content { get; }
@@ -91,8 +96,9 @@
             var targets = new Dictionary<string, object> { { "model", model }, { "owningType", owningType } };
             namingContext.AddToDictionary(targets);
 
-            var fieldReferenceResolver = new MultiObjectResolver(targets);
-            var content = new ObjectPathResolver(Content).Resolve(fieldReferenceResolver);
+            var content = _liquidTemplate.Render(DotLiquid.Hash.FromDictionary(targets));
+            //var fieldReferenceResolver = new MultiObjectResolver(targets);
+            //content = new ObjectPathResolver(Content).Resolve(fieldReferenceResolver);
 
             var methodHandler = frameworkSet.CreateTestMethod(TestMethodName, namingContext, IsAsync, IsStatic, Description);
             var body = (BlockSyntax)SyntaxFactory.ParseStatement("{\n" + content.TrimEnd('\r', '\n') + "\n}").NormalizeWhitespace();

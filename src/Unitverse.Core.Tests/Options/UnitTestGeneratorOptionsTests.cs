@@ -34,7 +34,7 @@ namespace Unitverse.Core.Tests.Options
             _membersSetByFilename["A"] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "A.File");
             _membersSetByFilename["B"] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "B.File");
             _membersSetByFilename["Other"] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "A.File");
-            _projectMappings = new Dictionary<string, string>();
+            _projectMappings = new Dictionary<string, string> { { "A", "B" }, { "C", "D" } };
             _solutionPath = "TestValue243761049";
             _sourceProjectPath = "TestValue902166532";
             _testClass = new UnitTestGeneratorOptions(_generationOptions, _namingOptions, _strategyOptions, _statisticsCollectionEnabled, _membersSetByFilename, _projectMappings, _solutionPath, _sourceProjectPath);
@@ -115,7 +115,7 @@ namespace Unitverse.Core.Tests.Options
         [Test]
         public void ProjectMappingsIsInitializedCorrectly()
         {
-            _testClass.ProjectMappings.Should().BeSameAs(_projectMappings);
+            _testClass.ProjectMappings.Should().BeEquivalentTo(_projectMappings);
         }
 
         [Test]

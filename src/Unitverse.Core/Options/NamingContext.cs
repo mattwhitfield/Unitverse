@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Unitverse.Core.Options
+﻿namespace Unitverse.Core.Options
 {
+    using System.Collections.Generic;
+
     public class NamingContext
     {
         public NamingContext(string typeName)
@@ -35,7 +35,9 @@ namespace Unitverse.Core.Options
         {
             if (!string.IsNullOrWhiteSpace(value))
             {
+#pragma warning disable CS8604 // Possible null reference argument - nope
                 target.Add(name, value);
+#pragma warning restore CS8604 // Possible null reference argument.
             }
         }
 

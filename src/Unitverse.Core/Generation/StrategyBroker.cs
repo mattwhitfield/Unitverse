@@ -26,21 +26,16 @@
         {
             targetType = new ClassDecorationStrategyFactory(generationContext.FrameworkSet).Apply(targetType, generationContext.Model);
 
-            targetType = AddGeneratedItems(generationContext, targetType, new ClassLevelGenerationStrategyFactory(generationContext.FrameworkSet), x => new[] { x }, x => x.Constructors.Any(c => c.ShouldGenerate) || (!x.Constructors.Any() && x.Properties.Any(p => p.HasInit)), (c, x) => c);
+            targetType = ApplyStandardStrategies(targetType, generationContext);
 
-            if (generationContext.Model.Interfaces.Count > 0)
-            {
-                targetType = AddGeneratedItems(generationContext, targetType, new InterfaceGenerationStrategyFactory(generationContext.FrameworkSet), x => new[] { x }, x => x.ShouldGenerate, (c, x) => c);
-            }
+            targetType = ApplyTemplates(targetType, generationContext);
 
-            targetType = AddGeneratedItems(generationContext, targetType, new MethodGenerationStrategyFactory(generationContext.FrameworkSet), x => x.Methods, x => x.ShouldGenerate, (c, x) => c.WithMemberName(generationContext.Model.GetMethodUniqueName(x), x.Name));
-            targetType = AddGeneratedItems(generationContext, targetType, new OperatorGenerationStrategyFactory(generationContext.FrameworkSet), x => x.Operators, x => x.ShouldGenerate, (c, x) => c.WithMemberName(generationContext.Model.GetOperatorUniqueName(x), x.Name));
-            targetType = AddGeneratedItems(generationContext, targetType, new PropertyGenerationStrategyFactory(generationContext.FrameworkSet), x => x.Properties, x => x.ShouldGenerate, (c, x) => c.WithMemberName(x.Name));
-            targetType = AddGeneratedItems(generationContext, targetType, new IndexerGenerationStrategyFactory(generationContext.FrameworkSet), x => x.Indexers, x => x.ShouldGenerate, (c, x) => c.WithMemberName(generationContext.Model.GetIndexerName(x)));
+            return targetType;
+        }
 
-            var path =
-                generationContext.FrameworkSet.Options.SourceProjectPath ??
-                generationContext.FrameworkSet.Options.SolutionPath;
+        private static TypeDeclarationSyntax ApplyTemplates(TypeDeclarationSyntax targetType, ModelGenerationContext generationContext)
+        {
+            var path = generationContext.FrameworkSet.Options.SourceProjectPath ?? generationContext.FrameworkSet.Options.SolutionPath;
 
             if (File.Exists(path))
             {
@@ -53,47 +48,53 @@
                 var templates = TemplateStore.LoadTemplatesFor(path, generationContext.MessageLogger);
                 if (templates.Any())
                 {
-                    var classModel = new ClassFilterModel(generationContext.Model);
-                    var semanticModel = generationContext.Model.SemanticModel;
+                    var context = new TemplatingContext(generationContext, templates);
 
-                    var constructorTemplates = templates.ForConstructors();
-                    targetType = AddGeneratedTemplates(generationContext, targetType, constructorTemplates, classModel, x => x.Constructors);
-
-                    var methodTemplates = templates.ForMethods();
-                    targetType = AddGeneratedTemplates(generationContext, targetType, methodTemplates, classModel, x => x.Methods);
-
-                    var propertyTemplates = templates.ForProperties();
-                    targetType = AddGeneratedTemplates(generationContext, targetType, propertyTemplates, classModel, x => x.Properties);
+                    targetType = AddGeneratedTemplates(context.ForConstructors(), targetType);
+                    targetType = AddGeneratedTemplates(context.ForMethods(), targetType);
+                    targetType = AddGeneratedTemplates(context.ForProperties(), targetType);
                 }
             }
 
             return targetType;
         }
 
-        private static TypeDeclarationSyntax AddGeneratedTemplates<T>(
-            ModelGenerationContext generationContext,
-            TypeDeclarationSyntax declaration,
-            IEnumerable<ITemplate> templates,
-            IClass classModel,
-            Func<IClass, IEnumerable<T>> selector)
-            where T : ITemplateTarget
+        private static TypeDeclarationSyntax ApplyStandardStrategies(TypeDeclarationSyntax targetType, ModelGenerationContext generationContext)
+        {
+            targetType = AddGeneratedItems(generationContext, targetType, new ClassLevelGenerationStrategyFactory(generationContext.FrameworkSet));
+
+            if (generationContext.Model.Interfaces.Count > 0)
+            {
+                targetType = AddGeneratedItems(generationContext, targetType, new InterfaceGenerationStrategyFactory(generationContext.FrameworkSet));
+            }
+
+            targetType = AddGeneratedItems(generationContext, targetType, new MethodGenerationStrategyFactory(generationContext.FrameworkSet));
+            targetType = AddGeneratedItems(generationContext, targetType, new OperatorGenerationStrategyFactory(generationContext.FrameworkSet));
+            targetType = AddGeneratedItems(generationContext, targetType, new PropertyGenerationStrategyFactory(generationContext.FrameworkSet));
+            targetType = AddGeneratedItems(generationContext, targetType, new IndexerGenerationStrategyFactory(generationContext.FrameworkSet));
+            return targetType;
+        }
+
+        private static TypeDeclarationSyntax AddGeneratedTemplates(
+            SpecificTemplatingContext templatingContext,
+            TypeDeclarationSyntax declaration)
         {
             var anyMatched = false;
-            foreach (var template in templates.OrderBy(x => x.Priority))
+            foreach (var template in templatingContext.Templates.OrderBy(x => x.Priority))
             {
                 if (anyMatched && template.IsExclusive)
                 {
                     continue;
                 }
 
-                foreach (var model in selector(classModel).Where(x => x.ShouldGenerate))
+                foreach (var model in templatingContext.Targets.Where(x => x.ShouldGenerate))
                 {
-                    if (template.AppliesTo(model, classModel))
+                    if (template.AppliesTo(model, templatingContext.ClassModel))
                     {
-                        var namingContext = model.CreateNamingContext(generationContext.BaseNamingContext, generationContext);
-                        var method = template.Create(generationContext.FrameworkSet, model, classModel, namingContext);
+                        var namingContext = model.CreateNamingContext(templatingContext);
+                        var method = template.Create(templatingContext.ModelGenerationContext.FrameworkSet, model, templatingContext.ClassModel, namingContext);
 
-                        declaration = EmitMethod(generationContext, declaration, method);
+                        declaration = EmitMethod(templatingContext.ModelGenerationContext, declaration, method);
                         if (template.StopMatching)
                         {
                             return declaration;
@@ -110,16 +111,13 @@
         private static TypeDeclarationSyntax AddGeneratedItems<T>(
             ModelGenerationContext generationContext,
             TypeDeclarationSyntax declaration,
-            ItemGenerationStrategyFactory<T> factory,
-            Func<ClassModel, IEnumerable<T>> selector,
-            Func<T, bool> shouldGenerate,
-            Func<NamingContext, T, NamingContext> nameDecorator)
+            ItemGenerationStrategyFactory<T> factory)
         {
-            foreach (var member in selector(generationContext.Model))
+            foreach (var member in factory.GetItems(generationContext.Model))
             {
-                if (shouldGenerate(member))
+                if (factory.ShouldGenerate(member))
                 {
-                    var namingContext = nameDecorator(generationContext.BaseNamingContext, member);
+                    var namingContext = factory.DecorateNamingContext(generationContext.BaseNamingContext, generationContext.Model, member);
                     foreach (var methodHandler in factory.CreateFor(member, generationContext.Model, namingContext, generationContext.FrameworkSet.Options.StrategyOptions))
                     {
                         var method = methodHandler.Method;

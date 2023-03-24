@@ -1,7 +1,6 @@
 ﻿namespace Unitverse.Core.Templating.Model
 {
     using System.Collections.Generic;
-    using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
     public interface ITemplateTarget
@@ -12,6 +11,6 @@
 
         bool ShouldGenerate { get; }
 
-        NamingContext CreateNamingContext(NamingContext baseNamingContext, ModelGenerationContext generationContext);
+        NamingContext CreateNamingContext(ITemplatingContext templatingContext);
     }
 }

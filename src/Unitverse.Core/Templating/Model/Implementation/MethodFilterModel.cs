@@ -41,9 +41,10 @@
 
         public string TemplateType => Target;
 
-        public NamingContext CreateNamingContext(NamingContext baseNamingContext, ModelGenerationContext generationContext)
+        public NamingContext CreateNamingContext(ITemplatingContext templatingContext)
         {
-            return baseNamingContext.WithMemberName(generationContext.Model.GetMethodUniqueName(_source), Name);
+            return templatingContext.ModelGenerationContext.BaseNamingContext
+                .WithMemberName(templatingContext.ModelGenerationContext.Model.GetMethodUniqueName(_source), Name);
         }
     }
 }

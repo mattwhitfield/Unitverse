@@ -70,7 +70,7 @@ namespace Unitverse.Core.Tests.Options
                 File.WriteAllText(Path.Combine(pathB, CoreConstants.ConfigFileName), "framework-type=NUnit3");
                 File.WriteAllText(Path.Combine(pathC, CoreConstants.ConfigFileName), "framework-type=NUnit2");
 
-                var result = UnitTestGeneratorOptionsFactory.Create(solutionFilePath, "projPath", generationOptions, namingOptions, strategyOptions, false, new Dictionary<string, string>());
+                var result = UnitTestGeneratorOptionsFactory.Create("", solutionFilePath, generationOptions, namingOptions, strategyOptions, false, new Dictionary<string, string>());
                 Assert.That(result.GenerationOptions.FrameworkType, Is.EqualTo(TestFrameworkTypes.NUnit2));
                 Assert.That(result.GenerationOptions.MockingFrameworkType, Is.EqualTo(MockingFrameworkType.NSubstitute));
 
