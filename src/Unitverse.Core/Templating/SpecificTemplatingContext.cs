@@ -7,7 +7,7 @@
 
     public class SpecificTemplatingContext : ITemplatingContext
     {
-        public SpecificTemplatingContext(ModelGenerationContext modelGenerationContext, IList<ITemplate> templates, IClass classModel, IEnumerable<ITemplateTarget> targets)
+        public SpecificTemplatingContext(ModelGenerationContext modelGenerationContext, IList<ITemplate> templates, IOwningType classModel, IEnumerable<ITemplateTarget> targets)
         {
             ModelGenerationContext = modelGenerationContext;
             Templates = templates;
@@ -19,7 +19,7 @@
 
         public IList<ITemplate> Templates { get; }
 
-        public IClass ClassModel { get; }
+        public IOwningType ClassModel { get; }
 
         public IList<ITemplateTarget> Targets { get; }
     }

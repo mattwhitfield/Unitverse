@@ -31,8 +31,8 @@
 
         string Description { get; }
 
-        bool AppliesTo(ITemplateTarget model, IClass owningType);
+        bool AppliesTo(ITemplateTarget model, IOwningType owningType);
 
-        MethodDeclarationSyntax Create(IFrameworkSet frameworkSet, ITemplateTarget model, IClass owningType, NamingContext namingContext);
+        MethodDeclarationSyntax Create(IFrameworkSet frameworkSet, ITemplateTarget model, IOwningType owningType, NamingContext namingContext);
     }
 }

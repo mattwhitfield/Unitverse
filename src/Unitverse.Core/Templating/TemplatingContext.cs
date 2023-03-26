@@ -11,14 +11,14 @@
         {
             ModelGenerationContext = modelGenerationContext;
             Templates = templates;
-            ClassModel = new ClassFilterModel(modelGenerationContext.Model);
+            ClassModel = new OwningTypeFilterModel(modelGenerationContext.Model);
         }
 
         public ModelGenerationContext ModelGenerationContext { get; }
 
         public IList<ITemplate> Templates { get; }
 
-        public IClass ClassModel { get; }
+        public IOwningType ClassModel { get; }
 
         public SpecificTemplatingContext ForConstructors()
         {

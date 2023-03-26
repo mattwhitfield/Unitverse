@@ -95,7 +95,7 @@ namespace Unitverse.Core.Tests.Templating
         public void CanGetClassModel()
         {
             // Assert
-            _testClass.ClassModel.Should().BeAssignableTo<IClass>();
+            _testClass.ClassModel.Should().BeAssignableTo<IOwningType>();
 
             Assert.Fail("Create or modify test");
         }

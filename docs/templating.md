@@ -39,20 +39,53 @@ The expressions use the [SequelFilter grammar](https://mattwhitfield.github.io/S
 
 ### Models
 
-TODO - show the model types used for each of the target types.
+TODO - link these to actual types
+
+Templates get different types in their context depending on what they target. For each there is 'Model' which is the member being generated for, and 'OwningType' which is the type to which the member belongs.
+
+| Target | Model | OwningType |
+| - | - | - |
+| Property | IProperty | IOwningType |
+| Method | IMethod | IOwningType |
+| Constructor | IConstructor | IOwningType |
 
 ### Example filter expressions
 
-TODO - show some example filter expressions
+| Expression | Meaning |
+| - | - |
+| Model.Type.Name == 'Int32' | The model's type is 'Int32' |
 
-### Filter expression debugging
+TODO - add more
 
-Hold down Ctrl+Alt while clicking 'Generate tests' and the filter expression tester will appear. This will show you the model that is generated for each selected member, and allow you to write and test filter expressions against it.
+## Template debugging 🕷
+
+Hold down Ctrl+Alt while clicking 'Generate tests' and the filter expression tester will appear. This will show you the model that is generated for each selected member, and allow you to write and test templates against it to see which filter expressions match and how the template is resolved.
 
 TODO - actually implement this functionality 🤣
 
 ## Example template 👀
 
-TODO - show an example template
+Here is an example template that will be generated for all properties of type `int`:
 
+```
+TestMethodName: {memberName:pascal}IsGreaterThan5AndLessThan100
+Target: Property
+Priority: 1
+Include: Model.Type.Name == 'Int32'
 
+// Verify that {{model.Name}} is between 5 and 100
+Assert.That(_testClass.{{model.Name}}, Is.GreaterThan(5));
+Assert.That(_testClass.{{model.Name}}, Is.LessThan(100));
+```
+
+The output generated is:
+
+```
+[Fact]
+public void TheNumberIsGreaterThan5AndLessThan100()
+{
+    // Verify that TheNumber is between 5 and 100
+    Assert.That(_testClass.TheNumber, Is.GreaterThan(5));
+    Assert.That(_testClass.TheNumber, Is.LessThan(100));
+}
+```

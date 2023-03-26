@@ -20,7 +20,7 @@ namespace Unitverse.Core.Tests.Templating
         private SpecificTemplatingContext _testClass;
         private ModelGenerationContext _modelGenerationContext;
         private IList<ITemplate> _templates;
-        private IClass _classModel;
+        private IOwningType _classModel;
         private IEnumerable<ITemplateTarget> _targets;
 
         [SetUp]
@@ -28,7 +28,7 @@ namespace Unitverse.Core.Tests.Templating
         {
             _modelGenerationContext = new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), false, new NamingContext("TestValue565412182"), Substitute.For<IMessageLogger>());
             _templates = new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() };
-            _classModel = Substitute.For<IClass>();
+            _classModel = Substitute.For<IOwningType>();
             _targets = new[] { Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>() };
             _testClass = new SpecificTemplatingContext(_modelGenerationContext, _templates, _classModel, _targets);
         }
@@ -46,25 +46,25 @@ namespace Unitverse.Core.Tests.Templating
         [Test]
         public void CannotConstructWithNullModelGenerationContext()
         {
-            FluentActions.Invoking(() => new SpecificTemplatingContext(default(ModelGenerationContext), new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() }, Substitute.For<IClass>(), new[] { Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>() })).Should().Throw<ArgumentNullException>().WithParameterName("modelGenerationContext");
+            FluentActions.Invoking(() => new SpecificTemplatingContext(default(ModelGenerationContext), new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() }, Substitute.For<IOwningType>(), new[] { Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>() })).Should().Throw<ArgumentNullException>().WithParameterName("modelGenerationContext");
         }
 
         [Test]
         public void CannotConstructWithNullTemplates()
         {
-            FluentActions.Invoking(() => new SpecificTemplatingContext(new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), true, new NamingContext("TestValue466595520"), Substitute.For<IMessageLogger>()), default(IList<ITemplate>), Substitute.For<IClass>(), new[] { Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>() })).Should().Throw<ArgumentNullException>().WithParameterName("templates");
+            FluentActions.Invoking(() => new SpecificTemplatingContext(new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), true, new NamingContext("TestValue466595520"), Substitute.For<IMessageLogger>()), default(IList<ITemplate>), Substitute.For<IOwningType>(), new[] { Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>() })).Should().Throw<ArgumentNullException>().WithParameterName("templates");
         }
 
         [Test]
         public void CannotConstructWithNullClassModel()
         {
-            FluentActions.Invoking(() => new SpecificTemplatingContext(new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), true, new NamingContext("TestValue751648590"), Substitute.For<IMessageLogger>()), new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() }, default(IClass), new[] { Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>() })).Should().Throw<ArgumentNullException>().WithParameterName("classModel");
+            FluentActions.Invoking(() => new SpecificTemplatingContext(new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), true, new NamingContext("TestValue751648590"), Substitute.For<IMessageLogger>()), new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() }, default(IOwningType), new[] { Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>() })).Should().Throw<ArgumentNullException>().WithParameterName("classModel");
         }
 
         [Test]
         public void CannotConstructWithNullTargets()
         {
-            FluentActions.Invoking(() => new SpecificTemplatingContext(new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), true, new NamingContext("TestValue1052248832"), Substitute.For<IMessageLogger>()), new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() }, Substitute.For<IClass>(), default(IEnumerable<ITemplateTarget>))).Should().Throw<ArgumentNullException>().WithParameterName("targets");
+            FluentActions.Invoking(() => new SpecificTemplatingContext(new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), true, new NamingContext("TestValue1052248832"), Substitute.For<IMessageLogger>()), new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() }, Substitute.For<IOwningType>(), default(IEnumerable<ITemplateTarget>))).Should().Throw<ArgumentNullException>().WithParameterName("targets");
         }
 
         [Test]

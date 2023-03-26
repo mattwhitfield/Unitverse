@@ -6,7 +6,7 @@ namespace Unitverse.Core.Templating
 {
     public interface ITemplatingContext
     {
-        IClass ClassModel { get; }
+        IOwningType ClassModel { get; }
         ModelGenerationContext ModelGenerationContext { get; }
         IList<ITemplate> Templates { get; }
     }

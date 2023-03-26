@@ -13,10 +13,10 @@ namespace Unitverse.Core.Tests.Templating.ModelIntegration
         {
             var model = ClassModelProvider.CreateModel(TemplateModelSources.TS_SampleClass);
 
-            TemplatingModel = new ClassFilterModel(model);
+            TemplatingModel = new OwningTypeFilterModel(model);
         }
 
-        static IClass TemplatingModel { get; }
+        static IOwningType TemplatingModel { get; }
 
         [Test]
         public void ClassHasType()

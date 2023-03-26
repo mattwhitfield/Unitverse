@@ -60,7 +60,7 @@ namespace Unitverse.Core.Tests.Templating
         public void CanCallAppliesTo()
         {
             var model = ClassModelProvider.CreateModel(TemplateModelSources.TS_SampleClass);
-            var owningType = new ClassFilterModel(model);
+            var owningType = new OwningTypeFilterModel(model);
 
             // Act
             var result = owningType.Properties.FirstOrDefault(x => _testClass.AppliesTo(x, owningType));
@@ -76,7 +76,7 @@ namespace Unitverse.Core.Tests.Templating
             _testClass = new Template(_content, _testMethodName, _target, new List<ExecutableExpression>(), _excludeExpressions, _isExclusive, _stopMatching, _priority, _isAsync, _isStatic, _description);
 
             var model = ClassModelProvider.CreateModel(TemplateModelSources.TS_SampleClass);
-            var owningType = new ClassFilterModel(model);
+            var owningType = new OwningTypeFilterModel(model);
 
             // Act
             var result = owningType.Methods.FirstOrDefault(x => _testClass.AppliesTo(x, owningType));
@@ -94,7 +94,7 @@ namespace Unitverse.Core.Tests.Templating
             _testClass = new Template(_content, _testMethodName, _target, includes, excludes, _isExclusive, _stopMatching, _priority, _isAsync, _isStatic, _description);
 
             var model = ClassModelProvider.CreateModel(TemplateModelSources.TS_SampleClass);
-            var owningType = new ClassFilterModel(model);
+            var owningType = new OwningTypeFilterModel(model);
 
             // Act
             var result = owningType.Properties.FirstOrDefault(x => _testClass.AppliesTo(x, owningType));
@@ -110,7 +110,7 @@ namespace Unitverse.Core.Tests.Templating
             var frameworkSet = DefaultFrameworkSet.Create();
 
             var model = ClassModelProvider.CreateModel(TemplateModelSources.TS_SampleClass);
-            var owningType = new ClassFilterModel(model);
+            var owningType = new OwningTypeFilterModel(model);
             var property = owningType.Properties.FirstOrDefault(x => x.Name == "ThisIsAReadWriteString");
 
             var namingContext = new NamingContext("TestClass");

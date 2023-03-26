@@ -11,11 +11,40 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Options;
     using Unitverse.Core.Templating.Model;
+    using Unitverse.Core.Templating.Model.Implementation;
     using LiquidTemplate = DotLiquid.Template;
 
     public class Template : ITemplate
     {
         private LiquidTemplate _liquidTemplate;
+
+        static Template()
+        {
+            var typesToRegister = new[]
+            {
+                typeof(IAttribute),
+                typeof(IConstructor),
+                typeof(IMethod),
+                typeof(IOwningType),
+                typeof(IParameter),
+                typeof(IProperty),
+                typeof(ITemplateTarget),
+                typeof(IType),
+                typeof(AttributeFilterModel),
+                typeof(ConstructorFilterModel),
+                typeof(MethodFilterModel),
+                typeof(OwningTypeFilterModel),
+                typeof(ParameterFilterModel),
+                typeof(PropertyFilterModel),
+                typeof(TypeFilterModel),
+            };
+
+            foreach (var type in typesToRegister)
+            {
+                var members = type.GetMembers().Select(x => x.Name).ToArray();
+                LiquidTemplate.RegisterSafeType(type, members);
+            }
+        }
 
         public Template(
             string content,
@@ -67,7 +96,7 @@
 
         public string Description { get; }
 
-        public bool AppliesTo(ITemplateTarget model, IClass owningType)
+        public bool AppliesTo(ITemplateTarget model, IOwningType owningType)
         {
             if (!string.Equals(Target, model.TemplateType, StringComparison.OrdinalIgnoreCase))
             {
@@ -91,14 +120,12 @@
             return true;
         }
 
-        public MethodDeclarationSyntax Create(IFrameworkSet frameworkSet, ITemplateTarget model, IClass owningType, NamingContext namingContext)
+        public MethodDeclarationSyntax Create(IFrameworkSet frameworkSet, ITemplateTarget model, IOwningType owningType, NamingContext namingContext)
         {
             var targets = new Dictionary<string, object> { { "model", model }, { "owningType", owningType } };
             namingContext.AddToDictionary(targets);
 
             var content = _liquidTemplate.Render(DotLiquid.Hash.FromDictionary(targets));
-            //var fieldReferenceResolver = new MultiObjectResolver(targets);
-            //content = new ObjectPathResolver(Content).Resolve(fieldReferenceResolver);
 
             var methodHandler = frameworkSet.CreateTestMethod(TestMethodName, namingContext, IsAsync, IsStatic, Description);
             var body = (BlockSyntax)SyntaxFactory.ParseStatement("{\n" + content.TrimEnd('\r', '\n') + "\n}").NormalizeWhitespace();
