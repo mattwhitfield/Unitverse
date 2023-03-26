@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class PropertyFilterModel : IProperty
     {
@@ -30,6 +31,15 @@
 
         public IEnumerable<IAttribute> Attributes { get; }
 
-        public string TemplateType => "Property";
+        public bool ShouldGenerate => _source.ShouldGenerate;
+
+        public const string Target = "Property";
+
+        public string TemplateType => Target;
+
+        public NamingContext CreateNamingContext(ITemplatingContext templatingContext)
+        {
+            return templatingContext.ModelGenerationContext.BaseNamingContext.WithMemberName(Name);
+        }
     }
 }

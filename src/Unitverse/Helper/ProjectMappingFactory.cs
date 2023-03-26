@@ -26,7 +26,7 @@
             }
 
             // resolve the options for this project
-            var projectOptions = UnitTestGeneratorOptionsFactory.Create(sourceProject.SafeFileName(), baseOptions);
+            var projectOptions = UnitTestGeneratorOptionsFactory.Create(baseOptions.SolutionPath, sourceProject.SafeFileName(), baseOptions);
 
             logger.LogMessage("Creating unit test project mapping for '" + sourceProject.Name + "'.");
             foreach (var source in projectOptions.SourceCounts)
@@ -47,7 +47,7 @@
             var generationOptions = OptionsResolver.DetectFrameworks(targetProject, projectOptions.GenerationOptions, logger);
 
             // now create the final options, including resolved frameworks
-            var finalOptions = new UnitTestGeneratorOptions(generationOptions, projectOptions.NamingOptions, projectOptions.StrategyOptions, projectOptions.StatisticsCollectionEnabled, new Dictionary<string, ConfigurationSource>());
+            var finalOptions = new UnitTestGeneratorOptions(generationOptions, projectOptions.NamingOptions, projectOptions.StrategyOptions, projectOptions.StatisticsCollectionEnabled, null, null, projectOptions.SolutionPath, projectOptions.SourceProjectPath);
 
             // now return the mapping from source to target, along with the per-project options
             return new ProjectMapping(sourceProject, targetProject, resolvedTarget, finalOptions);

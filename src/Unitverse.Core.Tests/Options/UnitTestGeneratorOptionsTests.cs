@@ -1,12 +1,12 @@
 namespace Unitverse.Core.Tests.Options
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using FluentAssertions;
     using NSubstitute;
     using NUnit.Framework;
     using Unitverse.Core.Options;
-    using FluentAssertions;
-    using System.Collections.Generic;
-    using System.Linq;
 
     [TestFixture]
     public class UnitTestGeneratorOptionsTests
@@ -17,10 +17,15 @@ namespace Unitverse.Core.Tests.Options
         private IStrategyOptions _strategyOptions;
         private bool _statisticsCollectionEnabled;
         private Dictionary<string, ConfigurationSource> _membersSetByFilename;
+        private Dictionary<string, string> _projectMappings;
+        private string _solutionPath;
+        private string _sourceProjectPath;
+        private Dictionary<string, ConfigurationSource> _configurationSources;
 
         [SetUp]
         public void SetUp()
         {
+            _configurationSources = new Dictionary<string, ConfigurationSource>();
             _generationOptions = Substitute.For<IGenerationOptions>();
             _namingOptions = Substitute.For<INamingOptions>();
             _strategyOptions = Substitute.For<IStrategyOptions>();
@@ -29,35 +34,38 @@ namespace Unitverse.Core.Tests.Options
             _membersSetByFilename["A"] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "A.File");
             _membersSetByFilename["B"] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "B.File");
             _membersSetByFilename["Other"] = new ConfigurationSource(ConfigurationSourceType.ConfigurationFile, "A.File");
-            _testClass = new UnitTestGeneratorOptions(_generationOptions, _namingOptions, _strategyOptions, _statisticsCollectionEnabled, _membersSetByFilename);
+            _projectMappings = new Dictionary<string, string> { { "A", "B" }, { "C", "D" } };
+            _solutionPath = "TestValue243761049";
+            _sourceProjectPath = "TestValue902166532";
+            _testClass = new UnitTestGeneratorOptions(_generationOptions, _namingOptions, _strategyOptions, _statisticsCollectionEnabled, _membersSetByFilename, _projectMappings, _solutionPath, _sourceProjectPath);
         }
 
         [Test]
         public void CanConstruct()
         {
             // Act
-            var instance = new UnitTestGeneratorOptions(_generationOptions, _namingOptions, _strategyOptions, _statisticsCollectionEnabled, _membersSetByFilename);
+            var instance = new UnitTestGeneratorOptions(_generationOptions, _namingOptions, _strategyOptions, _statisticsCollectionEnabled, _configurationSources, _projectMappings, _solutionPath, _sourceProjectPath);
 
             // Assert
-            instance.Should().NotBeNull();
+            Assert.That(instance, Is.Not.Null);
         }
 
         [Test]
         public void CannotConstructWithNullGenerationOptions()
         {
-            FluentActions.Invoking(() => new UnitTestGeneratorOptions(default(IGenerationOptions), Substitute.For<INamingOptions>(), Substitute.For<IStrategyOptions>(), false, new Dictionary<string, ConfigurationSource>())).Should().Throw<ArgumentNullException>();
+            Assert.Throws<ArgumentNullException>(() => new UnitTestGeneratorOptions(default(IGenerationOptions), Substitute.For<INamingOptions>(), Substitute.For<IStrategyOptions>(), false, new Dictionary<string, ConfigurationSource>(), new Dictionary<string, string>(), "TestValue846045550", "TestValue1119157727"));
         }
 
         [Test]
         public void CannotConstructWithNullNamingOptions()
         {
-            FluentActions.Invoking(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), default(INamingOptions), Substitute.For<IStrategyOptions>(), true, new Dictionary<string, ConfigurationSource>())).Should().Throw<ArgumentNullException>();
+            Assert.Throws<ArgumentNullException>(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), default(INamingOptions), Substitute.For<IStrategyOptions>(), true, new Dictionary<string, ConfigurationSource>(), new Dictionary<string, string>(), "TestValue968781388", "TestValue1505497627"));
         }
 
         [Test]
         public void CannotConstructWithNullStrategyOptions()
         {
-            FluentActions.Invoking(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), Substitute.For<INamingOptions>(), default(IStrategyOptions), false, new Dictionary<string, ConfigurationSource>())).Should().Throw<ArgumentNullException>();
+            Assert.Throws<ArgumentNullException>(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), Substitute.For<INamingOptions>(), default(IStrategyOptions), false, new Dictionary<string, ConfigurationSource>(), new Dictionary<string, string>(), "TestValue230891483", "TestValue1399860540"));
         }
 
         [Test]
@@ -85,12 +93,6 @@ namespace Unitverse.Core.Tests.Options
         }
 
         [Test]
-        public void CannotConstructWithNullMembersSetByFilename()
-        {
-            FluentActions.Invoking(() => new UnitTestGeneratorOptions(Substitute.For<IGenerationOptions>(), Substitute.For<INamingOptions>(), Substitute.For<IStrategyOptions>(), false, default(Dictionary<string, ConfigurationSource>))).Should().Throw<ArgumentNullException>();
-        }
-
-        [Test]
         public void CanCallGetFieldSourceFileName()
         {
             // Assert
@@ -108,6 +110,24 @@ namespace Unitverse.Core.Tests.Options
             // Assert
             sourceCounts.Should().Contain(x => x.Key == "A.File" && x.Value == 2);
             sourceCounts.Should().Contain(x => x.Key == "B.File" && x.Value == 1);
+        }
+
+        [Test]
+        public void ProjectMappingsIsInitializedCorrectly()
+        {
+            _testClass.ProjectMappings.Should().BeEquivalentTo(_projectMappings);
+        }
+
+        [Test]
+        public void SolutionPathIsInitializedCorrectly()
+        {
+            _testClass.SolutionPath.Should().Be(_solutionPath);
+        }
+
+        [Test]
+        public void SourceProjectPathIsInitializedCorrectly()
+        {
+            _testClass.SourceProjectPath.Should().Be(_sourceProjectPath);
         }
     }
 }

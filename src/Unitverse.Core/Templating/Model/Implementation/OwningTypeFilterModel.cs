@@ -1,17 +1,16 @@
 ﻿namespace Unitverse.Core.Templating.Model.Implementation
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
 
-    public class ClassFilterModel : IClass
+    public class OwningTypeFilterModel : IOwningType
     {
         private readonly ClassModel _source;
 
-        public ClassFilterModel(ClassModel source)
+        public OwningTypeFilterModel(ClassModel source)
         {
             _source = source;
 

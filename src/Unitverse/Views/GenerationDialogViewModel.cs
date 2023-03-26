@@ -64,7 +64,7 @@ namespace Unitverse.Views
             _selectedProject = Projects.FirstOrDefault(x => string.Equals(x.Text, resolvedTargetProjectName, StringComparison.OrdinalIgnoreCase));
             var selectedProject = _selectedProject?.Value as Project;
 
-            ResultingMapping = new ProjectMapping(sourceProject, selectedProject, selectedProject?.Name, new UnitTestGeneratorOptions(_generationOptions, namingOptions, strategyOptions, projectOptions.StatisticsCollectionEnabled, new Dictionary<string, ConfigurationSource>()));
+            ResultingMapping = new ProjectMapping(sourceProject, selectedProject, selectedProject?.Name, new UnitTestGeneratorOptions(_generationOptions, namingOptions, strategyOptions, projectOptions.StatisticsCollectionEnabled, null, null, sourceProject.DTE?.Solution?.FileName ?? string.Empty, sourceProject.SafeFileName()));
 
             ApplyTargetProjectFramework();
         }

@@ -20,5 +20,9 @@
         IEnumerable<KeyValuePair<string, int>> SourceCounts { get; }
 
         IUnitTestGeneratorOptions OverrideGenerationOption(Action<MutableGenerationOptions> configure);
+
+        string SolutionPath { get; }
+
+        string SourceProjectPath { get; }
     }
 }

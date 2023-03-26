@@ -52,7 +52,7 @@
             strategy.AddTypeParameterAliases(classModel, frameworkSet.Context);
 
             // create a context for generation
-            var context = new ModelGenerationContext(classModel, frameworkSet, withRegeneration, new NamingContext(classModel.ClassName));
+            var context = new ModelGenerationContext(classModel, frameworkSet, withRegeneration, new NamingContext(classModel.ClassName), messageLogger);
 
             // mark the items that we actually want to emit based on the applicable config
             EmissionMarker.MarkEmittedItems(context);

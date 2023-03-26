@@ -107,7 +107,7 @@
                     var logger = new AggregateLogger();
                     logger.Initialize();
 
-                    var options = UnitTestGeneratorOptionsFactory.Create(_package.Workspace?.CurrentSolution?.FilePath, _package.Options);
+                    var options = UnitTestGeneratorOptionsFactory.Create(_package.Workspace?.CurrentSolution?.FilePath, string.Empty, _package.Options);
                     var window = new NewProjectDialog(project, options);
                     var helper = new WindowInteropHelper(window);
 #if VS2022

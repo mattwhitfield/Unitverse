@@ -7,12 +7,12 @@
 
     public static class UnitTestGeneratorOptionsFactory
     {
-        public static IUnitTestGeneratorOptions Create(string projectFilePath, IUnitTestGeneratorOptions options)
+        public static IUnitTestGeneratorOptions Create(string solutionPath, string projectFilePath, IUnitTestGeneratorOptions options)
         {
-            return Create(projectFilePath, options.GenerationOptions, options.NamingOptions, options.StrategyOptions, options.StatisticsCollectionEnabled, options.ProjectMappings);
+            return Create(solutionPath, projectFilePath, options.GenerationOptions, options.NamingOptions, options.StrategyOptions, options.StatisticsCollectionEnabled, options.ProjectMappings);
         }
 
-        public static IUnitTestGeneratorOptions Create(string projectFilePath, IGenerationOptions generationOptions, INamingOptions namingOptions, IStrategyOptions strategyOptions, bool statisticsGenerationEnabled, Dictionary<string, string> projectMappings)
+        public static IUnitTestGeneratorOptions Create(string solutionPath, string projectFilePath, IGenerationOptions generationOptions, INamingOptions namingOptions, IStrategyOptions strategyOptions, bool statisticsGenerationEnabled, Dictionary<string, string> projectMappings)
         {
             var mutableGenerationOptions = new MutableGenerationOptions(generationOptions);
             var mutableNamingOptions = new MutableNamingOptions(namingOptions);
@@ -68,7 +68,7 @@
                 projectMappings[pair.Key] = pair.Value;
             }
 
-            return new UnitTestGeneratorOptions(mutableGenerationOptions, mutableNamingOptions, mutableStrategyOptions, statisticsGenerationEnabled, fieldSources, projectMappings);
+            return new UnitTestGeneratorOptions(mutableGenerationOptions, mutableNamingOptions, mutableStrategyOptions, statisticsGenerationEnabled, fieldSources, projectMappings, solutionPath, projectFilePath);
         }
 
         private static bool Apply(object instance, KeyValuePair<string, string> valuePair, Dictionary<string, TypeMemberSetter> mutatorSet, out string? memberName)

@@ -7,6 +7,7 @@
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class InterfaceGenerationStrategyFactory : ItemGenerationStrategyFactory<ClassModel>
     {
@@ -34,6 +35,21 @@
             }
 
             return StrategyFactories.ContainsKey(typeInfo.Type.ToFullName());
+        }
+
+        public override NamingContext DecorateNamingContext(NamingContext baseContext, ClassModel classModel, ClassModel item)
+        {
+            return baseContext;
+        }
+
+        public override IEnumerable<ClassModel> GetItems(ClassModel model)
+        {
+            yield return model;
+        }
+
+        public override bool ShouldGenerate(ClassModel item)
+        {
+            return item.ShouldGenerate;
         }
     }
 }

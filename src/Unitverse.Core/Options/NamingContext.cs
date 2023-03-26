@@ -1,5 +1,7 @@
 ﻿namespace Unitverse.Core.Options
 {
+    using System.Collections.Generic;
+
     public class NamingContext
     {
         public NamingContext(string typeName)
@@ -18,6 +20,26 @@
         public string? ParameterName { get; private set; }
 
         public string? TypeParameters { get; private set; }
+
+        public void AddToDictionary(Dictionary<string, object> target)
+        {
+            Add(nameof(TypeName), TypeName, target);
+            Add(nameof(InterfaceName), InterfaceName, target);
+            Add(nameof(MemberName), MemberName, target);
+            Add(nameof(MemberBareName), MemberBareName, target);
+            Add(nameof(ParameterName), ParameterName, target);
+            Add(nameof(TypeParameters), TypeParameters, target);
+        }
+
+        private static void Add(string name, string? value, Dictionary<string, object> target)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+#pragma warning disable CS8604 // Possible null reference argument - nope
+                target.Add(name, value);
+#pragma warning restore CS8604 // Possible null reference argument.
+            }
+        }
 
         private NamingContext Clone()
         {

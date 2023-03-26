@@ -4,7 +4,9 @@
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
+    using Unitverse.Core.Options;
 
     public class MethodFilterModel : IMethod
     {
@@ -33,6 +35,16 @@
 
         public IEnumerable<IAttribute> Attributes { get; }
 
-        public string TemplateType => "Method";
+        public bool ShouldGenerate => _source.ShouldGenerate;
+
+        public const string Target = "Method";
+
+        public string TemplateType => Target;
+
+        public NamingContext CreateNamingContext(ITemplatingContext templatingContext)
+        {
+            return templatingContext.ModelGenerationContext.BaseNamingContext
+                .WithMemberName(templatingContext.ModelGenerationContext.Model.GetMethodUniqueName(_source), Name);
+        }
     }
 }

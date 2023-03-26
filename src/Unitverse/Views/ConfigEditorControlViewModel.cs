@@ -13,7 +13,7 @@ namespace Unitverse.Views
         public ConfigEditorControlViewModel(IUnitTestGeneratorPackage package, string fileName, Action onModified)
         {
             var baseOptions = package.Options;
-            var projectOptions = UnitTestGeneratorOptionsFactory.Create(fileName, baseOptions);
+            var projectOptions = UnitTestGeneratorOptionsFactory.Create(fileName, string.Empty, baseOptions);
 
             Tabs.Add(new TabItem("Generation Options", false, TabItemType.GenerationOptions));
             Tabs.Add(new TabItem("Strategy Options", false, TabItemType.StrategyOptions));
@@ -29,7 +29,7 @@ namespace Unitverse.Views
             StrategyOptionsItems = EditableItemExtractor.ExtractFrom(new StrategyOptions(), strategyOptions, false).ToList();
             NamingOptionsItems = EditableItemExtractor.ExtractFrom(new NamingOptions(), namingOptions, false).ToList();
 
-            Options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false, new Dictionary<string, ConfigurationSource>());
+            Options = new UnitTestGeneratorOptions(generationOptions, namingOptions, strategyOptions, false, null, null, fileName, string.Empty);
 
             foreach (var item in GenerationOptionsItems.Concat(StrategyOptionsItems).Concat(NamingOptionsItems))
             {
