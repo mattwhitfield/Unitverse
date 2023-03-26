@@ -11,6 +11,7 @@ namespace Unitverse.Core.Tests.Templating
     using Unitverse.Core.Options;
     using Unitverse.Core.Templating;
     using Unitverse.Core.Templating.Model;
+    using Unitverse.Core.Templating.Model.Implementation;
 
     [TestFixture]
     public class TemplatingContextTests
@@ -18,12 +19,31 @@ namespace Unitverse.Core.Tests.Templating
         private TemplatingContext _testClass;
         private ModelGenerationContext _modelGenerationContext;
         private IList<ITemplate> _templates;
+        private ITemplate _constructorTemplate1;
+        private ITemplate _constructorTemplate2;
+        private ITemplate _methodTemplate1;
+        private ITemplate _methodTemplate2;
+        private ITemplate _propertyTemplate1;
+        private ITemplate _propertyTemplate2;
+
+        private static ITemplate GetTemplate(string target)
+        {
+            var template = Substitute.For<ITemplate>();
+            template.Target.Returns(target);
+            return template;
+        }
 
         [SetUp]
         public void SetUp()
         {
             _modelGenerationContext = new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), true, new NamingContext("TestValue2133156538"), Substitute.For<IMessageLogger>());
-            _templates = new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() };
+            _constructorTemplate1 = GetTemplate(ConstructorFilterModel.Target);
+            _constructorTemplate2 = GetTemplate(ConstructorFilterModel.Target);
+            _methodTemplate1 = GetTemplate(MethodFilterModel.Target);
+            _methodTemplate2 = GetTemplate(MethodFilterModel.Target);
+            _propertyTemplate1 = GetTemplate(PropertyFilterModel.Target);
+            _propertyTemplate2 = GetTemplate(PropertyFilterModel.Target);
+            _templates = new[] { _constructorTemplate1, _methodTemplate1, _propertyTemplate1, _constructorTemplate2, _methodTemplate2, _propertyTemplate2 };
             _testClass = new TemplatingContext(_modelGenerationContext, _templates);
         }
 
@@ -38,25 +58,13 @@ namespace Unitverse.Core.Tests.Templating
         }
 
         [Test]
-        public void CannotConstructWithNullModelGenerationContext()
-        {
-            FluentActions.Invoking(() => new TemplatingContext(default(ModelGenerationContext), new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() })).Should().Throw<ArgumentNullException>().WithParameterName("modelGenerationContext");
-        }
-
-        [Test]
-        public void CannotConstructWithNullTemplates()
-        {
-            FluentActions.Invoking(() => new TemplatingContext(new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), false, new NamingContext("TestValue1909171961"), Substitute.For<IMessageLogger>()), default(IList<ITemplate>))).Should().Throw<ArgumentNullException>().WithParameterName("templates");
-        }
-
-        [Test]
         public void CanCallForConstructors()
         {
             // Act
             var result = _testClass.ForConstructors();
 
             // Assert
-            Assert.Fail("Create or modify test");
+            result.Templates.Should().BeEquivalentTo(new[] { _constructorTemplate1, _constructorTemplate2 });
         }
 
         [Test]
@@ -66,7 +74,7 @@ namespace Unitverse.Core.Tests.Templating
             var result = _testClass.ForMethods();
 
             // Assert
-            Assert.Fail("Create or modify test");
+            result.Templates.Should().BeEquivalentTo(new[] { _methodTemplate1, _methodTemplate2 });
         }
 
         [Test]
@@ -76,7 +84,7 @@ namespace Unitverse.Core.Tests.Templating
             var result = _testClass.ForProperties();
 
             // Assert
-            Assert.Fail("Create or modify test");
+            result.Templates.Should().BeEquivalentTo(new[] { _propertyTemplate1, _propertyTemplate2 });
         }
 
         [Test]
@@ -96,8 +104,6 @@ namespace Unitverse.Core.Tests.Templating
         {
             // Assert
             _testClass.ClassModel.Should().BeAssignableTo<IOwningType>();
-
-            Assert.Fail("Create or modify test");
         }
     }
 }

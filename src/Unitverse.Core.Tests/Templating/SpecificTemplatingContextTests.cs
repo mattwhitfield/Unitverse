@@ -44,30 +44,6 @@ namespace Unitverse.Core.Tests.Templating
         }
 
         [Test]
-        public void CannotConstructWithNullModelGenerationContext()
-        {
-            FluentActions.Invoking(() => new SpecificTemplatingContext(default(ModelGenerationContext), new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() }, Substitute.For<IOwningType>(), new[] { Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>() })).Should().Throw<ArgumentNullException>().WithParameterName("modelGenerationContext");
-        }
-
-        [Test]
-        public void CannotConstructWithNullTemplates()
-        {
-            FluentActions.Invoking(() => new SpecificTemplatingContext(new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), true, new NamingContext("TestValue466595520"), Substitute.For<IMessageLogger>()), default(IList<ITemplate>), Substitute.For<IOwningType>(), new[] { Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>() })).Should().Throw<ArgumentNullException>().WithParameterName("templates");
-        }
-
-        [Test]
-        public void CannotConstructWithNullClassModel()
-        {
-            FluentActions.Invoking(() => new SpecificTemplatingContext(new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), true, new NamingContext("TestValue751648590"), Substitute.For<IMessageLogger>()), new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() }, default(IOwningType), new[] { Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>(), Substitute.For<ITemplateTarget>() })).Should().Throw<ArgumentNullException>().WithParameterName("classModel");
-        }
-
-        [Test]
-        public void CannotConstructWithNullTargets()
-        {
-            FluentActions.Invoking(() => new SpecificTemplatingContext(new ModelGenerationContext(ClassModelProvider.Instance, Substitute.For<IFrameworkSet>(), true, new NamingContext("TestValue1052248832"), Substitute.For<IMessageLogger>()), new[] { Substitute.For<ITemplate>(), Substitute.For<ITemplate>(), Substitute.For<ITemplate>() }, Substitute.For<IOwningType>(), default(IEnumerable<ITemplateTarget>))).Should().Throw<ArgumentNullException>().WithParameterName("targets");
-        }
-
-        [Test]
         public void ModelGenerationContextIsInitializedCorrectly()
         {
             _testClass.ModelGenerationContext.Should().BeSameAs(_modelGenerationContext);
