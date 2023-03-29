@@ -17,6 +17,7 @@ The best way to view the documentation is to visit the [documentation on GitHub 
 * [Features](docs/features.md) - covers the features offered by Unitverse along with in-depth descriptions.
 * [Configuration](docs/configuration.md) - covering the configuration options available, as well as details on how to configure the extension through source code.
 * [Examples](docs/examples/index.md) - presents a selection of sample scenarios showing the source code and the generated tests.
+* [Templating](docs/templating.md) - information about the templating functionality in Unitverse.
 
 ## Contributing ✋
 

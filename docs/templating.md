@@ -4,7 +4,7 @@
 
 Templating in Unitverse allows you to specify your own templates which will be used as the basis of tests, meaning that you can emit tests for common scenarios that exist in your problem domain but don't necessarily make sense to be added to the tool.
 
-Templates are loaded from `*.template` files that are stored in a `.unitverseTemplates`. These templates can be stored anywhere that is a parent path of the project for which tests are being generated (in the same way that `.unitTestGeneratorConfig` and `.editorConfig` files are found).
+Templates are loaded from `*.template` files that are stored in a folder called `.unitverseTemplates`. These templates can be stored anywhere that is a parent path of the project for which tests are being generated (in the same way that `.unitTestGeneratorConfig` and `.editorConfig` files are found).
 
 Templates can be targeted against properties, methods and constructors.
 
@@ -39,23 +39,21 @@ The expressions use the [SequelFilter grammar](https://mattwhitfield.github.io/S
 
 ### Models
 
-TODO - link these to actual types
-
 Templates get different types in their context depending on what they target. For each there is 'Model' which is the member being generated for, and 'OwningType' which is the type to which the member belongs.
 
 | Target | Model | OwningType |
 | - | - | - |
-| Property | IProperty | IOwningType |
-| Method | IMethod | IOwningType |
-| Constructor | IConstructor | IOwningType |
+| Property | [IProperty](https://github.com/mattwhitfield/Unitverse/blob/master/src/Unitverse.Core/Templating/Model/IProperty.cs) | [IOwningType](https://github.com/mattwhitfield/Unitverse/blob/master/src/Unitverse.Core/Templating/Model/IOwningType.cs) |
+| Method | [IMethod](https://github.com/mattwhitfield/Unitverse/blob/master/src/Unitverse.Core/Templating/Model/IMethod.cs) | [IOwningType](https://github.com/mattwhitfield/Unitverse/blob/master/src/Unitverse.Core/Templating/Model/IOwningType.cs) |
+| Constructor | [IConstructor](https://github.com/mattwhitfield/Unitverse/blob/master/src/Unitverse.Core/Templating/Model/IConstructor.cs) | [IOwningType](https://github.com/mattwhitfield/Unitverse/blob/master/src/Unitverse.Core/Templating/Model/IOwningType.cs) |
 
 ### Example filter expressions
 
 | Expression | Meaning |
 | - | - |
 | Model.Type.Name == 'Int32' | The model's type is 'Int32' |
-
-TODO - add more
+| OwningType.Methods HAS_ANY x => x.Name == 'Serialize' | The model's owning type has a method called 'Serialize' |
+| Model.Attibutes HAS_ANY x => x.Type.Name == 'HttpPostAttribute' | The model has an attribute `[HttpPost]` |
 
 ## Template debugging 🕷
 
