@@ -23,7 +23,7 @@
 
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var nameParts = VsProjectHelper.GetNameParts(source.Item);
+            var nameParts = VsProjectHelper.GetFolderParts(source.Item);
 
             var targetProject = mapping.TargetProject;
             TargetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out _targetPath);
@@ -54,7 +54,7 @@
         {
             get
             {
-                var targetFileName = OverrideTargetFileName ?? Mapping.Options.GenerationOptions.GetTargetFileName(Path.GetFileNameWithoutExtension(Source.FilePath)) + Path.GetExtension(Source.FilePath);
+                var targetFileName = OverrideTargetFileName ?? Mapping.Options.GenerationOptions.GetTargetFileName(Source.TransformableName) + Source.TransformableSuffix;
                 if (string.IsNullOrEmpty(_targetPath))
                 {
                     return targetFileName;
