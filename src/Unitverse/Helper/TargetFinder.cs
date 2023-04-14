@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using EnvDTE;
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.VisualStudio.Shell;
     using Unitverse.Core.Helpers;
@@ -20,7 +21,7 @@
             ThreadHelper.ThrowIfNotOnUIThread();
 
 #pragma warning disable VSTHRD010
-            var nameParts = VsProjectHelper.GetNameParts(source.Item);
+            var nameParts = VsProjectHelper.GetFolderParts(source.Item);
             targetItem = null;
             wasRedirection = false;
 
@@ -41,11 +42,9 @@
 
             if (targetProjectItems != null)
             {
-                var extension = Path.GetExtension(source.FilePath);
-                var baseName = Path.GetFileNameWithoutExtension(source.FilePath);
+                var testFileName = mapping.Options.GenerationOptions.GetTargetFileName(source.TransformableName) + source.TransformableSuffix;
 
-                var testFileName = mapping.Options.GenerationOptions.GetTargetFileName(baseName);
-                targetItem = targetProjectItems.OfType<ProjectItem>().FirstOrDefault(x => string.Equals(x.Name, testFileName + extension, StringComparison.OrdinalIgnoreCase));
+                targetItem = VsProjectHelper.Find(targetProjectItems, testFileName);
 
                 if (targetItem != null)
                 {
@@ -93,9 +92,9 @@
 
                 var tree = await semanticModel.SyntaxTree.GetRootAsync().ConfigureAwait(true);
 
-                var firstType = tree.DescendantNodes().FirstOrDefault(node => node is ClassDeclarationSyntax || node is StructDeclarationSyntax || node is RecordDeclarationSyntax);
+                var firstType = tree.DescendantNodes().FirstOrDefault(node => node is ClassDeclarationSyntax || node is StructDeclarationSyntax || node is RecordDeclarationSyntax) as TypeDeclarationSyntax;
 
-                if (firstType != null)
+                if (firstType != null && !firstType.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword)))
                 {
                     symbol = semanticModel.GetDeclaredSymbol(firstType);
                 }
@@ -119,26 +118,35 @@
 
                 if (symbol is INamedTypeSymbol typeSymbol)
                 {
-                    var compilation = await project.GetCompilationAsync().ConfigureAwait(true);
+                    var locations = symbol.Locations
+                                          .Select(x => x.SourceTree?.FilePath)
+                                          .Where(x => x != null)
+                                          .Distinct(StringComparer.OrdinalIgnoreCase)
+                                          .ToList();
 
-                    var typeSymbolProvider = new TypeSymbolProvider(typeSymbol);
-                    ISymbol targetSymbol = null;
-                    if (mapping.Options.GenerationOptions.FallbackTargetFinding == FallbackTargetFindingMethod.TypeInAnyNamespace)
+                    if (locations.Count == 1)
                     {
-                        var definedSymbol = compilation.GetSymbolsWithName(x => x != null && x.EndsWith(mapping.Options.GenerationOptions.GetTargetTypeName(typeSymbolProvider), StringComparison.OrdinalIgnoreCase), SymbolFilter.Type);
+                        var compilation = await project.GetCompilationAsync().ConfigureAwait(true);
 
-                        targetSymbol = definedSymbol?.FirstOrDefault();
-                    }
-                    else if (mapping.Options.GenerationOptions.FallbackTargetFinding == FallbackTargetFindingMethod.TypeInCorrectNamespace)
-                    {
-                        // derive typeName using namespace transform - code generator must already do this
-                        var typeName = mapping.Options.GenerationOptions.GetFullyQualifiedTargetTypeName(typeSymbolProvider, namespaceTransform);
-                        targetSymbol = compilation.GetTypeByMetadataName(typeName);
-                    }
+                        var typeSymbolProvider = new TypeSymbolProvider(typeSymbol);
+                        ISymbol targetSymbol = null;
+                        if (mapping.Options.GenerationOptions.FallbackTargetFinding == FallbackTargetFindingMethod.TypeInAnyNamespace)
+                        {
+                            var definedSymbol = compilation.GetSymbolsWithName(x => x != null && x.EndsWith(mapping.Options.GenerationOptions.GetTargetTypeName(typeSymbolProvider), StringComparison.OrdinalIgnoreCase), SymbolFilter.Type);
 
-                    if (targetSymbol != null)
-                    {
-                        fileName = targetSymbol.Locations.Where(x => x.IsInSource).Select(x => x.SourceTree?.FilePath).FirstOrDefault(f => !string.IsNullOrWhiteSpace(f));
+                            targetSymbol = definedSymbol?.FirstOrDefault();
+                        }
+                        else if (mapping.Options.GenerationOptions.FallbackTargetFinding == FallbackTargetFindingMethod.TypeInCorrectNamespace)
+                        {
+                            // derive typeName using namespace transform - code generator must already do this
+                            var typeName = mapping.Options.GenerationOptions.GetFullyQualifiedTargetTypeName(typeSymbolProvider, namespaceTransform);
+                            targetSymbol = compilation.GetTypeByMetadataName(typeName);
+                        }
+
+                        if (targetSymbol != null)
+                        {
+                            fileName = targetSymbol.Locations.Where(x => x.IsInSource).Select(x => x.SourceTree?.FilePath).FirstOrDefault(f => !string.IsNullOrWhiteSpace(f));
+                        }
                     }
                 }
             }
@@ -146,7 +154,7 @@
             return fileName;
         }
 
-        public static ProjectItems FindTargetFolder(EnvDTE.Project targetProject, List<string> nameParts, bool createMissingFolders, out string targetPath)
+        public static ProjectItems FindTargetFolder(EnvDTE.Project targetProject, List<string> folderParts, bool createMissingFolders, out string targetPath)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -166,9 +174,9 @@
 #pragma warning disable VSTHRD010
             var targetProjectItems = targetProject.ProjectItems;
             targetPath = Path.GetDirectoryName(fileName);
-            for (var i = nameParts.Count - 1; i > 0; i--)
+            for (var i = folderParts.Count - 1; i >= 0; i--)
             {
-                var currentNamePart = nameParts[i];
+                var currentNamePart = folderParts[i];
                 var item = targetProjectItems.OfType<ProjectItem>().FirstOrDefault(x => string.Equals(x.Name, currentNamePart, StringComparison.OrdinalIgnoreCase));
                 if (item != null)
                 {

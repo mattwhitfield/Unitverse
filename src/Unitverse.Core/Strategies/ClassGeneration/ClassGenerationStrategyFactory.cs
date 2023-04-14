@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
@@ -48,6 +50,12 @@
                         XmlCommentHelper.See(model.ClassName),
                         XmlCommentHelper.TextLiteral(".")));
                 classSyntax = classSyntax.WithXmlDocumentation(documentation);
+            }
+
+            if (model.Declaration.Modifiers.Any(x => x.IsKind(SyntaxKind.PartialKeyword)))
+            {
+                var newModifiers = classSyntax.Modifiers.Add(SyntaxFactory.Token(SyntaxKind.PartialKeyword));
+                classSyntax = classSyntax.WithModifiers(newModifiers);
             }
 
             if (!string.IsNullOrWhiteSpace(_frameworkSet.Options.GenerationOptions.TestTypeBaseClass))

@@ -3,9 +3,9 @@ namespace Unitverse.Helper
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.UI.Design;
     using EnvDTE;
     using Microsoft.VisualStudio;
-    using Microsoft.VisualStudio.OLE.Interop;
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
     using Unitverse.Core.Helpers;
@@ -13,6 +13,7 @@ namespace Unitverse.Helper
     internal static class VsProjectHelper
     {
         private static readonly Guid FolderProject = new Guid("{66A26720-8FB5-11D2-AA7E-00C04F688DDE}");
+        public static readonly Guid FileKind = new Guid("{6BB5F8EE-4483-11D3-8BCF-00C04F8EC28C}");
 
         private static IEnumerable<IVsProject> LoadedProjects
         {
@@ -121,7 +122,7 @@ namespace Unitverse.Helper
             }
         }
 
-        public static List<string> GetNameParts(ProjectItem projectItem)
+        public static List<string> GetFolderParts(ProjectItem projectItem)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -129,11 +130,38 @@ namespace Unitverse.Helper
             var current = projectItem;
             while (current != null)
             {
-                nameParts.Add(current.Name);
+                if (!Guid.TryParse(current.Kind, out var kindGuid) || kindGuid != FileKind)
+                {
+                    nameParts.Add(current.Name);
+                }
                 current = current.Collection.Parent as ProjectItem;
             }
 
             return nameParts;
+        }
+
+        public static ProjectItem Find(ProjectItems container, string name)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            foreach (var item in container.OfType<ProjectItem>())
+            {
+                if (string.Equals(item.Name, name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return item;
+                }
+
+                if (item.ProjectItems.Count > 0)
+                {
+                    var childItem = Find(item.ProjectItems, name);
+                    if (childItem != null)
+                    {
+                        return childItem;
+                    }
+                }
+            }
+
+            return null;
         }
 
         public static void ActivateItem(ProjectItem testProjectItem)
