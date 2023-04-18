@@ -65,15 +65,15 @@
                 var textView = TextViewHelper.GetTextView(ServiceProvider);
 
                 var methodTask = package.JoinableTaskFactory.RunAsync(async () => await TextViewHelper.GetTargetSymbolAsync(textView).ConfigureAwait(true));
-                var tuple = methodTask.Join();
-                var symbol = tuple?.Item2;
-                var baseType = tuple?.Item3;
+                var targetSymbol = methodTask.Join();
+                var symbol = targetSymbol?.Symbol;
+                var baseType = targetSymbol?.Type;
                 menuItem.Visible = false;
                 regenerationMenuItem.Visible = false;
                 if (symbol != null)
                 {
                     menuItem.Visible = true;
-                    regenerationMenuItem.Visible = Keyboard.IsKeyDown(Key.LeftShift);
+                    regenerationMenuItem.Visible = KeysPressed.Shift;
                     if (symbol.Kind == SymbolKind.NamedType)
                     {
                         menuItem.Text = "Generate tests for type '" + symbol.Name + "'...";
@@ -95,7 +95,7 @@
                     if (InterfaceGenerationStrategyFactory.Supports(baseType.Value))
                     {
                         menuItem.Visible = true;
-                        regenerationMenuItem.Visible = Keyboard.IsKeyDown(Key.LeftShift);
+                        regenerationMenuItem.Visible = KeysPressed.Shift;
                         menuItem.Text = "Generate tests for base type '" + baseType.Value.Type.Name + "'...";
                         regenerationMenuItem.Text = "Regenerate tests for base type '" + baseType.Value.Type.Name + "'...";
                     }
@@ -158,6 +158,12 @@
                 messageLogger.Initialize();
 
                 var source = new ProjectItemModel(VsProjectHelper.GetProjectItem(document.FilePath));
+                if (KeysPressed.Ctrl && KeysPressed.Alt)
+                {
+                    _package.ShowFilterDebugger(source, () => TextViewHelper.GetTargetSymbolAsync(textView));
+                    return;
+                }
+
                 var mapping = ProjectMappingFactory.CreateMappingFor(source.Project, _package.Options, true, false, messageLogger, _package);
                 if (mapping == null)
                 {
@@ -174,8 +180,8 @@
 
                         if (methodSymbol != null)
                         {
-                            generationItem.SourceNode = methodSymbol.Item1;
-                            generationItem.SourceSymbol = methodSymbol.Item2;
+                            generationItem.SourceNode = methodSymbol.Node;
+                            generationItem.SourceSymbol = methodSymbol.Symbol;
 
                             await CodeGenerator.GenerateCodeAsync(new[] { generationItem }, withRegeneration, _package, messageLogger).ConfigureAwait(true);
                         }

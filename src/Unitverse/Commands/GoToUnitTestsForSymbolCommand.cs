@@ -56,9 +56,9 @@
                 var textView = TextViewHelper.GetTextView(ServiceProvider);
 
                 var methodTask = package.JoinableTaskFactory.RunAsync(async () => await TextViewHelper.GetTargetSymbolAsync(textView).ConfigureAwait(true));
-                var tuple = methodTask.Join();
-                var symbol = tuple?.Item3;
-                menuItem.Visible = symbol != null;
+                var targetSymbol = methodTask.Join();
+                var type = targetSymbol?.Type;
+                menuItem.Visible = type != null;
             };
 
             commandService.AddCommand(menuItem);
@@ -105,12 +105,12 @@
                 var source = new ProjectItemModel(item);
 
                 var methodTask = _package.JoinableTaskFactory.RunAsync(async () => await TextViewHelper.GetTargetSymbolAsync(textView).ConfigureAwait(true));
-                var tuple = methodTask.Join();
+                var targetSymbol = methodTask.Join();
 
                 var logger = new AggregateLogger();
                 logger.Initialize();
 
-                GoToTestsHelper.FindTestsFor(tuple.Item2, source, _package, logger);
+                GoToTestsHelper.FindTestsFor(targetSymbol.Symbol, source, _package, logger);
             }, _package);
         }
     }

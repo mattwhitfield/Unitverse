@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Unitverse.Core.Helpers;
 
 namespace Unitverse.Helper
 {
@@ -28,7 +29,7 @@ namespace Unitverse.Helper
             return null;
         }
 
-        internal static async Task<Tuple<SyntaxNode, ISymbol, TypeInfo>> GetTargetSymbolAsync(ITextView textView)
+        internal static async Task<TargetSymbol> GetTargetSymbolAsync(ITextView textView)
         {
             var caretPosition = textView.Caret.Position.BufferPosition;
 
@@ -53,13 +54,13 @@ namespace Unitverse.Helper
 
                     if (declaration != null)
                     {
-                        return Tuple.Create(declaration, semanticModel.GetDeclaredSymbol(declaration), default(TypeInfo));
+                        return new TargetSymbol(declaration, semanticModel.GetDeclaredSymbol(declaration), default);
                     }
 
                     if (syntaxToken.Parent is BaseTypeSyntax)
                     {
-                        var symbol = semanticModel.GetTypeInfo(syntaxToken);
-                        return Tuple.Create(syntaxToken, default(ISymbol), symbol);
+                        var typeInfo = semanticModel.GetTypeInfo(syntaxToken);
+                        return new TargetSymbol(syntaxToken, default, typeInfo);
                     }
                 }
             }

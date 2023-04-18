@@ -86,6 +86,7 @@
     <Compile Include="Helper\FindTargetStatus.cs" />
     <Compile Include="Helper\AggregateLogger.cs" />
     <Compile Include="Helper\GoToTestsHelper.cs" />
+    <Compile Include="Helper\KeysPressed.cs" />
     <Compile Include="Helper\OptionsResolver.cs" />
     <Compile Include="Helper\OutputWindowMessageLogger.cs" />
     <Compile Include="Helper\ProjectMapping.cs" />
@@ -146,6 +147,10 @@
       <DependentUpon>ConfigEditorControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EditableItemTemplateSelector.cs" />
+    <Compile Include="Views\FilterExpressionDebugger.xaml.cs">
+      <DependentUpon>FilterExpressionDebugger.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FilterExpressionDebuggerViewModel.cs" />
     <Compile Include="Views\NewProjectDialogViewModel.cs" />
     <Compile Include="Views\NewProjectDialog.xaml.cs">
       <DependentUpon>NewProjectDialog.xaml</DependentUpon>
@@ -156,6 +161,7 @@
     <Compile Include="Views\ConfigEditorControlViewModel.cs" />
     <Compile Include="Views\GenerationDialogViewModel.cs" />
     <Compile Include="Views\ObjectItemTemplateSelector.cs" />
+    <Compile Include="Views\OwnerHelper.cs" />
     <Compile Include="Views\TabItemTypeVisibilityConverter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +275,10 @@
     <Page Include="Views\ConfigEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FilterExpressionDebugger.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\NewProjectDialog.xaml">
       <Generator>MSBuild:Compile</Generator>

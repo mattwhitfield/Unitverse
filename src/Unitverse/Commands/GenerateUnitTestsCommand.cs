@@ -8,6 +8,7 @@
     using System.Windows.Input;
     using EnvDTE;
     using EnvDTE80;
+    using Microsoft.VisualStudio.Package;
     using Microsoft.VisualStudio.Shell;
     using Unitverse.Helper;
     using Task = System.Threading.Tasks.Task;
@@ -59,7 +60,7 @@
                 ThreadHelper.ThrowIfNotOnUIThread();
                 var itemVisible = IsAvailable;
                 menuItem.Visible = itemVisible;
-                regenerateMenuItem.Visible = Keyboard.IsKeyDown(Key.LeftShift) && itemVisible;
+                regenerateMenuItem.Visible = KeysPressed.Shift && itemVisible;
             };
 
             commandService.AddCommand(menuItem);
@@ -130,6 +131,17 @@
                 if (sourceProjects.Count > 1)
                 {
                     throw new InvalidOperationException("Cannot generate unit tests for multiple projects at the same time, please select a single project");
+                }
+
+                if (KeysPressed.Ctrl && KeysPressed.Alt)
+                {
+                    if (!isSingleCreation)
+                    {
+                        throw new InvalidOperationException("Can only show the filter expression debugger when a single source file is selected.");
+                    }
+
+                    _package.ShowFilterDebugger(sources[0], null);
+                    return;
                 }
 
                 var mapping = ProjectMappingFactory.CreateMappingFor(sourceProjects.Single(), baseOptions, true, false, messageLogger, _package);

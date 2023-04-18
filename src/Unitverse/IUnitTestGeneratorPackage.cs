@@ -6,8 +6,10 @@
     using Microsoft.VisualStudio.LanguageServices;
     using Microsoft.VisualStudio.Threading;
     using NuGet.VisualStudio;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
     using Unitverse.Core.Options.Editing;
+    using Unitverse.Helper;
 
     public interface IUnitTestGeneratorPackage : IServiceProvider, IConfigurationWriter
     {
@@ -30,5 +32,7 @@
         IVsFrameworkParser FrameworkParser { get; }
 
         Task<object> GetServiceAsync(Type serviceType);
+
+        void ShowFilterDebugger(ProjectItemModel source, Func<Task<TargetSymbol>> targetSymbolFactory);
     }
 }

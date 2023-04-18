@@ -3,10 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.IO.Packaging;
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows.Media.Animation;
     using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.ComponentModelHost;
@@ -16,9 +18,15 @@
     using NuGet.VisualStudio;
     using Unitverse.Commands;
     using Unitverse.Core;
+    using Unitverse.Core.Generation;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
+    using Unitverse.Core.Templating.Model;
+    using Unitverse.Core.Templating.Model.Implementation;
     using Unitverse.Editor;
+    using Unitverse.Helper;
     using Unitverse.Options;
+    using Unitverse.Views;
     using Task = System.Threading.Tasks.Task;
 
     [ProvideAutoLoad(UIContextGuids.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
@@ -148,6 +156,45 @@
             await GenerateTestForSymbolCommand.InitializeAsync(this).ConfigureAwait(true);
             await GoToUnitTestsForSymbolCommand.InitializeAsync(this).ConfigureAwait(true);
             await CreateTestProjectCommand.InitializeAsync(this).ConfigureAwait(true);
+        }
+
+        public void ShowFilterDebugger(ProjectItemModel source, Func<Task<TargetSymbol>> targetSymbolFactory)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            IOwningType owningType = null;
+
+            var task = JoinableTaskFactory.RunAsync(() =>
+                Attempt.ActionAsync(async () =>
+                {
+                    TargetSymbol symbol = null;
+
+                    var solution = Workspace.CurrentSolution;
+                    var semanticModel = await CodeGenerator.GetSemanticModelAsync(solution, source);
+
+                    var extractor = new TestableItemExtractor(semanticModel.SyntaxTree, semanticModel);
+
+                    if (targetSymbolFactory != null)
+                    {
+                        symbol = await targetSymbolFactory().ConfigureAwait(true);
+                    }
+
+                    var model = extractor.Extract(symbol?.Node, Options).SingleOrDefault();
+
+                    if (model != null)
+                    {
+                        owningType = new OwningTypeFilterModel(model);
+                    }
+                }, this));
+
+            task.Join();
+
+            if (owningType != null)
+            {
+                var dte = GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE; 
+                FilterExpressionDebugger debugger = new FilterExpressionDebugger(owningType).ApplyOwner(dte);
+                debugger.ShowDialog();
+            }
         }
     }
 }

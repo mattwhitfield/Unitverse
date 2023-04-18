@@ -59,7 +59,7 @@
 
             resultingMapping = null;
 
-            var shouldShowUi = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+            var shouldShowUi = KeysPressed.Ctrl;
 
             switch (projectOptions.GenerationOptions.UserInterfaceMode)
             {
@@ -73,13 +73,7 @@
 
             if (shouldShowUi)
             {
-                var window = new GenerationDialog(sourceProject, projectOptions, resolvedTarget, new ConfigurationWriterFactory(package));
-                var helper = new WindowInteropHelper(window);
-#if VS2022
-                helper.Owner = sourceProject.DTE.MainWindow.HWnd;
-#elif VS2019
-                helper.Owner = new System.IntPtr(sourceProject.DTE.MainWindow.HWnd);
-#endif
+                var window = new GenerationDialog(sourceProject, projectOptions, resolvedTarget, new ConfigurationWriterFactory(package)).ApplyOwner(sourceProject.DTE);
 
                 var result = window.ShowDialog();
                 if (result.HasValue)

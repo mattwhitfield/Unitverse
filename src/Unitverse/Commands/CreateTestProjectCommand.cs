@@ -108,13 +108,7 @@
                     logger.Initialize();
 
                     var options = UnitTestGeneratorOptionsFactory.Create(_package.Workspace?.CurrentSolution?.FilePath, string.Empty, _package.Options);
-                    var window = new NewProjectDialog(project, options);
-                    var helper = new WindowInteropHelper(window);
-#if VS2022
-                    helper.Owner = project.DTE.MainWindow.HWnd;
-#elif VS2019
-                    helper.Owner = new System.IntPtr(project.DTE.MainWindow.HWnd);
-#endif
+                    var window = new NewProjectDialog(project, options).ApplyOwner(project.DTE);
 
                     var result = window.ShowDialog();
                     if (result.HasValue && result.Value)
