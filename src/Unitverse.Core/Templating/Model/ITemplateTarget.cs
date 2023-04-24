@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Unitverse.Core.Options;
 
-    public interface ITemplateTarget
+    public interface ITemplateTarget : INameProvider
     {
         IEnumerable<IAttribute> Attributes { get; }
 

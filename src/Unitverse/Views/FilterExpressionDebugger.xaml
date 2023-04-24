@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:editing="clr-namespace:Unitverse.Core.Options.Editing;assembly=Unitverse.Core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:platformUI="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
     xmlns:views="clr-namespace:Unitverse.Views"
@@ -36,7 +35,65 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <TextBlock Text="hello" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300" MinWidth="150" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TreeView
+                    Margin="4,4,9,4"
+                    BorderThickness="0"
+                    ItemsSource="{Binding Models}"
+                    SelectedItemChanged="TreeView_SelectedItemChanged"
+                    Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTreeViewStyleKey}}">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <TextBlock Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}" Text="{Binding Name}" />
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+
+                <GridSplitter
+                    Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                    Opacity="0.5"
+                    Grid.Column="0"
+                    Width="5"
+                    HorizontalAlignment="Right" />
+
+                <ScrollViewer
+                    Grid.Column="1"
+                    Margin="4"
+                    Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ScrollViewerStyleKey}}">
+                    <ItemsControl Grid.IsSharedSizeScope="True" ItemsSource="{Binding Properties}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="views:PropertyViewModel">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition
+                                            Width="Auto"
+                                            MinWidth="100"
+                                            SharedSizeGroup="a" />
+                                        <ColumnDefinition
+                                            Width="Auto"
+                                            MinWidth="100"
+                                            SharedSizeGroup="b" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                        Text="{Binding Name}" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Foreground="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}"
+                                        Text="{Binding Value}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+            </Grid>
         </Grid>
 
         <Border

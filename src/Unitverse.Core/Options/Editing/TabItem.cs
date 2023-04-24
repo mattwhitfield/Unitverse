@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel;
 
-    public class TabItem : INotifyPropertyChanged
+    public class TabItem : ViewModelBase
     {
         public TabItem(string text, bool isChecked, TabItemType itemType)
         {
@@ -35,11 +35,9 @@
                 if (_isChecked != value)
                 {
                     _isChecked = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsChecked)));
+                    RaisePropertyChanged(nameof(IsChecked));
                 }
             }
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

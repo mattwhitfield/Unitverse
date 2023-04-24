@@ -10,8 +10,6 @@
 
         bool IsStatic { get; }
 
-        string Name { get; }
-
         IType? Type { get; }
     }
 }

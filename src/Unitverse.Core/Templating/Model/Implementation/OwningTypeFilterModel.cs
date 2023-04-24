@@ -31,6 +31,10 @@
 
         public IType Type => new TypeFilterModel(_source.TypeSymbol);
 
+        public bool IsStatic => _source.IsStatic;
+
+        public bool IsGeneric => _source.TypeSymbol.IsGenericType;
+
         public IEnumerable<IType> BaseTypes { get; }
 
         public IEnumerable<IType> Interfaces { get; }
@@ -44,5 +48,7 @@
         public IEnumerable<IConstructor> Constructors { get; }
 
         public IEnumerable<IProperty> Properties { get; }
+
+        string INameProvider.Name => "owningType";
     }
 }

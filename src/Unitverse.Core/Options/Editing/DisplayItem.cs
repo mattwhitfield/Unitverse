@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel;
 
-    public abstract class DisplayItem : INotifyPropertyChanged
+    public abstract class DisplayItem : ViewModelBase
     {
         private readonly bool _showSourceIcon;
 
@@ -49,17 +49,5 @@
         public abstract EditableItemType ItemType { get; }
 
         public string Text { get; }
-
-        protected void RaisePropertyChanged(string propertyName)
-        {
-            if (string.IsNullOrWhiteSpace(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

@@ -10,8 +10,6 @@
 
         bool IsVoid { get; }
 
-        string Name { get; }
-
         IEnumerable<IParameter> Parameters { get; }
 
         IType? ReturnType { get; }

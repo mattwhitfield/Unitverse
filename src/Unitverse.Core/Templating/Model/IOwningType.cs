@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public interface IOwningType
+    public interface IOwningType : INameProvider
     {
         IEnumerable<IType> AllInterfaces { get; }
 

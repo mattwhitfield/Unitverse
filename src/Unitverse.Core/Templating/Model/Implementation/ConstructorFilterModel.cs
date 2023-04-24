@@ -29,6 +29,8 @@
 
         public string TemplateType => Target;
 
+        string INameProvider.Name => "ctor(" + string.Join(",", Parameters.Select(x => x.Type?.Name ?? string.Empty)) + ")";
+
         public NamingContext CreateNamingContext(ITemplatingContext templatingContext)
         {
             return templatingContext.ModelGenerationContext.BaseNamingContext.WithMemberName(_source.Name);

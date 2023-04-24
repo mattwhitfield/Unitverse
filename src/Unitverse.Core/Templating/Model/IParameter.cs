@@ -2,11 +2,9 @@
 {
     using System.Collections.Generic;
 
-    public interface IParameter
+    public interface IParameter : INameProvider
     {
         IEnumerable<IAttribute> Attributes { get; }
-
-        string Name { get; }
 
         IType? Type { get; }
     }

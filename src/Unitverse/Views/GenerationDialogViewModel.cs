@@ -12,7 +12,7 @@ using Unitverse.Options;
 
 namespace Unitverse.Views
 {
-    public class GenerationDialogViewModel : INotifyPropertyChanged
+    public class GenerationDialogViewModel : ViewModelBase
     {
         private MutableGenerationOptions _originalGenerationOptions;
         private MutableGenerationOptions _generationOptions;
@@ -86,7 +86,7 @@ namespace Unitverse.Views
                 if (_filterEmpty != value)
                 {
                     _filterEmpty = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterEmpty)));
+                    RaisePropertyChanged(nameof(FilterEmpty));
                 }
             }
         }
@@ -140,7 +140,7 @@ namespace Unitverse.Views
                 {
                     _selectedTab = value;
                     Tabs.ForEach(x => x.IsChecked = x == _selectedTab);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedTab)));
+                    RaisePropertyChanged(nameof(SelectedTab));
                 }
             }
         }
@@ -155,7 +155,7 @@ namespace Unitverse.Views
                 if (_selectedSaveOption != value)
                 {
                     _selectedSaveOption = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedSaveOption)));
+                    RaisePropertyChanged(nameof(SelectedSaveOption));
                 }
             }
         }
@@ -190,8 +190,8 @@ namespace Unitverse.Views
 
                     ApplyTargetProjectFramework();
 
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedProject)));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRememberSelectedProject)));
+                    RaisePropertyChanged(nameof(SelectedProject));
+                    RaisePropertyChanged(nameof(CanRememberSelectedProject));
                 }
             }
         }
@@ -260,7 +260,5 @@ namespace Unitverse.Views
                 }
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

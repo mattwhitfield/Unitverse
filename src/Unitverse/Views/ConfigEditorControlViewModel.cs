@@ -8,7 +8,7 @@ using Unitverse.Options;
 
 namespace Unitverse.Views
 {
-    public class ConfigEditorControlViewModel : INotifyPropertyChanged
+    public class ConfigEditorControlViewModel : ViewModelBase
     {
         public ConfigEditorControlViewModel(IUnitTestGeneratorPackage package, string fileName, Action onModified)
         {
@@ -60,7 +60,7 @@ namespace Unitverse.Views
                 {
                     _selectedTab = value;
                     Tabs.ForEach(x => x.IsChecked = x == _selectedTab);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedTab)));
+                    RaisePropertyChanged(nameof(SelectedTab));
                 }
             }
         }
@@ -72,7 +72,5 @@ namespace Unitverse.Views
         public IList<DisplayItem> NamingOptionsItems { get; }
 
         public List<TabItem> Tabs { get; } = new List<TabItem>();
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

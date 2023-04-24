@@ -161,6 +161,7 @@
     <Compile Include="Views\ConfigEditorControlViewModel.cs" />
     <Compile Include="Views\GenerationDialogViewModel.cs" />
     <Compile Include="Views\ObjectItemTemplateSelector.cs" />
+    <Compile Include="Views\ObjectViewModel.cs" />
     <Compile Include="Views\OwnerHelper.cs" />
     <Compile Include="Views\TabItemTypeVisibilityConverter.cs" />
   </ItemGroup>

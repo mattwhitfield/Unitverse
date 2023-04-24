@@ -13,7 +13,7 @@ using Unitverse.Options;
 
 namespace Unitverse.Views
 {
-    public class NewProjectDialogViewModel : INotifyPropertyChanged
+    public class NewProjectDialogViewModel : ViewModelBase
     {
         private readonly MutableGenerationOptions _generationOptions;
 
@@ -61,7 +61,7 @@ namespace Unitverse.Views
                 if (_name != value)
                 {
                     _name = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
+                    RaisePropertyChanged(nameof(Name));
                 }
             }
         }
@@ -76,11 +76,9 @@ namespace Unitverse.Views
                 if (_location != value)
                 {
                     _location = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Location)));
+                    RaisePropertyChanged(nameof(Location));
                 }
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

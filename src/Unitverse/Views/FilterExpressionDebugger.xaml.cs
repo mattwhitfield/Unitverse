@@ -52,5 +52,17 @@ namespace Unitverse.Views
         {
             DialogResult = true;
         }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            _viewModel.Properties.Clear();
+            if (e.NewValue is ObjectViewModel objectViewModel)
+            {
+                foreach (var property in objectViewModel.Properties)
+                {
+                    _viewModel.Properties.Add(property);
+                }
+            }
+        }
     }
 }
