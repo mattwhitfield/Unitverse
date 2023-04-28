@@ -170,19 +170,12 @@ namespace Unitverse.Helper
 
             const string vsViewKindCode = "{7651A701-06E5-11D1-8EBD-00A0C90F26EA}";
 
-            try
+            if (!testProjectItem.IsOpen[vsViewKindCode])
             {
-                if (!testProjectItem.IsOpen[vsViewKindCode])
-                {
-                    testProjectItem.Open(vsViewKindCode);
-                }
-
-                testProjectItem.Document.Activate();
+                testProjectItem.Open(vsViewKindCode);
             }
 
-            catch
-            {
-            }
+            testProjectItem.Document.Activate();
         }
 
         public static ProjectItem GetProjectItem(string filePath)
