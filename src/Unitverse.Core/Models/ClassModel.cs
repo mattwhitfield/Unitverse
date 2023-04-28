@@ -41,15 +41,25 @@
             {
                 foreach (var interfaceMember in interfaceImpl.GetMembers())
                 {
-                    var implementation = TypeSymbol.FindImplementationForInterfaceMember(interfaceMember);
-                    if (implementation != null)
+                    if (interfaceMember != null)
                     {
-                        if (!_implementedInterfaceSymbols.TryGetValue(implementation, out var list))
+                        try
                         {
-                            _implementedInterfaceSymbols[implementation] = list = new List<ISymbol>();
-                        }
+                            var implementation = TypeSymbol.FindImplementationForInterfaceMember(interfaceMember);
+                            if (implementation != null)
+                            {
+                                if (!_implementedInterfaceSymbols.TryGetValue(implementation, out var list))
+                                {
+                                    _implementedInterfaceSymbols[implementation] = list = new List<ISymbol>();
+                                }
 
-                        list.Add(interfaceMember);
+                                list.Add(interfaceMember);
+                            }
+                        }
+                        catch (NullReferenceException)
+                        {
+                            // NRE happens in Roslyn when calling TypeSymbol.FindImplementationForInterfaceMember sometimes (https://github.com/mattwhitfield/Unitverse/issues/219)
+                        }
                     }
                 }
             }
