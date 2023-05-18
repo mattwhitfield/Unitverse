@@ -87,7 +87,9 @@
             }
 
             bool canBeStatic = TestCanBeStatic(generationContext, isStatic);
-            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, canBeStatic)
+            string name = GetTestMethodName(nameResolver, namingContext, generationContext, isAsync);
+
+            var method = Generate.Method(name, isAsync, canBeStatic)
                                  .AddAttributeLists(Generate.Attribute(TestAttributeName).AsList());
 
             method = AddXmlCommentsIfConfigured(method, description);
@@ -118,7 +120,9 @@
             }
 
             bool canBeStatic = TestCanBeStatic(generationContext, isStatic);
-            var method = Generate.Method(nameResolver.Resolve(namingContext), isAsync, canBeStatic);
+            string name = GetTestMethodName(nameResolver, namingContext, generationContext, isAsync);
+
+            var method = Generate.Method(name, isAsync, canBeStatic);
 
             method = method.AddParameterListParameters(Generate.Parameter("value").WithType(valueType));
             if (!string.IsNullOrWhiteSpace(TestCaseMethodAttributeName))
@@ -134,6 +138,21 @@
             method = AddXmlCommentsIfConfigured(method, description, "value", "The parameter that receives the test case values.");
 
             return new SectionedMethodHandler(method, Options.GenerationOptions, Options.GenerationOptions.ArrangeComment, Options.GenerationOptions.ActComment, Options.GenerationOptions.AssertComment);
+        }
+
+        private static string GetTestMethodName(NameResolver nameResolver, NamingContext namingContext, IGenerationContext generationContext, bool isAsync)
+        {
+            var name = nameResolver.Resolve(namingContext);
+            if (isAsync)
+            {
+                if (generationContext.NamingProvider.ForceAsyncSuffix &&
+                    !name.EndsWith("Async", StringComparison.OrdinalIgnoreCase))
+                {
+                    name += "Async";
+                }
+            }
+
+            return name;
         }
 
         private bool TestCanBeStatic(IGenerationContext generationContext, bool isStatic)

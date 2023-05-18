@@ -47,5 +47,7 @@
         NameResolver MockDependencyFieldName { get; }
 
         NameResolver AutoFixtureFieldName { get; }
+
+        bool ForceAsyncSuffix { get; }
     }
 }
