@@ -34,6 +34,7 @@
             DependencyFieldName = options.DependencyFieldName;
             MockDependencyFieldName = options.MockDependencyFieldName;
             AutoFixtureFieldName = options.AutoFixtureFieldName;
+            ForceAsyncSuffix = options.ForceAsyncSuffix;
         }
 
         public string CanCallNamingPattern { get; set; }
@@ -81,5 +82,7 @@
         public string MockDependencyFieldName { get; set; }
 
         public string AutoFixtureFieldName { get; set; }
+
+        public bool ForceAsyncSuffix { get; set; }
     }
 }

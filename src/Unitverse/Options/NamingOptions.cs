@@ -121,5 +121,10 @@ namespace Unitverse.Options
         [DisplayName("AutoFixture Field Name")]
         [Description("Naming format for the field name used for auto fixture")]
         public string AutoFixtureFieldName { get; set; } = "_fixture";
+
+        [Category("Output")]
+        [DisplayName("Force Async Suffix")]
+        [Description("Ensure that the test method ends with 'Async' if the test method is async")]
+        public bool ForceAsyncSuffix { get; set; } = false;
     }
 }

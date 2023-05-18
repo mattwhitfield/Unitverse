@@ -47,5 +47,7 @@
         string MockDependencyFieldName { get; }
 
         string AutoFixtureFieldName { get; }
+
+        bool ForceAsyncSuffix { get; }
     }
 }

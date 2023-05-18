@@ -1,3 +1,5 @@
+// # ForceAsyncSuffix=true
+
 namespace TestNamespace.SubNameSpace
 {
     public class TestClass
@@ -13,5 +15,9 @@ namespace TestNamespace.SubNameSpace
 		    System.Console.WriteLine("Testing this");
 			return System.Threading.Tasks.Task.FromResult(0);
 	    }
+
+		public void NotAnAsyncMethod()
+		{
+		}
     }
 }
