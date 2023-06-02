@@ -163,5 +163,15 @@
         [DisplayName("Place System usings first")]
         [Description("When sorting using directives, place the 'System' directives first")]
         public bool PlaceSystemUsingDirectivesFirst { get; set; } = true;
+
+        [Category("Generation")]
+        [DisplayName("Skip internal types on multiple generation")]
+        [Description("Whether to skip internal types when generating for multiple files")]
+        public bool SkipInternalTypesOnMultipleGeneration { get; set; } = false;
+
+        [Category("Comments")]
+        [DisplayName("Default failure message")]
+        [Description("The message to use in failure asserts for skeleton tests")]
+        public string DefaultFailureMessage { get; set; } = "Create or modify test";
     }
 }

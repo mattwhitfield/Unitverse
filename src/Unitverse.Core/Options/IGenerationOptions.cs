@@ -63,5 +63,9 @@
 #endif
 
         bool PlaceSystemUsingDirectivesFirst { get; }
+
+        bool SkipInternalTypesOnMultipleGeneration { get; }
+
+        string DefaultFailureMessage { get; }
     }
 }

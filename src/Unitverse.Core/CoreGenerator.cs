@@ -26,6 +26,16 @@
             // extract the class models that we'll use for generation
             var classModels = GetClassModels(strategy);
 
+            // if we are generating for more than one type, and we're skipping internal types, then refine the models
+            if (!isSingleItemGeneration && generationItem.Options.GenerationOptions.SkipInternalTypesOnMultipleGeneration)
+            {
+                classModels = classModels.Where(x => x.IsPublic).ToList();
+                if (!classModels.Any())
+                {
+                    return new GenerationResult(string.Empty, false, new GenerationStatistics());
+                }
+            }
+
             // prepare the models ready to be emitted
             PrepareModelsForEmission(strategy, frameworkSet, classModels);
 

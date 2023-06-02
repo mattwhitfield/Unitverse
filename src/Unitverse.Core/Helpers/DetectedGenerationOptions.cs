@@ -84,5 +84,9 @@
 #endif
 
         public bool PlaceSystemUsingDirectivesFirst => _baseOptions.PlaceSystemUsingDirectivesFirst;
+
+        public bool SkipInternalTypesOnMultipleGeneration => _baseOptions.SkipInternalTypesOnMultipleGeneration;
+
+        public string DefaultFailureMessage => _baseOptions.DefaultFailureMessage;
     }
 }

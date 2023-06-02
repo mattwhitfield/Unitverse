@@ -123,9 +123,6 @@
   <data name="FrameworkSetFactory_Create_Couldn_t_find_the_required_testing_framework" xml:space="preserve">
     <value>Couldn't find the required testing framework</value>
   </data>
-  <data name="PlaceholderAssertionMessage" xml:space="preserve">
-    <value>Create or modify test</value>
-  </data>
   <data name="TargetNameTransform_GetTargetFileName_Cannot_not_derive_target_file_name__please_check_the_test_file_naming_setting_" xml:space="preserve">
     <value>Cannot not derive target file name, please check the test file naming setting.</value>
   </data>

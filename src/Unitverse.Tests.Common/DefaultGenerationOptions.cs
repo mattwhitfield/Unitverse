@@ -66,5 +66,9 @@
         public bool PlaceSystemUsingDirectivesFirst { get; set; } = false;
 
         public bool UseFieldForAutoFixture { get; set; } = false;
+
+        public bool SkipInternalTypesOnMultipleGeneration { get; set; } = false;
+
+        public string DefaultFailureMessage { get; set; } = "Create or modify test";
     }
 }

@@ -87,6 +87,8 @@
 
         public bool IsStatic => Declaration.Modifiers.Any(x => string.Equals(x.ValueText, "static", StringComparison.OrdinalIgnoreCase));
 
+        public bool IsPublic => Declaration.Modifiers.Any(x => string.Equals(x.ValueText, "public", StringComparison.OrdinalIgnoreCase));
+
         public IList<IMethodModel> Methods { get; } = new List<IMethodModel>();
 
         public IList<IOperatorModel> Operators { get; } = new List<IOperatorModel>();
