@@ -97,15 +97,6 @@ namespace Unitverse.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create or modify test.
-        /// </summary>
-        internal static string PlaceholderAssertionMessage {
-            get {
-                return ResourceManager.GetString("PlaceholderAssertionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot not derive target file name, please check the test file naming setting..
         /// </summary>
         internal static string TargetNameTransform_GetTargetFileName_Cannot_not_derive_target_file_name__please_check_the_test_file_naming_setting_ {

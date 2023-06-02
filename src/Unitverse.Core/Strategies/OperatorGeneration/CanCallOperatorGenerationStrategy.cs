@@ -76,7 +76,7 @@
                 generatedMethod.Act(bodyStatement);
             }
 
-            generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
+            generatedMethod.Assert(_frameworkSet.AssertionFramework.AssertFail(_frameworkSet.Options.GenerationOptions.DefaultFailureMessage));
 
             yield return generatedMethod;
         }

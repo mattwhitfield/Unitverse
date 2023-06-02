@@ -43,6 +43,8 @@
 #endif
             PlaceSystemUsingDirectivesFirst = options.PlaceSystemUsingDirectivesFirst;
             UseFieldForAutoFixture = options.UseFieldForAutoFixture;
+            DefaultFailureMessage = options.DefaultFailureMessage;
+            SkipInternalTypesOnMultipleGeneration = options.SkipInternalTypesOnMultipleGeneration;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -106,5 +108,9 @@
         public bool PlaceSystemUsingDirectivesFirst { get; set; }
 
         public bool UseFieldForAutoFixture { get; set; }
+
+        public bool SkipInternalTypesOnMultipleGeneration { get; set; }
+
+        public string DefaultFailureMessage { get; set; }
     }
 }

@@ -87,7 +87,7 @@
 
             if (!testIsComplete)
             {
-                method.Assert(_frameworkSet.AssertionFramework.AssertFail(Strings.PlaceholderAssertionMessage));
+                method.Assert(_frameworkSet.AssertionFramework.AssertFail(_frameworkSet.Options.GenerationOptions.DefaultFailureMessage));
             }
 
             yield return method;
