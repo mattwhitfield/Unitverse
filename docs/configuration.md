@@ -101,7 +101,7 @@ There are replacable tokens which can be substituted into the method names as fo
 | typeName | The name of the type that the tested item belongs to | Always |
 | interfaceName | The name of the interface for which generation is currently being performed | When generating tests for an interface implementation |
 | memberName | The unambiguous name of the member being tested (see below) | Everywhere except constructors |
-| memberBareName | The amiguous name of the member being tested (see below) | Everywhere except constructors |
+| memberBareName | The ambiguous name of the member being tested (see below) | Everywhere except constructors |
 | parameterName | The name of the parameter being tested for guard conditions | Method guard condition generation & dependency field name generation |
 | typeParameters | The list of type parameters for an interface | When generating tests for an interface implementation |
 
