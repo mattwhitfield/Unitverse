@@ -364,7 +364,7 @@
                 if (initializableProperties.Any() && !methods.Any())
                 {
                     {
-                        expressionSyntax = Generate.ObjectCreation(namedType.ToTypeSyntax(frameworkSet.Context), initializableProperties.Select(x =>
+                        expressionSyntax = Generate.ObjectCreation(frameworkSet.Options.GenerationOptions, namedType.ToTypeSyntax(frameworkSet.Context), initializableProperties.Select(x =>
                         {
                             var visitedTypesThisMember = new HashSet<string>(visitedTypes, StringComparer.OrdinalIgnoreCase);
                             return Generate.Assignment(x.Name, GetDefaultAssignmentValue(x.Type, semanticModel, visitedTypesThisMember, frameworkSet));

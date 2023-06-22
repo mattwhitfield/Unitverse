@@ -70,5 +70,9 @@
         public bool SkipInternalTypesOnMultipleGeneration { get; set; } = false;
 
         public string DefaultFailureMessage { get; set; } = "Create or modify test";
+
+        public bool EmitMultilinePocoInitializers { get; set; } = true;
+
+        public bool UseFieldsForConstructorParameterTests { get; set; } = true;
     }
 }

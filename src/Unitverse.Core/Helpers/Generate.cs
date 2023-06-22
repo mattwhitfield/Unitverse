@@ -365,7 +365,7 @@
             return SyntaxFactory.ObjectCreationExpression(type).WithArgumentList(Arguments(arguments));
         }
 
-        public static ObjectCreationExpressionSyntax ObjectCreation(TypeSyntax type, IEnumerable<AssignmentExpressionSyntax> initializers)
+        public static ObjectCreationExpressionSyntax ObjectCreation(IGenerationOptions generationOptions, TypeSyntax type, IEnumerable<AssignmentExpressionSyntax> initializers)
         {
             if (initializers == null)
             {
@@ -377,7 +377,13 @@
             {
                 if (nodes.Count > 0)
                 {
-                    nodes.Add(SyntaxFactory.Token(SyntaxKind.CommaToken));
+                    var commaToken = SyntaxFactory.Token(SyntaxKind.CommaToken);
+                    if (generationOptions.EmitMultilinePocoInitializers)
+                    {
+                        commaToken = commaToken.WithTrailingTrivia(SyntaxFactory.SyntaxTrivia(SyntaxKind.EndOfLineTrivia, "\n"));
+                    }
+
+                    nodes.Add(commaToken);
                 }
 
                 nodes.Add(initializer);

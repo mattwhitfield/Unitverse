@@ -1,0 +1,22 @@
+// # UseFieldsForConstructorParameterTests=false
+namespace TestNamespace.SubNameSpace
+{
+	using System;
+
+    public class SomePoco
+    {
+        public int ThisIsAProperty {get;set;}
+    }
+
+    public class TestClass
+    {
+		SomePoco _poco;
+
+        public TestClass(SomePoco poco, string s, SomePoco poco2)
+        {
+			_poco = poco;
+        }
+ 
+        public SomePoco Poco => _poco;
+    }
+}

@@ -287,7 +287,9 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///   Looks up a localized string similar to // # ForceAsyncSuffix=true
+        ///
+        ///namespace TestNamespace.SubNameSpace
         ///{
         ///    public class TestClass
         ///    {
@@ -300,7 +302,7 @@ namespace Unitverse.Core.Tests {
         ///	    public System.Threading.Tasks.Task&lt;int&gt; ThisIsAnAsyncMethodWithReturnType(string methodName, int methodValue)
         ///	    {
         ///		    System.Console.WriteLine(&quot;Testing this&quot;);
-        ///			return System.Threading.Tasks.Task.FromRes [rest of string was truncated]&quot;;.
+        ///			return Syste [rest of string was truncated]&quot;;.
         /// </summary>
         public static string AsyncMethod {
             get {
@@ -1455,6 +1457,29 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to // # EmitMultilinePocoInitializers=true
+        ///namespace TestNamespace.SubNameSpace
+        ///{
+        ///	using System;
+        ///
+        ///    public class SomePocoNested
+        ///    {
+        ///        public int ThisIsAProperty {get;set;}
+        ///        public string ThisIsAProperty2 {get;set;}
+        ///        public Guid ThisIsAProperty3 {get;set;}
+        ///        public Guid? ThisIsAProperty4 {get;set;}
+        ///        public int ThisIsAProperty5 {get;private set;}
+        ///		private int ThisIsAProperty6 {get;set;}
+        ///        public Guid ThisIsAProperty7 {get;set;}
+        ///        public Guid ThisIsA [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string NestedPocoFormatting {
+            get {
+                return ResourceManager.GetString("NestedPocoFormatting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to namespace Unitverse.Web.Services.Flow
         ///{
         ///    public interface P
@@ -1505,6 +1530,35 @@ namespace Unitverse.Core.Tests {
         public static string NullableReferenceTypes {
             get {
                 return ResourceManager.GetString("NullableReferenceTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///{
+        ///	using System;
+        ///
+        ///    public class SomePoco
+        ///    {
+        ///        public int ThisIsAProperty {get;set;}
+        ///    }
+        ///
+        ///    public class TestClass
+        ///    {
+        ///		SomePoco _poco;
+        ///
+        ///        public TestClass(SomePoco poco, string s, SomePoco poco2)
+        ///        {
+        ///			_poco = poco;
+        ///        }
+        /// 
+        ///        public SomePoco Poco =&gt; _poco;
+        ///    }
+        ///}.
+        /// </summary>
+        public static string OldStyleConstructorFieldTesting {
+            get {
+                return ResourceManager.GetString("OldStyleConstructorFieldTesting", resourceCulture);
             }
         }
         

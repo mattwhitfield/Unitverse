@@ -283,7 +283,7 @@
                 var initializableProperties = Properties.Where(x => x.HasInit).ToList();
                 if (initializableProperties.Any())
                 {
-                    return Generate.ObjectCreation(TypeSyntax, initializableProperties.Select(x => Generate.Assignment(x.Name, GetConstructorFieldReference(x, frameworkSet))));
+                    return Generate.ObjectCreation(frameworkSet.Options.GenerationOptions, TypeSyntax, initializableProperties.Select(x => Generate.Assignment(x.Name, GetConstructorFieldReference(x, frameworkSet))));
                 }
             }
 

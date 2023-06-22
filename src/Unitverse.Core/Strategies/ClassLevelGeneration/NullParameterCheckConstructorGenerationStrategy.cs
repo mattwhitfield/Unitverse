@@ -11,42 +11,19 @@
     using Unitverse.Core.Models;
     using Unitverse.Core.Options;
 
-    public class NullParameterCheckConstructorGenerationStrategy : IGenerationStrategy<ClassModel>
+    public class NullParameterCheckConstructorGenerationStrategy : ParameterCheckConstructorGenerationStrategyBase
     {
-        private readonly IFrameworkSet _frameworkSet;
-
         public NullParameterCheckConstructorGenerationStrategy(IFrameworkSet frameworkSet)
+            : base(frameworkSet)
         {
-            _frameworkSet = frameworkSet ?? throw new ArgumentNullException(nameof(frameworkSet));
         }
 
-        public bool IsExclusive => false;
-
-        public int Priority => 1;
-
-        public Func<IStrategyOptions, bool> IsEnabled => x => x.ConstructorParameterChecksAreEnabled;
-
-        public bool CanHandle(ClassModel method, ClassModel model)
+        protected override bool CanHandleParameter(ParameterModel parameter)
         {
-            if (method is null)
-            {
-                throw new ArgumentNullException(nameof(method));
-            }
-
-            if (model is null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
-            if (model.Declaration is RecordDeclarationSyntax)
-            {
-                return false;
-            }
-
-            return model.Constructors.SelectMany(x => x.Parameters).Any(x => x.TypeInfo.Type != null && x.TypeInfo.Type.IsReferenceType && x.TypeInfo.Type.SpecialType != SpecialType.System_String) && !model.IsStatic;
+            return parameter.TypeInfo.Type != null && parameter.TypeInfo.Type.IsReferenceType && parameter.TypeInfo.Type.SpecialType != SpecialType.System_String;
         }
 
-        public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
+        public override IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)
         {
             if (method is null)
             {
@@ -72,7 +49,7 @@
 
                 namingContext = namingContext.WithParameterName(nullableParameter.ToPascalCase());
 
-                var generatedMethod = _frameworkSet.CreateTestMethod(_frameworkSet.NamingProvider.CannotConstructWithNull, namingContext, false, false, "Checks that instance construction throws when the " + nullableParameter + " parameter is null.");
+                var generatedMethod = FrameworkSet.CreateTestMethod(FrameworkSet.NamingProvider.CannotConstructWithNull, namingContext, false, false, "Checks that instance construction throws when the " + nullableParameter + " parameter is null.");
 
                 foreach (var constructorModel in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))))
                 {
@@ -82,9 +59,9 @@
                         continue;
                     }
 
-                    var paramExpressions = constructorModel.Parameters.Select(param => string.Equals(param.Name, nullableParameter, StringComparison.OrdinalIgnoreCase) ? SyntaxFactory.DefaultExpression(param.TypeInfo.ToTypeSyntax(_frameworkSet.Context)) : AssignmentValueHelper.GetDefaultAssignmentValue(param.TypeInfo, model.SemanticModel, _frameworkSet)).ToList();
+                    var paramExpressions = constructorModel.Parameters.Select(param => string.Equals(param.Name, nullableParameter, StringComparison.OrdinalIgnoreCase) ? SyntaxFactory.DefaultExpression(param.TypeInfo.ToTypeSyntax(FrameworkSet.Context)) : GetFieldReferenceOrNewObjectFor(model, param)).ToList();
                     var methodCall = Generate.ObjectCreation(model.TypeSyntax, paramExpressions.ToArray());
-                    generatedMethod.Emit(_frameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall, nullableParameter));
+                    generatedMethod.Emit(FrameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall, nullableParameter));
                 }
 
                 yield return generatedMethod;

@@ -159,13 +159,13 @@ public class AutomaticMockGenerationExampleTests
     [Fact]
     public void CannotConstructWithNullDummyService()
     {
-        FluentActions.Invoking(() => new AutomaticMockGenerationExample(default(IDummyService), Substitute.For<IDummyService2>())).Should().Throw<ArgumentNullException>().WithParameterName("dummyService");
+        FluentActions.Invoking(() => new AutomaticMockGenerationExample(default(IDummyService), _dummyService2)).Should().Throw<ArgumentNullException>().WithParameterName("dummyService");
     }
 
     [Fact]
     public void CannotConstructWithNullDummyService2()
     {
-        FluentActions.Invoking(() => new AutomaticMockGenerationExample(Substitute.For<IDummyService>(), default(IDummyService2))).Should().Throw<ArgumentNullException>().WithParameterName("dummyService2");
+        FluentActions.Invoking(() => new AutomaticMockGenerationExample(_dummyService, default(IDummyService2))).Should().Throw<ArgumentNullException>().WithParameterName("dummyService2");
     }
 
     [Fact]

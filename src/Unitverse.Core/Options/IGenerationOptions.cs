@@ -67,5 +67,9 @@
         bool SkipInternalTypesOnMultipleGeneration { get; }
 
         string DefaultFailureMessage { get; }
+
+        bool EmitMultilinePocoInitializers { get; }
+
+        bool UseFieldsForConstructorParameterTests { get; }
     }
 }

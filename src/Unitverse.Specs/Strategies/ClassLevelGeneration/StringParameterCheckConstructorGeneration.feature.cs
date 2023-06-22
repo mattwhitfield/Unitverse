@@ -165,7 +165,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 53
   testRunner.And("I expect it to contain the statement \'Assert.ThrowsException<ArgumentNullExceptio" +
-                        "n>(() => newTestClass(value, default(ITest)));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        "n>(() => newTestClass(value, _iTest));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
