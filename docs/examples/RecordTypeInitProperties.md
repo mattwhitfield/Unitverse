@@ -47,14 +47,28 @@ public class PersonTests
         _middleName = "TestValue1321446349";
         _lastName = "TestValue1512368656";
         _iceCreamFlavours = new[] { "TestValue1507096884", "TestValue2039633683", "TestValue200550235" };
-        _testClass = new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours };
+        _testClass = new Person
+        {
+            Id = _id,
+            FirstName = _firstName,
+            MiddleName = _middleName,
+            LastName = _lastName,
+            IceCreamFlavours = _iceCreamFlavours
+        };
     }
 
     [Fact]
     public void CanInitialize()
     {
         // Act
-        var instance = new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours };
+        var instance = new Person
+        {
+            Id = _id,
+            FirstName = _firstName,
+            MiddleName = _middleName,
+            LastName = _lastName,
+            IceCreamFlavours = _iceCreamFlavours
+        };
 
         // Assert
         instance.Should().NotBeNull();
@@ -63,7 +77,14 @@ public class PersonTests
     [Fact]
     public void CannotInitializeWithNullIceCreamFlavours()
     {
-        FluentActions.Invoking(() => new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = default(IList<string>) }).Should().Throw<ArgumentNullException>().WithParameterName("IceCreamFlavours");
+        FluentActions.Invoking(() => new Person
+        {
+            Id = _id,
+            FirstName = _firstName,
+            MiddleName = _middleName,
+            LastName = _lastName,
+            IceCreamFlavours = default(IList<string>)
+        }).Should().Throw<ArgumentNullException>().WithParameterName("IceCreamFlavours");
     }
 
     [Theory]
@@ -72,7 +93,14 @@ public class PersonTests
     [InlineData("   ")]
     public void CannotInitializeWithInvalidFirstName(string value)
     {
-        FluentActions.Invoking(() => new Person { Id = _id, FirstName = value, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours }).Should().Throw<ArgumentNullException>().WithParameterName("FirstName");
+        FluentActions.Invoking(() => new Person
+        {
+            Id = _id,
+            FirstName = value,
+            MiddleName = _middleName,
+            LastName = _lastName,
+            IceCreamFlavours = _iceCreamFlavours
+        }).Should().Throw<ArgumentNullException>().WithParameterName("FirstName");
     }
 
     [Theory]
@@ -80,7 +108,14 @@ public class PersonTests
     [InlineData("   ")]
     public void CannotInitializeWithInvalidMiddleName(string value)
     {
-        FluentActions.Invoking(() => new Person { Id = _id, FirstName = _firstName, MiddleName = value, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours }).Should().Throw<ArgumentNullException>().WithParameterName("MiddleName");
+        FluentActions.Invoking(() => new Person
+        {
+            Id = _id,
+            FirstName = _firstName,
+            MiddleName = value,
+            LastName = _lastName,
+            IceCreamFlavours = _iceCreamFlavours
+        }).Should().Throw<ArgumentNullException>().WithParameterName("MiddleName");
     }
 
     [Theory]
@@ -89,14 +124,28 @@ public class PersonTests
     [InlineData("   ")]
     public void CannotInitializeWithInvalidLastName(string value)
     {
-        FluentActions.Invoking(() => new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = value, IceCreamFlavours = _iceCreamFlavours }).Should().Throw<ArgumentNullException>().WithParameterName("LastName");
+        FluentActions.Invoking(() => new Person
+        {
+            Id = _id,
+            FirstName = _firstName,
+            MiddleName = _middleName,
+            LastName = value,
+            IceCreamFlavours = _iceCreamFlavours
+        }).Should().Throw<ArgumentNullException>().WithParameterName("LastName");
     }
 
     [Fact]
     public void ImplementsIEquatable_Person()
     {
         // Arrange
-        var same = new Person { Id = _id, FirstName = _firstName, MiddleName = _middleName, LastName = _lastName, IceCreamFlavours = _iceCreamFlavours };
+        var same = new Person
+        {
+            Id = _id,
+            FirstName = _firstName,
+            MiddleName = _middleName,
+            LastName = _lastName,
+            IceCreamFlavours = _iceCreamFlavours
+        };
         var different = new Person();
 
         // Assert

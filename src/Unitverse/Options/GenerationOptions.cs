@@ -173,5 +173,15 @@
         [DisplayName("Default failure message")]
         [Description("The message to use in failure asserts for skeleton tests")]
         public string DefaultFailureMessage { get; set; } = "Create or modify test";
+
+        [Category("Generation")]
+        [DisplayName("Emit multi-line initializers")]
+        [Description("Whether to format type initializers over multiple lines for readability")] 
+        public bool EmitMultilinePocoInitializers { get; set; } = true;
+
+        [Category("Generation")]
+        [DisplayName("Use fields for constructor parameter tests")]
+        [Description("Whether to use fields for constructor parameter tests, or to create a new value for every test")]
+        public bool UseFieldsForConstructorParameterTests { get; set; } = true;
     }
 }

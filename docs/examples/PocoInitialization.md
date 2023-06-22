@@ -33,7 +33,12 @@ public class ConsumingClassTests
 
     public ConsumingClassTests()
     {
-        _poco = new SomePoco { Identity = 534011718, Description = "TestValue237820880", UniqueCode = new Guid("97408286-a3e4-cf95-ff46-699c73c4a1cd") };
+        _poco = new SomePoco
+        {
+            Identity = 534011718,
+            Description = "TestValue237820880",
+            UniqueCode = new Guid("97408286-a3e4-cf95-ff46-699c73c4a1cd")
+        };
         _testClass = new ConsumingClass(_poco);
     }
 

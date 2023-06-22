@@ -50,4 +50,4 @@ public class TestClass
 		And I expect it to have the attribute 'DataRow(null)'
 		And I expect it to have the attribute 'DataRow("")'
 		And I expect it to have the attribute 'DataRow("   ")'
-		And I expect it to contain the statement 'Assert.ThrowsException<ArgumentNullException>(() => newTestClass(value, default(ITest)));'
+		And I expect it to contain the statement 'Assert.ThrowsException<ArgumentNullException>(() => newTestClass(value, _iTest));'

@@ -45,6 +45,8 @@
             UseFieldForAutoFixture = options.UseFieldForAutoFixture;
             DefaultFailureMessage = options.DefaultFailureMessage;
             SkipInternalTypesOnMultipleGeneration = options.SkipInternalTypesOnMultipleGeneration;
+            EmitMultilinePocoInitializers = options.EmitMultilinePocoInitializers;
+            UseFieldsForConstructorParameterTests = options.UseFieldsForConstructorParameterTests;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -112,5 +114,9 @@
         public bool SkipInternalTypesOnMultipleGeneration { get; set; }
 
         public string DefaultFailureMessage { get; set; }
+
+        public bool EmitMultilinePocoInitializers { get; set; }
+
+        public bool UseFieldsForConstructorParameterTests { get; set; }
     }
 }

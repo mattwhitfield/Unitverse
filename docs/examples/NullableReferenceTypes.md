@@ -74,7 +74,7 @@ public class TestClassTests
     [Fact]
     public void CannotConstructWithNullTest()
     {
-        FluentActions.Invoking(() => new TestClass(default(ITest), "TestValue1657007234")).Should().Throw<ArgumentNullException>().WithParameterName("test");
+        FluentActions.Invoking(() => new TestClass(default(ITest), _someOtherThing)).Should().Throw<ArgumentNullException>().WithParameterName("test");
     }
 
     [Theory]
@@ -83,7 +83,7 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotConstructWithInvalidNotNullable(string value)
     {
-        FluentActions.Invoking(() => new TestClass(value, "TestValue1412011072")).Should().Throw<ArgumentNullException>().WithParameterName("notNullable");
+        FluentActions.Invoking(() => new TestClass(value, _nullable)).Should().Throw<ArgumentNullException>().WithParameterName("notNullable");
     }
 
     [Theory]
@@ -91,7 +91,7 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotConstructWithInvalidNullable(string value)
     {
-        FluentActions.Invoking(() => new TestClass("TestValue929393559", value)).Should().Throw<ArgumentNullException>().WithParameterName("nullable");
+        FluentActions.Invoking(() => new TestClass(_notNullable, value)).Should().Throw<ArgumentNullException>().WithParameterName("nullable");
     }
 
     [Theory]
@@ -100,16 +100,16 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotConstructWithInvalidSomeOtherThing(string value)
     {
-        FluentActions.Invoking(() => new TestClass(Substitute.For<ITest>(), value)).Should().Throw<ArgumentNullException>().WithParameterName("someOtherThing");
+        FluentActions.Invoking(() => new TestClass(_testITest, value)).Should().Throw<ArgumentNullException>().WithParameterName("someOtherThing");
     }
 
     [Fact]
     public void CanCallGetFullName()
     {
         // Arrange
-        var first = "TestValue760389092";
-        var middle = "TestValue2026928803";
-        var last = "TestValue217468053";
+        var first = "TestValue1657007234";
+        var middle = "TestValue1412011072";
+        var last = "TestValue929393559";
 
         // Act
         var result = _testClass.GetFullName(first, middle, last);
@@ -124,7 +124,7 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotCallGetFullNameWithInvalidFirst(string value)
     {
-        FluentActions.Invoking(() => _testClass.GetFullName(value, "TestValue1379662799", "TestValue61497087")).Should().Throw<ArgumentNullException>().WithParameterName("first");
+        FluentActions.Invoking(() => _testClass.GetFullName(value, "TestValue760389092", "TestValue2026928803")).Should().Throw<ArgumentNullException>().WithParameterName("first");
     }
 
     [Theory]
@@ -132,7 +132,7 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotCallGetFullNameWithInvalidMiddle(string value)
     {
-        FluentActions.Invoking(() => _testClass.GetFullName("TestValue532638534", value, "TestValue687431273")).Should().Throw<ArgumentNullException>().WithParameterName("middle");
+        FluentActions.Invoking(() => _testClass.GetFullName("TestValue217468053", value, "TestValue1379662799")).Should().Throw<ArgumentNullException>().WithParameterName("middle");
     }
 
     [Theory]
@@ -141,7 +141,7 @@ public class TestClassTests
     [InlineData("   ")]
     public void CannotCallGetFullNameWithInvalidLast(string value)
     {
-        FluentActions.Invoking(() => _testClass.GetFullName("TestValue2125508764", "TestValue1464848243", value)).Should().Throw<ArgumentNullException>().WithParameterName("last");
+        FluentActions.Invoking(() => _testClass.GetFullName("TestValue61497087", "TestValue532638534", value)).Should().Throw<ArgumentNullException>().WithParameterName("last");
     }
 
     [Fact]
@@ -149,7 +149,7 @@ public class TestClassTests
     {
         // Arrange
         var test = Substitute.For<ITest>();
-        var someOtherThing = "TestValue1406361028";
+        var someOtherThing = "TestValue687431273";
 
         // Act
         _testClass.SomeMethod(test, someOtherThing);
@@ -161,7 +161,7 @@ public class TestClassTests
     [Fact]
     public void CannotCallSomeMethodWithNullTest()
     {
-        FluentActions.Invoking(() => _testClass.SomeMethod(default(ITest), "TestValue607156385")).Should().Throw<ArgumentNullException>().WithParameterName("test");
+        FluentActions.Invoking(() => _testClass.SomeMethod(default(ITest), "TestValue2125508764")).Should().Throw<ArgumentNullException>().WithParameterName("test");
     }
 
     [Theory]

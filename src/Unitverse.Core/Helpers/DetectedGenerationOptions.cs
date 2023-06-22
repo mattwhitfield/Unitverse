@@ -88,5 +88,9 @@
         public bool SkipInternalTypesOnMultipleGeneration => _baseOptions.SkipInternalTypesOnMultipleGeneration;
 
         public string DefaultFailureMessage => _baseOptions.DefaultFailureMessage;
+
+        public bool EmitMultilinePocoInitializers => _baseOptions.EmitMultilinePocoInitializers;
+
+        public bool UseFieldsForConstructorParameterTests => _baseOptions.UseFieldsForConstructorParameterTests;
     }
 }
