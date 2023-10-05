@@ -6,10 +6,11 @@
     using Microsoft.VisualStudio.LanguageServices;
     using Microsoft.VisualStudio.Threading;
     using NuGet.VisualStudio;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
     using Unitverse.Core.Options.Editing;
 
-    public interface IUnitTestGeneratorPackage : IServiceProvider, IConfigurationWriter
+    public interface IUnitTestGeneratorPackage : IServiceProvider, IConfigurationWriter, ISemanticModelLoader
     {
         JoinableTaskFactory JoinableTaskFactory { get; }
 

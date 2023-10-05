@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Xml.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -67,8 +66,8 @@
             {
                 if (_targetFields.Contains(fieldTarget))
                 {
-                    var symbolInfo = _semanticModel.GetSymbolInfo(node);
-                    if (symbolInfo.Symbol is IPropertySymbol propertySymbol)
+                    var symbolInfo = _semanticModel.GetSymbolInfoSafe(node);
+                    if (symbolInfo?.Symbol is IPropertySymbol propertySymbol)
                     {
                         if (!(node.Parent is AssignmentExpressionSyntax assignment) || node != assignment.Left)
                         {
@@ -90,8 +89,8 @@
                 {
                     if (_targetFields.Contains(fieldTarget))
                     {
-                        var symbolInfo = _semanticModel.GetSymbolInfo(node);
-                        if (symbolInfo.Symbol is IMethodSymbol methodSymbol)
+                        var symbolInfo = _semanticModel.GetSymbolInfoSafe(node);
+                        if (symbolInfo?.Symbol is IMethodSymbol methodSymbol)
                         {
                             // if ReducedFrom is non-null, this is actually an extension method call
                             if (methodSymbol.ReducedFrom is null)
@@ -147,7 +146,7 @@
 
         private MethodDeclarationSyntax? GetInvokedMethodDeclaration(ExpressionSyntax invocationExpression)
         {
-            var symbol = _semanticModel.GetSymbolInfo(invocationExpression).Symbol;
+            var symbol = _semanticModel.GetSymbolInfoSafe(invocationExpression)?.Symbol;
 
             if (symbol == null
                 || symbol.Kind != SymbolKind.Method
