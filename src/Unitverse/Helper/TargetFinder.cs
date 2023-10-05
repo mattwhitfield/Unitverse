@@ -96,7 +96,7 @@
 
                 if (firstType != null && !firstType.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword)))
                 {
-                    symbol = semanticModel.GetDeclaredSymbol(firstType);
+                    symbol = semanticModel.GetDeclaredSymbolSafe(firstType);
                 }
             }
 

@@ -20,5 +20,39 @@
 
             return symbol.ContainingType;
         }
+
+        public static SymbolInfo? GetSymbolInfoSafe(this SemanticModel semanticModel, SyntaxNode node)
+        {
+            if (semanticModel.SyntaxTree == node.SyntaxTree)
+            {
+                return semanticModel.GetSymbolInfo(node);
+            }
+
+            var loader = SemanticModelLoaderProvider.ModelLoader;
+            if (loader != null)
+            {
+                var model = loader.GetSemanticModel(node);
+                return model.GetSymbolInfo(node);
+            }
+
+            return null;
+        }
+
+        public static ISymbol? GetDeclaredSymbolSafe(this SemanticModel semanticModel, SyntaxNode node)
+        {
+            if (semanticModel.SyntaxTree == node.SyntaxTree)
+            {
+                return semanticModel.GetDeclaredSymbol(node);
+            }
+
+            var loader = SemanticModelLoaderProvider.ModelLoader;
+            if (loader != null)
+            {
+                var model = loader.GetSemanticModel(node);
+                return model.GetDeclaredSymbol(node);
+            }
+
+            return null;
+        }
     }
 }

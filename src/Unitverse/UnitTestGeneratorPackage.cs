@@ -2,12 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices;
-    using System.Text;
     using System.Threading;
-    using System.Windows.Media.Animation;
+    using Microsoft.CodeAnalysis;
     using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.ComponentModelHost;
     using Microsoft.VisualStudio.LanguageServices;
@@ -16,6 +14,7 @@
     using NuGet.VisualStudio;
     using Unitverse.Commands;
     using Unitverse.Core;
+    using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;
     using Unitverse.Editor;
     using Unitverse.Options;
@@ -148,6 +147,13 @@
             await GenerateTestForSymbolCommand.InitializeAsync(this).ConfigureAwait(true);
             await GoToUnitTestsForSymbolCommand.InitializeAsync(this).ConfigureAwait(true);
             await CreateTestProjectCommand.InitializeAsync(this).ConfigureAwait(true);
+
+            SemanticModelLoaderProvider.ModelLoader = this;
+        }
+
+        public SemanticModel GetSemanticModel(SyntaxNode node)
+        {
+            return JoinableTaskFactory.Run(() => Workspace.CurrentSolution.GetDocument(node.SyntaxTree).GetSemanticModelAsync());
         }
     }
 }
