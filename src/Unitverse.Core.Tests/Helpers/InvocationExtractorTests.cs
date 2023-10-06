@@ -9,6 +9,7 @@ namespace Unitverse.Core.Tests.Helpers
     using Microsoft.CodeAnalysis.CSharp;
     using System.Linq;
     using NSubstitute;
+    using Unitverse.Core.Models;
 
     [TestFixture]
     public class InvocationExtractorTests
@@ -19,7 +20,7 @@ namespace Unitverse.Core.Tests.Helpers
             var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
 
             var targetFields = new[] { "_dummyService", "_dummyService2" };
-            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleNoReturn").Node, classModel.SemanticModel, targetFields);
+            var result = InvocationExtractor.ExtractFrom(classModel, classModel.Methods.Single(x => x.Name == "SampleNoReturn").Node, targetFields);
             result.GetAccessedPropertySymbolsFor("_dummyService2").Single().Name.Should().Be("SomeProp");
             result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("NoReturnMethod", "GenericMethod");
             result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("ReturnMethod");
@@ -31,7 +32,7 @@ namespace Unitverse.Core.Tests.Helpers
             var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
 
             var targetFields = new[] { "_dummyService", "_dummyService2" };
-            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleAsyncMethod").Node, classModel.SemanticModel, targetFields);
+            var result = InvocationExtractor.ExtractFrom(classModel, classModel.Methods.Single(x => x.Name == "SampleAsyncMethod").Node, targetFields);
             result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
             result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
         }
@@ -42,7 +43,7 @@ namespace Unitverse.Core.Tests.Helpers
             var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
 
             var targetFields = new[] { "_dummyService", "_dummyService2" };
-            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleDependencyCalledInsidePublicMethod").Node, classModel.SemanticModel, targetFields);
+            var result = InvocationExtractor.ExtractFrom(classModel, classModel.Methods.Single(x => x.Name == "SampleDependencyCalledInsidePublicMethod").Node, targetFields);
             result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
             result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
         }
@@ -53,7 +54,7 @@ namespace Unitverse.Core.Tests.Helpers
             var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
 
             var targetFields = new[] { "_dummyService", "_dummyService2" };
-            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleDeeperNestedDependencyCall").Node, classModel.SemanticModel, targetFields);
+            var result = InvocationExtractor.ExtractFrom(classModel, classModel.Methods.Single(x => x.Name == "SampleDeeperNestedDependencyCall").Node, targetFields);
             result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
             result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
         }
@@ -64,7 +65,7 @@ namespace Unitverse.Core.Tests.Helpers
             var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
 
             var targetFields = new[] { "_dummyService", "_dummyService2" };
-            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleDependencyCalledAsADelegateMethod").Node, classModel.SemanticModel, targetFields);
+            var result = InvocationExtractor.ExtractFrom(classModel, classModel.Methods.Single(x => x.Name == "SampleDependencyCalledAsADelegateMethod").Node, targetFields);
             result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
             result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
         }
@@ -75,7 +76,7 @@ namespace Unitverse.Core.Tests.Helpers
             var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
 
             var targetFields = new[] { "_dummyService", "_dummyService2" };
-            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleDependencyCalledAsALambdaMethod").Node, classModel.SemanticModel, targetFields);
+            var result = InvocationExtractor.ExtractFrom(classModel, classModel.Methods.Single(x => x.Name == "SampleDependencyCalledAsALambdaMethod").Node, targetFields);
             result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
             result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
         }
@@ -86,7 +87,7 @@ namespace Unitverse.Core.Tests.Helpers
             var classModel = ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration);
 
             var targetFields = new[] { "_dummyService", "_dummyService2" };
-            var result = InvocationExtractor.ExtractFrom(classModel.Methods.Single(x => x.Name == "SampleDependencyCalledAsAActionMethod").Node, classModel.SemanticModel, targetFields);
+            var result = InvocationExtractor.ExtractFrom(classModel, classModel.Methods.Single(x => x.Name == "SampleDependencyCalledAsAActionMethod").Node, targetFields);
             result.GetAccessedMethodSymbolsFor("_dummyService").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
             result.GetAccessedMethodSymbolsFor("_dummyService2").Select(x => x.Name).Should().BeEquivalentTo("AsyncMethod");
         }
@@ -94,19 +95,19 @@ namespace Unitverse.Core.Tests.Helpers
         [Test]
         public void CannotCallExtractFromWithNullNode()
         {
-            FluentActions.Invoking(() => InvocationExtractor.ExtractFrom(default(CSharpSyntaxNode), Substitute.For<SemanticModel>(), new[] { "TestValue1478414786", "TestValue1253389239", "TestValue1543172025" })).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => InvocationExtractor.ExtractFrom(ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration), default(CSharpSyntaxNode), new[] { "TestValue1478414786", "TestValue1253389239", "TestValue1543172025" })).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
-        public void CannotCallExtractFromWithNullSemanticModel()
+        public void CannotCallExtractFromWithNullModel()
         {
-            FluentActions.Invoking(() => InvocationExtractor.ExtractFrom(SyntaxFactory.IdentifierName("hello"), default(SemanticModel), new[] { "TestValue1562618265", "TestValue1888707362", "TestValue2031161598" })).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => InvocationExtractor.ExtractFrom(default(ClassModel), SyntaxFactory.IdentifierName("hello"), new[] { "TestValue1562618265", "TestValue1888707362", "TestValue2031161598" })).Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void CannotCallExtractFromWithNullTargetFields()
         {
-            FluentActions.Invoking(() => InvocationExtractor.ExtractFrom(SyntaxFactory.IdentifierName("hello"), Substitute.For<SemanticModel>(), default(IEnumerable<string>))).Should().Throw<ArgumentNullException>();
+            FluentActions.Invoking(() => InvocationExtractor.ExtractFrom(ClassModelProvider.CreateModel(TestClasses.AutomaticMockGeneration), SyntaxFactory.IdentifierName("hello"), default(IEnumerable<string>))).Should().Throw<ArgumentNullException>();
         }
     }
 }

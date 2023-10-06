@@ -9,28 +9,29 @@
 
     public class InvocationExtractor : CSharpSyntaxWalker
     {
-        private InvocationExtractor(SemanticModel semanticModel, IEnumerable<string> targetFields)
-            : this(semanticModel, targetFields, new HashSet<MethodDeclarationSyntax>())
+        private InvocationExtractor(INamedTypeSymbol containingTypeSymbol, SemanticModel semanticModel, IEnumerable<string> targetFields)
+            : this(containingTypeSymbol, semanticModel, targetFields, new HashSet<MethodDeclarationSyntax>())
         {
         }
 
-        private InvocationExtractor(SemanticModel semanticModel, IEnumerable<string> targetFields, ISet<MethodDeclarationSyntax> visitedMethods)
+        private InvocationExtractor(INamedTypeSymbol containingTypeSymbol, SemanticModel semanticModel, IEnumerable<string> targetFields, ISet<MethodDeclarationSyntax> visitedMethods)
         {
             _semanticModel = semanticModel;
             _targetFields = new HashSet<string>(targetFields);
             _visitedMethods = visitedMethods;
+            _containingTypeSymbol = containingTypeSymbol;
         }
 
-        public static DependencyAccessMap ExtractFrom(CSharpSyntaxNode node, SemanticModel semanticModel, IEnumerable<string> targetFields)
+        public static DependencyAccessMap ExtractFrom(ClassModel model, CSharpSyntaxNode node, IEnumerable<string> targetFields)
         {
             if (node is null)
             {
                 throw new ArgumentNullException(nameof(node));
             }
 
-            if (semanticModel is null)
+            if (model is null)
             {
-                throw new ArgumentNullException(nameof(semanticModel));
+                throw new ArgumentNullException(nameof(model));
             }
 
             if (targetFields is null)
@@ -38,7 +39,7 @@
                 throw new ArgumentNullException(nameof(targetFields));
             }
 
-            var extractor = new InvocationExtractor(semanticModel, targetFields);
+            var extractor = new InvocationExtractor(model.TypeSymbol, model.SemanticModel, targetFields);
             node.Accept(extractor);
 
             return new DependencyAccessMap(extractor._methodCalls, extractor._propertyCalls, extractor._invocationCount, extractor._memberAccessCount);
@@ -49,6 +50,7 @@
         private readonly SemanticModel _semanticModel;
         private readonly HashSet<string> _targetFields;
         private readonly ISet<MethodDeclarationSyntax> _visitedMethods;
+        private readonly INamedTypeSymbol _containingTypeSymbol;
         private int _invocationCount;
         private int _memberAccessCount;
 
@@ -120,7 +122,7 @@
             }
 
             _visitedMethods.Add(methodDeclaration);
-            var extractor = new InvocationExtractor(_semanticModel, _targetFields, _visitedMethods);
+            var extractor = new InvocationExtractor(_containingTypeSymbol, _semanticModel, _targetFields, _visitedMethods);
             methodDeclaration?.Accept(extractor);
             _methodCalls.AddRange(extractor._methodCalls);
         }
@@ -150,24 +152,12 @@
 
             if (symbol == null
                 || symbol.Kind != SymbolKind.Method
-                || !IsMethodInTheSameClass(symbol, invocationExpression))
+                || symbol.ContainingType != _containingTypeSymbol)
             {
                 return null;
             }
 
             return symbol.DeclaringSyntaxReferences[0].GetSyntax() as MethodDeclarationSyntax;
-        }
-
-        private bool IsMethodInTheSameClass(ISymbol methodSymbol, ExpressionSyntax invocationExpression)
-        {
-            // private methods can only be invoked from inside the class
-            if (methodSymbol.DeclaredAccessibility == Accessibility.Private)
-            {
-                return true;
-            }
-
-            var invocationContainingType = _semanticModel.GetEnclosingSymbol(invocationExpression.SpanStart)?.ContainingType;
-            return methodSymbol.ContainingType == invocationContainingType;
         }
     }
 }
