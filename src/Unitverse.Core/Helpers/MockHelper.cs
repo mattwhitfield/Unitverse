@@ -23,7 +23,7 @@
             }
 
             var mappedInterfaceFields = model.DependencyMap.MappedInterfaceFields.ToList();
-            var dependencyMap = InvocationExtractor.ExtractFrom(targetBody, model.SemanticModel, mappedInterfaceFields);
+            var dependencyMap = InvocationExtractor.ExtractFrom(model, targetBody, mappedInterfaceFields);
 
             foreach (var field in mappedInterfaceFields)
             {
