@@ -53,10 +53,9 @@
             var classDeclaration = SyntaxFactory.ClassDeclaration(targetTypeName);
 
             classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
-            if (!string.IsNullOrWhiteSpace(_frameworkSet.TestFramework.TestClassAttribute))
+            if (_frameworkSet.TestFramework.TestClassAttributes != null)
             {
-                var testFixtureAtt = Generate.Attribute(_frameworkSet.TestFramework.TestClassAttribute);
-                classDeclaration = classDeclaration.AddAttributeLists(testFixtureAtt.AsList());
+                classDeclaration = classDeclaration.AddAttributeLists(_frameworkSet.TestFramework.TestClassAttributes.AsList());
             }
 
             var variableDeclaration = SyntaxFactory.VariableDeclaration(model.TypeSyntax)

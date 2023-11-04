@@ -19,7 +19,7 @@
                 return AssetResources.PropertyTesterXUnit.Replace("%targetNamespace%", targetNamespace);
             }
 
-            if ((testFrameworkTypes & (TestFrameworkTypes.NUnit2 | TestFrameworkTypes.NUnit3)) > 0)
+            if ((testFrameworkTypes & (TestFrameworkTypes.NUnit2 | TestFrameworkTypes.NUnit3 | TestFrameworkTypes.NUnit3Lifecycle)) > 0)
             {
                 return AssetResources.PropertyTesterNUnit.Replace("%targetNamespace%", targetNamespace);
             }

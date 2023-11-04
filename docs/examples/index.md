@@ -14,6 +14,7 @@ This section contains examples of the output that Unitverse outputs, refreshed e
 | [Frameworks - MSTest & Moq](FrameworksMsTestMoq.md) | Demonstrates how tests are generated using MsTest for the test framework and Moq for the mocking framework |
 | [Frameworks - MSTest & Moq (with Moq.AutoMock)](FrameworksMsTestMoqAutoMock.md) | Demonstrates how tests are generated using MsTest for the test framework and Moq for the mocking framework, using Moq.AutoMock for object creation |
 | [Frameworks - NUnit 3 & FakeItEasy](FrameworksNUnitFakeItEasy.md) | Demonstrates how tests are generated using NUnit 3 for the test framework and FakeItEasy for the mocking framework |
+| [Frameworks - NUnit 3 (Lifecycle) & NSubstitute](FrameworksNUnitLifecycleNSubstitute.md) | Demonstrates how tests are generated using NUnit 3 (Lifecycle) for the test framework and NSubstitute for the mocking framework |
 | [Frameworks - XUnit & JustMock](FrameworksXUnitJustMock.md) | Demonstrates how tests are generated using XUnit for the test framework and JustMock for the mocking framework |
 | [Frameworks - XUnit & NSubstitute](FrameworksXUnitNSubstitute.md) | Demonstrates how tests are generated using XUnit for the test framework and NSubstitute for the mocking framework |
 | [Generic Methods](GenericMethod.md) | Demonstrates how Unitverse generates tests for generic methods |

@@ -55,6 +55,7 @@
                     yield return new NugetPackageReference("NUnitTestAdapter", null);
                     break;
                 case TestFrameworkTypes.NUnit3:
+                case TestFrameworkTypes.NUnit3Lifecycle:
                     yield return new NugetPackageReference("nunit", null);
                     yield return new NugetPackageReference("NUnit3TestAdapter", null);
                     break;

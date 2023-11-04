@@ -1,5 +1,6 @@
 ﻿namespace Unitverse.Core.Frameworks
 {
+    using System.Collections.Generic;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     public interface ITestFramework : IAssertionFramework
@@ -8,6 +9,6 @@
 
         AttributeSyntax? SingleThreadedApartmentAttribute { get; }
 
-        string TestClassAttribute { get; }
+        IEnumerable<AttributeSyntax>? TestClassAttributes { get; }
     }
 }
