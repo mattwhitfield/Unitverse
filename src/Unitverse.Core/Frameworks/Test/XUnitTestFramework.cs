@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
@@ -20,7 +21,7 @@
 
         public AttributeSyntax? SingleThreadedApartmentAttribute => null;
 
-        public string TestClassAttribute => string.Empty;
+        public IEnumerable<AttributeSyntax>? TestClassAttributes => null;
 
         protected override string TestAttributeName => "Fact";
 

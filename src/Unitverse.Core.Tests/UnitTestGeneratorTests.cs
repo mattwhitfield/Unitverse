@@ -36,6 +36,7 @@
     using Expression = System.Linq.Expressions.Expression;
 
     [TestFixture]
+    [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
     public class UnitTestGeneratorTests
     {
         // useAutoFixture, useAutoFixtureForMocking, useFieldForAutoFixture
@@ -71,7 +72,7 @@
                     entryKeys.Add(entry.Key.ToString());
                 }
 
-                var frameworks = new object[] { TestFrameworkTypes.MsTest, TestFrameworkTypes.NUnit3, TestFrameworkTypes.XUnit };
+                var frameworks = new object[] { TestFrameworkTypes.MsTest, TestFrameworkTypes.NUnit3, TestFrameworkTypes.NUnit3Lifecycle, TestFrameworkTypes.XUnit };
                 var mocks = new object[] { MockingFrameworkType.Moq, MockingFrameworkType.NSubstitute, MockingFrameworkType.FakeItEasy, MockingFrameworkType.MoqAutoMock, MockingFrameworkType.JustMock };
 
 #if VS2019
@@ -362,7 +363,7 @@
                 yield return MetadataReference.CreateFromFile(typeof(Xunit.Assert).Assembly.Location);
             }
 
-            if ((testFrameworkTypes & (TestFrameworkTypes.NUnit3 | TestFrameworkTypes.NUnit2)) > 0)
+            if ((testFrameworkTypes & (TestFrameworkTypes.NUnit3Lifecycle | TestFrameworkTypes.NUnit3 | TestFrameworkTypes.NUnit2)) > 0)
             {
                 yield return MetadataReference.CreateFromFile(typeof(TestFixtureAttribute).Assembly.Location);
             }

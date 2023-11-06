@@ -14,5 +14,7 @@
         MsTest = 4,
         [Description("xUnit")]
         XUnit = 8,
+        [Description("NUnit v3 (lifecycle)")]
+        NUnit3Lifecycle = 16,
     }
 }
