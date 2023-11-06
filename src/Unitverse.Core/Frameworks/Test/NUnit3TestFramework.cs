@@ -1,7 +1,6 @@
 ﻿namespace Unitverse.Core.Frameworks.Test
 {
     using System.Collections.Generic;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Options;

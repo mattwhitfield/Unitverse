@@ -20,7 +20,7 @@
 
         public abstract AttributeSyntax SingleThreadedApartmentAttribute { get; }
 
-        public virtual IEnumerable<AttributeSyntax> TestClassAttributes => new[] { Generate.Attribute("TestFixture") };
+        public string TestClassAttribute => "TestFixture";
 
         protected override string TestAttributeName => "Test";
 

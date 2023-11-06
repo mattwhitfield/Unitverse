@@ -211,7 +211,7 @@ namespace Unitverse.Core.Tests.Frameworks.Test
         public void CanGetTestClassAttribute(TestFrameworkTypes frameworkTypes, string expected)
         {
             var testClass = CreateFramework(frameworkTypes);
-            Assert.That(testClass.TestClassAttributes?.FirstOrDefault()?.Name.ToString() ?? string.Empty, Is.EqualTo(expected));
+            Assert.That(testClass.TestClassAttribute, Is.EqualTo(expected));
         }
 
         [TestCaseSource(nameof(Targets))]
