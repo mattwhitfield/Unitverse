@@ -79,11 +79,6 @@
                 return new NUnit3TestFramework(options);
             }
 
-            if ((testFrameworkTypes & TestFrameworkTypes.NUnit3Lifecycle) > 0)
-            {
-                return new NUnit3LifeCycleFramework(options);
-            }
-
             if ((testFrameworkTypes & TestFrameworkTypes.NUnit2) > 0)
             {
                 return new NUnit2TestFramework(options);

@@ -139,7 +139,6 @@ namespace Unitverse.ExampleGenerator {
         ///   Looks up a localized string similar to // ! Automatic Mock Generation
         ///// $ Demonstrates how dependencies injected into constructors are tracked, and mock configuration calls emitted for any detected dependencies
         ///
-        ///using System;
         ///using System.Threading.Tasks;
         ///
         ///namespace Unitverse.Examples
@@ -157,7 +156,7 @@ namespace Unitverse.ExampleGenerator {
         ///        Task&lt;string&gt; AsyncMethod(); 
         ///    }
         ///
-        ///    public interface [rest of string was truncated]&quot;;.
+        ///    public interface IDummyService2 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AutomaticMockGeneration {
             get {
@@ -358,32 +357,6 @@ namespace Unitverse.ExampleGenerator {
         internal static string FrameworksNUnitFakeItEasy {
             get {
                 return ResourceManager.GetString("FrameworksNUnitFakeItEasy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to // ! Frameworks - NUnit 3 (Lifecycle) &amp; NSubstitute
-        ///// $ Demonstrates how tests are generated using NUnit 3 (Lifecycle) for the test framework and NSubstitute for the mocking framework
-        ///// # FrameworkType=NUnit3Lifecycle
-        ///// # MockingFrameworkType=NSubstitute
-        ///// # UseFluentAssertions=false
-        ///
-        ///namespace Unitverse.Examples
-        ///{
-        ///    public interface IDependency
-        ///    {
-        ///        int Method();
-        ///    }
-        ///
-        ///    public class TestClass
-        ///    {
-        ///        IDependency _dependency;
-        ///
-        ///        public TestClass(IDependency de [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string FrameworksNUnitLifecycleNSubstitute {
-            get {
-                return ResourceManager.GetString("FrameworksNUnitLifecycleNSubstitute", resourceCulture);
             }
         }
         

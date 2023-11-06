@@ -290,7 +290,7 @@ namespace Unitverse.ExampleGenerator
                 yield return MetadataReference.CreateFromFile(typeof(Xunit.Assert).Assembly.Location);
             }
 
-            if ((testFrameworkTypes & (TestFrameworkTypes.NUnit3Lifecycle | TestFrameworkTypes.NUnit3 | TestFrameworkTypes.NUnit2)) > 0)
+            if ((testFrameworkTypes & (TestFrameworkTypes.NUnit3 | TestFrameworkTypes.NUnit2)) > 0)
             {
                 yield return MetadataReference.CreateFromFile(typeof(TestFixtureAttribute).Assembly.Location);
             }

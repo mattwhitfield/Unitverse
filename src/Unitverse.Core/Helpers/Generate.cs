@@ -280,11 +280,6 @@
             return SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(attribute));
         }
 
-        public static AttributeListSyntax AsList(this IEnumerable<AttributeSyntax> attributes)
-        {
-            return SyntaxFactory.AttributeList(SyntaxFactory.SeparatedList(attributes));
-        }
-
         public static AttributeSyntax Attribute(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
