@@ -1534,7 +1534,8 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace TestNamespace.SubNameSpace
+        ///   Looks up a localized string similar to // # UseFieldsForConstructorParameterTests=false
+        ///namespace TestNamespace.SubNameSpace
         ///{
         ///	using System;
         ///
@@ -1559,6 +1560,25 @@ namespace Unitverse.Core.Tests {
         public static string OldStyleConstructorFieldTesting {
             get {
                 return ResourceManager.GetString("OldStyleConstructorFieldTesting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # OmitTestClassAttribute=true
+        ///namespace TestNamespace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///	    public static string ParseTheThing(string input)
+        ///	    {
+        ///		    return string.Empty;
+        ///	    }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string OmitTestClassAttribute {
+            get {
+                return ResourceManager.GetString("OmitTestClassAttribute", resourceCulture);
             }
         }
         
@@ -2158,6 +2178,25 @@ namespace Unitverse.Core.Tests {
         public static string TypeGenericDisambiguation {
             get {
                 return ResourceManager.GetString("TypeGenericDisambiguation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to // # UseConstructorForTestClassSetUp=true
+        ///namespace TestNamespace
+        ///{
+        ///    public class TestClass
+        ///    {
+        ///	    public static string ParseTheThing(string input)
+        ///	    {
+        ///		    return string.Empty;
+        ///	    }
+        ///    }
+        ///}.
+        /// </summary>
+        public static string UseConstructorForClassSetup {
+            get {
+                return ResourceManager.GetString("UseConstructorForClassSetup", resourceCulture);
             }
         }
         

@@ -159,6 +159,11 @@
 
         protected override BaseMethodDeclarationSyntax CreateSetupMethodSyntax(string targetTypeName)
         {
+            if (Options.GenerationOptions.UseConstructorForTestClassSetUp)
+            {
+                return SyntaxFactory.ConstructorDeclaration(SyntaxFactory.Identifier(targetTypeName)).AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+            }
+
             return Generate.Method("SetUp", false, false).AddAttributeLists(Generate.Attribute("TestInitialize").AsList());
         }
 

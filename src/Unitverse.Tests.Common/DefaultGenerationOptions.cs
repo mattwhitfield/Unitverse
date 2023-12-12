@@ -74,5 +74,9 @@
         public bool EmitMultilinePocoInitializers { get; set; } = true;
 
         public bool UseFieldsForConstructorParameterTests { get; set; } = true;
+
+        public bool UseConstructorForTestClassSetUp { get; set; } = false;
+
+        public bool OmitTestClassAttribute { get; set; } = false;
     }
 }

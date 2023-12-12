@@ -183,5 +183,15 @@
         [DisplayName("Use fields for constructor parameter tests")]
         [Description("Whether to use fields for constructor parameter tests, or to create a new value for every test")]
         public bool UseFieldsForConstructorParameterTests { get; set; } = true;
+
+        [Category("Generation")]
+        [DisplayName("Use constructor for test class set up")]
+        [Description("Whether to use constructor for test class set up instead of the framework set up method")]
+        public bool UseConstructorForTestClassSetUp { get; set; } = false;
+
+        [Category("Generation")]
+        [DisplayName("Omit test class attribute")]
+        [Description("Whether to omit the attribute used to decorate test classes")]
+        public bool OmitTestClassAttribute { get; set; } = false;
     }
 }

@@ -92,5 +92,9 @@
         public bool EmitMultilinePocoInitializers => _baseOptions.EmitMultilinePocoInitializers;
 
         public bool UseFieldsForConstructorParameterTests => _baseOptions.UseFieldsForConstructorParameterTests;
+
+        public bool UseConstructorForTestClassSetUp => _baseOptions.UseConstructorForTestClassSetUp;
+
+        public bool OmitTestClassAttribute => _baseOptions.OmitTestClassAttribute;
     }
 }

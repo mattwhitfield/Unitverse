@@ -1,0 +1,11 @@
+// # UseConstructorForTestClassSetUp=true
+namespace TestNamespace
+{
+    public class TestClass
+    {
+	    public static string ParseTheThing(string input)
+	    {
+		    return string.Empty;
+	    }
+    }
+}
