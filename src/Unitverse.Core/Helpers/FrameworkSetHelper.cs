@@ -28,5 +28,17 @@
 
             return nameSyntax;
         }
+
+        public static ClassDeclarationSyntax ApplyTestClassAttribute(this IFrameworkSet frameworkSet, ClassDeclarationSyntax classDeclarationSyntax)
+        {
+            if (!frameworkSet.Options.GenerationOptions.OmitTestClassAttribute &&
+                !string.IsNullOrWhiteSpace(frameworkSet.TestFramework.TestClassAttribute))
+            {
+                var testFixtureAtt = Generate.Attribute(frameworkSet.TestFramework.TestClassAttribute);
+                return classDeclarationSyntax.AddAttributeLists(testFixtureAtt.AsList());
+            }
+
+            return classDeclarationSyntax;
+        }
     }
 }

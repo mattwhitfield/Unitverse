@@ -274,6 +274,9 @@
   <data name="OldStyleConstructorFieldTesting" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\OldStyleConstructorFieldTesting.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="OmitTestClassAttribute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\OmitTestClassAttribute.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="OperatorOverloading" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\OperatorOverloading.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -342,6 +345,9 @@
   </data>
   <data name="TypeGenericDisambiguation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\TypeGenericDisambiguation.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UseConstructorForClassSetup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\UseConstructorForClassSetup.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="UsingSort-Natural" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\UsingSort-Natural.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

@@ -69,11 +69,7 @@
                 classDeclaration = classDeclaration.AddMembers(field);
             }
 
-            if (!string.IsNullOrWhiteSpace(_frameworkSet.TestFramework.TestClassAttribute))
-            {
-                var testFixtureAtt = Generate.Attribute(_frameworkSet.TestFramework.TestClassAttribute);
-                classDeclaration = classDeclaration.AddAttributeLists(testFixtureAtt.AsList());
-            }
+            classDeclaration = _frameworkSet.ApplyTestClassAttribute(classDeclaration);
 
             return classDeclaration;
         }
