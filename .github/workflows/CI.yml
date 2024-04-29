@@ -125,10 +125,10 @@ jobs:
         extension-file: 'dist/UnitverseVS2022.vsix'
         publish-manifest-file: 'publishManifestVS2022.json'
         personal-access-code: ${{ secrets.UNITVERSE_PUBLISHER_ACCESS_TOKEN }}      
-    # - name: Publish 2019 extension to Marketplace
-      # if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
-      # uses: cezarypiatek/VsixPublisherAction@1.0
-      # with:
-        # extension-file: 'dist/UnitverseVS2019.vsix'
-        # publish-manifest-file: 'publishManifestVS2019.json'
-        # personal-access-code: ${{ secrets.UNITVERSE_PUBLISHER_ACCESS_TOKEN }}      
+    - name: Publish 2019 extension to Marketplace
+      if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+      uses: cezarypiatek/VsixPublisherAction@1.0
+      with:
+        extension-file: 'dist/UnitverseVS2019.vsix'
+        publish-manifest-file: 'publishManifestVS2019.json'
+        personal-access-code: ${{ secrets.UNITVERSE_PUBLISHER_ACCESS_TOKEN }}      
