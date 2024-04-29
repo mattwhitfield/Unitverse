@@ -59,12 +59,20 @@
             new Matcher<MockingFrameworkType>("JustMock", null, MockingFrameworkType.JustMock),
         };
 
-        private static void Resolve<T>(ref T? value, IList<Matcher<T>> matchers, string referenceName, int referenceMajorVersion)
+        private static void ResolveWithExistingSelection<T>(ref T? value, T existingValue, Func<T, T, bool> isEqual, IList<Matcher<T>> matchers, string referenceName, int referenceMajorVersion)
             where T : struct
         {
+            Resolve(ref value, matchers, referenceName, referenceMajorVersion, x => isEqual(x.Result, existingValue));
+        }
+
+        private static void Resolve<T>(ref T? value, IList<Matcher<T>> matchers, string referenceName, int referenceMajorVersion, Func<Matcher<T>, bool>? predicate = null)
+            where T : struct
+        {
+            predicate ??= _ => true;
+
             if (!value.HasValue)
             {
-                var match = matchers.FirstOrDefault(x => x.IsMatch(referenceName, referenceMajorVersion));
+                var match = matchers.FirstOrDefault(x => x.IsMatch(referenceName, referenceMajorVersion) && predicate(x));
                 if (match != null)
                 {
                     value = match.Result;
@@ -95,6 +103,12 @@
             bool? autoFixtureMockingPresent = null;
             TestFrameworkTypes? detectedTestFramework = null;
             MockingFrameworkType? detectedMockingFramework = null;
+
+            foreach (var reference in referencedAssemblies)
+            {
+                ResolveWithExistingSelection(ref detectedTestFramework, baseOptions.FrameworkType, (x, y) => x == y, TestFrameworkMatchers, reference.AssemblyName, reference.MajorVersion);
+                ResolveWithExistingSelection(ref detectedMockingFramework, baseOptions.MockingFrameworkType, (x, y) => x == y, MockingFrameworkMatchers, reference.AssemblyName, reference.MajorVersion);
+            }
 
             foreach (var reference in referencedAssemblies)
             {
