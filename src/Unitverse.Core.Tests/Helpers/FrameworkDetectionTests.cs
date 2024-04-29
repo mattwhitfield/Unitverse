@@ -43,6 +43,32 @@ namespace Unitverse.Core.Tests.Helpers
             Assert.That(result.MockingFrameworkType, Is.EqualTo(detectedType));
         }
 
+        [TestCase(TestFrameworkTypes.NUnit3)]
+        [TestCase(TestFrameworkTypes.MsTest)]
+        [TestCase(TestFrameworkTypes.XUnit)]
+        public static void ResolveTargetFrameworksRetainsValidSelectedTestFramework(TestFrameworkTypes baseType)
+        {
+            var referencedAssemblies = new[] { new ReferencedAssembly("Microsoft.VisualStudio.TestPlatform.TestFramework", 3), new ReferencedAssembly("xunit.assert", 3), new ReferencedAssembly("nunit.framework", 3) };
+            var baseOptions = Substitute.For<IGenerationOptions>();
+            baseOptions.FrameworkType.Returns(baseType);
+            baseOptions.AutoDetectFrameworkTypes.Returns(true);
+            var result = FrameworkDetection.ResolveTargetFrameworks(referencedAssemblies, baseOptions);
+            Assert.That(result.FrameworkType, Is.EqualTo(baseType));
+        }
+
+        [TestCase(MockingFrameworkType.FakeItEasy)]
+        [TestCase(MockingFrameworkType.NSubstitute)]
+        [TestCase(MockingFrameworkType.Moq)]
+        public static void ResolveTargetFrameworksRetainsValidSelectedMockingFramework(MockingFrameworkType baseType)
+        {
+            var referencedAssemblies = new[] { new ReferencedAssembly("FakeItEasy", 1), new ReferencedAssembly("NSubstitute", 1), new ReferencedAssembly("Moq", 1) };
+            var baseOptions = Substitute.For<IGenerationOptions>();
+            baseOptions.MockingFrameworkType.Returns(baseType);
+            baseOptions.AutoDetectFrameworkTypes.Returns(true);
+            var result = FrameworkDetection.ResolveTargetFrameworks(referencedAssemblies, baseOptions);
+            Assert.That(result.MockingFrameworkType, Is.EqualTo(baseType));
+        }
+
         [TestCase("FluentAssertions", false, true)]
         [TestCase("fred", false, false)]
         [TestCase("fred", true, true)]
