@@ -76,7 +76,7 @@ Include: Model.Type.Name == 'Int32'
 Assert.That(_testClass.{{model.Name}}, Is.GreaterThan(5));
 Assert.That(_testClass.{{model.Name}}, Is.LessThan(100));
 ```
-<-- {% endraw %} -->
+<!-- {% endraw %} -->
 
 The output generated is:
 
