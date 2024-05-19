@@ -65,6 +65,7 @@ TODO - actually implement this functionality 🤣
 
 Here is an example template that will be generated for all properties of type `int`:
 
+<!-- {% raw %} -->
 ```
 TestMethodName: {memberName:pascal}IsGreaterThan5AndLessThan100
 Target: Property
@@ -75,6 +76,7 @@ Include: Model.Type.Name == 'Int32'
 Assert.That(_testClass.{{model.Name}}, Is.GreaterThan(5));
 Assert.That(_testClass.{{model.Name}}, Is.LessThan(100));
 ```
+<-- {% endraw %} -->
 
 The output generated is:
 
