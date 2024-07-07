@@ -82,7 +82,7 @@
             return Generate.MemberInvocation("Mock", methodName, Generate.ParenthesizedLambdaExpression(methodCall));
         }
 
-        public ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type)
+        public ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type, bool isReferenceType)
         {
             return null;
         }

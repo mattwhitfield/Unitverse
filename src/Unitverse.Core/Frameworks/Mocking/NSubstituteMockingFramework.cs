@@ -72,7 +72,7 @@
             return MockingHelper.GetMethodCall(dependencyMethod, received, MockingHelper.TranslateArgumentFunc(GetArgument, parameters), frameworkSet.Context);
         }
 
-        public ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type)
+        public ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type, bool isReferenceType)
         {
             return null;
         }

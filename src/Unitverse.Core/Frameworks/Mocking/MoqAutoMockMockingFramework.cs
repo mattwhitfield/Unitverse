@@ -53,16 +53,16 @@
             return base.GetFieldInitializer(type);
         }
 
-        public override ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type)
+        public override ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type, bool isReferenceType)
         {
-            if (IsActive)
+            if (IsActive && isReferenceType)
             {
                 _context.MocksUsed = true;
                 _context.CurrentMethod.AddRequirement(Requirements.AutoMocker);
                 return Generate.MemberInvocation("mocker", Generate.GenericName("CreateInstance", type));
             }
 
-            return base.GetObjectCreationExpression(type);
+            return base.GetObjectCreationExpression(type, isReferenceType);
         }
     }
 }

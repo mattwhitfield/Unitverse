@@ -1,0 +1,3 @@
+public struct Foo<T> where T : unmanaged {
+  public void Bar() { }
+}

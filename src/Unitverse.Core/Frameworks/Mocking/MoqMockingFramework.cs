@@ -118,7 +118,7 @@
             return Generate.MemberInvocation(mockFieldName, actionName, SyntaxFactory.SimpleLambdaExpression(Generate.Parameter("mock"), methodCall));
         }
 
-        public virtual ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type)
+        public virtual ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type, bool isReferenceType)
         {
             return null;
         }

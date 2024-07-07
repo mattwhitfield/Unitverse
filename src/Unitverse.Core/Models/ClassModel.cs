@@ -264,7 +264,7 @@
 
             if (forSetupMethod)
             {
-                var mockedCreationExpression = frameworkSet.MockingFramework.GetObjectCreationExpression(TypeSyntax);
+                var mockedCreationExpression = frameworkSet.MockingFramework.GetObjectCreationExpression(TypeSyntax, TypeSymbol.IsReferenceType);
                 if (mockedCreationExpression != null)
                 {
                     return mockedCreationExpression;

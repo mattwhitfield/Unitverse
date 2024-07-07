@@ -78,17 +78,22 @@
                 entryKeys = entryKeys.Where(x => x.IndexOf("FileScoped", StringComparison.OrdinalIgnoreCase) < 0).ToList();
 #endif
 
-                var baseSet = entryKeys.Cast<object>().ToArray()
-                    .CrossJoin(frameworks)
+                var baseSet = entryKeys.Select(x => new List<object> { x });
+                    
+                var secondarySet = frameworks
                     .CrossJoin(mocks)
-                    .CrossJoin(AssertionFrameworkVariations);
+                    .CrossJoin(AssertionFrameworkVariations)
+                    .CrossJoin(AutoFixtureVariations);
 
-                int autoFixtureRow = 0;
+                int secondaryRow = 0;
                 foreach (var row in baseSet)
                 {
-                    autoFixtureRow++;
-                    var autoFixtureValues = AutoFixtureVariations[autoFixtureRow % AutoFixtureVariations.Count];
-                    yield return row.Concat(autoFixtureValues).ToArray();
+                    for (int i = 0; i < 50; i++)
+                    {
+                        secondaryRow++;
+                        var secondaryValues = secondarySet[secondaryRow % secondarySet.Count];
+                        yield return row.Concat(secondaryValues).ToArray();
+                    }
                 }
             }
         }

@@ -90,14 +90,24 @@
 
                 if (constraint != null)
                 {
-                    var typeConstraints = constraint.Constraints.OfType<TypeConstraintSyntax>().Select(x => x.Type).Select(x => classModel.SemanticModel.GetTypeInfo(x)) ?? Enumerable.Empty<TypeInfo>();
-                    ITypeSymbol[] constrainableTypes = typeConstraints.Select(x => x.Type).WhereNotNull().Where(x => !(x is IErrorTypeSymbol)).ToArray();
+                    var typeConstraints = constraint.Constraints.OfType<TypeConstraintSyntax>().Select(x => x.Type);
+                    var typeConstraintInfo = typeConstraints.Select(x => classModel.SemanticModel.GetTypeInfo(x)) ?? Enumerable.Empty<TypeInfo>();
+                    ITypeSymbol[] constrainableTypes = typeConstraintInfo.Select(x => x.Type).WhereNotNull().Where(x => !(x is IErrorTypeSymbol)).ToArray();
                     if (constrainableTypes.Any())
                     {
                         derivedType = TypeHelper.FindDerivedNonAbstractType(constrainableTypes);
                         if (derivedType != null)
                         {
                             nameSyntax = SyntaxFactory.IdentifierName(derivedType.ToFullName());
+                        }
+                    }
+                    else
+                    {
+                        var structOrUnmanaged = typeConstraints.OfType<IdentifierNameSyntax>().Select(x => x.Identifier.Text).Any(x =>
+                            string.Equals(x, "struct", StringComparison.OrdinalIgnoreCase) || string.Equals(x, "unmanaged", StringComparison.OrdinalIgnoreCase));
+                        if (structOrUnmanaged)
+                        {
+                            nameSyntax = SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName("System"), SyntaxFactory.IdentifierName("Int32"));
                         }
                     }
                 }
