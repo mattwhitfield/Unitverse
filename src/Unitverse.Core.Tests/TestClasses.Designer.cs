@@ -2182,6 +2182,17 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to public struct Foo&lt;T&gt; where T : unmanaged {
+        ///  public void Bar() { }
+        ///}.
+        /// </summary>
+        public static string UnmanagedConstraint {
+            get {
+                return ResourceManager.GetString("UnmanagedConstraint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to // # UseConstructorForTestClassSetUp=true
         ///namespace TestNamespace
         ///{
