@@ -45,7 +45,7 @@ public class TestClassTests
     {
         var mocker = new AutoMocker();
         _dependency = mocker.GetMock<IDependency>();
-        _testClass = new TestClass(_dependency.Object);
+        _testClass = mocker.CreateInstance<TestClass>();
     }
 
     [TestMethod]
