@@ -45,7 +45,7 @@
             return _targetFramework.GetFieldType(type);
         }
 
-        public ExpressionSyntax GetObjectCreationExpression(TypeSyntax typeSyntax)
+        public ExpressionSyntax GetObjectCreationExpression(TypeSyntax typeSyntax, bool isReferenceType)
         {
             return AutoFixtureHelper.Create(typeSyntax, _context);
         }

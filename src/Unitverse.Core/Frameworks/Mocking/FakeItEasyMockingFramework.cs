@@ -77,7 +77,7 @@
             return Generate.MemberInvocation("A", "CallTo", Generate.ParenthesizedLambdaExpression(methodCall));
         }
 
-        public ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type)
+        public ExpressionSyntax? GetObjectCreationExpression(TypeSyntax type, bool isReferenceType)
         {
             return null;
         }
