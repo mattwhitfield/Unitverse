@@ -96,11 +96,11 @@ jobs:
     - run: |
         ./.github/workflows/AutoVersion.ps1
       shell: pwsh 
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4.1.7
       with:
         name: Unitverse-VSIX-VS2019
         path: dist/
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4.1.7
       with:
         name: Unitverse-VSIX-VS2022
         path: dist/
