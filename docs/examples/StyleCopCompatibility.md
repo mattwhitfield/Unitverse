@@ -35,8 +35,8 @@ public class TestClass
 /// </summary>
 public class TestClassTests
 {
-    private TestClass _testClass;
-    private IDependency _dependency;
+    private readonly TestClass _testClass;
+    private readonly IDependency _dependency;
 
     /// <summary>
     /// Sets up the dependencies required for the tests for <see cref="TestClass"/>.

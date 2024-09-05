@@ -28,7 +28,7 @@ public class ConsumingClass
 ``` csharp
 public class ConsumingClassTests
 {
-    private ConsumingClass _testClass;
+    private readonly ConsumingClass _testClass;
     private SomePoco _poco;
 
     public ConsumingClassTests()

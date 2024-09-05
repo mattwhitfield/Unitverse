@@ -44,7 +44,7 @@ public class TestComparableGeneric : IComparable<TestComparableGeneric>, ICompar
 ``` csharp
 public class TestComparableGenericTests
 {
-    private TestComparableGeneric _testClass;
+    private readonly TestComparableGeneric _testClass;
     private int _value;
 
     public TestComparableGenericTests()

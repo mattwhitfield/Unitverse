@@ -45,7 +45,7 @@ public class TestClass<T, R>
 ``` csharp
 public class TestClass_2Tests
 {
-    private TestClass<T, R> _testClass;
+    private readonly TestClass<T, R> _testClass;
     private T _insta;
     private R _insta2;
 

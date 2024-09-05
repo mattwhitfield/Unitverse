@@ -54,7 +54,7 @@ class Calculator
 ``` csharp
 public class CalculatorTests
 {
-    private Calculator _testClass;
+    private readonly Calculator _testClass;
     private int _n;
 
     public CalculatorTests()

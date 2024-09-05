@@ -16,7 +16,7 @@ public class SomePoco
 ``` csharp
 public class SomePocoTests
 {
-    private SomePoco _testClass;
+    private readonly SomePoco _testClass;
 
     public SomePocoTests()
     {

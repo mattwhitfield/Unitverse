@@ -36,8 +36,8 @@ public class TestClass
 ``` csharp
 public class TestClassTests
 {
-    private TestClass _testClass;
-    private IDependency _dependency;
+    private readonly TestClass _testClass;
+    private readonly IDependency _dependency;
 
     public TestClassTests()
     {

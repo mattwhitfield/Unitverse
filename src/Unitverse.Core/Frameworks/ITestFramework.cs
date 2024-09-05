@@ -9,5 +9,7 @@
         AttributeSyntax? SingleThreadedApartmentAttribute { get; }
 
         string TestClassAttribute { get; }
+
+        bool SupportsReadonlyFields { get; }
     }
 }

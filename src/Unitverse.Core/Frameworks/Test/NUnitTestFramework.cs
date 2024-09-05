@@ -30,6 +30,8 @@
 
         public bool SkipValueTypeNotNull => false;
 
+        public override bool SupportsReadonlyFields => false;
+
         private static InvocationExpressionSyntax AssertThat => Generate.MemberInvocation("Assert", "That");
 
         public StatementSyntax AssertEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)

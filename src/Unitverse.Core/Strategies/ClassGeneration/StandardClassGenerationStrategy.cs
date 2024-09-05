@@ -58,8 +58,7 @@
             var variableDeclaration = SyntaxFactory.VariableDeclaration(model.TypeSyntax)
                 .AddVariables(SyntaxFactory.VariableDeclarator(model.TargetFieldName));
 
-            var fieldDeclaration = SyntaxFactory.FieldDeclaration(variableDeclaration)
-                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+            var fieldDeclaration = Generate.Field(variableDeclaration, _frameworkSet.TestFramework.SupportsReadonlyFields && model.TypeSymbol.IsReferenceType);
             classDeclaration = classDeclaration.AddMembers(fieldDeclaration);
 
             if (_frameworkSet.Options.GenerationOptions.UseFieldForAutoFixture)

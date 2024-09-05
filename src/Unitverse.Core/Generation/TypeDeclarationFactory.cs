@@ -74,7 +74,7 @@
                     if (!autoFixtureFieldExists)
                     {
                         var defaultExpression = AutoFixtureHelper.GetCreationExpression(frameworkSet.Options.GenerationOptions);
-                        updatedMethod = UpdateMethod(updatedMethod, allFields, fields, autoFixtureFieldName, AutoFixtureHelper.TypeSyntax, defaultExpression);
+                        updatedMethod = UpdateMethod(updatedMethod, allFields, fields, autoFixtureFieldName, AutoFixtureHelper.TypeSyntax, defaultExpression, frameworkSet.TestFramework.SupportsReadonlyFields);
                     }
                 }
 
@@ -106,7 +106,7 @@
                             defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(parameterModel.TypeInfo, classModel.SemanticModel, frameworkSet);
                         }
 
-                        updatedMethod = UpdateMethod(updatedMethod, allFields, fields, fieldName, fieldTypeSyntax, defaultExpression);
+                        updatedMethod = UpdateMethod(updatedMethod, allFields, fields, fieldName, fieldTypeSyntax, defaultExpression, frameworkSet.TestFramework.SupportsReadonlyFields);
                     }
                 }
 
@@ -137,12 +137,11 @@
             return targetType;
         }
 
-        private static BaseMethodDeclarationSyntax UpdateMethod(BaseMethodDeclarationSyntax updatedMethod, HashSet<string> allFields, List<FieldDeclarationSyntax> fields, string fieldName, TypeSyntax fieldTypeSyntax, ExpressionSyntax defaultExpression)
+        private static BaseMethodDeclarationSyntax UpdateMethod(BaseMethodDeclarationSyntax updatedMethod, HashSet<string> allFields, List<FieldDeclarationSyntax> fields, string fieldName, TypeSyntax fieldTypeSyntax, ExpressionSyntax defaultExpression, bool readonlyField)
         {
             var variable = SyntaxFactory.VariableDeclaration(fieldTypeSyntax)
                                         .AddVariables(SyntaxFactory.VariableDeclarator(fieldName));
-            var field = SyntaxFactory.FieldDeclaration(variable)
-                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+            var field = Generate.Field(variable, readonlyField);
 
             fields.Add(field);
 

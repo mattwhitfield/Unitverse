@@ -32,7 +32,7 @@ public class TestClass
 ``` csharp
 public class TestClassTests
 {
-    private TestClass _testClass;
+    private readonly TestClass _testClass;
 
     public TestClassTests()
     {

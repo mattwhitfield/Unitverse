@@ -177,22 +177,22 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("I expect it to have the attribute \'Test\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 72
-  testRunner.And("I expect it to contain the statement \'_testClass = new TestClass(_thisIsAProperty" +
-                        ", _iTest);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to contain the statement \'var instance = new TestClass(_thisIsAProper" +
+                        "ty, _iTest);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 73
-  testRunner.And("I expect it to contain 2 statements called \'Assert.That(_testClass.ThisIsAPropert" +
-                        "y, Is.EqualTo(_thisIsAProperty));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to contain 2 statements called \'Assert.That(instance.ThisIsAProperty," +
+                        " Is.EqualTo(_thisIsAProperty));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 74
  testRunner.And("I expect a method called \'StringPropIsInitializedCorrectly\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 75
-  testRunner.And("I expect it to contain the statement \'_testClass = new TestClass(_stringProp);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to contain the statement \'instance = new TestClass(_stringProp);\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 76
-  testRunner.And("I expect it to contain 2 statements called \'Assert.That(_testClass.StringProp, Is" +
-                        ".EqualTo(_stringProp));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.And("I expect it to contain 2 statements called \'Assert.That(instance.StringProp, Is.E" +
+                        "qualTo(_stringProp));\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 77
  testRunner.And("I expect no method with a name like \'.*nullableIntProp.*\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

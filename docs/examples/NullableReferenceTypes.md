@@ -34,10 +34,10 @@ public class TestClass
 ``` csharp
 public class TestClassTests
 {
-    private TestClass _testClass;
+    private readonly TestClass _testClass;
     private string _notNullable;
     private string _nullable;
-    private ITest _testITest;
+    private readonly ITest _testITest;
     private string _someOtherThing;
 
     public TestClassTests()

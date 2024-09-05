@@ -23,7 +23,7 @@ public class TypeWithIndexer
 ``` csharp
 public class TypeWithIndexerTests
 {
-    private TypeWithIndexer _testClass;
+    private readonly TypeWithIndexer _testClass;
 
     public TypeWithIndexerTests()
     {
