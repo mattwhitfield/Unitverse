@@ -44,7 +44,7 @@ public struct Complex : IEquatable<Complex>
 ``` csharp
 public class ComplexTests
 {
-    private readonly Complex _testClass;
+    private Complex _testClass;
 
     public ComplexTests()
     {
