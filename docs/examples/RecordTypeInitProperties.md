@@ -33,7 +33,7 @@ record Person
 ``` csharp
 public class PersonTests
 {
-    private Person _testClass;
+    private readonly Person _testClass;
     private Guid _id;
     private string _firstName;
     private string _middleName;

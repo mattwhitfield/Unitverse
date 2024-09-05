@@ -81,6 +81,8 @@
 
         private IEnumerable<StatementSyntax> GetPropertyAssertionBodyStatements(IPropertyModel property, ClassModel model)
         {
+            bool declared = false;
+
             foreach (var targetConstructor in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, property.Name, StringComparison.OrdinalIgnoreCase))))
             {
                 var tokenList = new List<SyntaxNodeOrToken>();
@@ -97,16 +99,24 @@
 
                 var objectCreation = SyntaxFactory.ObjectCreationExpression(model.TypeSyntax).WithArgumentList(SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList<ArgumentSyntax>(tokenList)));
 
-                var assignment = SyntaxFactory.AssignmentExpression(
-                    SyntaxKind.SimpleAssignmentExpression,
-                    model.TargetInstance,
-                    objectCreation);
+                if (!declared)
+                {
+                    yield return Generate.ImplicitlyTypedVariableDeclaration("instance", objectCreation);
+                    declared = true;
+                }
+                else
+                {
+                    var assignment = SyntaxFactory.AssignmentExpression(
+                        SyntaxKind.SimpleAssignmentExpression,
+                        SyntaxFactory.IdentifierName("instance"),
+                        objectCreation);
 
-                yield return Generate.Statement(assignment);
+                    yield return Generate.Statement(assignment);
+                }
 
                 var parameterToCheck = model.Constructors.SelectMany(x => x.Parameters).First(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
 
-                yield return _frameworkSet.AssertionFramework.AssertEqual(property.Access(model.TargetInstance), model.GetConstructorFieldReference(parameterToCheck, _frameworkSet), parameterToCheck.TypeInfo.Type.IsReferenceTypeAndNotString());
+                yield return _frameworkSet.AssertionFramework.AssertEqual(property.Access(SyntaxFactory.IdentifierName("instance")), model.GetConstructorFieldReference(parameterToCheck, _frameworkSet), parameterToCheck.TypeInfo.Type.IsReferenceTypeAndNotString());
             }
         }
     }

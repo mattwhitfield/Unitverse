@@ -462,11 +462,24 @@
             return setupMethod;
         }
 
+        public static FieldDeclarationSyntax Field(VariableDeclarationSyntax variableDeclaration, bool readonlyField)
+        {
+            var field = SyntaxFactory.FieldDeclaration(variableDeclaration);
+
+            if (readonlyField)
+            {
+                return field.AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword), SyntaxFactory.Token(SyntaxKind.ReadOnlyKeyword));
+            }
+
+            return field.AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+        }
+
         private static void AddConstructorField(ClassModel model, IFrameworkSet frameworkSet, ref ClassDeclarationSyntax classDeclaration, SectionedMethodHandler setupMethod, string fieldName, TypeInfo typeInfo)
         {
             var typeSyntax = typeInfo.ToTypeSyntax(frameworkSet.Context);
             ExpressionSyntax defaultExpression;
-            if (typeInfo.ShouldUseMock())
+            var isMock = typeInfo.ShouldUseMock();
+            if (isMock)
             {
                 typeSyntax = frameworkSet.MockingFramework.GetFieldType(typeSyntax);
                 frameworkSet.Context.InterfacesMocked++;
@@ -477,13 +490,13 @@
                 defaultExpression = AssignmentValueHelper.GetDefaultAssignmentValue(typeInfo, model.SemanticModel, frameworkSet);
             }
 
-            AddConstructorField(frameworkSet, ref classDeclaration, setupMethod, fieldName, typeSyntax, defaultExpression);
+            AddConstructorField(frameworkSet, ref classDeclaration, setupMethod, fieldName, typeSyntax, defaultExpression, isMock && frameworkSet.TestFramework.SupportsReadonlyFields);
         }
 
-        private static void AddConstructorField(IFrameworkSet frameworkSet, ref ClassDeclarationSyntax classDeclaration, SectionedMethodHandler setupMethod, string fieldName, TypeSyntax typeSyntax, ExpressionSyntax defaultExpression)
+        private static void AddConstructorField(IFrameworkSet frameworkSet, ref ClassDeclarationSyntax classDeclaration, SectionedMethodHandler setupMethod, string fieldName, TypeSyntax typeSyntax, ExpressionSyntax defaultExpression, bool readonlyField)
         {
             var variable = SyntaxFactory.VariableDeclaration(typeSyntax).AddVariables(SyntaxFactory.VariableDeclarator(fieldName));
-            var field = SyntaxFactory.FieldDeclaration(variable).AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+            var field = Field(variable, readonlyField);
 
             classDeclaration = classDeclaration.AddMembers(field);
 

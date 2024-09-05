@@ -11,7 +11,7 @@ public record RecordType(string StringProperty, int IntProperty);
 ``` csharp
 public class RecordTypeTests
 {
-    private RecordType _testClass;
+    private readonly RecordType _testClass;
     private string _stringProperty;
     private int _intProperty;
 

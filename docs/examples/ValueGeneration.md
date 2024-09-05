@@ -24,7 +24,7 @@ public class Writer
 ``` csharp
 public class WriterTests
 {
-    private Writer _testClass;
+    private readonly Writer _testClass;
 
     public WriterTests()
     {

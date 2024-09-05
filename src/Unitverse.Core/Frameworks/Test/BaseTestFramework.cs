@@ -23,6 +23,8 @@
 
         protected abstract string TestCaseAttributeName { get; }
 
+        public abstract bool SupportsReadonlyFields { get; }
+
         protected abstract BaseMethodDeclarationSyntax CreateSetupMethodSyntax(string targetTypeName);
 
         public IUnitTestGeneratorOptions Options { get; }

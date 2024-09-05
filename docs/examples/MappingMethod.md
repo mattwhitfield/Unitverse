@@ -31,7 +31,7 @@ public class MappingClass
 ``` csharp
 public class MappingClassTests
 {
-    private MappingClass _testClass;
+    private readonly MappingClass _testClass;
 
     public MappingClassTests()
     {

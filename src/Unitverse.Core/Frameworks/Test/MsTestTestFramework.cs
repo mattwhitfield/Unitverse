@@ -30,6 +30,8 @@
 
         public bool SkipValueTypeNotNull => false;
 
+        public override bool SupportsReadonlyFields => false;
+
         public StatementSyntax AssertEqual(ExpressionSyntax actual, ExpressionSyntax expected, bool isReferenceType)
         {
             if (actual == null)

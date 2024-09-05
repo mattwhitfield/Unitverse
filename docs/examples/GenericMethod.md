@@ -17,7 +17,7 @@ public class GenericSource
 ``` csharp
 public class GenericSourceTests
 {
-    private GenericSource _testClass;
+    private readonly GenericSource _testClass;
 
     public GenericSourceTests()
     {

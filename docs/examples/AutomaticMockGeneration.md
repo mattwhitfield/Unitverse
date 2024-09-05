@@ -135,9 +135,9 @@ public class AutomaticMockGenerationExample
 ``` csharp
 public class AutomaticMockGenerationExampleTests
 {
-    private AutomaticMockGenerationExample _testClass;
-    private IDummyService _dummyService;
-    private IDummyService2 _dummyService2;
+    private readonly AutomaticMockGenerationExample _testClass;
+    private readonly IDummyService _dummyService;
+    private readonly IDummyService2 _dummyService2;
 
     public AutomaticMockGenerationExampleTests()
     {

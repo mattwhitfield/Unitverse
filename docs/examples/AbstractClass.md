@@ -40,7 +40,7 @@ public class TestClassTests
         }
     }
 
-    private TestTestClass _testClass;
+    private readonly TestTestClass _testClass;
 
     public TestClassTests()
     {

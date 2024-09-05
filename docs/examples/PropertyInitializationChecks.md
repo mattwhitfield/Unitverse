@@ -23,7 +23,7 @@ public class ExampleClass
 ``` csharp
 public class ExampleClassTests
 {
-    private ExampleClass _testClass;
+    private readonly ExampleClass _testClass;
     private int _identity;
     private string _description;
     private Guid _uniqueCode;
