@@ -193,12 +193,14 @@ namespace Unitverse.Helper
 
             var defaultNamespaceProperty = project.Properties.Item("DefaultNamespace");
 
-            if (defaultNamespaceProperty?.Value == null)
+            var defaultNamespace = defaultNamespaceProperty?.Value?.ToString();
+
+            if (string.IsNullOrWhiteSpace(defaultNamespace))
             {
-                return "Testing";
+                defaultNamespace = project.Name;
             }
 
-            return defaultNamespaceProperty.Value.ToString();
+            return defaultNamespace;
         }
 
         private static IVsHierarchy GetVsHierarchyFromFilepath(string filepath, out uint itemId)
