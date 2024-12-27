@@ -5,7 +5,6 @@
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Frameworks;
     using Unitverse.Core.Helpers;
     using Unitverse.Core.Models;
@@ -41,17 +40,62 @@
             {
                 namingContext = namingContext.WithParameterName(nullableParameter.ToPascalCase());
                 var isNonNullable = model.Constructors.SelectMany(x => x.Parameters.Where(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))).All(x => x.IsNullableTypeSyntax || x.HasNullDefaultValue);
-                object?[] testValues = isNonNullable ? new object?[] { string.Empty, "   " } : new object?[] { null, string.Empty, "   " };
-                var generatedMethod = FrameworkSet.CreateTestCaseMethod(FrameworkSet.NamingProvider.CannotConstructWithInvalid, namingContext, false, false, SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword)), testValues, "Checks that the constructor throws when the " + nullableParameter + " parameter is null, empty or white space.");
 
-                foreach (var constructorModel in model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase))))
+                var stringKeyword = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.StringKeyword));
+
+                var constructors = model.Constructors.Where(x => x.Parameters.Any(p => string.Equals(p.Name, nullableParameter, StringComparison.OrdinalIgnoreCase)));
+                var shouldUseSeparatedNullableChecks = constructors.Any(x => FrameworkSet.Options.GenerationOptions.ShouldUseSeparateChecksForNullAndEmpty(x.Node));
+
+                if (shouldUseSeparatedNullableChecks)
                 {
-                    var paramExpressions = constructorModel.Parameters.Select(param => string.Equals(param.Name, nullableParameter, StringComparison.OrdinalIgnoreCase) ? SyntaxFactory.IdentifierName("value") : GetFieldReferenceOrNewObjectFor(model, param)).ToList();
-                    var methodCall = Generate.ObjectCreation(model.TypeSyntax, paramExpressions.ToArray());
-                    generatedMethod.Emit(FrameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall, nullableParameter));
-                }
+                    if (!isNonNullable)
+                    {
+                        var nullDescription = "Checks that the constructor throws when the " + nullableParameter + " parameter is null.";
+                        var nullMethod = FrameworkSet.CreateTestMethod(FrameworkSet.NamingProvider.CannotConstructWithNull, namingContext, false, false, nullDescription);
 
-                yield return generatedMethod;
+                        foreach (var constructorModel in constructors)
+                        {
+                            var paramExpressions = constructorModel.Parameters.Select(param => string.Equals(param.Name, nullableParameter, StringComparison.OrdinalIgnoreCase) ? SyntaxFactory.DefaultExpression(param.TypeInfo.ToTypeSyntax(FrameworkSet.Context)) : GetFieldReferenceOrNewObjectFor(model, param)).ToList();
+                            var methodCall = Generate.ObjectCreation(model.TypeSyntax, paramExpressions.ToArray());
+                            nullMethod.Emit(FrameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall, nullableParameter));
+                        }
+
+                        yield return nullMethod;
+                    }
+
+                    var description = "Checks that the constructor throws when the " + nullableParameter + " parameter is empty or white space.";
+                    var generatedMethod = FrameworkSet.CreateTestCaseMethod(FrameworkSet.NamingProvider.CannotConstructWithInvalid, namingContext, false, false, stringKeyword, new object?[] { string.Empty, "   " }, description);
+
+                    foreach (var constructorModel in constructors)
+                    {
+                        var paramExpressions = constructorModel.Parameters.Select(param => string.Equals(param.Name, nullableParameter, StringComparison.OrdinalIgnoreCase) ? SyntaxFactory.IdentifierName("value") : GetFieldReferenceOrNewObjectFor(model, param)).ToList();
+                        var methodCall = Generate.ObjectCreation(model.TypeSyntax, paramExpressions.ToArray());
+                        generatedMethod.Emit(FrameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentException"), methodCall, nullableParameter));
+                    }
+
+                    yield return generatedMethod;
+                }
+                else
+                {
+                    var description = isNonNullable ?
+                        "Checks that the constructor throws when the " + nullableParameter + " parameter is empty or white space." :
+                        "Checks that the constructor throws when the " + nullableParameter + " parameter is null, empty or white space.";
+
+                    object?[] testValues = isNonNullable ?
+                        new object?[] { string.Empty, "   " } :
+                        new object?[] { null, string.Empty, "   " };
+
+                    var generatedMethod = FrameworkSet.CreateTestCaseMethod(FrameworkSet.NamingProvider.CannotConstructWithInvalid, namingContext, false, false, stringKeyword, testValues, description);
+
+                    foreach (var constructorModel in constructors)
+                    {
+                        var paramExpressions = constructorModel.Parameters.Select(param => string.Equals(param.Name, nullableParameter, StringComparison.OrdinalIgnoreCase) ? SyntaxFactory.IdentifierName("value") : GetFieldReferenceOrNewObjectFor(model, param)).ToList();
+                        var methodCall = Generate.ObjectCreation(model.TypeSyntax, paramExpressions.ToArray());
+                        generatedMethod.Emit(FrameworkSet.AssertionFramework.AssertThrows(SyntaxFactory.IdentifierName("ArgumentNullException"), methodCall, nullableParameter));
+                    }
+
+                    yield return generatedMethod;
+                }
             }
         }
     }

@@ -271,6 +271,9 @@
   <data name="NullableReferenceTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\NullableReferenceTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="NullOrWhiteSpaceSeparation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\NullOrWhiteSpaceSeparation.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="OldStyleConstructorFieldTesting" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\OldStyleConstructorFieldTesting.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

@@ -75,5 +75,7 @@
         bool UseConstructorForTestClassSetUp { get; }
 
         bool OmitTestClassAttribute { get; }
+
+        bool UseSeparateChecksForNullAndEmpty { get; }
     }
 }
