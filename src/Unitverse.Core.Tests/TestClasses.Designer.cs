@@ -1534,6 +1534,32 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to using System;
+        ///using System.Collections.Generic;
+        ///using System.Text;
+        ///
+        ///namespace AssemblyCore
+        ///{
+        ///    public class NullOrWhitespace
+        ///    {
+        ///        public NullOrWhitespace(string argumentOne, string argumentTwo)
+        ///        {
+        ///            ArgumentException.ThrowIfNullOrWhiteSpace(argumentOne);
+        ///            ArgumentException.ThrowIfNullOrWhiteSpace(argumentTwo);
+        ///        }
+        ///
+        ///        public int MethodOne(string argumentOne)
+        ///        {
+        ///            ArgumentException.ThrowIfNullOrWhiteSpace(argumentOne);
+        ///       [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string NullOrWhiteSpaceSeparation {
+            get {
+                return ResourceManager.GetString("NullOrWhiteSpaceSeparation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to // # UseFieldsForConstructorParameterTests=false
         ///namespace TestNamespace.SubNameSpace
         ///{

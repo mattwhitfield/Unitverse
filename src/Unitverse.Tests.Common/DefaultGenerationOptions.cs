@@ -78,5 +78,7 @@
         public bool UseConstructorForTestClassSetUp { get; set; } = false;
 
         public bool OmitTestClassAttribute { get; set; } = false;
+
+        public bool UseSeparateChecksForNullAndEmpty { get; set; } = false;
     }
 }

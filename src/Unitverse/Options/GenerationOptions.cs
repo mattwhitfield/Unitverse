@@ -193,5 +193,10 @@
         [DisplayName("Omit test class attribute")]
         [Description("Whether to omit the attribute used to decorate test classes")]
         public bool OmitTestClassAttribute { get; set; } = false;
+        
+        [Category("Generation")]
+        [DisplayName("Use separate checks for null and empty")]
+        [Description("Whether to emit separate methods for null and empty string checks")]
+        public bool UseSeparateChecksForNullAndEmpty { get; set; } = false;
     }
 }

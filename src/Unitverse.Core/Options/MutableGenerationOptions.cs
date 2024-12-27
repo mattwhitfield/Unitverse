@@ -47,6 +47,7 @@
             SkipInternalTypesOnMultipleGeneration = options.SkipInternalTypesOnMultipleGeneration;
             EmitMultilinePocoInitializers = options.EmitMultilinePocoInitializers;
             UseFieldsForConstructorParameterTests = options.UseFieldsForConstructorParameterTests;
+            UseSeparateChecksForNullAndEmpty = options.UseSeparateChecksForNullAndEmpty;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -122,5 +123,7 @@
         public bool UseConstructorForTestClassSetUp { get; set; }
 
         public bool OmitTestClassAttribute { get; set; }
+
+        public bool UseSeparateChecksForNullAndEmpty { get; set; }
     }
 }

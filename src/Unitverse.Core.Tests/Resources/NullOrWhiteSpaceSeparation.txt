@@ -1,0 +1,18 @@
+// # UseSeparateChecksForNullAndEmpty=true
+
+using System.Collections.Generic;
+using System.Text;
+
+namespace AssemblyCore
+{
+    public class NullOrWhitespace
+    {
+        public NullOrWhitespace(string argumentOne, string argumentTwo)
+        {
+        }
+
+        public void MethodOne(string argumentOne)
+        {
+        }
+    }
+}

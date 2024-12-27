@@ -96,5 +96,7 @@
         public bool UseConstructorForTestClassSetUp => _baseOptions.UseConstructorForTestClassSetUp;
 
         public bool OmitTestClassAttribute => _baseOptions.OmitTestClassAttribute;
+
+        public bool UseSeparateChecksForNullAndEmpty => _baseOptions.UseSeparateChecksForNullAndEmpty;
     }
 }
