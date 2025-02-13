@@ -28,7 +28,7 @@
     [ProvideOptionPage(typeof(GenerationOptions), "Unitverse", "Generation Options", 0, 0, true)]
     [ProvideOptionPage(typeof(NamingOptions), "Unitverse", "Naming Options", 0, 0, true)]
     [ProvideOptionPage(typeof(StrategyOptions), "Unitverse", "Strategy Options", 0, 0, true)]
-    [ProvideOptionPage(typeof(ExportOptions), "Unitverse", "Options Export", 0, 0, true)]
+    [ProvideOptionPage(typeof(ExportOptions), "Unitverse", "Options Import/Export", 0, 0, true)]
     [ProvideOptionPage(typeof(StatisticsOptions), "Unitverse", "Statistics", 0, 0, true)]
     [ProvideOptionPage(typeof(ProjectMappingOptions), "Unitverse", "Project Mappings", 0, 0, true)]
     [ProvideEditorExtension(typeof(ConfigEditorFactory), CoreConstants.ConfigFileName, 50, NameResourceID = 110)]

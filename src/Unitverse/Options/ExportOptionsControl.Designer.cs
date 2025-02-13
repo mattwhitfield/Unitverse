@@ -32,9 +32,11 @@
             System.Windows.Forms.Button Export;
             System.Windows.Forms.Label label;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportOptionsControl));
+            System.Windows.Forms.Button Import;
             tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             Export = new System.Windows.Forms.Button();
             label = new System.Windows.Forms.Label();
+            Import = new System.Windows.Forms.Button();
             tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,10 +45,12 @@
             tableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            tableLayoutPanel.ColumnCount = 1;
-            tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel.ColumnCount = 2;
+            tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             tableLayoutPanel.Controls.Add(Export, 0, 1);
             tableLayoutPanel.Controls.Add(label, 0, 0);
+            tableLayoutPanel.Controls.Add(Import, 1, 1);
             tableLayoutPanel.Location = new System.Drawing.Point(6, 6);
             tableLayoutPanel.Margin = new System.Windows.Forms.Padding(6);
             tableLayoutPanel.Name = "tableLayoutPanel";
@@ -60,7 +64,7 @@
             // 
             Export.Anchor = System.Windows.Forms.AnchorStyles.None;
             Export.AutoSize = true;
-            Export.Location = new System.Drawing.Point(185, 276);
+            Export.Location = new System.Drawing.Point(67, 276);
             Export.Name = "Export";
             Export.Size = new System.Drawing.Size(102, 23);
             Export.TabIndex = 0;
@@ -71,11 +75,24 @@
             // label
             // 
             label.AutoSize = true;
+            tableLayoutPanel.SetColumnSpan(label, 2);
             label.Location = new System.Drawing.Point(3, 0);
             label.Name = "label";
-            label.Size = new System.Drawing.Size(462, 143);
+            label.Size = new System.Drawing.Size(456, 182);
             label.TabIndex = 1;
             label.Text = resources.GetString("label.Text");
+            // 
+            // Import
+            // 
+            Import.Anchor = System.Windows.Forms.AnchorStyles.None;
+            Import.AutoSize = true;
+            Import.Location = new System.Drawing.Point(304, 276);
+            Import.Name = "Import";
+            Import.Size = new System.Drawing.Size(100, 23);
+            Import.TabIndex = 0;
+            Import.Text = "Import options file";
+            Import.UseVisualStyleBackColor = true;
+            Import.Click += new System.EventHandler(this.Import_Click);
             // 
             // ExportOptionsControl
             // 
