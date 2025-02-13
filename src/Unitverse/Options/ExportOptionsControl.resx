@@ -134,6 +134,11 @@ This allows you to share your configuration with team members, check it into sou
 To create a .unitTestGeneratorConfig file that represents the options currently configured in this instance of Visual Studio, click the 'Export' button below.
 
 When Unitverse goes to generate tests, it will start in the path where the active solution is, and search all parent folders to find .unitTestGeneratorConfig files from which to load settings. All found files are considered, and settings read from files closer to the solution take precedence.
+
+If you want to import settings to this Visual Studio instance from an existing .unitTestGeneratorConfig file, click the 'Import' button below.
 </value>
   </data>
+  <metadata name="Import.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
 </root>

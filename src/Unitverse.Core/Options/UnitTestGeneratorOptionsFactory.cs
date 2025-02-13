@@ -71,7 +71,7 @@
             return new UnitTestGeneratorOptions(mutableGenerationOptions, mutableNamingOptions, mutableStrategyOptions, statisticsGenerationEnabled, fieldSources, projectMappings, solutionPath, projectFilePath);
         }
 
-        private static bool Apply(object instance, KeyValuePair<string, string> valuePair, Dictionary<string, TypeMemberSetter> mutatorSet, out string? memberName)
+        public static bool Apply(object instance, KeyValuePair<string, string> valuePair, Dictionary<string, TypeMemberSetter> mutatorSet, out string? memberName)
         {
             var cleanFieldName = valuePair.Key.Replace("_", string.Empty).Replace("-", string.Empty);
             if (mutatorSet.TryGetValue(cleanFieldName, out var mutator))
