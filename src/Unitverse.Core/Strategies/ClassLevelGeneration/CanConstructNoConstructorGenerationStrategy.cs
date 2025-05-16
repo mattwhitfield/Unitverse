@@ -36,8 +36,11 @@
             {
                 throw new ArgumentNullException(nameof(model));
             }
-
+#if VS2022
+            return !model.Declaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Any() && !(model.Declaration is RecordDeclarationSyntax) && model.Declaration.ParameterList is null && !model.IsStatic;
+#else
             return !model.Declaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Any() && !(model.Declaration is RecordDeclarationSyntax) && !model.IsStatic;
+#endif
         }
 
         public IEnumerable<SectionedMethodHandler> Create(ClassModel method, ClassModel model, NamingContext namingContext)

@@ -144,6 +144,15 @@
                     }
                 }
             }
+#if VS2022
+            else if (syntax.ParameterList != null)
+            {
+                var constructor = SyntaxFactory.ConstructorDeclaration(model.ClassName).WithParameterList(syntax.ParameterList);
+                var parameters = ExtractParameters(syntax.ParameterList.Parameters, semanticModel);
+
+                model.Constructors.Add(new ConstructorModel(model.ClassName, parameters, constructor));
+            }
+#endif
 
             foreach (var methodModel in syntax.ChildNodes().OfType<MethodDeclarationSyntax>().Where(x => x.ExplicitInterfaceSpecifier != null).Select(x => ExtractMethodModel(x, semanticModel)))
             {
@@ -163,7 +172,7 @@
 
         private void CollectRelatedPartialTypeConstructors(TypeDeclarationSyntax syntax, SemanticModel semanticModel, IList<Func<SyntaxTokenList, bool>> allowedModifiers, ClassModel model)
         {
-            if (!syntax.Modifiers.Any(x => x.Kind() == SyntaxKind.PartialKeyword))
+            if (!syntax.Modifiers.Any(x => x.IsKind(SyntaxKind.PartialKeyword)))
             {
                 return;
             }

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Unitverse.Core.Helpers;
@@ -41,7 +42,7 @@
                         yield return XmlCommentHelper.Param(parameterName, parameterDescription);
                     }
 
-                    if (method.Modifiers.Any(x => x.Kind() == SyntaxKind.AsyncKeyword))
+                    if (method.Modifiers.Any(x => x.IsKind(SyntaxKind.AsyncKeyword)))
                     {
                         yield return XmlCommentHelper.Returns("A task that represents the running test.");
                     }

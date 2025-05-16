@@ -241,7 +241,7 @@
                 throw new ArgumentNullException(nameof(name));
             }
 
-            if (method.ParameterList.Parameters.Count > 0 && method.ParameterList.Parameters[0].Modifiers.Any(x => x.Kind() == SyntaxKind.ThisKeyword) && arguments.Length > 0 && arguments[0] is ExpressionSyntax expression)
+            if (method.ParameterList.Parameters.Count > 0 && method.ParameterList.Parameters[0].Modifiers.Any(x => x.IsKind(SyntaxKind.ThisKeyword)) && arguments.Length > 0 && arguments[0] is ExpressionSyntax expression)
             {
                 target = expression;
                 arguments = arguments.Skip(1).ToArray();

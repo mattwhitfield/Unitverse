@@ -17,7 +17,7 @@
                 throw new ArgumentNullException(nameof(declaration));
             }
 
-            var classIdentifierToken = declaration.ChildTokens().FirstOrDefault(n => n.Kind() == SyntaxKind.IdentifierToken);
+            var classIdentifierToken = declaration.ChildTokens().FirstOrDefault(n => n.IsKind(SyntaxKind.IdentifierToken));
             if (classIdentifierToken == default(SyntaxToken))
             {
                 throw new InvalidOperationException(Strings.NameExtractor_GetClassName_Could_not_find_type_identifier_);

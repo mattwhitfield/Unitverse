@@ -68,7 +68,7 @@
 
             foreach (var parameter in method.Parameters)
             {
-                if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.OutKeyword))
+                if (parameter.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.OutKeyword)))
                 {
                     paramExpressions.Add(SyntaxFactory.Argument(SyntaxFactory.DeclarationExpression(SyntaxFactory.IdentifierName("var"), SyntaxFactory.SingleVariableDesignation(parameter.Identifier))).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
                 }
@@ -89,7 +89,7 @@
                         generatedMethod.Arrange(Generate.VariableDeclaration(parameter.TypeInfo.Type, _frameworkSet, paramName, defaultAssignmentValue));
                     }
 
-                    if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
+                    if (parameter.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.RefKeyword)))
                     {
                         paramExpressions.Add(SyntaxFactory.Argument(paramIdentifier).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
                     }

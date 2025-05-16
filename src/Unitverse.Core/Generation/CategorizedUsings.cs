@@ -64,18 +64,18 @@
         {
             var resolvedUsings = new List<UsingDirectiveSyntax>();
 
-            resolvedUsings.AddRange(_systemUsings.OrderBy(x => x.Name.ToString()));
-            resolvedUsings.AddRange(_nonSystemUsings.OrderBy(x => x.Name.ToString()));
+            resolvedUsings.AddRange(_systemUsings.OrderBy(x => x.Name?.ToString()));
+            resolvedUsings.AddRange(_nonSystemUsings.OrderBy(x => x.Name?.ToString()));
             resolvedUsings.AddRange(_aliasUsings.OrderBy(x => x.Alias?.ToString()));
-            resolvedUsings.AddRange(_staticSystemUsings.OrderBy(x => x.Name.ToString()));
-            resolvedUsings.AddRange(_staticNonSystemUsings.OrderBy(x => x.Name.ToString()));
+            resolvedUsings.AddRange(_staticSystemUsings.OrderBy(x => x.Name?.ToString()));
+            resolvedUsings.AddRange(_staticNonSystemUsings.OrderBy(x => x.Name?.ToString()));
 
             return resolvedUsings;
         }
 
         private static bool IsSystemUsing(UsingDirectiveSyntax usingDirective)
         {
-            var name = usingDirective.Name.ToString();
+            var name = usingDirective.Name?.ToString();
             return string.Equals(name, nameof(System), StringComparison.OrdinalIgnoreCase) ||
                    name.StartsWith(nameof(System) + ".", StringComparison.OrdinalIgnoreCase);
         }
