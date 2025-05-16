@@ -102,6 +102,7 @@
             AddModels<PropertyDeclarationSyntax, IPropertyModel>(syntax, semanticModel, x => x.Modifiers, ExtractPropertyModel, allowedModifiers, model.Properties);
             AddModels<IndexerDeclarationSyntax, IIndexerModel>(syntax, semanticModel, x => x.Modifiers, ExtractIndexerModel, allowedModifiers, model.Indexers);
 
+#if VS2022
             if (syntax.ParameterList != null)
             {
                 var constructor = SyntaxFactory.ConstructorDeclaration(model.ClassName).WithParameterList(syntax.ParameterList);
@@ -109,6 +110,7 @@
 
                 model.Constructors.Add(new ConstructorModel(model.ClassName, parameters, constructor));
             }
+#endif
 
             if (syntax is RecordDeclarationSyntax record)
             {
