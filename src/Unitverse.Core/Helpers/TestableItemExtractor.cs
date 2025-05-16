@@ -102,16 +102,6 @@
             AddModels<PropertyDeclarationSyntax, IPropertyModel>(syntax, semanticModel, x => x.Modifiers, ExtractPropertyModel, allowedModifiers, model.Properties);
             AddModels<IndexerDeclarationSyntax, IIndexerModel>(syntax, semanticModel, x => x.Modifiers, ExtractIndexerModel, allowedModifiers, model.Indexers);
 
-#if VS2022
-            if (syntax.ParameterList != null)
-            {
-                var constructor = SyntaxFactory.ConstructorDeclaration(model.ClassName).WithParameterList(syntax.ParameterList);
-                var parameters = ExtractParameters(syntax.ParameterList.Parameters, semanticModel);
-
-                model.Constructors.Add(new ConstructorModel(model.ClassName, parameters, constructor));
-            }
-#endif
-
             if (syntax is RecordDeclarationSyntax record)
             {
                 if (record.ParameterList != null)
@@ -154,6 +144,15 @@
                     }
                 }
             }
+#if VS2022
+            else if (syntax.ParameterList != null)
+            {
+                var constructor = SyntaxFactory.ConstructorDeclaration(model.ClassName).WithParameterList(syntax.ParameterList);
+                var parameters = ExtractParameters(syntax.ParameterList.Parameters, semanticModel);
+
+                model.Constructors.Add(new ConstructorModel(model.ClassName, parameters, constructor));
+            }
+#endif
 
             foreach (var methodModel in syntax.ChildNodes().OfType<MethodDeclarationSyntax>().Where(x => x.ExplicitInterfaceSpecifier != null).Select(x => ExtractMethodModel(x, semanticModel)))
             {
