@@ -75,7 +75,7 @@
                 var mocks = new object[] { MockingFrameworkType.Moq, MockingFrameworkType.NSubstitute, MockingFrameworkType.FakeItEasy, MockingFrameworkType.MoqAutoMock, MockingFrameworkType.JustMock };
 
 #if VS2019
-                entryKeys = entryKeys.Where(x => x.IndexOf("FileScoped", StringComparison.OrdinalIgnoreCase) < 0).ToList();
+                entryKeys = entryKeys.Where(x => x.IndexOf("FileScoped", StringComparison.OrdinalIgnoreCase) < 0 && x.IndexOf("PrimaryConstructor", StringComparison.OrdinalIgnoreCase) < 0).ToList();
 #endif
 
                 var baseSet = entryKeys.Select(x => new List<object> { x });
