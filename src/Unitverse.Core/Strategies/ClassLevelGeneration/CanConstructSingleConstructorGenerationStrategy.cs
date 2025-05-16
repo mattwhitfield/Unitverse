@@ -43,7 +43,7 @@
                 return false;
             }
 
-            if (model.Declaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Count() == 1 && model.DefaultConstructor.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.PublicKeyword))
+            if (model.Declaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Count() == 1 && model.DefaultConstructor.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.PublicKeyword)))
             {
                 return true;
             }

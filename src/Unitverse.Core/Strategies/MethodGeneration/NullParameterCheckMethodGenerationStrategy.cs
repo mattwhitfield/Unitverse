@@ -65,7 +65,7 @@
                     continue;
                 }
 
-                if (currentParam.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.OutKeyword))
+                if (currentParam.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.OutKeyword)))
                 {
                     continue;
                 }
@@ -83,7 +83,7 @@
                 for (var index = 0; index < method.Parameters.Count; index++)
                 {
                     var parameter = method.Parameters[index];
-                    if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.RefKeyword))
+                    if (parameter.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.RefKeyword)))
                     {
                         var defaultAssignmentValue = AssignmentValueHelper.GetDefaultAssignmentValue(parameter.TypeInfo, model.SemanticModel, _frameworkSet);
 
@@ -99,7 +99,7 @@
 
                         paramList.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Name)).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.RefKeyword)));
                     }
-                    else if (parameter.Node.Modifiers.Any(x => x.Kind() == SyntaxKind.OutKeyword))
+                    else if (parameter.Node.Modifiers.Any(x => x.IsKind(SyntaxKind.OutKeyword)))
                     {
                         paramList.Add(SyntaxFactory.Argument(SyntaxFactory.IdentifierName("_")).WithRefKindKeyword(SyntaxFactory.Token(SyntaxKind.OutKeyword)));
                     }

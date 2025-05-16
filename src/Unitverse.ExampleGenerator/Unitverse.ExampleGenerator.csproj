@@ -33,7 +33,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(VsTargetVersion)' == 'VS2022'">
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.0.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.10.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(VsTargetVersion)' == 'VS2019'">

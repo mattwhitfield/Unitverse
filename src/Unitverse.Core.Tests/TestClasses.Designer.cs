@@ -1534,7 +1534,8 @@ namespace Unitverse.Core.Tests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using System;
+        ///   Looks up a localized string similar to // # UseSeparateChecksForNullAndEmpty=true
+        ///
         ///using System.Collections.Generic;
         ///using System.Text;
         ///
@@ -1544,14 +1545,14 @@ namespace Unitverse.Core.Tests {
         ///    {
         ///        public NullOrWhitespace(string argumentOne, string argumentTwo)
         ///        {
-        ///            ArgumentException.ThrowIfNullOrWhiteSpace(argumentOne);
-        ///            ArgumentException.ThrowIfNullOrWhiteSpace(argumentTwo);
         ///        }
         ///
-        ///        public int MethodOne(string argumentOne)
+        ///        public void MethodOne(string argumentOne)
         ///        {
-        ///            ArgumentException.ThrowIfNullOrWhiteSpace(argumentOne);
-        ///       [rest of string was truncated]&quot;;.
+        ///        }
+        ///    }
+        ///}
+        ///.
         /// </summary>
         public static string NullOrWhiteSpaceSeparation {
             get {
@@ -1738,6 +1739,15 @@ namespace Unitverse.Core.Tests {
         public static string PocoInitialization {
             get {
                 return ResourceManager.GetString("PocoInitialization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to public class RequestHandler(IOptions&lt;CommonOptions&gt; options) { private readonly CommonOptions _options = options.Value!; }.
+        /// </summary>
+        public static string PrimaryConstructor {
+            get {
+                return ResourceManager.GetString("PrimaryConstructor", resourceCulture);
             }
         }
         

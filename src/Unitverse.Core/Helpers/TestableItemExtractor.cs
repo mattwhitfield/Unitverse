@@ -102,6 +102,14 @@
             AddModels<PropertyDeclarationSyntax, IPropertyModel>(syntax, semanticModel, x => x.Modifiers, ExtractPropertyModel, allowedModifiers, model.Properties);
             AddModels<IndexerDeclarationSyntax, IIndexerModel>(syntax, semanticModel, x => x.Modifiers, ExtractIndexerModel, allowedModifiers, model.Indexers);
 
+            if (syntax.ParameterList != null)
+            {
+                var constructor = SyntaxFactory.ConstructorDeclaration(model.ClassName).WithParameterList(syntax.ParameterList);
+                var parameters = ExtractParameters(syntax.ParameterList.Parameters, semanticModel);
+
+                model.Constructors.Add(new ConstructorModel(model.ClassName, parameters, constructor));
+            }
+
             if (syntax is RecordDeclarationSyntax record)
             {
                 if (record.ParameterList != null)
@@ -163,7 +171,7 @@
 
         private void CollectRelatedPartialTypeConstructors(TypeDeclarationSyntax syntax, SemanticModel semanticModel, IList<Func<SyntaxTokenList, bool>> allowedModifiers, ClassModel model)
         {
-            if (!syntax.Modifiers.Any(x => x.Kind() == SyntaxKind.PartialKeyword))
+            if (!syntax.Modifiers.Any(x => x.IsKind(SyntaxKind.PartialKeyword)))
             {
                 return;
             }
