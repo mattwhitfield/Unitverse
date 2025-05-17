@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using EnvDTE;
     using Microsoft.CodeAnalysis;
     using Microsoft.VisualStudio.Shell;
@@ -24,6 +25,16 @@
             ThreadHelper.ThrowIfNotOnUIThread();
 
             var nameParts = VsProjectHelper.GetFolderParts(source.Item);
+
+            if (mapping.Options.GenerationOptions.IncludeSourceProjectAsFolder)
+            {
+                var sourceName = mapping.SourceProject.Name;
+                var sourceNameParts = sourceName.Split('.');
+                foreach (var sourceNamePart in sourceNameParts.Reverse())
+                {
+                    nameParts.Add(sourceNamePart);
+                }
+            }
 
             var targetProject = mapping.TargetProject;
             TargetProjectItems = TargetFinder.FindTargetFolder(targetProject, nameParts, true, out _targetPath);

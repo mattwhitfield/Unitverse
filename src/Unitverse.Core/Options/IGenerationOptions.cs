@@ -77,5 +77,7 @@
         bool OmitTestClassAttribute { get; }
 
         bool UseSeparateChecksForNullAndEmpty { get; }
+
+        bool IncludeSourceProjectAsFolder { get; }
     }
 }
