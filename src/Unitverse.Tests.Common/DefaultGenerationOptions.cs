@@ -80,5 +80,7 @@
         public bool OmitTestClassAttribute { get; set; } = false;
 
         public bool UseSeparateChecksForNullAndEmpty { get; set; } = false;
+
+        public bool IncludeSourceProjectAsFolder { get; set; } = false;
     }
 }

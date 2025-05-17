@@ -198,5 +198,10 @@
         [DisplayName("Use separate checks for null and empty")]
         [Description("Whether to emit separate methods for null and empty string checks")]
         public bool UseSeparateChecksForNullAndEmpty { get; set; } = false;
+
+        [Category("Naming")]
+        [DisplayName("Include source project as target folder")]
+        [Description("Whether to include the source project as part of the target folder structure")]
+        public bool IncludeSourceProjectAsFolder { get; set; } = false;
     }
 }

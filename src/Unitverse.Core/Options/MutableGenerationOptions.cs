@@ -48,6 +48,7 @@
             EmitMultilinePocoInitializers = options.EmitMultilinePocoInitializers;
             UseFieldsForConstructorParameterTests = options.UseFieldsForConstructorParameterTests;
             UseSeparateChecksForNullAndEmpty = options.UseSeparateChecksForNullAndEmpty;
+            IncludeSourceProjectAsFolder = options.IncludeSourceProjectAsFolder;
         }
 
         public TestFrameworkTypes FrameworkType { get; set; }
@@ -125,5 +126,7 @@
         public bool OmitTestClassAttribute { get; set; }
 
         public bool UseSeparateChecksForNullAndEmpty { get; set; }
+
+        public bool IncludeSourceProjectAsFolder { get; set; }
     }
 }

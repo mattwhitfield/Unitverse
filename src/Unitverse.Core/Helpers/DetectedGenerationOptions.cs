@@ -98,5 +98,7 @@
         public bool OmitTestClassAttribute => _baseOptions.OmitTestClassAttribute;
 
         public bool UseSeparateChecksForNullAndEmpty => _baseOptions.UseSeparateChecksForNullAndEmpty;
+
+        public bool IncludeSourceProjectAsFolder => _baseOptions.IncludeSourceProjectAsFolder;
     }
 }
